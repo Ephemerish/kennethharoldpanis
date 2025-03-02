@@ -8,7 +8,6 @@ const Home: React.FC = () => {
       <Helmet>
         <meta charSet="utf-8" />
         <title>Kenneth Harold Panis</title>
-        <link rel="icon" type="image/png" href="/src/assets/boy.png" />
       </Helmet>
       <Header />
     </div>
