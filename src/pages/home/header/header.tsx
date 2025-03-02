@@ -31,7 +31,7 @@ export default function Header() {
             <div className="relative w-[300px] h-[300px] sm:w-[350px] sm:h-[350px] lg:w-[400px] lg:h-[400px] overflow-hidden rounded-full border-4 border-primary">
               <Avatar.Root className="w-full h-full">
                 <Avatar.Image
-                  src="https://scontent.fceb2-2.fna.fbcdn.net/v/t39.30808-6/480159326_1121614799701323_614920794384842799_n.jpg?_nc_cat=107&ccb=1-7&_nc_sid=6ee11a&_nc_eui2=AeE-akOxhR_uels_x_5gbU2BYaO-m0IccUZho76bQhxxRuWQyz3xDRG57-saVe5srfUTNpdoDrIf73OMbrg0DTgR&_nc_ohc=AW5v0JUuRf0Q7kNvgFBBlet&_nc_oc=Adi-JTgJX4zBHyU6MDOX97-jMJcpTn5OtwvJdudeK6k03eO2HBYCfG8LZM9ZPpH_aCM&_nc_zt=23&_nc_ht=scontent.fceb2-2.fna&_nc_gid=A4JyQZ0uMWqANYWkvXViv-J&oh=00_AYAtnr7TtA64XwpwShqS5hZVEFik8eJINmNL6SCcYEOYcg&oe=67C89A1C"
+                  src="https://media.licdn.com/dms/image/v2/D5603AQGUIyi19V4Nug/profile-displayphoto-shrink_800_800/B56ZOZH25sGwAc-/0/1733440796303?e=1746662400&v=beta&t=X-dP5TLV04R_pmoFTmA2DuQrllSTEvDCjHAEiPsDaH8"
                   alt="Kenneth Harold Panis"
                   className="w-full h-full object-cover"
                 />
