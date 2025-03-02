@@ -6,27 +6,27 @@ metadata:
 spec:
   type: LoadBalancer
   selector:
-  app: nginx
+    app: nginx # Fixed indentation
   ports:
     - port: 80
-  targetPort: 80
+      targetPort: 80 # Moved inside ports
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: nginx
   labels:
-  app: nginx
+    app: nginx # Moved inside labels
 spec:
   replicas: 1
   selector:
-  matchLabels:
-    app: nginx
+    matchLabels:
+      app: nginx
   template:
-  metadata:
-    labels:
-    app: nginx
-  spec:
-    containers:
-      - name: nginx
-    image: asia-southeast1-docker.pkg.dev/$GOOGLE_PROJECT/kenneth-artifacts/nginx:latest
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+        - name: nginx
+          image: asia-southeast1-docker.pkg.dev/$GOOGLE_PROJECT/kenneth-artifacts/nginx:latest # Fixed indentation
