@@ -27,11 +27,3 @@ jobs:
           gcloud auth configure-docker asia-southeast1-docker.pkg.dev
           docker build -t asia-southeast1-docker.pkg.dev/$GOOGLE_PROJECT/kenneth-artifacts/nginx:latest .
           docker push asia-southeast1-docker.pkg.dev/$GOOGLE_PROJECT/kenneth-artifacts/nginx:latest
-
-      - name: deploy to gke
-        env:
-          GOOGLE_PROJECT: ${{ secrets.GOOGLE_PROJECT }}
-        run: |
-          gcloud container clusters get-credentials kenneth-gke-main --region asia-southeast1
-          sed -i "s/GOOGLE_PROJECT/$GOOGLE_PROJECT/g" resources.yaml
-          kubectl apply -f resources.yaml
