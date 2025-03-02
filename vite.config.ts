@@ -8,6 +8,7 @@ export default defineConfig({
   server: {
     port: 3000, // Ensure it matches the Docker exposed port
     host: "0.0.0.0",
+    allowedHosts: ["nginx-230158669164.us-central1.run.app"],
   },
   plugins: [react()],
   resolve: {
