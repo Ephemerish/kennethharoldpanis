@@ -1,137 +1,48 @@
-# React Project Structure with React Router & Zustand
+# Astro Starter Kit: Basics
 
-This repository follows a **scalable folder structure** for a React project using **React Router** for navigation and **Zustand** for state management.
-
-## 📂 Folder Structure
-
-```
-/src
-│── /assets           # Static assets (images, fonts, etc.)
-│── /components       # Reusable UI components
-│── /features         # Feature-based components (self-contained)
-│── /layouts          # Layout components (e.g., AuthLayout, MainLayout)
-│── /pages            # Page components (mapped to routes)
-│── /routes           # Centralized route definitions
-│── /stores           # Zustand stores (state management)
-│── /hooks            # Custom hooks
-│── /utils            # Utility functions/helpers
-│── /services         # API calls or external services
-│── /types            # TypeScript types (if using TS)
-│── App.tsx           # Root component
-│── main.tsx          # Entry point (if using Vite) / index.tsx for CRA
-│── vite.config.ts    # Vite configuration (if using Vite)
-│── tsconfig.json     # TypeScript config (if using TS)
-│── package.json      # Dependencies and scripts
+```sh
+pnpm create astro@latest -- --template basics
 ```
 
----
+[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/withastro/astro/tree/latest/examples/basics)
+[![Open with CodeSandbox](https://assets.codesandbox.io/github/button-edit-lime.svg)](https://codesandbox.io/p/sandbox/github/withastro/astro/tree/latest/examples/basics)
+[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/withastro/astro?devcontainer_path=.devcontainer/basics/devcontainer.json)
 
-## 📌 Folder Breakdown
+> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
 
-### `/components`
+![just-the-basics](https://github.com/withastro/astro/assets/2244813/a0a5533c-a856-4198-8470-2d67b1d7c554)
 
-- Contains **reusable UI components** (e.g., `Button.tsx`, `Modal.tsx`).
-- Should not contain business logic.
+## 🚀 Project Structure
 
-### `/features`
+Inside of your Astro project, you'll see the following folders and files:
 
-- Groups related components, Zustand store, and API calls together per feature.
-- Example:
-  ```
-  /features/auth
-  │── AuthForm.tsx
-  │── authStore.ts
-  │── authService.ts
-  ```
-
-### `/layouts`
-
-- Defines layouts like `MainLayout.tsx`, `AuthLayout.tsx` for different page structures.
-
-### `/pages`
-
-- Contains **page components** mapped to routes.
-- Example:
-  ```
-  /pages
-  │── Home.tsx
-  │── Dashboard.tsx
-  │── Login.tsx
-  ```
-
-### `/routes`
-
-- Centralizes **React Router** configuration.
-- Example (`routes.tsx`):
-
-  ```tsx
-  import { BrowserRouter, Routes, Route } from "react-router-dom";
-  import Home from "@/pages/Home";
-  import Dashboard from "@/pages/Dashboard";
-  import Login from "@/pages/Login";
-
-  const AppRoutes = () => (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/login" element={<Login />} />
-      </Routes>
-    </BrowserRouter>
-  );
-
-  export default AppRoutes;
-  ```
-
-### `/stores`
-
-- Stores Zustand global state files.
-- Example (`authStore.ts`):
-
-  ```tsx
-  import { create } from "zustand";
-
-  interface AuthState {
-    user: string | null;
-    login: (username: string) => void;
-    logout: () => void;
-  }
-
-  export const useAuthStore = create<AuthState>((set) => ({
-    user: null,
-    login: (username) => set({ user: username }),
-    logout: () => set({ user: null }),
-  }));
-  ```
-
-### `/hooks`
-
-- Stores custom hooks (e.g., `useAuth.ts` for authentication logic).
-
-### `/utils`
-
-- Utility/helper functions (e.g., `formatDate.ts`, `getToken.ts`).
-
-### `/services`
-
-- API calls or external service interactions (e.g., `authService.ts` for authentication API calls).
-
----
-
-## 🚀 Example Usage
-
-Inside `App.tsx`:
-
-```tsx
-import AppRoutes from "@/routes/routes";
-
-const App = () => {
-  return <AppRoutes />;
-};
-
-export default App;
+```text
+/
+├── public/
+│   └── favicon.svg
+├── src/
+│   ├── layouts/
+│   │   └── Layout.astro
+│   └── pages/
+│       └── index.astro
+└── package.json
 ```
 
-This structure keeps components **modular, scalable**, and maintains **clean separation of concerns**. 🎯
+To learn more about the folder structure of an Astro project, refer to [our guide on project structure](https://docs.astro.build/en/basics/project-structure/).
 
-rerun
+## 🧞 Commands
+
+All commands are run from the root of the project, from a terminal:
+
+| Command                   | Action                                           |
+| :------------------------ | :----------------------------------------------- |
+| `pnpm install`             | Installs dependencies                            |
+| `pnpm dev`             | Starts local dev server at `localhost:4321`      |
+| `pnpm build`           | Build your production site to `./dist/`          |
+| `pnpm preview`         | Preview your build locally, before deploying     |
+| `pnpm astro ...`       | Run CLI commands like `astro add`, `astro check` |
+| `pnpm astro -- --help` | Get help using the Astro CLI                     |
+
+## 👀 Want to learn more?
+
+Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
