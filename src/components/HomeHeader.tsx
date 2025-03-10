@@ -139,7 +139,7 @@ const HomeHeader: React.FC = () => {
             />
             <Avatar.Root className="w-full h-full">
               <Avatar.Image
-                src="/public/me.jpg"
+                src="/me.jpg"
                 alt="Kenneth Harold Panis"
                 className="w-full h-full object-cover"
               />
