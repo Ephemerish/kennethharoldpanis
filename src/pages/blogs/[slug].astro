@@ -58,26 +58,156 @@ if (entry) {
       {/* Article Content */}
       <article class="
         text-gray-700 text-lg leading-8 font-light
-        [&>h1]:text-2xl [&>h1]:font-medium [&>h1]:text-gray-900 [&>h1]:mt-12 [&>h1]:mb-6 [&>h1]:tracking-tight [&>h1]:pb-3 [&>h1]:border-b [&>h1]:border-gray-100
-        [&>h2]:text-xl [&>h2]:font-medium [&>h2]:text-gray-900 [&>h2]:mt-10 [&>h2]:mb-4 [&>h2]:tracking-tight [&>h2]:bg-gray-50 [&>h2]:px-4 [&>h2]:py-3 [&>h2]:rounded-lg [&>h2]:border-l-4 [&>h2]:border-blue-200
-        [&>h3]:text-lg [&>h3]:font-medium [&>h3]:text-gray-900 [&>h3]:mt-8 [&>h3]:mb-3 [&>h3]:tracking-tight [&>h3]:bg-gray-25 [&>h3]:px-3 [&>h3]:py-2 [&>h3]:rounded [&>h3]:border-l-2 [&>h3]:border-gray-300
-        [&>h4]:text-base [&>h4]:font-medium [&>h4]:text-gray-900 [&>h4]:mt-6 [&>h4]:mb-2 [&>h4]:pl-3 [&>h4]:border-l-2 [&>h4]:border-gray-200
-        [&>p]:mb-6 [&>p]:leading-8
-        [&>ul]:mb-6 [&>ul]:space-y-2 [&>ul>li]:relative [&>ul>li]:pl-6 [&>ul>li]:before:content-['•'] [&>ul>li]:before:absolute [&>ul>li]:before:left-0 [&>ul>li]:before:text-gray-400 [&>ul>li]:before:font-medium
-        [&>ol]:mb-6 [&>ol]:space-y-2 [&>ol]:ml-6 [&>ol]:list-decimal [&>ol>li]:mb-1
-        [&>blockquote]:border-l-2 [&>blockquote]:border-gray-200 [&>blockquote]:pl-6 [&>blockquote]:text-gray-600 [&>blockquote]:italic [&>blockquote]:my-8 [&>blockquote]:text-lg
-        [&>pre]:bg-gray-50 [&>pre]:border [&>pre]:border-gray-100 [&>pre]:p-6 [&>pre]:rounded-xl [&>pre]:overflow-x-auto [&>pre]:my-8 [&>pre]:text-sm [&>pre]:leading-6
+        [&>h1]:text-2xl [&>h1]:font-medium [&>h1]:text-gray-900 [&>h1]:mt-8 [&>h1]:mb-4 [&>h1]:tracking-tight [&>h1]:pb-2 [&>h1]:border-b [&>h1]:border-gray-100
+        [&>h2]:text-xl [&>h2]:font-medium [&>h2]:text-gray-900 [&>h2]:mt-6 [&>h2]:mb-3 [&>h2]:tracking-tight [&>h2]:bg-gray-50 [&>h2]:px-3 [&>h2]:py-2 [&>h2]:rounded-lg [&>h2]:border-l-4 [&>h2]:border-blue-200 [&>h2]:cursor-pointer [&>h2]:hover:bg-gray-100 [&>h2]:transition-colors [&>h2]:relative [&>h2]:pr-8
+        [&>h3]:text-lg [&>h3]:font-medium [&>h3]:text-gray-900 [&>h3]:mt-5 [&>h3]:mb-2 [&>h3]:tracking-tight [&>h3]:bg-gray-100 [&>h3]:px-2 [&>h3]:py-1.5 [&>h3]:rounded [&>h3]:border-l-2 [&>h3]:border-gray-300 [&>h3]:cursor-pointer [&>h3]:hover:bg-gray-200 [&>h3]:transition-colors [&>h3]:relative [&>h3]:pr-6
+        [&>h4]:text-base [&>h4]:font-medium [&>h4]:text-gray-900 [&>h4]:mt-4 [&>h4]:mb-2 [&>h4]:pl-3 [&>h4]:border-l-2 [&>h4]:border-gray-200
+        [&>p]:mb-4 [&>p]:leading-8
+        [&>ul]:mb-4 [&>ul]:space-y-1 [&>ul>li]:relative [&>ul>li]:pl-6 [&>ul>li]:before:content-['•'] [&>ul>li]:before:absolute [&>ul>li]:before:left-0 [&>ul>li]:before:text-gray-400 [&>ul>li]:before:font-medium
+        [&>ol]:mb-4 [&>ol]:space-y-1 [&>ol]:ml-6 [&>ol]:list-decimal [&>ol>li]:mb-1
+        [&>blockquote]:border-l-2 [&>blockquote]:border-gray-200 [&>blockquote]:pl-4 [&>blockquote]:text-gray-600 [&>blockquote]:italic [&>blockquote]:my-6 [&>blockquote]:text-lg
+        [&>pre]:bg-gray-50 [&>pre]:border [&>pre]:border-gray-100 [&>pre]:p-4 [&>pre]:rounded-xl [&>pre]:overflow-x-auto [&>pre]:my-6 [&>pre]:text-sm [&>pre]:leading-6
         [&>:not(pre)>code]:bg-gray-100 [&>:not(pre)>code]:px-2 [&>:not(pre)>code]:py-0.5 [&>:not(pre)>code]:rounded [&>:not(pre)>code]:text-sm [&>:not(pre)>code]:font-mono [&>:not(pre)>code]:text-gray-800
         [&>a]:text-gray-900 [&>a]:underline [&>a]:decoration-gray-300 [&>a]:underline-offset-4 [&>a]:transition-colors [&>a:hover]:decoration-gray-600
-        [&>img]:rounded-xl [&>img]:my-8 [&>img]:border [&>img]:border-gray-100
-        [&>hr]:border-0 [&>hr]:h-px [&>hr]:bg-gray-200 [&>hr]:my-12
-        [&>table]:w-full [&>table]:border-collapse [&>table]:my-8 [&>table]:text-sm
+        [&>img]:rounded-xl [&>img]:my-6 [&>img]:border [&>img]:border-gray-100
+        [&>hr]:border-0 [&>hr]:h-px [&>hr]:bg-gray-200 [&>hr]:my-8
+        [&>table]:w-full [&>table]:border-collapse [&>table]:my-6 [&>table]:text-sm
         [&>table_th]:border-b [&>table_th]:border-gray-200 [&>table_th]:px-4 [&>table_th]:py-3 [&>table_th]:text-left [&>table_th]:font-medium [&>table_th]:text-gray-900
         [&>table_td]:border-b [&>table_td]:border-gray-100 [&>table_td]:px-4 [&>table_td]:py-3 [&>table_td]:text-gray-700
         first:[&>*]:mt-0
-      ">
+      " id="article-content">
         {Content && <Content />}
       </article>
+
+      <script>
+        document.addEventListener('DOMContentLoaded', function() {
+          const article = document.getElementById('article-content');
+          if (!article) return;
+
+          // Create collapse button
+          const collapseBtn = document.createElement('button');
+          collapseBtn.innerHTML = '📖 Toggle Sections';
+          collapseBtn.className = 'mb-4 px-3 py-1.5 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 transition-colors text-sm font-medium';
+          
+          let sectionsCollapsed = false;
+          
+          function initializeCollapsible() {
+            if (!article) return;
+            
+            const headers = article.querySelectorAll('h2, h3');
+            
+            headers.forEach(header => {
+              // Add click indicator
+              const indicator = document.createElement('span');
+              indicator.innerHTML = '▼';
+              indicator.className = 'absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 text-xs select-none transition-all duration-200';
+              header.appendChild(indicator);
+              
+              // Find content until next header of same/higher level
+              const contentElements: Element[] = [];
+              let sibling = header.nextElementSibling;
+              const headerLevel = parseInt(header.tagName.charAt(1));
+              
+              while (sibling) {
+                const siblingLevel = sibling.tagName.match(/^H[1-6]$/) ? 
+                  parseInt(sibling.tagName.charAt(1)) : null;
+                
+                if (siblingLevel && siblingLevel <= headerLevel) {
+                  break;
+                }
+                
+                contentElements.push(sibling);
+                sibling = sibling.nextElementSibling;
+              }
+              
+              if (contentElements.length > 0) {
+                // Store original styles and add data attributes for tracking
+                header.setAttribute('data-collapsible', 'true');
+                
+                contentElements.forEach((el, index) => {
+                  el.setAttribute('data-section-content', header.tagName.toLowerCase() + '-' + Array.from(article.children).indexOf(header));
+                  el.setAttribute('data-original-display', window.getComputedStyle(el).display);
+                });
+                
+                // Add click handler
+                header.addEventListener('click', () => {
+                  const isCollapsed = header.getAttribute('data-collapsed') === 'true';
+                  
+                  if (isCollapsed) {
+                    // Expand
+                    contentElements.forEach(el => {
+                      (el as HTMLElement).style.display = el.getAttribute('data-original-display') || 'block';
+                      (el as HTMLElement).style.opacity = '1';
+                      (el as HTMLElement).style.transform = 'translateY(0)';
+                    });
+                    header.setAttribute('data-collapsed', 'false');
+                    indicator.innerHTML = '▼';
+                  } else {
+                    // Collapse
+                    contentElements.forEach(el => {
+                      (el as HTMLElement).style.display = 'none';
+                      (el as HTMLElement).style.opacity = '0';
+                      (el as HTMLElement).style.transform = 'translateY(-10px)';
+                    });
+                    header.setAttribute('data-collapsed', 'true');
+                    indicator.innerHTML = '▶';
+                  }
+                });
+              }
+            });
+          }
+          
+          collapseBtn.addEventListener('click', () => {
+            if (!article) return;
+            
+            const collapsibleHeaders = article.querySelectorAll('[data-collapsible="true"]');
+            
+            if (sectionsCollapsed) {
+              // Expand all
+              collapsibleHeaders.forEach(header => {
+                const indicator = header.querySelector('span');
+                const sectionId = header.tagName.toLowerCase() + '-' + Array.from(article.children).indexOf(header);
+                const contentElements = article.querySelectorAll('[data-section-content="' + sectionId + '"]');
+                
+                contentElements.forEach(el => {
+                  (el as HTMLElement).style.display = el.getAttribute('data-original-display') || 'block';
+                  (el as HTMLElement).style.opacity = '1';
+                  (el as HTMLElement).style.transform = 'translateY(0)';
+                });
+                header.setAttribute('data-collapsed', 'false');
+                if (indicator) indicator.innerHTML = '▼';
+              });
+              collapseBtn.innerHTML = '📖 Toggle Sections';
+            } else {
+              // Collapse all
+              collapsibleHeaders.forEach(header => {
+                const indicator = header.querySelector('span');
+                const sectionId = header.tagName.toLowerCase() + '-' + Array.from(article.children).indexOf(header);
+                const contentElements = article.querySelectorAll('[data-section-content="' + sectionId + '"]');
+                
+                contentElements.forEach(el => {
+                  (el as HTMLElement).style.display = 'none';
+                  (el as HTMLElement).style.opacity = '0';
+                  (el as HTMLElement).style.transform = 'translateY(-10px)';
+                });
+                header.setAttribute('data-collapsed', 'true');
+                if (indicator) indicator.innerHTML = '▶';
+              });
+              collapseBtn.innerHTML = '📋 Expand All';
+            }
+            
+            sectionsCollapsed = !sectionsCollapsed;
+          });
+          
+          // Insert button before article
+          if (article.parentNode) {
+            article.parentNode.insertBefore(collapseBtn, article);
+          }
+          
+          // Initialize
+          initializeCollapsible();
+        });
+      </script>
 
       {/* Navigation/Back Button */}
       <div class="mt-12 pt-8 border-t border-gray-200">
