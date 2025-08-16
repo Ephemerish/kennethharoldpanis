@@ -1,0 +1,110 @@
+---
+import MainLayout from "../../layouts/MainLayout.astro";
+import { getEntryBySlug, getCollection } from "astro:content";
+
+export async function getStaticPaths() {
+  const blogEntries = await getCollection("blog");
+  return blogEntries.map(entry => ({
+    params: { slug: entry.slug },
+    props: { entry },
+  }));
+}
+
+const { slug } = Astro.params;
+const { entry } = Astro.props;
+let Content, frontmatter;
+if (entry) {
+  const rendered = await entry.render();
+  Content = rendered.Content;
+  frontmatter = entry.data;
+}
+---
+
+<MainLayout title={frontmatter?.title || "Blog Article"}>
+  {entry ? (
+    <div class="max-w-4xl mx-auto px-4 py-8">
+      {/* Hero Section */}
+      <header class="mb-8">
+        <h1 class="text-4xl md:text-5xl font-bold text-gray-900 mb-4 leading-tight">
+          {frontmatter?.title}
+        </h1>
+        <div class="flex items-center justify-between flex-wrap gap-4 mb-6">
+          <div class="flex items-center gap-4 text-gray-600">
+            <span class="text-sm">By {frontmatter?.author}</span>
+            <span class="text-sm">•</span>
+            <time class="text-sm">{frontmatter?.pubDate?.toLocaleDateString()}</time>
+          </div>
+          {frontmatter?.tags && (
+            <div class="flex flex-wrap gap-2">
+              {frontmatter.tags.map((tag) => (
+                <span class="px-3 py-1 bg-blue-100 text-blue-800 text-xs font-medium rounded-full">
+                  #{tag}
+                </span>
+              ))}
+            </div>
+          )}
+        </div>
+        {frontmatter?.image && (
+          <div class="mb-8">
+            <img 
+              src={"/images/" + frontmatter.image} 
+              alt={frontmatter?.title || "Blog post image"} 
+              class="w-full h-64 md:h-96 object-cover rounded-lg shadow-lg"
+            />
+          </div>
+        )}
+      </header>
+
+      {/* Article Content */}
+      <article class="
+        text-gray-700 text-lg leading-8 font-light
+        [&>h1]:text-2xl [&>h1]:font-medium [&>h1]:text-gray-900 [&>h1]:mt-12 [&>h1]:mb-6 [&>h1]:tracking-tight [&>h1]:pb-3 [&>h1]:border-b [&>h1]:border-gray-100
+        [&>h2]:text-xl [&>h2]:font-medium [&>h2]:text-gray-900 [&>h2]:mt-10 [&>h2]:mb-4 [&>h2]:tracking-tight [&>h2]:bg-gray-50 [&>h2]:px-4 [&>h2]:py-3 [&>h2]:rounded-lg [&>h2]:border-l-4 [&>h2]:border-blue-200
+        [&>h3]:text-lg [&>h3]:font-medium [&>h3]:text-gray-900 [&>h3]:mt-8 [&>h3]:mb-3 [&>h3]:tracking-tight [&>h3]:bg-gray-25 [&>h3]:px-3 [&>h3]:py-2 [&>h3]:rounded [&>h3]:border-l-2 [&>h3]:border-gray-300
+        [&>h4]:text-base [&>h4]:font-medium [&>h4]:text-gray-900 [&>h4]:mt-6 [&>h4]:mb-2 [&>h4]:pl-3 [&>h4]:border-l-2 [&>h4]:border-gray-200
+        [&>p]:mb-6 [&>p]:leading-8
+        [&>ul]:mb-6 [&>ul]:space-y-2 [&>ul>li]:relative [&>ul>li]:pl-6 [&>ul>li]:before:content-['•'] [&>ul>li]:before:absolute [&>ul>li]:before:left-0 [&>ul>li]:before:text-gray-400 [&>ul>li]:before:font-medium
+        [&>ol]:mb-6 [&>ol]:space-y-2 [&>ol]:ml-6 [&>ol]:list-decimal [&>ol>li]:mb-1
+        [&>blockquote]:border-l-2 [&>blockquote]:border-gray-200 [&>blockquote]:pl-6 [&>blockquote]:text-gray-600 [&>blockquote]:italic [&>blockquote]:my-8 [&>blockquote]:text-lg
+        [&>pre]:bg-gray-50 [&>pre]:border [&>pre]:border-gray-100 [&>pre]:p-6 [&>pre]:rounded-xl [&>pre]:overflow-x-auto [&>pre]:my-8 [&>pre]:text-sm [&>pre]:leading-6
+        [&>:not(pre)>code]:bg-gray-100 [&>:not(pre)>code]:px-2 [&>:not(pre)>code]:py-0.5 [&>:not(pre)>code]:rounded [&>:not(pre)>code]:text-sm [&>:not(pre)>code]:font-mono [&>:not(pre)>code]:text-gray-800
+        [&>a]:text-gray-900 [&>a]:underline [&>a]:decoration-gray-300 [&>a]:underline-offset-4 [&>a]:transition-colors [&>a:hover]:decoration-gray-600
+        [&>img]:rounded-xl [&>img]:my-8 [&>img]:border [&>img]:border-gray-100
+        [&>hr]:border-0 [&>hr]:h-px [&>hr]:bg-gray-200 [&>hr]:my-12
+        [&>table]:w-full [&>table]:border-collapse [&>table]:my-8 [&>table]:text-sm
+        [&>table_th]:border-b [&>table_th]:border-gray-200 [&>table_th]:px-4 [&>table_th]:py-3 [&>table_th]:text-left [&>table_th]:font-medium [&>table_th]:text-gray-900
+        [&>table_td]:border-b [&>table_td]:border-gray-100 [&>table_td]:px-4 [&>table_td]:py-3 [&>table_td]:text-gray-700
+        first:[&>*]:mt-0
+      ">
+        {Content && <Content />}
+      </article>
+
+      {/* Navigation/Back Button */}
+      <div class="mt-12 pt-8 border-t border-gray-200">
+        <a 
+          href="/blogs" 
+          class="inline-flex items-center gap-2 text-blue-600 hover:text-blue-800 font-medium transition-colors"
+        >
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+          </svg>
+          Back to all posts
+        </a>
+      </div>
+    </div>
+  ) : (
+    <div class="text-center py-16">
+      <h2 class="text-2xl font-bold text-gray-900 mb-4">Article not found</h2>
+      <p class="text-gray-600 mb-8">The blog post you are looking for does not exist.</p>
+      <a 
+        href="/blogs" 
+        class="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+      >
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+        </svg>
+        Back to all posts
+      </a>
+    </div>
+  )}
+</MainLayout>
