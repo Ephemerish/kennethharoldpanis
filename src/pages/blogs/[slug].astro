@@ -59,12 +59,12 @@ if (entry) {
       <article class="
         text-gray-700 text-lg leading-8 font-light
         [&>h1]:text-2xl [&>h1]:font-medium [&>h1]:text-gray-900 [&>h1]:mt-8 [&>h1]:mb-4 [&>h1]:tracking-tight [&>h1]:pb-2 [&>h1]:border-b [&>h1]:border-gray-100
-        [&>h2]:text-xl [&>h2]:font-medium [&>h2]:text-gray-900 [&>h2]:mt-6 [&>h2]:mb-3 [&>h2]:tracking-tight [&>h2]:bg-gray-50 [&>h2]:px-3 [&>h2]:py-2 [&>h2]:rounded-lg [&>h2]:border-l-4 [&>h2]:border-blue-200 [&>h2]:cursor-pointer [&>h2]:hover:bg-gray-100 [&>h2]:transition-colors [&>h2]:relative [&>h2]:pr-8
-        [&>h3]:text-lg [&>h3]:font-medium [&>h3]:text-gray-900 [&>h3]:mt-5 [&>h3]:mb-2 [&>h3]:tracking-tight [&>h3]:bg-gray-100 [&>h3]:px-2 [&>h3]:py-1.5 [&>h3]:rounded [&>h3]:border-l-2 [&>h3]:border-gray-300 [&>h3]:cursor-pointer [&>h3]:hover:bg-gray-200 [&>h3]:transition-colors [&>h3]:relative [&>h3]:pr-6
-        [&>h4]:text-base [&>h4]:font-medium [&>h4]:text-gray-900 [&>h4]:mt-4 [&>h4]:mb-2 [&>h4]:pl-3 [&>h4]:border-l-2 [&>h4]:border-gray-200
+        [&>h2]:text-xl [&>h2]:font-semibold [&>h2]:text-white [&>h2]:mt-6 [&>h2]:mb-3 [&>h2]:tracking-tight [&>h2]:bg-gradient-to-r [&>h2]:from-slate-700 [&>h2]:to-slate-800 [&>h2]:px-4 [&>h2]:py-3 [&>h2]:rounded-lg [&>h2]:border-l-4 [&>h2]:border-blue-400 [&>h2]:cursor-pointer [&>h2]:hover:from-slate-600 [&>h2]:hover:to-slate-700 [&>h2]:hover:border-blue-500 [&>h2]:transition-all [&>h2]:duration-200 [&>h2]:relative [&>h2]:pr-8 [&>h2]:shadow-md [&>h2]:hover:shadow-lg
+        [&>h3]:text-lg [&>h3]:font-semibold [&>h3]:text-gray-800 [&>h3]:mt-5 [&>h3]:mb-3 [&>h3]:tracking-tight [&>h3]:bg-gradient-to-r [&>h3]:from-indigo-50 [&>h3]:to-purple-50 [&>h3]:px-4 [&>h3]:py-2.5 [&>h3]:rounded-lg [&>h3]:border [&>h3]:border-indigo-100 [&>h3]:border-l-4 [&>h3]:border-l-indigo-300 [&>h3]:cursor-pointer [&>h3]:hover:from-indigo-100 [&>h3]:hover:to-purple-100 [&>h3]:hover:border-indigo-200 [&>h3]:hover:border-l-indigo-400 [&>h3]:transition-all [&>h3]:duration-200 [&>h3]:relative [&>h3]:pr-8 [&>h3]:shadow-sm [&>h3]:hover:shadow-md
+        [&>h4]:text-base [&>h4]:font-medium [&>h4]:text-gray-700 [&>h4]:mt-4 [&>h4]:mb-2 [&>h4]:pl-3 [&>h4]:border-l-3 [&>h4]:border-gray-300 [&>h4]:bg-gray-25 [&>h4]:py-1 [&>h4]:rounded-r-md
         [&>p]:mb-4 [&>p]:leading-8
-        [&>ul]:mb-4 [&>ul]:space-y-1 [&>ul>li]:relative [&>ul>li]:pl-6 [&>ul>li]:before:content-['•'] [&>ul>li]:before:absolute [&>ul>li]:before:left-0 [&>ul>li]:before:text-gray-400 [&>ul>li]:before:font-medium
-        [&>ol]:mb-4 [&>ol]:space-y-1 [&>ol]:ml-6 [&>ol]:list-decimal [&>ol>li]:mb-1
+        [&>ul]:mb-4 [&>ul]:space-y-2 [&>ul>li]:relative [&>ul>li]:pl-8 [&>ul>li]:before:content-['●'] [&>ul>li]:before:absolute [&>ul>li]:before:left-0 [&>ul>li]:before:text-blue-500 [&>ul>li]:before:font-bold [&>ul>li]:before:text-lg [&>ul>li]:before:top-0
+        [&>ol]:mb-4 [&>ol]:space-y-2 [&>ol]:ml-8 [&>ol]:list-decimal [&>ol]:marker:text-blue-600 [&>ol]:marker:font-semibold [&>ol]:marker:text-lg [&>ol>li]:mb-1 [&>ol>li]:pl-2
         [&>blockquote]:border-l-2 [&>blockquote]:border-gray-200 [&>blockquote]:pl-4 [&>blockquote]:text-gray-600 [&>blockquote]:italic [&>blockquote]:my-6 [&>blockquote]:text-lg
         [&>pre]:bg-gray-50 [&>pre]:border [&>pre]:border-gray-100 [&>pre]:p-4 [&>pre]:rounded-xl [&>pre]:overflow-x-auto [&>pre]:my-6 [&>pre]:text-sm [&>pre]:leading-6
         [&>:not(pre)>code]:bg-gray-100 [&>:not(pre)>code]:px-2 [&>:not(pre)>code]:py-0.5 [&>:not(pre)>code]:rounded [&>:not(pre)>code]:text-sm [&>:not(pre)>code]:font-mono [&>:not(pre)>code]:text-gray-800
@@ -84,10 +84,31 @@ if (entry) {
           const article = document.getElementById('article-content');
           if (!article) return;
 
+          // Check if button already exists to prevent duplicates
+          if (document.querySelector('[data-collapse-button]')) return;
+
           // Create collapse button
           const collapseBtn = document.createElement('button');
-          collapseBtn.innerHTML = '📖 Toggle Sections';
-          collapseBtn.className = 'mb-4 px-3 py-1.5 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 transition-colors text-sm font-medium';
+          collapseBtn.innerHTML = '📖';
+          collapseBtn.className = 'fixed top-20 right-4 z-50 w-12 h-12 bg-white/90 backdrop-blur-sm text-slate-700 rounded-full hover:bg-white hover:scale-110 transition-all duration-200 border border-slate-200 hover:border-slate-300 shadow-lg hover:shadow-xl flex items-center justify-center text-lg';
+          collapseBtn.setAttribute('data-collapse-button', 'true');
+          
+          // Create tooltip
+          const tooltip = document.createElement('div');
+          tooltip.innerHTML = 'Toggle Sections';
+          tooltip.className = 'fixed top-20 right-16 z-50 bg-slate-800 text-white px-3 py-1.5 rounded-lg text-sm font-medium shadow-lg opacity-0 pointer-events-none transition-all duration-200 whitespace-nowrap';
+          tooltip.setAttribute('data-collapse-tooltip', 'true');
+          
+          // Add hover events for tooltip
+          collapseBtn.addEventListener('mouseenter', () => {
+            tooltip.style.opacity = '1';
+            tooltip.style.transform = 'translateX(-4px)';
+          });
+          
+          collapseBtn.addEventListener('mouseleave', () => {
+            tooltip.style.opacity = '0';
+            tooltip.style.transform = 'translateX(0)';
+          });
           
           let sectionsCollapsed = false;
           
@@ -99,7 +120,7 @@ if (entry) {
             headers.forEach(header => {
               // Add click indicator
               const indicator = document.createElement('span');
-              indicator.innerHTML = '▼';
+              indicator.innerHTML = '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>';
               indicator.className = 'absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 text-xs select-none transition-all duration-200';
               header.appendChild(indicator);
               
@@ -141,7 +162,7 @@ if (entry) {
                       (el as HTMLElement).style.transform = 'translateY(0)';
                     });
                     header.setAttribute('data-collapsed', 'false');
-                    indicator.innerHTML = '▼';
+                    indicator.innerHTML = '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>';
                   } else {
                     // Collapse
                     contentElements.forEach(el => {
@@ -150,7 +171,7 @@ if (entry) {
                       (el as HTMLElement).style.transform = 'translateY(-10px)';
                     });
                     header.setAttribute('data-collapsed', 'true');
-                    indicator.innerHTML = '▶';
+                    indicator.innerHTML = '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>';
                   }
                 });
               }
@@ -177,7 +198,8 @@ if (entry) {
                 header.setAttribute('data-collapsed', 'false');
                 if (indicator) indicator.innerHTML = '▼';
               });
-              collapseBtn.innerHTML = '📖 Toggle Sections';
+              collapseBtn.innerHTML = '📖';
+              tooltip.innerHTML = 'Collapse Sections';
             } else {
               // Collapse all
               collapsibleHeaders.forEach(header => {
@@ -193,16 +215,22 @@ if (entry) {
                 header.setAttribute('data-collapsed', 'true');
                 if (indicator) indicator.innerHTML = '▶';
               });
-              collapseBtn.innerHTML = '📋 Expand All';
+              collapseBtn.innerHTML = '📋';
+              tooltip.innerHTML = 'Expand Sections';
             }
             
             sectionsCollapsed = !sectionsCollapsed;
           });
           
-          // Insert button before article
-          if (article.parentNode) {
-            article.parentNode.insertBefore(collapseBtn, article);
-          }
+          // Clean up any existing buttons/tooltips before adding new ones
+          const existingButton = document.querySelector('[data-collapse-button]');
+          const existingTooltip = document.querySelector('[data-collapse-tooltip]');
+          if (existingButton) existingButton.remove();
+          if (existingTooltip) existingTooltip.remove();
+          
+          // Add floating button and tooltip to body
+          document.body.appendChild(collapseBtn);
+          document.body.appendChild(tooltip);
           
           // Initialize
           initializeCollapsible();
