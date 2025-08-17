@@ -5,33 +5,33 @@ import { HomeHeader } from "../components/HomeHeader";
 import MainLayout from "../layouts/MainLayout.astro";
 import SearchForm from "../components/SearchForm.astro";
 import Card from "../components/Card.astro";
-import MostRecentArticle from "../components/MostRecentArticle.astro";
-import { HOMEPAGE_ARTICLE_LIMIT } from "../constants";
+import MostRecentBlog from "../components/MostRecentBlog.astro";
+import { HOMEPAGE_BLOG_LIMIT } from "../constants";
 
 import { getCollection } from "astro:content";
 import type { CollectionEntry, CollectionKey } from "astro:content";
 
-const allBlogArticles: CollectionEntry<"blog">[] = (
+const allBlogs: CollectionEntry<"blog">[] = (
   await getCollection("blog")
 ).sort(
   (a: CollectionEntry<"blog">, b: CollectionEntry<"blog">) =>
     b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
 );
 
-const mostRecentArticle: CollectionEntry<"blog"> = allBlogArticles[0];
+const mostRecentBlog: CollectionEntry<"blog"> = allBlogs[0];
 
-const otherArticles: CollectionEntry<"blog">[] = allBlogArticles.slice(1);
+const otherBlogs: CollectionEntry<"blog">[] = allBlogs.slice(1);
 ---
 
 <Layout title={"Kenneth Harold Panis"}>
   <HomeHeader client:load />
-  <MostRecentArticle article={mostRecentArticle} />
+  <MostRecentBlog blog={mostRecentBlog} />
   <!-- Main Grid -->
   <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
     {
-      otherArticles
-        .slice(0, HOMEPAGE_ARTICLE_LIMIT)
-        .map((article) => <Card item={article} type="blog" />)
+      otherBlogs
+        .slice(0, HOMEPAGE_BLOG_LIMIT)
+        .map((blog) => <Card item={blog} type="blog" />)
     }
   </div>
 </Layout>

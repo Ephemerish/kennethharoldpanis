@@ -5,11 +5,11 @@ import SearchForm from "../../components/SearchForm.astro";
 import Pagination from "../../components/Pagination.astro";
 import { getCollection } from "astro:content";
 import type { CollectionEntry } from "astro:content";
-import { ARTICLES_PER_PAGE } from "../../constants";
+import { BLOGS_PER_PAGE } from "../../constants";
 
 const currentPage: number | null = +Astro.url.searchParams.get("page")! || 1;
 
-const allBlogArticles: CollectionEntry<"blog">[] = (
+const allBlogs: CollectionEntry<"blog">[] = (
   await getCollection("blog")
 ).sort(
   (a: CollectionEntry<"blog">, b: CollectionEntry<"blog">) =>
@@ -17,12 +17,12 @@ const allBlogArticles: CollectionEntry<"blog">[] = (
 );
 
 const totalPages: number = Math.ceil(
-  allBlogArticles.length / ARTICLES_PER_PAGE
+  allBlogs.length / BLOGS_PER_PAGE
 );
 
-const articlesForPage: CollectionEntry<"blog">[] = allBlogArticles.slice(
-  (currentPage - 1) * ARTICLES_PER_PAGE,
-  currentPage * ARTICLES_PER_PAGE
+const blogsForPage: CollectionEntry<"blog">[] = allBlogs.slice(
+  (currentPage - 1) * BLOGS_PER_PAGE,
+  currentPage * BLOGS_PER_PAGE
 );
 ---
 
@@ -38,13 +38,13 @@ const articlesForPage: CollectionEntry<"blog">[] = allBlogArticles.slice(
       </p>
     </div>
 
-    <!-- Articles Grid -->
+    <!-- Blogs Grid -->
     <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
-      {articlesForPage.map((article) => <Card item={article} type="blog" />)}
+      {blogsForPage.map((blog) => <Card item={blog} type="blog" />)}
     </div>
 
     <!-- Empty State -->
-    {allBlogArticles.length === 0 && (
+    {allBlogs.length === 0 && (
       <div class="text-center py-16">
         <div class="text-gray-400 mb-4">
           <svg class="w-16 h-16 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
