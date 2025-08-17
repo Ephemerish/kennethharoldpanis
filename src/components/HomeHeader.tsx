@@ -82,9 +82,7 @@ const HomeHeader: React.FC = () => {
               animate={{ opacity: isLoaded ? 1 : 0 }}
               transition={{ duration: 0.6, delay: 0.6 }}
             >
-              I'm a passionate developer/designer with expertise in creating
-              beautiful and functional web experiences. I love solving complex
-              problems and turning ideas into reality.
+              I'm drawn to creating things that solve random problems and bring ideas to life.
             </motion.p>
             <motion.p
               className="max-w-[600px] text-muted-foreground md:text-xl"
@@ -92,10 +90,53 @@ const HomeHeader: React.FC = () => {
               animate={{ opacity: isLoaded ? 1 : 0 }}
               transition={{ duration: 0.6, delay: 0.8 }}
             >
-              Welcome to my portfolio where I showcase my projects and share my
-              thoughts on technology, design, and more.
+              I have a plan to create projects, and this is where all my thoughts and projects will be on display – 
+              everything from weekend experiments to things I'm actually proud of or not, we'll see.
             </motion.p>
           </div>
+
+          {/* Call to Action */}
+          <motion.div
+            className="flex flex-col sm:flex-row gap-4 mt-8"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: isLoaded ? 1 : 0, y: isLoaded ? 0 : 20 }}
+            transition={{ duration: 0.6, delay: 1.0 }}
+          >
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    className="inline-flex items-center px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors duration-200"
+                    onClick={() => window.location.href = '/contact'}
+                  >
+                    <Mail className="mr-2 h-4 w-4" />
+                    Get In Touch
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Let's discuss your project ideas</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    variant="outline"
+                    className="inline-flex items-center px-6 py-3 border-2 border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white rounded-lg transition-colors duration-200"
+                    onClick={() => window.location.href = '/projects'}
+                  >
+                    <FileText className="mr-2 h-4 w-4" />
+                    View Projects
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Check out my latest work</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          </motion.div>
 
           {/* <motion.div
               className="hidden md:flex items-center justify-center mt-12"
