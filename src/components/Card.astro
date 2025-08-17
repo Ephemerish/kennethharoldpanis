@@ -2,6 +2,7 @@
 import { formatDate, calculateReadTime } from "../utils";
 import type { CollectionEntry } from "astro:content";
 import Tags from "./Tags.astro";
+import { Image } from 'astro:assets';
 
 const { item, type } = Astro.props;
 
@@ -62,10 +63,12 @@ const baseUrl = isBlog ? "/blogs/" : "/projects/";
   <a href={baseUrl + slug} class="block">
     <!-- Image container -->
     <div class="relative aspect-[16/9] overflow-hidden">
-      <img
+      <Image
         src={"/images/" + image}
         alt={title}
         class="w-full h-full object-cover"
+        width={400}
+        height={225}
       />
       
       <!-- Blog: Reading time badge -->

@@ -1,6 +1,7 @@
 ---
 import type { CollectionEntry } from "astro:content";
 import Tags from "./Tags.astro";
+import { Image } from 'astro:assets';
 
 const { project } = Astro.props;
 
@@ -25,10 +26,12 @@ const statusText = {
   <div class="lg:flex">
     <div class="lg:w-1/2">
       <a href={"/projects/" + project.slug}>
-        <img
+        <Image
           src={"/images/" + project.data.image}
           alt={project.data.title}
           class="w-full h-64 lg:h-full object-cover hover:opacity-75 transition duration-300 ease-in-out"
+          width={600}
+          height={400}
         />
       </a>
     </div>

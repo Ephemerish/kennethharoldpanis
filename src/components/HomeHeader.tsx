@@ -3,7 +3,6 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Button } from "./button";
-import * as Avatar from "@radix-ui/react-avatar";
 import {
   // ChevronDown,
   Mail,
@@ -54,7 +53,7 @@ const TypingEffect = ({ text, delay = 40 }: TypingEffectProps) => {
 };
 
 const HomeHeader: React.FC = () => {
-  const [isLoaded, setIsLoaded] = useState(false);
+  const [isLoaded, setIsLoaded] = useState(true);
 
   useEffect(() => {
     setIsLoaded(true);
@@ -66,13 +65,13 @@ const HomeHeader: React.FC = () => {
         {/* Avatar Section - Show first on mobile */}
         <motion.div
           className="order-1 md:order-2 flex items-center justify-center"
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: isLoaded ? 1 : 0, scale: isLoaded ? 1 : 0.8 }}
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: isLoaded ? 1 : 0, scale: isLoaded ? 1 : 0.95 }}
           transition={{
             type: "spring",
-            stiffness: 100,
-            damping: 15,
-            delay: 0.4,
+            stiffness: 200,
+            damping: 20,
+            delay: 0,
           }}
         >
           <div className="relative w-[200px] h-[200px] sm:w-[250px] sm:h-[250px] md:w-[300px] md:h-[300px] lg:w-[350px] lg:h-[350px] overflow-hidden rounded-full border-4 border-primary">
@@ -88,13 +87,18 @@ const HomeHeader: React.FC = () => {
                 ease: "easeInOut",
               }}
             />
-            <Avatar.Root className="w-full h-full">
-              <Avatar.Image
+            <div className="w-full h-full rounded-full overflow-hidden">
+              <img
                 src="/me.jpg"
                 alt="Kenneth Harold Panis"
                 className="w-full h-full object-cover"
+                loading="eager"
+                width="240"
+                height="240"
+                decoding="async"
+                fetchPriority="high"
               />
-            </Avatar.Root>
+            </div>
 
             {/* Decorative elements around the avatar */}
             <motion.div
@@ -112,9 +116,9 @@ const HomeHeader: React.FC = () => {
         {/* Content Section */}
         <motion.div
           className="order-2 md:order-1 flex flex-col justify-center space-y-6 text-center md:text-left flex-1"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: isLoaded ? 1 : 0, y: isLoaded ? 0 : 20 }}
-          transition={{ duration: 0.6, delay: 0.2 }}
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: isLoaded ? 1 : 0, y: isLoaded ? 0 : 10 }}
+          transition={{ duration: 0.4, delay: 0.05 }}
         >
           <div className="space-y-4">
             <h1 className="text-2xl font-bold tracking-tighter sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl/none">
@@ -127,7 +131,7 @@ const HomeHeader: React.FC = () => {
               className="max-w-[600px] mx-auto md:mx-0 text-muted-foreground text-base sm:text-lg md:text-xl"
               initial={{ opacity: 0 }}
               animate={{ opacity: isLoaded ? 1 : 0 }}
-              transition={{ duration: 0.6, delay: 0.6 }}
+              transition={{ duration: 0.4, delay: 0.15 }}
             >
               I'm drawn to creating things that solve random problems and bring ideas to life.
             </motion.p>
@@ -135,7 +139,7 @@ const HomeHeader: React.FC = () => {
               className="max-w-[600px] mx-auto md:mx-0 text-muted-foreground text-base sm:text-lg md:text-xl"
               initial={{ opacity: 0 }}
               animate={{ opacity: isLoaded ? 1 : 0 }}
-              transition={{ duration: 0.6, delay: 0.8 }}
+              transition={{ duration: 0.4, delay: 0.25 }}
             >
               I have a plan to create projects, and this is where all my thoughts and projects will be on display – 
               everything from weekend experiments to things I'm actually proud of or not, we'll see.
@@ -145,9 +149,9 @@ const HomeHeader: React.FC = () => {
           {/* Call to Action */}
           <motion.div
             className="flex flex-col sm:flex-row gap-3 sm:gap-4 mt-6 sm:mt-8 w-full sm:w-auto"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: isLoaded ? 1 : 0, y: isLoaded ? 0 : 20 }}
-            transition={{ duration: 0.6, delay: 1.0 }}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: isLoaded ? 1 : 0, y: isLoaded ? 0 : 10 }}
+            transition={{ duration: 0.4, delay: 0.35 }}
           >
             <TooltipProvider>
               <Tooltip>

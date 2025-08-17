@@ -1,6 +1,7 @@
 ---
 import Layout from "../layouts/MainLayout.astro";
 import { Button } from "../components/button.tsx";
+import { Image } from 'astro:assets';
 ---
 
 <Layout title="404 - Page Not Found">
@@ -8,11 +9,12 @@ import { Button } from "../components/button.tsx";
     <div class="max-w-lg mx-auto">
       <!-- Error Image/Icon -->
       <div class="mb-6 sm:mb-8">
-        <img 
+        <Image 
           src="/images/error-404.png" 
           alt="404 Error" 
           class="w-48 h-48 sm:w-64 sm:h-64 mx-auto object-contain"
-          loading="lazy"
+          width={256}
+          height={256}
         />
       </div>
       

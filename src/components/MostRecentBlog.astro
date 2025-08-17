@@ -1,21 +1,25 @@
 ---
 import { formatDate } from "../utils";
 import type { CollectionEntry } from "astro:content";
-
-const { blog } = Astro.props;
+import { Image } from 'astro:assets';
 
 interface Props {
   blog: CollectionEntry<"blog">;
 }
+
+const { blog } = Astro.props;
 ---
 
 <div class="relative w-full group cursor-pointer rounded-3xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-500 transform hover:scale-[1.02]">
   <a href={"/blogs/" + blog.slug} class="block">
     <div class="relative">
-      <img
+      <Image
         src={"/images/" + blog.data.image}
         alt={blog.data.title}
         class="w-full h-[400px] sm:h-[500px] lg:h-[600px] object-cover"
+        width={800}
+        height={600}
+        loading="eager"
       />
       
       <!-- Gradient overlay -->

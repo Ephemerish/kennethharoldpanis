@@ -3,6 +3,7 @@ import MainLayout from "../../layouts/MainLayout.astro";
 import { getEntryBySlug, getCollection } from "astro:content";
 import HeroIcon from "../../components/HeroIcon.tsx";
 import { formatDate, calculateReadTime } from "../../utils";
+import { Image } from 'astro:assets';
 
 export async function getStaticPaths() {
   const blogEntries = await getCollection("blog");
@@ -66,10 +67,13 @@ if (entry) {
         </div>
         {frontmatter?.image && (
           <div class="mb-8">
-            <img 
+            <Image 
               src={"/images/" + frontmatter.image} 
               alt={frontmatter?.title || "Blog post image"} 
               class="w-full h-64 md:h-96 object-cover rounded-lg shadow-lg"
+              width={800}
+              height={400}
+              loading="eager"
             />
           </div>
         )}
