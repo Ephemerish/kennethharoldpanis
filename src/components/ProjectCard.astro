@@ -1,0 +1,75 @@
+---
+import type { CollectionEntry } from "astro:content";
+import Tags from "./Tags.astro";
+
+const { project } = Astro.props;
+
+interface Props {
+  project: CollectionEntry<"projects">;
+}
+
+const statusColors = {
+  completed: "bg-green-100 text-green-800",
+  "in-progress": "bg-blue-100 text-blue-800", 
+  planned: "bg-gray-100 text-gray-800"
+};
+
+const statusText = {
+  completed: "Completed",
+  "in-progress": "In Progress",
+  planned: "Planned"
+};
+---
+
+<div class="max-w-md mx-auto mt-10">
+  <div class="bg-white rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300">
+    <a href={"/projects/" + project.slug}>
+      <img
+        src={"/images/" + project.data.image}
+        alt={project.data.title}
+        class="w-full h-48 object-cover hover:opacity-75 transition duration-300 ease-in-out"
+      />
+    </a>
+    <div class="p-6">
+      <div class="flex justify-between items-start mb-2">
+        <h2 class="text-xl font-semibold">
+          <a href={"/projects/" + project.slug} class="hover:text-blue-600 transition-colors"> 
+            {project.data.title} 
+          </a>
+        </h2>
+        <span class={`px-2 py-1 rounded-full text-xs font-medium ${statusColors[project.data.status]}`}>
+          {statusText[project.data.status]}
+        </span>
+      </div>
+      
+      <p class="text-gray-600 text-sm mb-4 line-clamp-3">
+        {project.data.description}
+      </p>
+      
+      <div class="flex gap-2 mb-4">
+        {project.data.demoUrl && (
+          <a 
+            href={project.data.demoUrl} 
+            target="_blank" 
+            rel="noopener noreferrer"
+            class="text-blue-600 hover:text-blue-800 text-sm font-medium"
+          >
+            Live Demo ↗
+          </a>
+        )}
+        {project.data.githubUrl && (
+          <a 
+            href={project.data.githubUrl} 
+            target="_blank" 
+            rel="noopener noreferrer"
+            class="text-gray-600 hover:text-gray-800 text-sm font-medium"
+          >
+            GitHub ↗
+          </a>
+        )}
+      </div>
+      
+      <Tags tags={project.data.tags} />
+    </div>
+  </div>
+</div>
