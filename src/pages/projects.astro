@@ -30,15 +30,26 @@ const pageTitle = "Projects";
 ---
 
 <Layout title={pageTitle}>
-  <div class="max-w-6xl mx-auto px-4 py-12">
+  <div class="max-w-7xl mx-auto px-4 py-12">
+    <!-- Header Section -->
+    <div class="text-center mb-16">
+      <h1 class="text-4xl md:text-6xl font-bold text-gray-900 mb-6">
+        Projects
+      </h1>
+      <p class="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+        A collection of projects showcasing my skills in web development, software engineering, and innovative problem-solving.
+      </p>
+    </div>
 
     <!-- Featured Projects -->
     {featuredProjects.length > 0 && (
       <div class="mb-16">
         <h2 class="text-2xl font-bold text-gray-900 mb-8">Featured Projects</h2>
-        {featuredProjects.map((project) => (
-          <FeaturedProject project={project} />
-        ))}
+        <div class="max-w-6xl mx-auto">
+          {featuredProjects.map((project) => (
+            <FeaturedProject project={project} />
+          ))}
+        </div>
       </div>
     )}
 
