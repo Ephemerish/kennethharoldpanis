@@ -4,15 +4,45 @@ import { Button } from "../components/button.tsx";
 ---
 
 <Layout title="404 - Page Not Found">
-  <div
-    class="flex flex-col items-center justify-center min-h-[70vh] text-center"
-  >
-    <h1 class="text-4xl font-bold text-gray-900">404 - Page Not Found</h1>
-    <p class="text-lg text-gray-600 mt-4">
-      Sorry, the page you are looking for does not exist.
-    </p>
-    <Button variant="link">
-      <a href="/">Go back to Home</a>
-    </Button>
+  <div class="flex flex-col items-center justify-center min-h-[70vh] text-center px-4 sm:px-6 lg:px-8">
+    <div class="max-w-lg mx-auto">
+      <!-- Error Image/Icon -->
+      <div class="mb-6 sm:mb-8">
+        <img 
+          src="/images/error-404.png" 
+          alt="404 Error" 
+          class="w-48 h-48 sm:w-64 sm:h-64 mx-auto object-contain"
+          loading="lazy"
+        />
+      </div>
+      
+      <!-- Error Content -->
+      <h1 class="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-3 sm:mb-4">
+        404 - Page Not Found
+      </h1>
+      <p class="text-base sm:text-lg text-gray-600 mb-6 sm:mb-8 leading-relaxed">
+        Oops! The page you're looking for seems to have wandered off. 
+        Don't worry, even the best code sometimes takes unexpected paths.
+      </p>
+      
+      <!-- Action Buttons -->
+      <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
+        <Button variant="default" className="w-full sm:w-auto">
+          <a href="/" class="block w-full">Go back to Home</a>
+        </Button>
+        <Button variant="outline" className="w-full sm:w-auto">
+          <a href="/projects" class="block w-full">View Projects</a>
+        </Button>
+      </div>
+      
+      <!-- Additional Help -->
+      <div class="mt-8 sm:mt-12 text-sm text-gray-500">
+        <p>Still lost? You can also:</p>
+        <div class="flex flex-wrap justify-center gap-4 sm:gap-6 mt-2">
+          <a href="/blogs" class="hover:text-blue-600 transition-colors">Read the Blog</a>
+          <a href="/contact" class="hover:text-blue-600 transition-colors">Contact Me</a>
+        </div>
+      </div>
+    </div>
   </div>
 </Layout>
