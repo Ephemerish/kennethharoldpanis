@@ -37,18 +37,24 @@ const categoryColors = {
   web: "bg-blue-100 text-blue-800",
   mobile: "bg-green-100 text-green-800",
   hardware: "bg-orange-100 text-orange-800",
+  iot: "bg-cyan-100 text-cyan-800",
   "ai-ml": "bg-purple-100 text-purple-800",
   game: "bg-red-100 text-red-800",
-  desktop: "bg-gray-100 text-gray-800"
+  desktop: "bg-gray-100 text-gray-800",
+  thesis: "bg-indigo-100 text-indigo-800",
+  research: "bg-teal-100 text-teal-800"
 };
 
 const categoryText = {
   web: "Web Development",
   mobile: "Mobile App",
   hardware: "Hardware Project",
+  iot: "IoT System",
   "ai-ml": "AI/Machine Learning",
   game: "Game Development",
-  desktop: "Desktop Application"
+  desktop: "Desktop Application",
+  thesis: "Thesis Project",
+  research: "Research Project"
 };
 
 const formatDate = (date: Date) => {
@@ -261,6 +267,66 @@ const formatDate = (date: Date) => {
               <p class="text-gray-700">{challenge}</p>
             </div>
           ))}
+        </div>
+      </div>
+    )}
+
+    <!-- Project Team & Institution -->
+    {(project.data.team || project.data.institution || project.data.supervisor || project.data.researchArea) && (
+      <div class="mb-12">
+        <h2 class="text-2xl font-bold text-gray-900 mb-6">Project Information</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {project.data.team && project.data.team.length > 0 && (
+            <div class="bg-white p-6 rounded-lg shadow-md border">
+              <h3 class="font-semibold text-gray-900 mb-3 flex items-center">
+                <svg class="w-5 h-5 mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                </svg>
+                Team Members
+              </h3>
+              <div class="space-y-2">
+                {project.data.team.map((member) => (
+                  <div class="text-gray-700">{member}</div>
+                ))}
+              </div>
+            </div>
+          )}
+          
+          {project.data.institution && (
+            <div class="bg-white p-6 rounded-lg shadow-md border">
+              <h3 class="font-semibold text-gray-900 mb-3 flex items-center">
+                <svg class="w-5 h-5 mr-2 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                </svg>
+                Institution
+              </h3>
+              <div class="text-gray-700">{project.data.institution}</div>
+            </div>
+          )}
+          
+          {project.data.supervisor && (
+            <div class="bg-white p-6 rounded-lg shadow-md border">
+              <h3 class="font-semibold text-gray-900 mb-3 flex items-center">
+                <svg class="w-5 h-5 mr-2 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                </svg>
+                Supervisor
+              </h3>
+              <div class="text-gray-700">{project.data.supervisor}</div>
+            </div>
+          )}
+          
+          {project.data.researchArea && (
+            <div class="bg-white p-6 rounded-lg shadow-md border">
+              <h3 class="font-semibold text-gray-900 mb-3 flex items-center">
+                <svg class="w-5 h-5 mr-2 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                </svg>
+                Research Area
+              </h3>
+              <div class="text-gray-700">{project.data.researchArea}</div>
+            </div>
+          )}
         </div>
       </div>
     )}

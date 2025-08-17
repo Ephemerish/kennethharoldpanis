@@ -18,7 +18,7 @@ const projectCollection = defineCollection({
     image: z.string(),
     gallery: z.array(z.string()).optional(),
     tags: z.array(z.string()),
-    category: z.enum(["web", "mobile", "hardware", "ai-ml", "game", "desktop"]),
+    category: z.enum(["web", "mobile", "hardware", "iot", "ai-ml", "game", "desktop", "thesis", "research"]),
     demoUrl: z.string().optional(),
     videoUrl: z.string().optional(),
     githubUrl: z.string().optional(),
@@ -29,6 +29,10 @@ const projectCollection = defineCollection({
     challenges: z.array(z.string()).optional(),
     technologies: z.array(z.string()).optional(),
     keyFeatures: z.array(z.string()).optional(),
+    team: z.array(z.string()).optional(),
+    institution: z.string().optional(),
+    supervisor: z.string().optional(),
+    researchArea: z.string().optional(),
   }),
 });
 
