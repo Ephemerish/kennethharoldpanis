@@ -1,6 +1,6 @@
 ---
 import MainLayout from "../../layouts/MainLayout.astro";
-import ArticleCard from "../../components/ArticleCard.astro";
+import Card from "../../components/Card.astro";
 import SearchForm from "../../components/SearchForm.astro";
 import Pagination from "../../components/Pagination.astro";
 import { getCollection } from "astro:content";
@@ -40,7 +40,7 @@ const articlesForPage: CollectionEntry<"blog">[] = allBlogArticles.slice(
 
     <!-- Articles Grid -->
     <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
-      {articlesForPage.map((article) => <ArticleCard article={article} />)}
+      {articlesForPage.map((article) => <Card item={article} type="blog" />)}
     </div>
 
     <!-- Empty State -->

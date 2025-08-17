@@ -4,7 +4,7 @@ import { HomeHeader } from "../components/HomeHeader";
 
 import MainLayout from "../layouts/MainLayout.astro";
 import SearchForm from "../components/SearchForm.astro";
-import ArticleCard from "../components/ArticleCard.astro";
+import Card from "../components/Card.astro";
 import MostRecentArticle from "../components/MostRecentArticle.astro";
 import { HOMEPAGE_ARTICLE_LIMIT } from "../constants";
 
@@ -31,7 +31,7 @@ const otherArticles: CollectionEntry<"blog">[] = allBlogArticles.slice(1);
     {
       otherArticles
         .slice(0, HOMEPAGE_ARTICLE_LIMIT)
-        .map((article) => <ArticleCard article={article} />)
+        .map((article) => <Card item={article} type="blog" />)
     }
   </div>
 </Layout>
