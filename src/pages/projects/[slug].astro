@@ -32,6 +32,24 @@ const statusText = {
   planned: "Planned"
 };
 
+const categoryColors = {
+  web: "bg-blue-100 text-blue-800",
+  mobile: "bg-green-100 text-green-800",
+  hardware: "bg-orange-100 text-orange-800",
+  "ai-ml": "bg-purple-100 text-purple-800",
+  game: "bg-red-100 text-red-800",
+  desktop: "bg-gray-100 text-gray-800"
+};
+
+const categoryText = {
+  web: "Web Development",
+  mobile: "Mobile App",
+  hardware: "Hardware Project",
+  "ai-ml": "AI/Machine Learning",
+  game: "Game Development",
+  desktop: "Desktop Application"
+};
+
 const formatDate = (date: Date) => {
   return new Intl.DateTimeFormat('en-US', { 
     year: 'numeric', 
@@ -42,7 +60,7 @@ const formatDate = (date: Date) => {
 ---
 
 <Layout title={project.data.title}>
-  <article class="max-w-4xl mx-auto px-4 py-12">
+  <article class="max-w-5xl mx-auto px-4 py-12">
     <!-- Header -->
     <header class="mb-12">
       <!-- Back to Projects -->
@@ -58,11 +76,14 @@ const formatDate = (date: Date) => {
         </a>
       </nav>
 
-      <!-- Project Title and Status -->
+      <!-- Project Title and Badges -->
       <div class="flex flex-wrap items-center gap-3 mb-4">
         <h1 class="text-4xl md:text-5xl font-bold text-gray-900">
           {project.data.title}
         </h1>
+        <span class={`px-3 py-1 rounded-full text-sm font-medium ${categoryColors[project.data.category]}`}>
+          {categoryText[project.data.category]}
+        </span>
         <span class={`px-3 py-1 rounded-full text-sm font-medium ${statusColors[project.data.status]}`}>
           {statusText[project.data.status]}
         </span>
@@ -74,20 +95,36 @@ const formatDate = (date: Date) => {
       </div>
 
       <!-- Project Description -->
-      <p class="text-xl text-gray-600 mb-6 leading-relaxed">
+      <p class="text-xl text-gray-600 mb-8 leading-relaxed">
         {project.data.description}
       </p>
 
-      <!-- Project Links -->
+      <!-- Project Actions -->
       <div class="flex flex-wrap gap-3 mb-8">
         {project.data.demoUrl && (
           <a 
             href={project.data.demoUrl} 
             target="_blank" 
             rel="noopener noreferrer"
-            class="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors font-medium"
+            class="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors font-medium inline-flex items-center"
           >
-            Live Demo ↗
+            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+            </svg>
+            Live Demo
+          </a>
+        )}
+        {project.data.videoUrl && (
+          <a 
+            href={project.data.videoUrl} 
+            target="_blank" 
+            rel="noopener noreferrer"
+            class="bg-red-600 text-white px-6 py-3 rounded-lg hover:bg-red-700 transition-colors font-medium inline-flex items-center"
+          >
+            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h1.586a1 1 0 01.707.293l2.414 2.414a1 1 0 00.707.293H15M9 10v4a2 2 0 002 2h2a2 2 0 002-2v-4M9 10V9a2 2 0 012-2h2a2 2 0 012 2v1" />
+            </svg>
+            Watch Demo
           </a>
         )}
         {project.data.githubUrl && (
@@ -95,130 +132,374 @@ const formatDate = (date: Date) => {
             href={project.data.githubUrl} 
             target="_blank" 
             rel="noopener noreferrer"
-            class="border border-gray-300 text-gray-700 px-6 py-3 rounded-lg hover:bg-gray-50 transition-colors font-medium"
+            class="border border-gray-300 text-gray-700 px-6 py-3 rounded-lg hover:bg-gray-50 transition-colors font-medium inline-flex items-center"
           >
-            View Code ↗
+            <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+            </svg>
+            View Code
           </a>
         )}
       </div>
-
-      <!-- Project Hero Image -->
-      <div class="mb-8">
-        <img
-          src={"/images/" + project.data.image}
-          alt={project.data.title}
-          class="w-full h-64 md:h-96 object-cover rounded-lg shadow-lg"
-        />
-      </div>
-
-      <!-- Project Meta Information -->
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 p-6 bg-gray-50 rounded-lg mb-8">
-        <div>
-          <h3 class="font-semibold text-gray-900 mb-2">Timeline</h3>
-          <p class="text-gray-600">
-            Started: {formatDate(project.data.startDate)}
-            {project.data.endDate && (
-              <><br />Completed: {formatDate(project.data.endDate)}</>
-            )}
-          </p>
-        </div>
-        <div>
-          <h3 class="font-semibold text-gray-900 mb-2">Technologies</h3>
-          <Tags tags={project.data.tags} />
-        </div>
-      </div>
     </header>
 
-    <!-- Project Content -->
-    <div class="prose prose-lg max-w-none">
-      <Content />
+    <!-- Project Gallery -->
+    <div class="mb-12">
+      <img
+        src={"/images/" + project.data.image}
+        alt={project.data.title}
+        class="w-full h-64 md:h-96 object-cover rounded-lg shadow-lg mb-6"
+      />
+      
+      {project.data.gallery && project.data.gallery.length > 1 && (
+        <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+          {project.data.gallery.slice(1).map((image) => (
+            <img
+              src={"/images/" + image}
+              alt={`${project.data.title} gallery image`}
+              class="w-full h-32 md:h-48 object-cover rounded-lg shadow-md hover:shadow-lg transition-shadow cursor-pointer"
+            />
+          ))}
+        </div>
+      )}
     </div>
+
+    <!-- Project Overview Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+      <!-- Timeline Card -->
+      <div class="bg-white p-6 rounded-lg shadow-md border">
+        <h3 class="font-semibold text-gray-900 mb-3 flex items-center">
+          <svg class="w-5 h-5 mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+          </svg>
+          Timeline
+        </h3>
+        <p class="text-gray-600 text-sm">
+          <strong>Started:</strong> {formatDate(project.data.startDate)}<br />
+          {project.data.endDate && (
+            <><strong>Completed:</strong> {formatDate(project.data.endDate)}</>
+          )}
+          {!project.data.endDate && project.data.status === "in-progress" && (
+            <><strong>Status:</strong> In Progress</>
+          )}
+        </p>
+      </div>
+
+      <!-- Technologies Card -->
+      <div class="bg-white p-6 rounded-lg shadow-md border">
+        <h3 class="font-semibold text-gray-900 mb-3 flex items-center">
+          <svg class="w-5 h-5 mr-2 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+          </svg>
+          Technologies
+        </h3>
+        <Tags tags={project.data.tags} />
+      </div>
+
+      <!-- Category Card -->
+      <div class="bg-white p-6 rounded-lg shadow-md border">
+        <h3 class="font-semibold text-gray-900 mb-3 flex items-center">
+          <svg class="w-5 h-5 mr-2 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+          </svg>
+          Category
+        </h3>
+        <span class={`inline-block px-3 py-1 rounded-full text-sm font-medium ${categoryColors[project.data.category]}`}>
+          {categoryText[project.data.category]}
+        </span>
+      </div>
+    </div>
+
+    <!-- Key Features -->
+    {project.data.keyFeatures && project.data.keyFeatures.length > 0 && (
+      <div class="mb-12">
+        <h2 class="text-2xl font-bold text-gray-900 mb-6">Key Features</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {project.data.keyFeatures.map((feature) => (
+            <div class="flex items-start">
+              <svg class="w-5 h-5 text-green-500 mr-3 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+              </svg>
+              <span class="text-gray-700">{feature}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+    )}
+
+    <!-- Technologies Used -->
+    {project.data.technologies && project.data.technologies.length > 0 && (
+      <div class="mb-12">
+        <h2 class="text-2xl font-bold text-gray-900 mb-6">Technologies Used</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {project.data.technologies.map((tech) => (
+            <div class="bg-gray-50 p-4 rounded-lg border">
+              <div class="font-medium text-gray-900">{tech}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+    )}
+
+    <!-- Challenges -->
+    {project.data.challenges && project.data.challenges.length > 0 && (
+      <div class="mb-12">
+        <h2 class="text-2xl font-bold text-gray-900 mb-6">Challenges Overcome</h2>
+        <div class="space-y-4">
+          {project.data.challenges.map((challenge, index) => (
+            <div class="flex items-start">
+              <div class="bg-red-100 text-red-600 rounded-full w-6 h-6 flex items-center justify-center text-sm font-medium mr-4 mt-0.5 flex-shrink-0">
+                {index + 1}
+              </div>
+              <p class="text-gray-700">{challenge}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    )}
+
+    <!-- Project Content -->
+    <article class="
+      text-gray-700 text-lg leading-8 font-light
+      [&>h1]:text-2xl [&>h1]:font-medium [&>h1]:text-gray-900 [&>h1]:mt-8 [&>h1]:mb-4 [&>h1]:tracking-tight [&>h1]:pb-2 [&>h1]:border-b [&>h1]:border-gray-100
+      [&>h2]:text-xl [&>h2]:font-semibold [&>h2]:text-white [&>h2]:mt-6 [&>h2]:mb-3 [&>h2]:tracking-tight [&>h2]:bg-gradient-to-r [&>h2]:from-slate-700 [&>h2]:to-slate-800 [&>h2]:px-4 [&>h2]:py-3 [&>h2]:rounded-lg [&>h2]:border-l-4 [&>h2]:border-blue-400 [&>h2]:cursor-pointer [&>h2]:hover:from-slate-600 [&>h2]:hover:to-slate-700 [&>h2]:hover:border-blue-500 [&>h2]:transition-all [&>h2]:duration-200 [&>h2]:relative [&>h2]:pr-8 [&>h2]:shadow-md [&>h2]:hover:shadow-lg
+      [&>h3]:text-lg [&>h3]:font-semibold [&>h3]:text-gray-800 [&>h3]:mt-5 [&>h3]:mb-3 [&>h3]:tracking-tight [&>h3]:bg-gradient-to-r [&>h3]:from-indigo-50 [&>h3]:to-purple-50 [&>h3]:px-4 [&>h3]:py-2.5 [&>h3]:rounded-lg [&>h3]:border [&>h3]:border-indigo-100 [&>h3]:border-l-4 [&>h3]:border-l-indigo-300 [&>h3]:cursor-pointer [&>h3]:hover:from-indigo-100 [&>h3]:hover:to-purple-100 [&>h3]:hover:border-indigo-200 [&>h3]:hover:border-l-indigo-400 [&>h3]:transition-all [&>h3]:duration-200 [&>h3]:relative [&>h3]:pr-8 [&>h3]:shadow-sm [&>h3]:hover:shadow-md
+      [&>h4]:text-base [&>h4]:font-medium [&>h4]:text-gray-700 [&>h4]:mt-4 [&>h4]:mb-2 [&>h4]:pl-3 [&>h4]:border-l-3 [&>h4]:border-gray-300 [&>h4]:bg-gray-25 [&>h4]:py-1 [&>h4]:rounded-r-md
+      [&>p]:mb-4 [&>p]:leading-8
+      [&>ul]:mb-4 [&>ul]:space-y-2 [&>ul>li]:relative [&>ul>li]:pl-8 [&>ul>li]:before:content-['●'] [&>ul>li]:before:absolute [&>ul>li]:before:left-0 [&>ul>li]:before:text-blue-500 [&>ul>li]:before:font-bold [&>ul>li]:before:text-lg [&>ul>li]:before:top-0
+      [&>ol]:mb-4 [&>ol]:space-y-2 [&>ol]:ml-8 [&>ol]:list-decimal [&>ol]:marker:text-blue-600 [&>ol]:marker:font-semibold [&>ol]:marker:text-lg [&>ol>li]:mb-1 [&>ol>li]:pl-2
+      [&>blockquote]:border-l-2 [&>blockquote]:border-gray-200 [&>blockquote]:pl-4 [&>blockquote]:text-gray-600 [&>blockquote]:italic [&>blockquote]:my-6 [&>blockquote]:text-lg
+      [&>pre]:bg-gray-50 [&>pre]:border [&>pre]:border-gray-100 [&>pre]:p-4 [&>pre]:rounded-xl [&>pre]:overflow-x-auto [&>pre]:my-6 [&>pre]:text-sm [&>pre]:leading-6
+      [&>:not(pre)>code]:bg-gray-100 [&>:not(pre)>code]:px-2 [&>:not(pre)>code]:py-0.5 [&>:not(pre)>code]:rounded [&>:not(pre)>code]:text-sm [&>:not(pre)>code]:font-mono [&>:not(pre)>code]:text-gray-800
+      [&>a]:text-gray-900 [&>a]:underline [&>a]:decoration-gray-300 [&>a]:underline-offset-4 [&>a]:transition-colors [&>a:hover]:decoration-gray-600
+      [&>img]:rounded-xl [&>img]:my-6 [&>img]:border [&>img]:border-gray-100
+      [&>hr]:border-0 [&>hr]:h-px [&>hr]:bg-gray-200 [&>hr]:my-8
+      [&>table]:w-full [&>table]:border-collapse [&>table]:my-6 [&>table]:text-sm
+      [&>table_th]:border-b [&>table_th]:border-gray-200 [&>table_th]:px-4 [&>table_th]:py-3 [&>table_th]:text-left [&>table_th]:font-medium [&>table_th]:text-gray-900
+      [&>table_td]:border-b [&>table_td]:border-gray-100 [&>table_td]:px-4 [&>table_td]:py-3 [&>table_td]:text-gray-700
+      first:[&>*]:mt-0
+    " id="project-content">
+      <Content />
+    </article>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        const article = document.getElementById('project-content');
+        if (!article) return;
+
+        // Check if button already exists to prevent duplicates
+        if (document.querySelector('[data-collapse-button]')) return;
+
+        // Create collapse button with Heroicon
+        const collapseBtn = document.createElement('button');
+        collapseBtn.innerHTML = `
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C20.832 18.477 19.246 18 17.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+          </svg>
+        `;
+        collapseBtn.className = 'fixed top-20 right-4 z-50 w-12 h-12 bg-white/90 backdrop-blur-sm text-slate-700 rounded-full hover:bg-white hover:scale-110 transition-all duration-200 border border-slate-200 hover:border-slate-300 shadow-lg hover:shadow-xl flex items-center justify-center';
+        collapseBtn.setAttribute('data-collapse-button', 'true');
+        
+        // Create tooltip
+        const tooltip = document.createElement('div');
+        tooltip.innerHTML = 'Toggle Sections';
+        tooltip.className = 'fixed top-20 right-16 z-50 bg-slate-800 text-white px-3 py-1.5 rounded-lg text-sm font-medium shadow-lg opacity-0 pointer-events-none transition-all duration-200 whitespace-nowrap';
+        tooltip.setAttribute('data-collapse-tooltip', 'true');
+        
+        // Add hover events for tooltip
+        collapseBtn.addEventListener('mouseenter', () => {
+          tooltip.style.opacity = '1';
+          tooltip.style.transform = 'translateX(-4px)';
+        });
+        
+        collapseBtn.addEventListener('mouseleave', () => {
+          tooltip.style.opacity = '0';
+          tooltip.style.transform = 'translateX(0)';
+        });
+        
+        let sectionsCollapsed = false;
+        
+        function initializeCollapsible() {
+          if (!article) return;
+          
+          const headers = article.querySelectorAll('h2, h3');
+          
+          headers.forEach(header => {
+            // Add click indicator with Heroicon
+            const indicator = document.createElement('span');
+            indicator.innerHTML = `
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+              </svg>
+            `;
+            indicator.className = 'absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 text-xs select-none transition-all duration-200';
+            header.appendChild(indicator);
+            
+            // Find content until next header of same/higher level
+            const contentElements: Element[] = [];
+            let sibling = header.nextElementSibling;
+            const headerLevel = parseInt(header.tagName.charAt(1));
+            
+            while (sibling) {
+              const siblingLevel = sibling.tagName.match(/^H[1-6]$/) ? 
+                parseInt(sibling.tagName.charAt(1)) : null;
+              
+              if (siblingLevel && siblingLevel <= headerLevel) {
+                break;
+              }
+              
+              contentElements.push(sibling);
+              sibling = sibling.nextElementSibling;
+            }
+            
+            if (contentElements.length > 0) {
+              // Store original styles and add data attributes for tracking
+              header.setAttribute('data-collapsible', 'true');
+              
+              contentElements.forEach((el, index) => {
+                el.setAttribute('data-section-content', header.tagName.toLowerCase() + '-' + Array.from(article.children).indexOf(header));
+                el.setAttribute('data-original-display', window.getComputedStyle(el).display);
+              });
+              
+              // Add click handler
+              header.addEventListener('click', () => {
+                const isCollapsed = header.getAttribute('data-collapsed') === 'true';
+                
+                if (isCollapsed) {
+                  // Expand
+                  contentElements.forEach(el => {
+                    (el as HTMLElement).style.display = el.getAttribute('data-original-display') || 'block';
+                    (el as HTMLElement).style.opacity = '1';
+                    (el as HTMLElement).style.transform = 'translateY(0)';
+                  });
+                  header.setAttribute('data-collapsed', 'false');
+                  indicator.innerHTML = `
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                    </svg>
+                  `;
+                } else {
+                  // Collapse
+                  contentElements.forEach(el => {
+                    (el as HTMLElement).style.display = 'none';
+                    (el as HTMLElement).style.opacity = '0';
+                    (el as HTMLElement).style.transform = 'translateY(-10px)';
+                  });
+                  header.setAttribute('data-collapsed', 'true');
+                  indicator.innerHTML = `
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                    </svg>
+                  `;
+                }
+              });
+            }
+          });
+        }
+        
+        collapseBtn.addEventListener('click', () => {
+          if (!article) return;
+          
+          const collapsibleHeaders = article.querySelectorAll('[data-collapsible="true"]');
+          
+          if (sectionsCollapsed) {
+            // Expand all
+            collapsibleHeaders.forEach(header => {
+              const indicator = header.querySelector('span');
+              const sectionId = header.tagName.toLowerCase() + '-' + Array.from(article.children).indexOf(header);
+              const contentElements = article.querySelectorAll('[data-section-content="' + sectionId + '"]');
+              
+              contentElements.forEach(el => {
+                (el as HTMLElement).style.display = el.getAttribute('data-original-display') || 'block';
+                (el as HTMLElement).style.opacity = '1';
+                (el as HTMLElement).style.transform = 'translateY(0)';
+              });
+              header.setAttribute('data-collapsed', 'false');
+              if (indicator) indicator.innerHTML = `
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                </svg>
+              `;
+            });
+            collapseBtn.innerHTML = `
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C20.832 18.477 19.246 18 17.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+              </svg>
+            `;
+            tooltip.innerHTML = 'Collapse Sections';
+          } else {
+            // Collapse all
+            collapsibleHeaders.forEach(header => {
+              const indicator = header.querySelector('span');
+              const sectionId = header.tagName.toLowerCase() + '-' + Array.from(article.children).indexOf(header);
+              const contentElements = article.querySelectorAll('[data-section-content="' + sectionId + '"]');
+              
+              contentElements.forEach(el => {
+                (el as HTMLElement).style.display = 'none';
+                (el as HTMLElement).style.opacity = '0';
+                (el as HTMLElement).style.transform = 'translateY(-10px)';
+              });
+              header.setAttribute('data-collapsed', 'true');
+              if (indicator) indicator.innerHTML = `
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                </svg>
+              `;
+            });
+            collapseBtn.innerHTML = `
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4"></path>
+              </svg>
+            `;
+            tooltip.innerHTML = 'Expand Sections';
+          }
+          
+          sectionsCollapsed = !sectionsCollapsed;
+        });
+        
+        // Clean up any existing buttons/tooltips before adding new ones
+        const existingButton = document.querySelector('[data-collapse-button]');
+        const existingTooltip = document.querySelector('[data-collapse-tooltip]');
+        if (existingButton) existingButton.remove();
+        if (existingTooltip) existingTooltip.remove();
+        
+        // Add floating button and tooltip to body
+        document.body.appendChild(collapseBtn);
+        document.body.appendChild(tooltip);
+        
+        // Initialize
+        initializeCollapsible();
+      });
+    </script>
 
     <!-- Navigation to Other Projects -->
     <footer class="mt-16 pt-8 border-t border-gray-200">
-      <div class="text-center">
-        <h3 class="text-xl font-semibold text-gray-900 mb-4">Explore More Projects</h3>
+      <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <a 
           href="/projects" 
-          class="inline-block px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
+          class="inline-flex items-center gap-2 text-blue-600 hover:text-blue-800 font-medium transition-colors"
         >
-          View All Projects
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+          </svg>
+          Back to all projects
         </a>
+        <div class="flex flex-wrap gap-4">
+          <a 
+            href="/projects" 
+            class="inline-block px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium text-sm"
+          >
+            View All Projects
+          </a>
+          <a 
+            href="/contact" 
+            class="inline-block px-4 py-2 border border-blue-600 text-blue-600 rounded-lg hover:bg-blue-50 transition-colors font-medium text-sm"
+          >
+            Discuss This Project
+          </a>
+        </div>
       </div>
     </footer>
   </article>
 </Layout>
-
-<style>
-  .prose {
-    color: #374151;
-  }
-  
-  .prose h1,
-  .prose h2,
-  .prose h3,
-  .prose h4 {
-    color: #111827;
-    font-weight: 600;
-  }
-  
-  .prose h2 {
-    font-size: 1.5rem;
-    margin-top: 2rem;
-    margin-bottom: 1rem;
-  }
-  
-  .prose h3 {
-    font-size: 1.25rem;
-    margin-top: 1.5rem;
-    margin-bottom: 0.75rem;
-  }
-  
-  .prose p {
-    margin-bottom: 1rem;
-    line-height: 1.7;
-  }
-  
-  .prose ul,
-  .prose ol {
-    margin-bottom: 1rem;
-    padding-left: 1.5rem;
-  }
-  
-  .prose li {
-    margin-bottom: 0.5rem;
-  }
-  
-  .prose a {
-    color: #2563eb;
-    text-decoration: underline;
-  }
-  
-  .prose a:hover {
-    color: #1d4ed8;
-  }
-  
-  .prose code {
-    background-color: #f3f4f6;
-    padding: 0.125rem 0.25rem;
-    border-radius: 0.25rem;
-    font-size: 0.875rem;
-  }
-  
-  .prose pre {
-    background-color: #1f2937;
-    color: #f9fafb;
-    padding: 1rem;
-    border-radius: 0.5rem;
-    overflow-x: auto;
-    margin: 1rem 0;
-  }
-  
-  .prose blockquote {
-    border-left: 4px solid #e5e7eb;
-    padding-left: 1rem;
-    margin: 1rem 0;
-    font-style: italic;
-    color: #6b7280;
-  }
-</style>

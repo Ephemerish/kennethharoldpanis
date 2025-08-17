@@ -3,12 +3,32 @@ title: "Task Management App"
 description: "A collaborative task management application with real-time updates, team collaboration features, and intuitive drag-and-drop interface."
 image: "image2.png"
 tags: ["React", "Socket.io", "Node.js", "PostgreSQL", "Real-time"]
+category: "web"
 demoUrl: "https://taskmanager-demo.com"
 githubUrl: "https://github.com/yourusername/task-manager"
 featured: false
 status: "completed"
 startDate: 2023-05-01
 endDate: 2023-07-30
+challenges:
+  - "Implementing real-time synchronization across multiple clients"
+  - "Creating intuitive drag-and-drop interface"
+  - "Managing complex state for team collaboration"
+  - "Ensuring data consistency with concurrent updates"
+technologies:
+  - "React with TypeScript"
+  - "Node.js with Express.js"
+  - "Socket.io for real-time communication"
+  - "PostgreSQL with Sequelize ORM"
+  - "Passport.js for authentication"
+  - "Material-UI for design system"
+keyFeatures:
+  - "Real-time collaboration with live updates"
+  - "Drag & drop interface for task organization"
+  - "Team management with user roles"
+  - "Kanban-style project boards"
+  - "Real-time notifications system"
+  - "File attachments and uploads"
 ---
 
 # Task Management App

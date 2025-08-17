@@ -3,11 +3,30 @@ title: "Machine Learning Blog Platform"
 description: "An AI-powered blogging platform that uses machine learning for content recommendations, sentiment analysis, and automated tagging."
 image: "image4.png"
 tags: ["Python", "Machine Learning", "Django", "TensorFlow", "NLP"]
-demoUrl: ""
+category: "ai-ml"
 githubUrl: "https://github.com/yourusername/ml-blog-platform"
 featured: false
 status: "in-progress"
 startDate: 2024-02-01
+challenges:
+  - "Optimizing model performance for real-time inference"
+  - "Handling large datasets efficiently"
+  - "Balancing model accuracy with response time"
+  - "Creating intuitive UI for AI features"
+technologies:
+  - "Django with Django REST Framework"
+  - "TensorFlow and scikit-learn"
+  - "Natural Language Toolkit (NLTK)"
+  - "PostgreSQL with vector extensions"
+  - "Apache Airflow for ML pipelines"
+  - "React with TypeScript frontend"
+keyFeatures:
+  - "ML-powered content recommendations"
+  - "Automatic sentiment analysis of posts"
+  - "Intelligent content categorization"
+  - "AI-powered writing suggestions"
+  - "Trending topics identification"
+  - "Personalized content feeds"
 ---
 
 # Machine Learning Blog Platform
