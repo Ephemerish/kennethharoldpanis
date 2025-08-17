@@ -2,7 +2,6 @@
 import Layout from "../layouts/MainLayout.astro";
 import ProjectCard from "../components/ProjectCard.astro";
 import FeaturedProject from "../components/FeaturedProject.astro";
-import ProjectFilter from "../components/ProjectFilter.astro";
 import { getCollection } from "astro:content";
 import type { CollectionEntry } from "astro:content";
 
@@ -23,37 +22,11 @@ const allProjects: CollectionEntry<"projects">[] = (
   return b.data.startDate.valueOf() - a.data.startDate.valueOf();
 });
 
-// Get filter parameter from URL
-const url = new URL(Astro.request.url);
-const tagFilter = url.searchParams.get("tag");
-const categoryFilter = url.searchParams.get("category");
-
-// Filter projects by tag and/or category if specified
-const filteredProjects = allProjects.filter(project => {
-  const matchesTag = !tagFilter || project.data.tags.some(tag => 
-    tag.toLowerCase() === tagFilter.toLowerCase()
-  );
-  const matchesCategory = !categoryFilter || project.data.category === categoryFilter;
-  return matchesTag && matchesCategory;
-});
-
 // Get featured projects
-const featuredProjects = filteredProjects.filter(project => project.data.featured);
-const regularProjects = filteredProjects.filter(project => !project.data.featured);
+const featuredProjects = allProjects.filter(project => project.data.featured);
+const regularProjects = allProjects.filter(project => !project.data.featured);
 
-// Get all unique tags and categories for filters
-const allTags = [...new Set(allProjects.flatMap(project => project.data.tags))].sort();
-const allCategories = [...new Set(allProjects.map(project => project.data.category))].sort();
-
-// Page title based on filter
-let pageTitle = "Projects";
-if (tagFilter && categoryFilter) {
-  pageTitle = `Projects - ${categoryFilter} - ${tagFilter}`;
-} else if (tagFilter) {
-  pageTitle = `Projects - ${tagFilter}`;
-} else if (categoryFilter) {
-  pageTitle = `Projects - ${categoryFilter}`;
-}
+const pageTitle = "Projects";
 ---
 
 <Layout title={pageTitle}>
@@ -69,85 +42,10 @@ if (tagFilter && categoryFilter) {
       </p>
     </div>
 
-    <!-- Project Filter -->
-    <div class="mb-8">
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <!-- Category Filter -->
-        <div>
-          <h3 class="text-lg font-semibold mb-4 text-gray-700">Filter by Category</h3>
-          <div class="flex flex-wrap gap-2">
-            <a 
-              href="/projects"
-              class={`px-3 py-1 rounded-full text-sm font-medium transition-colors ${
-                !categoryFilter 
-                  ? 'bg-purple-600 text-white' 
-                  : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-              }`}
-            >
-              All Categories
-            </a>
-            {allCategories.map((category) => (
-              <a 
-                href={`/projects?category=${encodeURIComponent(category)}`}
-                class={`px-3 py-1 rounded-full text-sm font-medium transition-colors capitalize ${
-                  categoryFilter === category 
-                    ? 'bg-purple-600 text-white' 
-                    : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-                }`}
-              >
-                {category.replace('-', ' ')}
-              </a>
-            ))}
-          </div>
-        </div>
-        
-        <!-- Tag Filter -->
-        <div>
-          <h3 class="text-lg font-semibold mb-4 text-gray-700">Filter by Technology</h3>
-          <div class="flex flex-wrap gap-2">
-            <a 
-              href={categoryFilter ? `/projects?category=${categoryFilter}` : "/projects"}
-              class={`px-3 py-1 rounded-full text-sm font-medium transition-colors ${
-                !tagFilter 
-                  ? 'bg-blue-600 text-white' 
-                  : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-              }`}
-            >
-              All Technologies
-            </a>
-            {allTags.slice(0, 8).map((tag) => (
-              <a 
-                href={`/projects?${categoryFilter ? `category=${categoryFilter}&` : ''}tag=${encodeURIComponent(tag)}`}
-                class={`px-3 py-1 rounded-full text-sm font-medium transition-colors ${
-                  tagFilter === tag 
-                    ? 'bg-blue-600 text-white' 
-                    : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-                }`}
-              >
-                {tag}
-              </a>
-            ))}
-          </div>
-        </div>
-      </div>
-    </div>
-
     <!-- Results Count -->
     <div class="mb-8">
       <p class="text-gray-600">
-        {(() => {
-          let message = `Showing ${filteredProjects.length} project${filteredProjects.length !== 1 ? 's' : ''}`;
-          if (categoryFilter && tagFilter) {
-            message += ` in "${categoryFilter.replace('-', ' ')}" category tagged with "${tagFilter}"`;
-          } else if (categoryFilter) {
-            message += ` in "${categoryFilter.replace('-', ' ')}" category`;
-          } else if (tagFilter) {
-            message += ` tagged with "${tagFilter}"`;
-          } else {
-            message = `Showing all ${filteredProjects.length} project${filteredProjects.length !== 1 ? 's' : ''}`;
-          }
-          return message;
-        })()}
+        Showing all {allProjects.length} project{allProjects.length !== 1 ? 's' : ''}
       </p>
     </div>
 
@@ -176,7 +74,7 @@ if (tagFilter && categoryFilter) {
     )}
 
     <!-- Empty State -->
-    {filteredProjects.length === 0 && (
+    {allProjects.length === 0 && (
       <div class="text-center py-16">
         <div class="text-gray-400 mb-4">
           <svg class="w-24 h-24 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -185,26 +83,8 @@ if (tagFilter && categoryFilter) {
         </div>
         <h3 class="text-xl font-semibold text-gray-600 mb-2">No projects found</h3>
         <p class="text-gray-500">
-          {(() => {
-            if (categoryFilter && tagFilter) {
-              return `No projects found in "${categoryFilter.replace('-', ' ')}" category with the tag "${tagFilter}". Try adjusting your filters.`;
-            } else if (categoryFilter) {
-              return `No projects found in "${categoryFilter.replace('-', ' ')}" category. Try removing the filter to see all projects.`;
-            } else if (tagFilter) {
-              return `No projects found with the tag "${tagFilter}". Try removing the filter to see all projects.`;
-            } else {
-              return "No projects available at the moment.";
-            }
-          })()}
+          No projects available at the moment.
         </p>
-        {(tagFilter || categoryFilter) && (
-          <a 
-            href="/projects" 
-            class="inline-block mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-          >
-            View All Projects
-          </a>
-        )}
       </div>
     )}
 
