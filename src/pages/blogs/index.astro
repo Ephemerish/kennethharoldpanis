@@ -27,17 +27,45 @@ const articlesForPage: CollectionEntry<"blog">[] = allBlogArticles.slice(
 ---
 
 <MainLayout>
-  <!-- <SearchForm /> -->
-  <br />
+  <div class="max-w-7xl mx-auto px-4 py-12">
+    <!-- Header Section -->
+    <div class="text-center mb-16">
+      <h1 class="text-4xl md:text-6xl font-bold text-gray-900 mb-6">
+        Blog
+      </h1>
+      <p class="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+        Thoughts, tutorials, and insights on web development, software engineering, and technology.
+      </p>
+    </div>
 
-  <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-    {articlesForPage.map((article) => <ArticleCard article={article} />)}
+    <!-- Articles Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
+      {articlesForPage.map((article) => <ArticleCard article={article} />)}
+    </div>
+
+    <!-- Empty State -->
+    {allBlogArticles.length === 0 && (
+      <div class="text-center py-16">
+        <div class="text-gray-400 mb-4">
+          <svg class="w-16 h-16 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+          </svg>
+        </div>
+        <h3 class="text-xl font-medium text-gray-900 mb-2">No blog posts yet</h3>
+        <p class="text-gray-600">Check back soon for new content!</p>
+      </div>
+    )}
+
+    <!-- Pagination -->
+    {totalPages > 1 && (
+      <div class="mt-16">
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          disablePrevious={currentPage === 1}
+          disableNext={currentPage === totalPages}
+        />
+      </div>
+    )}
   </div>
-
-  <!-- <Pagination
-    currentPage={currentPage}
-    totalPages={totalPages}
-    disablePrevious={currentPage === 1}
-    disableNext={currentPage === totalPages}
-  /> -->
 </MainLayout>

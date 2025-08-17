@@ -10,16 +10,14 @@ interface Props {
 
 <div class="flex flex-wrap gap-2">
   {
-    tags.map((tag: string, index: number) => (
-      <span
-        class={
-          index % 2 === 0
-            ? "px-2 py-1 bg-green-500 text-white rounded-full text-xs hover:opacity-90"
-            : "px-2 py-1 bg-indigo-500 text-white rounded-full text-xs hover:opacity-90"
-        }
+    tags.map((tag: string) => (
+      <a 
+        href={`/blogs?tag=${encodeURIComponent(tag)}`}
+        class="inline-flex items-center px-3 py-1.5 bg-blue-50 text-blue-700 rounded-full text-xs font-medium hover:bg-blue-100 hover:text-blue-800 border border-blue-100 hover:border-blue-200"
       >
-        <a href={"/blogs/"}>#{capitalize(tag)}</a>
-      </span>
+        <span class="w-1.5 h-1.5 bg-blue-400 rounded-full mr-1.5"></span>
+        {capitalize(tag)}
+      </a>
     ))
   }
 </div>

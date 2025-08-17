@@ -2,6 +2,7 @@
 import MainLayout from "../../layouts/MainLayout.astro";
 import { getEntryBySlug, getCollection } from "astro:content";
 import HeroIcon from "../../components/HeroIcon.tsx";
+import { formatDate, calculateReadTime } from "../../utils";
 
 export async function getStaticPaths() {
   const blogEntries = await getCollection("blog");
@@ -13,11 +14,12 @@ export async function getStaticPaths() {
 
 const { slug } = Astro.params;
 const { entry } = Astro.props;
-let Content, frontmatter;
+let Content, frontmatter, readTime;
 if (entry) {
   const rendered = await entry.render();
   Content = rendered.Content;
   frontmatter = entry.data;
+  readTime = calculateReadTime(entry.body);
 }
 ---
 
@@ -31,15 +33,32 @@ if (entry) {
         </h1>
         <div class="flex items-center justify-between flex-wrap gap-4 mb-6">
           <div class="flex items-center gap-4 text-gray-600">
-            <span class="text-sm">By {frontmatter?.author}</span>
-            <span class="text-sm">•</span>
-            <time class="text-sm">{frontmatter?.pubDate?.toLocaleDateString()}</time>
+            <span class="flex items-center gap-1.5 text-sm">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+              </svg>
+              By {frontmatter?.author}
+            </span>
+            <span class="text-gray-300">•</span>
+            <time class="flex items-center gap-1.5 text-sm">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+              </svg>
+              {formatDate(frontmatter?.pubDate)}
+            </time>
+            <span class="text-gray-300">•</span>
+            <span class="flex items-center gap-1.5 text-sm">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+              </svg>
+              {readTime}
+            </span>
           </div>
           {frontmatter?.tags && (
             <div class="flex flex-wrap gap-2">
               {frontmatter.tags.map((tag) => (
-                <span class="px-3 py-1 bg-blue-100 text-blue-800 text-xs font-medium rounded-full">
-                  #{tag}
+                <span class="px-2.5 py-1 bg-gray-50 text-gray-600 text-xs font-normal rounded-md hover:bg-gray-100 transition-colors">
+                  {tag}
                 </span>
               ))}
             </div>

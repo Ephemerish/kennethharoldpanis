@@ -24,4 +24,12 @@ function capitalize(str: string): string {
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
-export { formatDate, capitalize };
+// Calculate reading time based on word count
+function calculateReadTime(content: string): string {
+  const wordsPerMinute = 200;
+  const words = content.trim().split(/\s+/).length;
+  const minutes = Math.ceil(words / wordsPerMinute);
+  return `${minutes} min read`;
+}
+
+export { formatDate, capitalize, calculateReadTime };

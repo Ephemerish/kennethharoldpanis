@@ -1,10 +1,80 @@
 @import "tailwindcss";
 
 /* Line clamp utilities */
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
 .line-clamp-3 {
   display: -webkit-box;
   -webkit-line-clamp: 3;
   line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
+}
+
+/* Smooth scroll behavior */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Blog content improvements */
+.prose {
+  color: #374151;
+  max-width: 65ch;
+}
+
+.prose [class~="lead"] {
+  color: #6b7280;
+}
+
+.prose a {
+  color: #2563eb;
+  text-decoration: underline;
+  font-weight: 500;
+}
+
+.prose strong {
+  color: #111827;
+  font-weight: 600;
+}
+
+.prose ol[type="A"] {
+  --list-counter-style: upper-alpha;
+}
+
+.prose ol[type="a"] {
+  --list-counter-style: lower-alpha;
+}
+
+.prose ol[type="A s"] {
+  --list-counter-style: upper-alpha;
+}
+
+.prose ol[type="a s"] {
+  --list-counter-style: lower-alpha;
+}
+
+.prose ol[type="I"] {
+  --list-counter-style: upper-roman;
+}
+
+.prose ol[type="i"] {
+  --list-counter-style: lower-roman;
+}
+
+.prose ol[type="I s"] {
+  --list-counter-style: upper-roman;
+}
+
+.prose ol[type="i s"] {
+  --list-counter-style: lower-roman;
+}
+
+.prose ol[type="1"] {
+  --list-counter-style: decimal;
 }
