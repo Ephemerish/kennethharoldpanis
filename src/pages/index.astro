@@ -1,15 +1,13 @@
 ---
 import Layout from "../layouts/MainLayout.astro";
 import { HomeHeader } from "../components/HomeHeader";
-
-import MainLayout from "../layouts/MainLayout.astro";
-import SearchForm from "../components/SearchForm.astro";
 import Card from "../components/Card.astro";
 import MostRecentBlog from "../components/MostRecentBlog.astro";
-import { HOMEPAGE_BLOG_LIMIT } from "../constants";
+import FeaturedProject from "../components/FeaturedProject.astro";
+import { HOMEPAGE_BLOG_LIMIT, HOMEPAGE_PROJECTS_LIMIT } from "../constants";
 
 import { getCollection } from "astro:content";
-import type { CollectionEntry, CollectionKey } from "astro:content";
+import type { CollectionEntry } from "astro:content";
 
 const allBlogs: CollectionEntry<"blog">[] = (
   await getCollection("blog")
@@ -18,20 +16,182 @@ const allBlogs: CollectionEntry<"blog">[] = (
     b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
 );
 
-const mostRecentBlog: CollectionEntry<"blog"> = allBlogs[0];
+const allProjects: CollectionEntry<"projects">[] = (
+  await getCollection("projects")
+).sort((a, b) => {
+  // Sort by featured first, then by end date (or start date if no end date)
+  if (a.data.featured && !b.data.featured) return -1;
+  if (!a.data.featured && b.data.featured) return 1;
+  
+  // Use endDate if available, otherwise use startDate
+  const aDate = a.data.endDate || a.data.startDate;
+  const bDate = b.data.endDate || b.data.startDate;
+  
+  return bDate.getTime() - aDate.getTime();
+});
 
+const mostRecentBlog: CollectionEntry<"blog"> = allBlogs[0];
 const otherBlogs: CollectionEntry<"blog">[] = allBlogs.slice(1);
+const featuredProjects = allProjects.slice(0, HOMEPAGE_PROJECTS_LIMIT);
+
+// Skills data
+const skillCategories = [
+  {
+    title: "Frontend Development",
+    skills: ["React", "TypeScript", "Next.js", "Astro", "Tailwind CSS", "Framer Motion"]
+  },
+  {
+    title: "Backend & Systems",
+    skills: ["Node.js", "Python", "PostgreSQL", "MongoDB", "Redis", "Docker"]
+  },
+  {
+    title: "Hardware & Embedded",
+    skills: ["Arduino", "Raspberry Pi", "Microcontrollers", "PCB Design", "IoT Systems", "Circuit Analysis"]
+  },
+  {
+    title: "Tools & Platforms",
+    skills: ["Git", "Linux", "AWS", "Vercel", "Figma", "Jest"]
+  }
+];
 ---
 
 <Layout title={"Kenneth Harold Panis"}>
+  <!-- Hero Section -->
   <HomeHeader client:load />
-  <MostRecentBlog blog={mostRecentBlog} />
-  <!-- Main Grid -->
-  <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-    {
-      otherBlogs
-        .slice(0, HOMEPAGE_BLOG_LIMIT)
-        .map((blog) => <Card item={blog} type="blog" />)
-    }
-  </div>
+  
+  <!-- Skills Section -->
+  <section class="py-16 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl font-bold text-gray-900 sm:text-4xl">
+          Technologies I Work With
+        </h2>
+        <p class="mt-4 text-lg text-gray-600 max-w-2xl mx-auto">
+          With a Computer Engineering background, I bridge the gap between hardware and software, 
+          creating comprehensive solutions from circuit design to web applications
+        </p>
+      </div>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        {skillCategories.map((category) => (
+          <div class="bg-gray-50 rounded-xl p-6 hover:shadow-md transition-shadow duration-300">
+            <h3 class="text-xl font-semibold text-gray-900 mb-4 text-center">
+              {category.title}
+            </h3>
+            <div class="flex flex-wrap justify-center gap-2">
+              {category.skills.map((skill) => (
+                <span class="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-medium hover:bg-blue-200 transition-colors duration-200">
+                  {skill}
+                </span>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Featured Projects Section -->
+  <section class="py-16 bg-gray-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl font-bold text-gray-900 sm:text-4xl">
+          Featured Projects
+        </h2>
+        <p class="mt-4 text-lg text-gray-600 max-w-2xl mx-auto">
+          Take a look at some of my recent work and creative solutions
+        </p>
+      </div>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-8">
+        {featuredProjects.map((project) => (
+          <Card item={project} type="project" />
+        ))}
+      </div>
+      
+      <div class="text-center">
+        <a 
+          href="/projects" 
+          class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-lg text-white bg-blue-600 hover:bg-blue-700 transition-colors duration-200"
+        >
+          View All Projects
+          <svg class="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+          </svg>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Latest Blog Posts Section -->
+  <section class="py-16 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl font-bold text-gray-900 sm:text-4xl">
+          Latest from the Blog
+        </h2>
+        <p class="mt-4 text-lg text-gray-600 max-w-2xl mx-auto">
+          Thoughts on development, technology, and lessons learned along the way
+        </p>
+      </div>
+      
+      <!-- Featured Blog Post -->
+      <div class="mb-12">
+        <MostRecentBlog blog={mostRecentBlog} />
+      </div>
+      
+      <!-- Other Blog Posts -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mb-8">
+        {otherBlogs
+          .slice(0, HOMEPAGE_BLOG_LIMIT)
+          .map((blog) => <Card item={blog} type="blog" />)
+        }
+      </div>
+      
+      <div class="text-center">
+        <a 
+          href="/blogs" 
+          class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-lg text-white bg-blue-600 hover:bg-blue-700 transition-colors duration-200"
+        >
+          Read All Posts
+          <svg class="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+          </svg>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Call to Action Section -->
+  <section class="py-16 bg-blue-600">
+    <div class="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
+      <h2 class="text-3xl font-bold text-white sm:text-4xl">
+        Let's Work Together
+      </h2>
+      <p class="mt-4 text-xl text-blue-100 max-w-2xl mx-auto">
+        I'm always interested in new opportunities and exciting projects. 
+        Let's discuss how we can create something amazing together.
+      </p>
+      <div class="mt-8 flex flex-col sm:flex-row gap-4 justify-center">
+        <a 
+          href="/contact" 
+          class="inline-flex items-center px-8 py-3 border border-transparent text-base font-medium rounded-lg text-blue-600 bg-white hover:bg-gray-50 transition-colors duration-200"
+        >
+          Get In Touch
+          <svg class="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+          </svg>
+        </a>
+        <a 
+          href="mailto:kenneth@example.com" 
+          class="inline-flex items-center px-8 py-3 border-2 border-white text-base font-medium rounded-lg text-white hover:bg-white hover:text-blue-600 transition-colors duration-200"
+        >
+          Send Email
+          <svg class="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+          </svg>
+        </a>
+      </div>
+    </div>
+  </section>
 </Layout>
