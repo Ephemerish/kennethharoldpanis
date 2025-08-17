@@ -1,6 +1,6 @@
-export const SITE_TITLE = "TechPeople Blog";
+export const SITE_TITLE = "Kenneth Harold Panis";
 export const SITE_DESCRIPTION =
-  "Blogs, stories and tutorials from Tech People";
+  "Software Engineer portfolio - Computer Engineering graduate specializing in frontend development with hardware and system knowledge";
 export const HOMEPAGE_BLOG_LIMIT = 6;
 export const BLOGS_PER_PAGE = 6;
 export const PROJECTS_PER_PAGE = 9;
