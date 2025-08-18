@@ -2,7 +2,7 @@
 title: 'Our Journey Building an App with Micro Frontends: The Good, Bad, and Ugly'
 author: 'Kenneth Harold Panis'
 pubDate: 2025-08-16
-image: 'image2.png'
+image: 'Microfrontend.png'
 tags:
   [
     'micro-frontends',
