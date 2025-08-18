@@ -1,5 +1,5 @@
 ---
-title: 'Our Journey Building an App with Micro Frontends: The Good, Bad, and Ugly'
+title: 'Our Journey Building an App with Micro Frontends'
 author: 'Kenneth Harold Panis'
 pubDate: 2025-08-16
 image: 'Microfrontend.png'
@@ -18,9 +18,7 @@ tags:
 
 We spent 8 months building a complex application with micro frontends. The result? A working system that taught us more about architectural tradeoffs than we ever wanted to know.
 
-Everyone told us micro frontends would solve our scaling problems. Independent teams, independent deployments, technology flexibility - it all sounded perfect. But here's what they don't tell you in the blog posts: micro frontends come with their own special brand of complexity that can make your life interesting in ways you didn't expect.
-
-This is the brutally honest story of what worked, what didn't, and whether we'd do it again. Spoiler alert: it's complicated.
+Everyone told us micro frontends would solve our scaling problems. Independent teams, independent deployments, technology flexibility - it all sounded perfect, But from our experience micro frontends come with their own special brand of complexity that can make your life interesting in ways you didn't expect.
 
 ## The Problem We Were Trying to Solve
 
@@ -30,7 +28,7 @@ The old app was a nightmare to work with. The build times were absolutely brutal
 
 But the build times were just the tip of the iceberg. The real killer was the unpredictable side effects. You'd touch one feature and something completely unrelated would break. The interconnected nature of the monolith meant that even the simplest changes could have cascading effects that were nearly impossible to predict or debug. You would spend entire afternoons trying to figure out why changing a button in one form broke a completely different part of the application.
 
-Multiple developers couldn't work on different features without constantly stepping on each other. Git conflicts were a daily occurrence, and deployments were anxiety-inducing events because everything was all-or-nothing. One broken feature meant rolling back everything, even if the other features were working perfectly.
+Multiple developers couldn't work on different features without constantly stepping on each other. One broken feature meant rolling back everything, even if the other features were working perfectly.
 
 That's when they started thinking... maybe we don't need to cram everything into one giant codebase?
 
