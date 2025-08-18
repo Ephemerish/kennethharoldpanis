@@ -45,24 +45,6 @@ This undergraduate thesis project presents a comprehensive solution for enhancin
 
 The Philippines, with over 7,000 islands and approximately 2.2 million fisherfolk, faces significant challenges in maritime safety. Small fishing boats operating in remote areas often lack reliable communication systems when cellular coverage is unavailable, putting operators at risk during emergencies, mechanical failures, and adverse weather conditions.
 
-## Key Features
-
-### Hardware Components
-- **NodeMCU-32S development board** - ESP32-based microcontroller with Wi-Fi capabilities
-- **LoRa 433MHz Module SX1278** - Long-range wireless transceiver for communication
-- **NEO-M8N GPS Module** - Accurate positioning and location tracking
-- **LED indicators** - Visual feedback for network connection status
-- **Emergency buttons** - Quick distress signal activation
-- **Waterproof enclosures** - Protection for maritime environments
-
-### Software Features
-- **Real-time GPS tracking** - Continuous location monitoring
-- **Emergency alert system** - Quick distress signal transmission
-- **Mobile application** - Real-time data viewing for emergency responders
-- **Historical data logging** - Track boat movements over time
-- **Star network topology** - Efficient communication architecture
-- **XOR encryption** - Basic data security implementation
-
 ## Technical Implementation
 
 ### Network Architecture
