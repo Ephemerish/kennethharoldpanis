@@ -204,25 +204,25 @@ The speed of data delivery depends on the distance - if the node is near the gat
 
 Based on the conclusions reached, the researchers suggest the following recommendations:
 
-### 1. Antenna Enhancement
+1. **Antenna Enhancement**
 Explore alternative antennas for LoRa to assess their impact on network performance and improve signal strength.
 
-### 2. Network Topology Upgrade
+2. **Network Topology Upgrade**
 Transition from a star network to a mesh network configuration to enhance range, redundancy, and security.
 
-### 3. Application Development Enhancement
+3. **Application Development Enhancement**
 Develop a more advanced application to leverage collected data effectively and provide enhanced functionality.
 
-### 4. Hardware Integration Improvement
+4. **Hardware Integration Improvement**
 Replace the intermediary computer for data transmission with the gateway node and database, preferably on a Raspberry Pi or similar single-board computer, to streamline the process.
 
-### 5. Security Enhancement
+5. **Security Enhancement**
 Improve the existing encryption method to bolster data security and integrity.
 
-### 6. Waterproofing Implementation
+6. **Waterproofing Implementation**
 Upgrade the casing to waterproof the device, preventing water ingress and ensuring operational integrity in maritime conditions.
 
-### 7. Enhanced Authentication Security
+7. **Enhanced Authentication Security**
 While the current design of the application allows access to authorized individuals and authorities for the purpose of monitoring fishermen's locations, there remains a possibility of unauthorized personnel gaining access to the application if the mobile device is compromised. To mitigate this risk, future researchers may implement additional security measures to safeguard sensitive information and ensure the integrity of the system by implementing enhanced authentication mechanisms, such as biometric verification or multi-factor authentication.
 
 ## Academic Achievement
