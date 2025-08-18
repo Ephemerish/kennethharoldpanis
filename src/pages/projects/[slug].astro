@@ -347,9 +347,6 @@ const formatDate = (date: Date) => {
       [&>a]:text-gray-900 [&>a]:underline [&>a]:decoration-gray-300 [&>a]:underline-offset-4 [&>a]:transition-colors [&>a:hover]:decoration-gray-600
       [&>img]:rounded-xl [&>img]:my-6 [&>img]:border [&>img]:border-gray-100
       [&>hr]:border-0 [&>hr]:h-px [&>hr]:bg-gray-200 [&>hr]:my-8
-      [&>table]:w-full [&>table]:border-collapse [&>table]:my-6 [&>table]:text-sm
-      [&>table_th]:border-b [&>table_th]:border-gray-200 [&>table_th]:px-4 [&>table_th]:py-3 [&>table_th]:text-left [&>table_th]:font-medium [&>table_th]:text-gray-900
-      [&>table_td]:border-b [&>table_td]:border-gray-100 [&>table_td]:px-4 [&>table_td]:py-3 [&>table_td]:text-gray-700
       first:[&>*]:mt-0
     " id="project-content">
       <Content />
@@ -360,23 +357,58 @@ const formatDate = (date: Date) => {
         const article = document.getElementById('project-content');
         if (!article) return;
 
+        // Wrap tables in responsive containers to prevent layout issues
+        const tables = article.querySelectorAll('table');
+        tables.forEach(table => {
+          const parent = table.parentElement;
+          if (parent && !parent.classList.contains('table-wrapper')) {
+            const wrapper = document.createElement('div');
+            wrapper.className = 'table-wrapper overflow-x-auto my-6 border border-gray-200 rounded-lg shadow-sm bg-white';
+            parent.insertBefore(wrapper, table);
+            wrapper.appendChild(table);
+            
+            // Enhanced table styling
+            table.className = 'w-full border-collapse text-sm min-w-full';
+            
+            // Style table headers
+            const headers = table.querySelectorAll('th');
+            headers.forEach(th => {
+              th.className = 'bg-gray-50 border-b-2 border-gray-200 px-4 py-3 text-left font-semibold text-gray-900 text-xs uppercase tracking-wider';
+            });
+            
+            // Style table cells
+            const cells = table.querySelectorAll('td');
+            cells.forEach(td => {
+              td.className = 'border-b border-gray-100 px-4 py-3 text-gray-700 text-sm whitespace-nowrap';
+            });
+            
+            // Add alternating row colors
+            const rows = table.querySelectorAll('tbody tr');
+            rows.forEach((row, index) => {
+              if (index % 2 === 1) {
+                row.className = 'bg-gray-25';
+              }
+            });
+          }
+        });
+
         // Check if button already exists to prevent duplicates
         if (document.querySelector('[data-collapse-button]')) return;
 
-        // Create collapse button with Heroicon
+        // Create collapse button with improved icons
         const collapseBtn = document.createElement('button');
         collapseBtn.innerHTML = `
-          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C20.832 18.477 19.246 18 17.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 6h16M4 12h16M4 18h16"></path>
           </svg>
         `;
-        collapseBtn.className = 'fixed top-20 right-4 z-50 w-12 h-12 bg-white/90 backdrop-blur-sm text-slate-700 rounded-full hover:bg-white hover:scale-110 transition-all duration-200 border border-slate-200 hover:border-slate-300 shadow-lg hover:shadow-xl flex items-center justify-center';
+        collapseBtn.className = 'fixed top-20 right-2 sm:right-4 z-50 w-11 h-11 sm:w-12 sm:h-12 bg-white/95 backdrop-blur-sm text-slate-700 rounded-full hover:bg-white hover:scale-105 transition-all duration-200 border border-slate-200 hover:border-slate-300 shadow-lg hover:shadow-xl flex items-center justify-center';
         collapseBtn.setAttribute('data-collapse-button', 'true');
         
-        // Create tooltip
+        // Create tooltip with improved wording
         const tooltip = document.createElement('div');
-        tooltip.innerHTML = 'Toggle Sections';
-        tooltip.className = 'fixed top-20 right-16 z-50 bg-slate-800 text-white px-3 py-1.5 rounded-lg text-sm font-medium shadow-lg opacity-0 pointer-events-none transition-all duration-200 whitespace-nowrap';
+        tooltip.innerHTML = 'Hide All Sections';
+        tooltip.className = 'fixed top-20 right-14 sm:right-16 z-50 bg-slate-800 text-white px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium shadow-lg opacity-0 pointer-events-none transition-all duration-200 whitespace-nowrap';
         tooltip.setAttribute('data-collapse-tooltip', 'true');
         
         // Add hover events for tooltip
@@ -398,14 +430,14 @@ const formatDate = (date: Date) => {
           const headers = article.querySelectorAll('h2, h3');
           
           headers.forEach(header => {
-            // Add click indicator with Heroicon
+            // Add click indicator with better icon
             const indicator = document.createElement('span');
             indicator.innerHTML = `
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path>
               </svg>
             `;
-            indicator.className = 'absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 text-xs select-none transition-all duration-200';
+            indicator.className = 'absolute right-2 top-1/2 transform -translate-y-1/2 text-white/70 text-xs select-none transition-all duration-200';
             header.appendChild(indicator);
             
             // Find content until next header of same/higher level
@@ -448,7 +480,7 @@ const formatDate = (date: Date) => {
                   header.setAttribute('data-collapsed', 'false');
                   indicator.innerHTML = `
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path>
                     </svg>
                   `;
                 } else {
@@ -461,7 +493,7 @@ const formatDate = (date: Date) => {
                   header.setAttribute('data-collapsed', 'true');
                   indicator.innerHTML = `
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"></path>
                     </svg>
                   `;
                 }
@@ -490,16 +522,16 @@ const formatDate = (date: Date) => {
               header.setAttribute('data-collapsed', 'false');
               if (indicator) indicator.innerHTML = `
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path>
                 </svg>
               `;
             });
             collapseBtn.innerHTML = `
-              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C20.832 18.477 19.246 18 17.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 6h16M4 12h16M4 18h16"></path>
               </svg>
             `;
-            tooltip.innerHTML = 'Collapse Sections';
+            tooltip.innerHTML = 'Hide All Sections';
           } else {
             // Collapse all
             collapsibleHeaders.forEach(header => {
@@ -515,16 +547,16 @@ const formatDate = (date: Date) => {
               header.setAttribute('data-collapsed', 'true');
               if (indicator) indicator.innerHTML = `
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"></path>
                 </svg>
               `;
             });
             collapseBtn.innerHTML = `
-              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4"></path>
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M8 9l4-4 4 4m0 6l-4 4-4-4"></path>
               </svg>
             `;
-            tooltip.innerHTML = 'Expand Sections';
+            tooltip.innerHTML = 'Show All Sections';
           }
           
           sectionsCollapsed = !sectionsCollapsed;
