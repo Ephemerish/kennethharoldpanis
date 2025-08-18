@@ -13,7 +13,7 @@ status: "completed"
 startDate: 2023-09-01
 endDate: 2024-05-01
 challenges:
-  - "Achieving maximum communication range of 882 meters in open sea conditions"
+  - "Achieving maximum communication range of 882 meters in open sea conditions (target: 2+ kilometers)"
   - "Implementing XOR encryption for secure data transmission"
   - "Developing waterproof enclosures for harsh maritime environments"
   - "Integrating real-time GPS tracking with LoRa communication protocol"
@@ -88,14 +88,14 @@ The system implements a **STAR network topology** where:
 ## Testing Results
 
 ### Performance Metrics
-- **Maximum range**: 882 meters in open sea conditions
+- **Maximum range**: 882 meters in open sea conditions (expected: at least 2 kilometers)
 - **GPS accuracy**: Tested and validated for maritime use
 - **Network reliability**: Successful communication establishment
 - **Emergency response time**: Real-time alert transmission
 - **Signal analysis**: Inverse relationship between distance and signal strength (RSSI/SNR)
 
 ### Testing Location & Methodology
-Testing was conducted in the sea areas around Loon and Calape, Bohol, chosen for their representative maritime conditions and proximity to fishing communities. The open sea environment provided ideal conditions for range testing without physical barriers, allowing for accurate measurement of the 882-meter maximum communication distance.
+Testing was conducted in the sea areas around Loon, Bohol, chosen for their representative maritime conditions and proximity to fishing communities. The open sea environment provided ideal conditions for range testing without physical barriers, allowing for accurate measurement of the 882-meter maximum communication distance.
 
 ### Actual Test Results
 Based on comprehensive field testing, the system demonstrated:
@@ -185,28 +185,6 @@ The study findings indicate that data delivery speed is dependent on distance. W
 - **Distance vs Signal**: Strong negative correlation (-0.93) between distance and RSSI
 - **Network Functionality**: 100% success rate for all communication network functions tested
 
-## Research Recommendations
-
-Based on the study conclusions, the researchers provided the following specific recommendations:
-
-### 1. Antenna Enhancement
-Explore alternative antennas for LoRa to assess their impact on network performance and improve signal strength.
-
-### 2. Network Topology Upgrade  
-Transition from star network to mesh network configuration to enhance range, redundancy, and security.
-
-### 3. Application Development
-Develop a more advanced application to leverage collected data effectively and provide enhanced functionality.
-
-### 4. Hardware Integration
-Replace the intermediary computer for data transmission with the gateway node and database, preferably on a Raspberry Pi or similar single-board computer to streamline the process.
-
-### 5. Security Improvements
-Improve the existing encryption method to bolster data security and integrity.
-
-### 6. Waterproofing Enhancement
-Upgrade the casing to waterproof the device, preventing water ingress and ensuring operational integrity in maritime conditions.
-
 ### 7. Enhanced Authentication
 While the current design allows access to authorized individuals and authorities for monitoring fishermen's locations, there remains a possibility of unauthorized access if the mobile device is compromised. Future researchers should implement additional security measures such as biometric verification or multi-factor authentication to safeguard sensitive information and ensure system integrity.
 
@@ -235,7 +213,7 @@ The speed of data delivery depends on the distance - if the node is near the gat
 ### Key Research Findings:
 1. **Successful prototype development** with minor adjustments required for optimal functionality
 2. **Communication network functionality** - overall network, LED indicators, and mobile application functioned as expected
-3. **Range limitations** - achieved maximum distance of 882 meters, which fell short of expectations
+3. **Range limitations** - achieved maximum distance of 882 meters, which fell significantly short of the expected 2-kilometer range
 4. **Signal quality analysis** - demonstrated inverse relationship between distance and both RSSI and SNR
 5. **Data transmission challenges** - addressed ineffective direct transmission by implementing serial communication with PC
 6. **Waterproofing needs** - essential for device durability in maritime environments
@@ -298,5 +276,7 @@ This project contributes to:
 - [Technical Documentation](https://docs.your-project.com)
 
 ---
+
+**P.S.** It's not included in the paper, but one assumption affecting SNR rapidly is because we are sending big data, we need to make it more concise so that requires a more sophisticated algorithm in compressing and decompressing the data.
 
 *This project represents the successful application of LoRa wireless technology for maritime safety, demonstrating how modern IoT solutions can address real-world challenges faced by fishing communities in the Philippines.*
