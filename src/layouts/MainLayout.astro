@@ -1,5 +1,14 @@
 ---
-const { title = "Astro Basics" } = Astro.props;
+const { 
+  title = "Kenneth Harold Panis", 
+  description = "Full-stack developer and designer specializing in modern web technologies, creating beautiful and functional digital experiences.",
+  image = "/me.jpg",
+  type = "website"
+} = Astro.props;
+
+// Ensure image URL is absolute for social sharing
+const absoluteImageUrl = new URL(image, Astro.site || 'https://kennethharoldpanis.com').toString();
+
 import "../styles/global.css";
 import Navbar from "../components/navbar.tsx";
 import Footer from "../components/Footer.astro";
@@ -12,15 +21,22 @@ import Footer from "../components/Footer.astro";
     <meta name="viewport" content="width=device-width" />
     <link rel="icon" type="image/svg+xml" href="/favicon.ico" />
     <meta name="generator" content={Astro.generator} />
-    <meta name="description" content="Kenneth Harold Panis - Full-stack developer and designer specializing in modern web technologies, creating beautiful and functional digital experiences." />
+    <meta name="description" content={description} />
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content={type} />
     <meta property="og:title" content={title} />
-    <meta property="og:description" content="Full-stack developer and designer specializing in modern web technologies" />
-    <meta property="og:type" content="website" />
-    <meta property="og:image" content="/me.jpg" />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={absoluteImageUrl} />
+    <meta property="og:url" content={Astro.url} />
+    
+    <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
-    <title>
-      {title}
-    </title>
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={absoluteImageUrl} />
+    
+    <title>{title}</title>
   </head>
   <body class="w-full min-h-screen bg-gray-50 antialiased">
     <Navbar client:load />
