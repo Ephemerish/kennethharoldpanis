@@ -22,21 +22,19 @@ Everyone told us micro frontends would solve our scaling problems. Independent t
 
 ## The Problem We Were Trying to Solve
 
-We had this legacy application that was... well, let's just say it was a proper monolith. Think of one of those massive codebases where changing a single feature could mysteriously break three other completely unrelated things. You know the type - where you'd spend hours trying to figure out why updating a user profile form somehow broke the reporting system.
+We had this legacy application that was... well, let's just say it was a proper monolith, it was a massive codebases where changing a single feature could break three other completely unrelated things.
 
-The old app was a nightmare to work with. The build times were absolutely brutal - we're talking no hot reload, no incremental builds, nothing. You'd change a single letter and then have to rebuild the entire application just to see if your change worked. And that build? It took forever, Like, seriously, go-get-coffee-and-maybe-lunch-and-check-your-emails forever. The development feedback loop was so slow it was crushing productivity.
+The old app was a nightmare to work with, build times were absolutely brutal with no hot reload, no incremental builds, nothing. You'd change a single letter and then have to rebuild the entire application just to see if your change worked. And that build? It took forever. The development feedback loop was so slow it was crushing productivity.
 
-But the build times were just the tip of the iceberg. The real killer was the unpredictable side effects. You'd touch one feature and something completely unrelated would break. The interconnected nature of the monolith meant that even the simplest changes could have cascading effects that were nearly impossible to predict or debug. You would spend entire afternoons trying to figure out why changing a button in one form broke a completely different part of the application.
-
-Multiple developers couldn't work on different features without constantly stepping on each other. One broken feature meant rolling back everything, even if the other features were working perfectly.
+The other real killer was the unpredictable side effects, You'd touch one feature and something completely unrelated would break. The interconnected nature of the monolith meant that even the simplest changes could have cascading effects that were nearly impossible to predict or debug. You would spend entire afternoons trying to figure out why changing a button in one form broke a completely different part of the application.
 
 That's when they started thinking... maybe we don't need to cram everything into one giant codebase?
 
 ## Why We Thought Micro Frontends Would Save Us
 
-Someone from the company had already explored micro frontends as a solution to our monolith problems. They brought in a senior developer to start rebuilding the application using this architecture, splitting it into distinct key features that could be developed and deployed independently. We joined the project to help him build this new system.
+Someone from the company had already explored micro frontends as a solution to our monolith problems. Then they brought in a senior developer to start rebuilding the application using this architecture, splitting it into distinct key features that could be developed and deployed independently. We joined the project to help him build this new system.
 
-The main driver was escaping the nightmare of our legacy monolith. We were so tired of the brutal build times, the unpredictable side effects, and the constant fear of breaking something completely unrelated when making simple changes. Micro frontends promised independent development and deployment, which sounded like exactly what we needed to break free from that cycle of pain.
+The main driver was escaping the nightmare of our legacy monolith. We were so tired of the brutal build times and the constant fear of breaking something completely unrelated when making simple changes. Micro frontends promised independent development and deployment, which sounded like exactly what we needed to break free from that cycle of pain.
 
 The idea of having clear boundaries between different parts of the application was really appealing after dealing with the interconnected mess of the old system. We also knew this rebuilt application was going to get much bigger and more complex over time. Micro frontends felt like they would give us the architectural foundation to scale without repeating our past mistakes.
 
@@ -46,9 +44,9 @@ But after working together for a few months, the senior developer left the team,
 
 ### The Tech Stack
 
-We ended up with this technology stack that looked really good on paper. Nx 21.1.2 was supposed to make monorepo management easy. Vite 6.2.2 promised fast builds and a great dev server, and this part actually lived up to the hype. Module Federation was the magic that would make micro frontends work. And React 18.3.1 was the one thing everyone on the team could actually agree on.
+After a lot of back and forth and experimentation, this is the stack we finally settled on, Nx 21.1.2 made monorepo management bearable, Vite 6.2.2 delivered on fast builds and a smooth dev server, Vite Module Federation (@originjs/vite-plugin-federation) was the glue for our micro frontends—the Webpack version is more mature, but this worked perfectly with our Vite setup. React 18.3.1 was the one constant everyone agreed on.
 
-Our architecture ended up looking like this: one host application that acts as the main shell and pulls everything together, four remote applications with each one handling a specific key feature, and seven shared libraries because we learned the hard way that duplicating code across micro frontends is an absolute nightmare.
+Our final architecture: one host application as the main shell, four remote apps each handling a key feature, and seven shared libraries—because duplicating code across micro frontends is a nightmare we learned to avoid.
 
 ### The Module Federation Dance
 
@@ -56,7 +54,7 @@ Getting Module Federation working was... well, let's call it an experience. Each
 
 It seems straightforward when you write it down like that, but wait until you start debugging why one of your micro frontends won't load because of some weird webpack configuration issue that makes absolutely no sense. Those were fun times.
 
-### Our Shared Library Strategy (AKA How We Stayed Sane)
+### Our Shared Library Strategy
 
 One thing we actually got right early on was building a solid foundation of shared libraries. We created a UI library with over 40 components so we wouldn't end up with 15 different button styles scattered across our apps. We had a constants library to keep all our configuration stuff in one place because hardcoded values are evil. Our HTTP service provided one consistent way to talk to APIs with authentication and error handling built right in.
 
@@ -92,7 +90,7 @@ The shared library system also made dependencies crystal clear. We could see exa
 
 ### The Learning Curve From Hell
 
-The combination of Module Federation, Nx, Vite, and micro frontend patterns created a learning curve that was honestly pretty brutal. We're talking about a lot of new concepts for developers to wrap their heads around all at once. New team members spent weeks just understanding the setup before they could actually be productive. When you're already down to just four people and one of them needs weeks to get up to speed, that's a significant hit to your team's velocity.
+The combination of Module Federation, Nx, Vite, and micro frontend patterns created a learning curve that was honestly pretty brutal. We're talking about a lot of new concepts for developers to wrap their heads around all at once. When you're already down to just four people and one of them needs weeks to get up to speed, that's a significant hit to your team's velocity.
 
 Configuration became a nightmare of its own. We had Vite configurations for each individual app, Module Federation settings that needed to be just right, and Nx workspace configuration files scattered everywhere. When something broke (and things broke regularly in those early days), figuring out which configuration file was the culprit became this detective game that nobody wanted to play. Was it the host app's config? A remote app's setup? Some weird interaction between Nx and Vite? Good luck figuring that out at 3 PM on a Friday.
 
