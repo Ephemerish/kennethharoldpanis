@@ -12,7 +12,6 @@ export const POST: APIRoute = async ({ request }) => {
     const message = formData.get('message') as string;
 
     console.log('Form data received:', { name, email, subject, message: message?.substring(0, 50) + '...' });
-    console.log('Environment check - API key exists:', !!import.meta.env.RESEND_API_KEY);
 
     // Validate required fields
     if (!name || !email || !subject || !message) {
@@ -40,8 +39,9 @@ export const POST: APIRoute = async ({ request }) => {
     }
 
     // Check if Resend API key is available
-    const resendApiKey = import.meta.env.RESEND_API_KEY;
+    const resendApiKey = import.meta.env.RESEND_API_KEY || process.env.RESEND_API_KEY;
     console.log('Resend API key available:', !!resendApiKey);
+    console.log('API key source:', import.meta.env.RESEND_API_KEY ? 'import.meta.env' : process.env.RESEND_API_KEY ? 'process.env' : 'not found');
     
     if (!resendApiKey) {
       console.log('No Resend API key found');
