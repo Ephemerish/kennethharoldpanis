@@ -12,6 +12,7 @@ import node from "@astrojs/node";
 // https://astro.build/config
 export default defineConfig({
   site: 'https://kennethharoldpanis.com',
+  output: 'server', // Enable server-side rendering
   server: {
     port: 3000, // Ensure it matches the Docker exposed port
     host: "0.0.0.0",
