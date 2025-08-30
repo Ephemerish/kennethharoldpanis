@@ -44,7 +44,7 @@ const TypingEffect = ({ text, delay = 40 }: TypingEffectProps) => {
       className={`${
         isComplete
           ? "after:hidden"
-          : "after:inline-block after:w-0.5 after:h-5 after:bg-[#4ECDC4] after:animate-blink"
+          : "after:inline-block after:w-0.5 after:h-5 after:bg-[#4ECDC4] after:animate-pulse"
       }`}
     >
       {displayText}
