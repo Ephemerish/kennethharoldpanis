@@ -5,6 +5,8 @@ import HeroIcon from "../../components/HeroIcon.tsx";
 import { formatDate, calculateReadTime } from "../../utils";
 import { Image } from 'astro:assets';
 
+export const prerender = true;
+
 export async function getStaticPaths() {
   const blogEntries = await getCollection("blog");
   return blogEntries.map(entry => ({
