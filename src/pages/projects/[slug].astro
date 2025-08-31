@@ -24,9 +24,9 @@ interface Props {
 const { Content } = await project.render();
 
 const statusColors = {
-  completed: "bg-gray-200 text-black",
-  "in-progress": "bg-gray-100 text-gray-800", 
-  planned: "bg-gray-100 text-gray-600"
+  completed: "bg-success-200 text-success-800",
+  "in-progress": "bg-warning-200 text-warning-800", 
+  planned: "bg-neutral-200 text-neutral-600"
 };
 
 const statusText = {
@@ -36,15 +36,15 @@ const statusText = {
 };
 
 const categoryColors = {
-  web: "bg-gray-100 text-gray-800",
-  mobile: "bg-gray-100 text-gray-800",
-  hardware: "bg-gray-100 text-gray-800",
-  iot: "bg-gray-100 text-gray-800",
-  "ai-ml": "bg-gray-100 text-gray-800",
-  game: "bg-gray-100 text-gray-800",
-  desktop: "bg-gray-100 text-gray-800",
-  thesis: "bg-gray-100 text-gray-800",
-  research: "bg-gray-100 text-gray-800"
+  web: "bg-brand-100 text-brand-800",
+  mobile: "bg-brand-100 text-brand-800",
+  hardware: "bg-brand-100 text-brand-800",
+  iot: "bg-brand-100 text-brand-800",
+  "ai-ml": "bg-brand-100 text-brand-800",
+  game: "bg-brand-100 text-brand-800",
+  desktop: "bg-brand-100 text-brand-800",
+  thesis: "bg-brand-100 text-brand-800",
+  research: "bg-brand-100 text-brand-800"
 };
 
 const categoryText = {
@@ -74,14 +74,14 @@ const formatDate = (date: Date) => {
   image={project.data.image ? `/images/${project.data.image}` : "/me.jpg"}
   type="article"
 >
-  <article class="max-w-5xl mx-auto px-4 py-12">
+  <article class="max-w-5xl mx-auto px-6 py-12 bg-neutral-0 rounded-xl shadow-sm my-8">
     <!-- Header -->
     <header class="mb-12">
       <!-- Back to Projects -->
       <nav class="mb-6">
         <a 
           href="/projects" 
-          class="inline-flex items-center text-black hover:text-gray-700 transition-colors"
+          class="inline-flex items-center text-brand-600 hover:text-brand-700 transition-colors"
         >
           <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
@@ -92,7 +92,7 @@ const formatDate = (date: Date) => {
 
       <!-- Project Title and Badges -->
       <div class="flex flex-wrap items-center gap-3 mb-4">
-        <h1 class="text-4xl md:text-5xl font-bold text-gray-900">
+        <h1 class="text-4xl md:text-5xl font-bold text-neutral-900">
           {project.data.title}
         </h1>
         <span class={`px-3 py-1 rounded-full text-sm font-medium ${categoryColors[project.data.category]}`}>
@@ -102,14 +102,14 @@ const formatDate = (date: Date) => {
           {statusText[project.data.status]}
         </span>
         {project.data.featured && (
-          <span class="bg-gray-200 text-black px-3 py-1 rounded-full text-sm font-medium">
+          <span class="bg-warning-200 text-warning-800 px-3 py-1 rounded-full text-sm font-medium">
             Featured
           </span>
         )}
       </div>
 
       <!-- Project Description -->
-      <p class="text-xl text-gray-600 mb-8 leading-relaxed">
+      <p class="text-xl text-neutral-700 mb-8 leading-relaxed">
         {project.data.description}
       </p>
 
@@ -120,7 +120,7 @@ const formatDate = (date: Date) => {
             href={project.data.demoUrl} 
             target="_blank" 
             rel="noopener noreferrer"
-            class="bg-black text-white px-6 py-3 rounded-lg hover:bg-gray-800 transition-colors font-medium inline-flex items-center"
+            class="bg-brand-gradient text-neutral-0 px-6 py-3 rounded-lg hover:shadow-brand transition-all font-medium inline-flex items-center"
           >
             <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
@@ -133,7 +133,7 @@ const formatDate = (date: Date) => {
             href={project.data.videoUrl} 
             target="_blank" 
             rel="noopener noreferrer"
-            class="bg-gray-700 text-white px-6 py-3 rounded-lg hover:bg-gray-800 transition-colors font-medium inline-flex items-center"
+            class="bg-neutral-700 text-neutral-0 px-6 py-3 rounded-lg hover:bg-neutral-800 transition-colors font-medium inline-flex items-center"
           >
             <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h1.586a1 1 0 01.707.293l2.414 2.414a1 1 0 00.707.293H15M9 10v4a2 2 0 002 2h2a2 2 0 002-2v-4M9 10V9a2 2 0 012-2h2a2 2 0 012 2v1" />
@@ -146,7 +146,7 @@ const formatDate = (date: Date) => {
             href={project.data.githubUrl} 
             target="_blank" 
             rel="noopener noreferrer"
-            class="border border-gray-300 text-gray-700 px-6 py-3 rounded-lg hover:bg-gray-50 transition-colors font-medium inline-flex items-center"
+            class="border border-brand-300 text-brand-700 px-6 py-3 rounded-lg hover:bg-brand-50 transition-colors font-medium inline-flex items-center"
           >
             <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 24 24">
               <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
@@ -340,20 +340,20 @@ const formatDate = (date: Date) => {
 
     <!-- Project Content -->
     <article class="
-      text-gray-700 text-sm sm:text-base lg:text-lg leading-6 sm:leading-7 lg:leading-8 font-light
-      [&>h1]:text-xl [&>h1]:sm:text-2xl [&>h1]:font-medium [&>h1]:text-gray-900 [&>h1]:mt-6 [&>h1]:sm:mt-8 [&>h1]:mb-3 [&>h1]:sm:mb-4 [&>h1]:tracking-tight [&>h1]:pb-2 [&>h1]:border-b [&>h1]:border-gray-100
-      [&>h2]:text-lg [&>h2]:sm:text-xl [&>h2]:font-semibold [&>h2]:text-white [&>h2]:mt-5 [&>h2]:sm:mt-6 [&>h2]:mb-2 [&>h2]:sm:mb-3 [&>h2]:tracking-tight [&>h2]:bg-linear-to-r [&>h2]:from-slate-700 [&>h2]:to-slate-800 [&>h2]:px-3 [&>h2]:sm:px-4 [&>h2]:py-2 [&>h2]:sm:py-3 [&>h2]:rounded-lg [&>h2]:border-l-4 [&>h2]:border-gray-400 [&>h2]:cursor-pointer [&>h2]:hover:from-slate-600 [&>h2]:hover:to-slate-700 [&>h2]:hover:border-gray-500 [&>h2]:transition-all [&>h2]:duration-200 [&>h2]:relative [&>h2]:pr-8 [&>h2]:shadow-md [&>h2]:hover:shadow-lg
-      [&>h3]:text-base [&>h3]:sm:text-lg [&>h3]:font-semibold [&>h3]:text-gray-800 [&>h3]:mt-4 [&>h3]:sm:mt-5 [&>h3]:mb-2 [&>h3]:sm:mb-3 [&>h3]:tracking-tight [&>h3]:bg-linear-to-r [&>h3]:from-gray-50 [&>h3]:to-gray-100 [&>h3]:px-3 [&>h3]:sm:px-4 [&>h3]:py-2 [&>h3]:sm:py-2.5 [&>h3]:rounded-lg [&>h3]:border [&>h3]:border-gray-200 [&>h3]:border-l-4 [&>h3]:border-l-gray-400 [&>h3]:cursor-pointer [&>h3]:hover:from-gray-100 [&>h3]:hover:to-gray-200 [&>h3]:hover:border-gray-300 [&>h3]:hover:border-l-gray-500 [&>h3]:transition-all [&>h3]:duration-200 [&>h3]:relative [&>h3]:pr-8 [&>h3]:shadow-sm [&>h3]:hover:shadow-md
-      [&>h4]:text-sm [&>h4]:sm:text-base [&>h4]:font-medium [&>h4]:text-gray-700 [&>h4]:mt-3 [&>h4]:sm:mt-4 [&>h4]:mb-1 [&>h4]:sm:mb-2 [&>h4]:pl-3 [&>h4]:border-l-3 [&>h4]:border-gray-300 [&>h4]:bg-gray-25 [&>h4]:py-1 [&>h4]:rounded-r-md
+      text-neutral-700 text-sm sm:text-base lg:text-lg leading-6 sm:leading-7 lg:leading-8 font-light
+      [&>h1]:text-xl [&>h1]:sm:text-2xl [&>h1]:font-medium [&>h1]:text-neutral-900 [&>h1]:mt-6 [&>h1]:sm:mt-8 [&>h1]:mb-3 [&>h1]:sm:mb-4 [&>h1]:tracking-tight [&>h1]:pb-2 [&>h1]:border-b [&>h1]:border-neutral-100
+      [&>h2]:text-lg [&>h2]:sm:text-xl [&>h2]:font-semibold [&>h2]:text-neutral-900 [&>h2]:mt-6 [&>h2]:sm:mt-8 [&>h2]:mb-3 [&>h2]:sm:mb-4 [&>h2]:tracking-tight [&>h2]:pb-2 [&>h2]:border-b-2 [&>h2]:border-brand-500
+      [&>h3]:text-base [&>h3]:sm:text-lg [&>h3]:font-medium [&>h3]:text-neutral-900 [&>h3]:mt-5 [&>h3]:sm:mt-6 [&>h3]:mb-2 [&>h3]:sm:mb-3 [&>h3]:tracking-tight [&>h3]:pb-1.5 [&>h3]:border-b [&>h3]:border-brand-300
+      [&>h4]:text-sm [&>h4]:sm:text-base [&>h4]:font-medium [&>h4]:text-neutral-900 [&>h4]:mt-4 [&>h4]:sm:mt-5 [&>h4]:mb-2 [&>h4]:bg-neutral-50 [&>h4]:border-l-3 [&>h4]:border-brand-300 [&>h4]:px-3 [&>h4]:py-1.5 [&>h4]:rounded-r-md
       [&>p]:mb-3 [&>p]:sm:mb-4 [&>p]:leading-6 [&>p]:sm:leading-7 [&>p]:lg:leading-8
-      [&>ul]:mb-3 [&>ul]:sm:mb-4 [&>ul]:space-y-1 [&>ul]:sm:space-y-2 [&>ul>li]:relative [&>ul>li]:pl-6 [&>ul>li]:sm:pl-8 [&>ul>li]:before:content-['●'] [&>ul>li]:before:absolute [&>ul>li]:before:left-0 [&>ul>li]:before:text-gray-700 [&>ul>li]:before:font-bold [&>ul>li]:before:text-sm [&>ul>li]:sm:before:text-lg [&>ul>li]:before:top-0
-      [&>ol]:mb-3 [&>ol]:sm:mb-4 [&>ol]:space-y-1 [&>ol]:sm:space-y-2 [&>ol]:ml-6 [&>ol]:sm:ml-8 [&>ol]:list-decimal [&>ol]:marker:text-gray-700 [&>ol]:marker:font-semibold [&>ol]:marker:text-sm [&>ol]:sm:marker:text-lg [&>ol>li]:mb-1 [&>ol>li]:pl-1 [&>ol>li]:sm:pl-2
-      [&>blockquote]:border-l-2 [&>blockquote]:border-gray-200 [&>blockquote]:pl-3 [&>blockquote]:sm:pl-4 [&>blockquote]:text-gray-600 [&>blockquote]:italic [&>blockquote]:my-4 [&>blockquote]:sm:my-6 [&>blockquote]:text-base [&>blockquote]:sm:text-lg
-      [&>pre]:bg-gray-50 [&>pre]:border [&>pre]:border-gray-100 [&>pre]:p-3 [&>pre]:sm:p-4 [&>pre]:rounded-xl [&>pre]:overflow-x-auto [&>pre]:my-4 [&>pre]:sm:my-6 [&>pre]:text-xs [&>pre]:sm:text-sm [&>pre]:leading-5 [&>pre]:sm:leading-6
-      [&>:not(pre)>code]:bg-gray-100 [&>:not(pre)>code]:px-1.5 [&>:not(pre)>code]:sm:px-2 [&>:not(pre)>code]:py-0.5 [&>:not(pre)>code]:rounded [&>:not(pre)>code]:text-xs [&>:not(pre)>code]:sm:text-sm [&>:not(pre)>code]:font-mono [&>:not(pre)>code]:text-gray-800
-      [&>a]:text-gray-900 [&>a]:underline [&>a]:decoration-gray-300 [&>a]:underline-offset-4 [&>a]:transition-colors [&>a:hover]:decoration-gray-600
-      [&>img]:rounded-xl [&>img]:my-4 [&>img]:sm:my-6 [&>img]:border [&>img]:border-gray-100
-      [&>hr]:border-0 [&>hr]:h-px [&>hr]:bg-gray-200 [&>hr]:my-6 [&>hr]:sm:my-8
+      [&>ul]:mb-3 [&>ul]:sm:mb-4 [&>ul]:space-y-1 [&>ul]:sm:space-y-2 [&>ul>li]:relative [&>ul>li]:pl-6 [&>ul>li]:sm:pl-8 [&>ul>li]:before:content-['●'] [&>ul>li]:before:absolute [&>ul>li]:before:left-0 [&>ul>li]:before:text-brand-600 [&>ul>li]:before:font-bold [&>ul>li]:before:text-sm [&>ul>li]:sm:before:text-lg [&>ul>li]:before:top-0
+      [&>ol]:mb-3 [&>ol]:sm:mb-4 [&>ol]:space-y-1 [&>ol]:sm:space-y-2 [&>ol]:ml-6 [&>ol]:sm:ml-8 [&>ol]:list-decimal [&>ol]:marker:text-brand-600 [&>ol]:marker:font-semibold [&>ol]:marker:text-sm [&>ol]:sm:marker:text-lg [&>ol>li]:mb-1 [&>ol>li]:pl-1 [&>ol>li]:sm:pl-2
+      [&>blockquote]:border-l-2 [&>blockquote]:border-brand-200 [&>blockquote]:pl-3 [&>blockquote]:sm:pl-4 [&>blockquote]:text-neutral-600 [&>blockquote]:italic [&>blockquote]:my-4 [&>blockquote]:sm:my-6 [&>blockquote]:text-base [&>blockquote]:sm:text-lg
+      [&>pre]:bg-neutral-50 [&>pre]:border [&>pre]:border-neutral-100 [&>pre]:p-3 [&>pre]:sm:p-4 [&>pre]:rounded-xl [&>pre]:overflow-x-auto [&>pre]:my-4 [&>pre]:sm:my-6 [&>pre]:text-xs [&>pre]:sm:text-sm [&>pre]:leading-5 [&>pre]:sm:leading-6
+      [&>:not(pre)>code]:bg-brand-100 [&>:not(pre)>code]:px-1.5 [&>:not(pre)>code]:sm:px-2 [&>:not(pre)>code]:py-0.5 [&>:not(pre)>code]:rounded [&>:not(pre)>code]:text-xs [&>:not(pre)>code]:sm:text-sm [&>:not(pre)>code]:font-mono [&>:not(pre)>code]:text-brand-800
+      [&>a]:text-brand-600 [&>a]:underline [&>a]:decoration-brand-300 [&>a]:underline-offset-4 [&>a]:transition-colors [&>a:hover]:decoration-brand-600
+      [&>img]:rounded-xl [&>img]:my-4 [&>img]:sm:my-6 [&>img]:border [&>img]:border-neutral-100
+      [&>hr]:border-0 [&>hr]:h-px [&>hr]:bg-neutral-200 [&>hr]:my-6 [&>hr]:sm:my-8
       first:*:mt-0
     " id="project-content">
       <Content />
