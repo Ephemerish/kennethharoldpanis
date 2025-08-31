@@ -16,7 +16,7 @@ tags:
 
 ## Introduction
 
-We spent 8 months building a complex application with micro frontends. The result? A working system that taught us more about architectural tradeoffs than we ever wanted to know.
+We spent 9 months building a complex application with micro frontends. The result? A working system that taught us more about architectural tradeoffs than we ever wanted to know.
 
 Everyone told us micro frontends would solve our scaling problems. Independent teams, independent deployments, technology flexibility - it all sounded perfect, But from our experience micro frontends come with their own special brand of complexity that can make your life interesting in ways you didn't expect.
 
