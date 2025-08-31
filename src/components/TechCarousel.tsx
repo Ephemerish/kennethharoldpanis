@@ -70,7 +70,7 @@ export const TechCarousel: React.FC<TechCarouselProps> = ({ categories }) => {
                 }
                 ${position === 'prev' ? '-ml-4 sm:-ml-8' : ''}
                 ${position === 'next' ? '-mr-4 sm:-mr-8' : ''}
-                w-80 sm:w-96 flex-shrink-0
+                w-80 sm:w-96 shrink-0
               `}
               onClick={() => position !== 'current' && goToSlide(index)}
             >

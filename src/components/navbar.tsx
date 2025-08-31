@@ -17,7 +17,7 @@ export default function Navbar() {
       <div className="max-w-full px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between">
           {/* Logo/Name */}
-          <div className="flex-shrink-0">
+          <div className="shrink-0">
             <a
               href="/"
               className="text-xl font-bold text-black"

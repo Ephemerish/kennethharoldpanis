@@ -26,7 +26,7 @@ const Toaster = ({ ...props }: ToasterProps) => {
           info:
             "group-[.toast]:border-gray-300 group-[.toast]:bg-gray-100 group-[.toast]:text-black",
           title: "group-[.toast]:text-sm group-[.toast]:font-semibold group-[.toast]:flex group-[.toast]:items-center group-[.toast]:gap-2",
-          icon: "group-[.toast]:w-5 group-[.toast]:h-5 group-[.toast]:flex-shrink-0",
+          icon: "group-[.toast]:w-5 group-[.toast]:h-5 group-[.toast]:shrink-0",
         },
       }}
       icons={{

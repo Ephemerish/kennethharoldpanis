@@ -237,7 +237,7 @@ const formatDate = (date: Date) => {
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
           {project.data.keyFeatures.map((feature) => (
             <div class="flex items-start">
-              <svg class="w-5 h-5 text-gray-700 mr-3 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg class="w-5 h-5 text-gray-700 mr-3 mt-0.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
               </svg>
               <span class="text-gray-700">{feature}</span>
@@ -268,7 +268,7 @@ const formatDate = (date: Date) => {
         <div class="space-y-4">
           {project.data.challenges.map((challenge, index) => (
             <div class="flex items-start">
-              <div class="bg-gray-200 text-black rounded-full w-6 h-6 flex items-center justify-center text-sm font-medium mr-4 mt-0.5 flex-shrink-0">
+              <div class="bg-gray-200 text-black rounded-full w-6 h-6 flex items-center justify-center text-sm font-medium mr-4 mt-0.5 shrink-0">
                 {index + 1}
               </div>
               <p class="text-gray-700">{challenge}</p>
@@ -342,8 +342,8 @@ const formatDate = (date: Date) => {
     <article class="
       text-gray-700 text-sm sm:text-base lg:text-lg leading-6 sm:leading-7 lg:leading-8 font-light
       [&>h1]:text-xl [&>h1]:sm:text-2xl [&>h1]:font-medium [&>h1]:text-gray-900 [&>h1]:mt-6 [&>h1]:sm:mt-8 [&>h1]:mb-3 [&>h1]:sm:mb-4 [&>h1]:tracking-tight [&>h1]:pb-2 [&>h1]:border-b [&>h1]:border-gray-100
-      [&>h2]:text-lg [&>h2]:sm:text-xl [&>h2]:font-semibold [&>h2]:text-white [&>h2]:mt-5 [&>h2]:sm:mt-6 [&>h2]:mb-2 [&>h2]:sm:mb-3 [&>h2]:tracking-tight [&>h2]:bg-gradient-to-r [&>h2]:from-slate-700 [&>h2]:to-slate-800 [&>h2]:px-3 [&>h2]:sm:px-4 [&>h2]:py-2 [&>h2]:sm:py-3 [&>h2]:rounded-lg [&>h2]:border-l-4 [&>h2]:border-gray-400 [&>h2]:cursor-pointer [&>h2]:hover:from-slate-600 [&>h2]:hover:to-slate-700 [&>h2]:hover:border-gray-500 [&>h2]:transition-all [&>h2]:duration-200 [&>h2]:relative [&>h2]:pr-8 [&>h2]:shadow-md [&>h2]:hover:shadow-lg
-      [&>h3]:text-base [&>h3]:sm:text-lg [&>h3]:font-semibold [&>h3]:text-gray-800 [&>h3]:mt-4 [&>h3]:sm:mt-5 [&>h3]:mb-2 [&>h3]:sm:mb-3 [&>h3]:tracking-tight [&>h3]:bg-gradient-to-r [&>h3]:from-gray-50 [&>h3]:to-gray-100 [&>h3]:px-3 [&>h3]:sm:px-4 [&>h3]:py-2 [&>h3]:sm:py-2.5 [&>h3]:rounded-lg [&>h3]:border [&>h3]:border-gray-200 [&>h3]:border-l-4 [&>h3]:border-l-gray-400 [&>h3]:cursor-pointer [&>h3]:hover:from-gray-100 [&>h3]:hover:to-gray-200 [&>h3]:hover:border-gray-300 [&>h3]:hover:border-l-gray-500 [&>h3]:transition-all [&>h3]:duration-200 [&>h3]:relative [&>h3]:pr-8 [&>h3]:shadow-sm [&>h3]:hover:shadow-md
+      [&>h2]:text-lg [&>h2]:sm:text-xl [&>h2]:font-semibold [&>h2]:text-white [&>h2]:mt-5 [&>h2]:sm:mt-6 [&>h2]:mb-2 [&>h2]:sm:mb-3 [&>h2]:tracking-tight [&>h2]:bg-linear-to-r [&>h2]:from-slate-700 [&>h2]:to-slate-800 [&>h2]:px-3 [&>h2]:sm:px-4 [&>h2]:py-2 [&>h2]:sm:py-3 [&>h2]:rounded-lg [&>h2]:border-l-4 [&>h2]:border-gray-400 [&>h2]:cursor-pointer [&>h2]:hover:from-slate-600 [&>h2]:hover:to-slate-700 [&>h2]:hover:border-gray-500 [&>h2]:transition-all [&>h2]:duration-200 [&>h2]:relative [&>h2]:pr-8 [&>h2]:shadow-md [&>h2]:hover:shadow-lg
+      [&>h3]:text-base [&>h3]:sm:text-lg [&>h3]:font-semibold [&>h3]:text-gray-800 [&>h3]:mt-4 [&>h3]:sm:mt-5 [&>h3]:mb-2 [&>h3]:sm:mb-3 [&>h3]:tracking-tight [&>h3]:bg-linear-to-r [&>h3]:from-gray-50 [&>h3]:to-gray-100 [&>h3]:px-3 [&>h3]:sm:px-4 [&>h3]:py-2 [&>h3]:sm:py-2.5 [&>h3]:rounded-lg [&>h3]:border [&>h3]:border-gray-200 [&>h3]:border-l-4 [&>h3]:border-l-gray-400 [&>h3]:cursor-pointer [&>h3]:hover:from-gray-100 [&>h3]:hover:to-gray-200 [&>h3]:hover:border-gray-300 [&>h3]:hover:border-l-gray-500 [&>h3]:transition-all [&>h3]:duration-200 [&>h3]:relative [&>h3]:pr-8 [&>h3]:shadow-sm [&>h3]:hover:shadow-md
       [&>h4]:text-sm [&>h4]:sm:text-base [&>h4]:font-medium [&>h4]:text-gray-700 [&>h4]:mt-3 [&>h4]:sm:mt-4 [&>h4]:mb-1 [&>h4]:sm:mb-2 [&>h4]:pl-3 [&>h4]:border-l-3 [&>h4]:border-gray-300 [&>h4]:bg-gray-25 [&>h4]:py-1 [&>h4]:rounded-r-md
       [&>p]:mb-3 [&>p]:sm:mb-4 [&>p]:leading-6 [&>p]:sm:leading-7 [&>p]:lg:leading-8
       [&>ul]:mb-3 [&>ul]:sm:mb-4 [&>ul]:space-y-1 [&>ul]:sm:space-y-2 [&>ul>li]:relative [&>ul>li]:pl-6 [&>ul>li]:sm:pl-8 [&>ul>li]:before:content-['●'] [&>ul>li]:before:absolute [&>ul>li]:before:left-0 [&>ul>li]:before:text-gray-700 [&>ul>li]:before:font-bold [&>ul>li]:before:text-sm [&>ul>li]:sm:before:text-lg [&>ul>li]:before:top-0
@@ -354,7 +354,7 @@ const formatDate = (date: Date) => {
       [&>a]:text-gray-900 [&>a]:underline [&>a]:decoration-gray-300 [&>a]:underline-offset-4 [&>a]:transition-colors [&>a:hover]:decoration-gray-600
       [&>img]:rounded-xl [&>img]:my-4 [&>img]:sm:my-6 [&>img]:border [&>img]:border-gray-100
       [&>hr]:border-0 [&>hr]:h-px [&>hr]:bg-gray-200 [&>hr]:my-6 [&>hr]:sm:my-8
-      first:[&>*]:mt-0
+      first:*:mt-0
     " id="project-content">
       <Content />
     </article>
