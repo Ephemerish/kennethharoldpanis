@@ -74,15 +74,15 @@ export const TechCarousel: React.FC<TechCarouselProps> = ({ categories }) => {
               `}
               onClick={() => position !== 'current' && goToSlide(index)}
             >
-                            <div className="bg-white rounded-2xl shadow-lg p-4 sm:p-6 lg:p-8 h-80 sm:h-96 border border-gray-300 transition-shadow duration-700 ease-out hover:shadow-xl flex flex-col">
+                            <div className="bg-neutral-0 rounded-2xl shadow-lg p-4 sm:p-6 lg:p-8 h-80 sm:h-96 border border-neutral-200 transition-shadow duration-700 ease-out hover:shadow-xl flex flex-col">
                 <div className="text-center flex-1 flex flex-col">
                   {/* Icon and title container */}
                   <div className="flex-1 flex flex-col justify-center">
                     <div className="text-3xl sm:text-4xl lg:text-5xl mb-2 sm:mb-3 transition-transform duration-700 ease-out">{category.icon}</div>
-                    <h3 className="text-lg sm:text-xl lg:text-2xl font-bold text-black mb-1.5 sm:mb-2 transition-all duration-700 ease-out">
+                    <h3 className="text-lg sm:text-xl lg:text-2xl font-bold text-neutral-900 mb-1.5 sm:mb-2 transition-all duration-700 ease-out">
                       {category.name}
                     </h3>
-                    <div className="w-12 sm:w-16 lg:w-20 h-0.5 sm:h-1 bg-black rounded-full mx-auto transition-all duration-700 ease-out"></div>
+                    <div className="w-12 sm:w-16 lg:w-20 h-0.5 sm:h-1 bg-brand-600 rounded-full mx-auto transition-all duration-700 ease-out"></div>
                   </div>
                   
                   {/* Skills grid - flexible to fill remaining space */}
@@ -90,13 +90,13 @@ export const TechCarousel: React.FC<TechCarouselProps> = ({ categories }) => {
                     {category.skills.slice(0, position === 'current' ? 8 : 4).map((skill) => (
                       <span 
                         key={skill}
-                        className="px-2 py-1 sm:px-2.5 sm:py-1 bg-white text-black rounded-full text-xs sm:text-sm font-medium shadow-sm hover:shadow-md transition-all duration-300 ease-out border border-gray-400 h-fit"
+                        className="px-2 py-1 sm:px-2.5 sm:py-1 bg-neutral-0 text-neutral-900 rounded-full text-xs sm:text-sm font-medium shadow-sm hover:shadow-md transition-all duration-300 ease-out border border-neutral-200 h-fit"
                       >
                         {skill}
                       </span>
                     ))}
                     {category.skills.length > (position === 'current' ? 8 : 4) && (
-                      <span className="px-2 py-1 sm:px-2.5 sm:py-1 bg-gray-200 text-gray-700 rounded-full text-xs sm:text-sm font-medium border border-gray-400 transition-all duration-700 ease-out h-fit">
+                      <span className="px-2 py-1 sm:px-2.5 sm:py-1 bg-neutral-100 text-neutral-700 rounded-full text-xs sm:text-sm font-medium border border-neutral-200 transition-all duration-700 ease-out h-fit">
                         +{category.skills.length - (position === 'current' ? 8 : 4)} more
                       </span>
                     )}

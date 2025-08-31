@@ -13,14 +13,14 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="sticky top-0 z-50 w-full bg-white shadow-sm border-b border-gray-300">
+    <nav className="sticky top-0 z-50 w-full bg-neutral-0 shadow-sm border-b border-neutral-200">
       <div className="max-w-full px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between">
           {/* Logo/Name */}
           <div className="shrink-0">
             <a
               href="/"
-              className="text-xl font-bold text-black"
+              className="text-xl font-bold text-neutral-900"
             >
               Kenneth Harold Panis
             </a>

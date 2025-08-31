@@ -51,48 +51,66 @@ const skillCategories = categorizeTags(allTags);
   <!-- Hero Section -->
   <HomeHeader client:load />
   
-  <!-- Skills Section -->
-  <section class="py-12 sm:py-16 bg-white">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="text-center mb-8 sm:mb-12">
-        <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-black">
+  <!-- Skills Section with Enhanced Design -->
+  <section class="py-16 sm:py-20 bg-neutral-0 relative overflow-hidden">
+    <!-- Decorative background elements -->
+    <div class="absolute inset-0 bg-gradient-to-br from-neutral-50/30 to-neutral-100/20"></div>
+    <div class="absolute top-0 right-0 w-96 h-96 bg-neutral-100/30 rounded-full blur-3xl transform translate-x-1/2 -translate-y-1/2"></div>
+    
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+      <div class="text-center mb-12 sm:mb-16 animate-fade-in">
+        <h2 class="text-3xl sm:text-4xl md:text-5xl font-bold text-neutral-900 mb-4">
           Technologies I Work With
         </h2>
-        <p class="mt-3 sm:mt-4 text-base sm:text-lg text-gray-600 max-w-2xl mx-auto px-2">
+        <p class="mt-4 sm:mt-6 text-lg sm:text-xl text-neutral-700 max-w-3xl mx-auto px-2 leading-relaxed">
           With a Computer Engineering background, I bridge the gap between hardware and software, 
           creating comprehensive solutions from circuit design to web applications
         </p>
+        <div class="w-24 h-1 bg-brand-gradient mx-auto mt-6 rounded-full"></div>
       </div>
       
-      <TechCarousel categories={skillCategories} client:load />
+      <div class="animate-slide-up">
+        <TechCarousel categories={skillCategories} client:load />
+      </div>
     </div>
   </section>
 
-  <!-- Featured Projects Section -->
-  <section class="py-12 sm:py-16 bg-gray-100">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="text-center mb-8 sm:mb-12">
-        <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-black">
-          Featured Projects
+  <!-- Featured Projects Section with Enhanced Visual Design -->
+  <section class="py-16 sm:py-20 bg-hero-gradient relative overflow-hidden">
+    <!-- Decorative background elements -->
+    <div class="absolute inset-0 bg-gradient-to-br from-brand-50/30 to-brand-100/20"></div>
+    <div class="absolute bottom-0 left-0 w-96 h-96 bg-brand-100/30 rounded-full blur-3xl transform -translate-x-1/2 translate-y-1/2"></div>
+    
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+      <div class="text-center mb-12 sm:mb-16">
+        <h2 class="text-3xl sm:text-4xl md:text-5xl font-bold text-neutral-900 mb-4">
+          Featured <span class="text-brand-gradient">Projects</span>
         </h2>
-        <p class="mt-3 sm:mt-4 text-base sm:text-lg text-gray-600 max-w-2xl mx-auto px-2">
-          Take a look at my recent work and creative solutions
+        <p class="mt-4 sm:mt-6 text-lg sm:text-xl text-neutral-600 max-w-3xl mx-auto px-2 leading-relaxed">
+          Take a look at my recent work and creative solutions that solve real-world problems
         </p>
+        <div class="w-24 h-1 bg-brand-gradient mx-auto mt-6 rounded-full"></div>
       </div>
       
-      <!-- Featured Project -->
+      <!-- Featured Project with Enhanced Styling -->
       {featuredProject && (
-        <div class="mb-8 sm:mb-12">
-          <FeaturedProject project={featuredProject} />
+        <div class="mb-12 sm:mb-16 animate-fade-in">
+          <div class="bg-card-gradient rounded-2xl p-6 sm:p-8 shadow-elegant hover-lift border border-neutral-200/50">
+            <FeaturedProject project={featuredProject} />
+          </div>
         </div>
       )}
       
-      <!-- Other Projects -->
+      <!-- Other Projects Grid with Enhanced Cards -->
       {otherProjects.length > 0 && (
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 mb-6 sm:mb-8">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 sm:gap-10 mb-8 sm:mb-12">
           {otherProjects
             .slice(0, HOMEPAGE_PROJECTS_LIMIT - 1)
-            .map((project: CollectionEntry<"projects">) => <Card item={project} type="project" />)
+            .map((project: CollectionEntry<"projects">) => (
+              <div class="hover-lift animate-fade-in">
+                <Card item={project} type="project" />
+              </div>
+            ))
           }
         </div>
       )}
@@ -100,10 +118,10 @@ const skillCategories = categorizeTags(allTags);
       <div class="text-center">
         <a 
           href="/projects" 
-          class="inline-flex items-center px-6 py-3 border border-gray-400 text-sm sm:text-base font-medium rounded-lg text-black bg-white hover:bg-gray-100 transition-colors duration-200"
+          class="inline-flex items-center px-8 py-4 bg-brand-gradient text-neutral-0 text-base sm:text-lg font-semibold rounded-xl shadow-brand hover:shadow-brand-lg hover-lift transition-all duration-300"
         >
           View All Projects
-          <svg class="ml-2 w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg class="ml-3 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
           </svg>
         </a>
@@ -111,38 +129,48 @@ const skillCategories = categorizeTags(allTags);
     </div>
   </section>
 
-  <!-- Latest Blog Posts Section -->
-  <section class="py-12 sm:py-16 bg-white">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="text-center mb-8 sm:mb-12">
-        <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-black">
-          Latest from the Blog
+  <!-- Latest Blog Posts Section with Premium Design -->
+  <section class="py-16 sm:py-20 bg-neutral-0 relative overflow-hidden">
+    <!-- Subtle background pattern -->
+    <div class="absolute bottom-0 left-0 w-96 h-96 bg-brand-50/40 rounded-full blur-3xl transform -translate-x-1/2 translate-y-1/2"></div>
+    
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+      <div class="text-center mb-12 sm:mb-16">
+        <h2 class="text-3xl sm:text-4xl md:text-5xl font-bold text-neutral-900 mb-4">
+          Latest from the <span class="text-brand-gradient">Blog</span>
         </h2>
-        <p class="mt-3 sm:mt-4 text-base sm:text-lg text-gray-600 max-w-2xl mx-auto px-2">
+        <p class="mt-4 sm:mt-6 text-lg sm:text-xl text-neutral-600 max-w-3xl mx-auto px-2 leading-relaxed">
           Thoughts on development, technology, and lessons learned along the way
         </p>
+        <div class="w-24 h-1 bg-brand-gradient mx-auto mt-6 rounded-full"></div>
       </div>
       
-      <!-- Featured Blog Post -->
-      <div class="mb-8 sm:mb-12">
-        <MostRecentBlog blog={mostRecentBlog} />
+      <!-- Featured Blog Post with Enhanced Styling -->
+      <div class="mb-12 sm:mb-16 animate-fade-in">
+        <div class="bg-card-gradient rounded-2xl p-6 sm:p-8 shadow-elegant hover-lift">
+          <MostRecentBlog blog={mostRecentBlog} />
+        </div>
       </div>
       
-      <!-- Other Blog Posts -->
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 mb-6 sm:mb-8">
+      <!-- Other Blog Posts Grid with Enhanced Cards -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 sm:gap-10 mb-8 sm:mb-12">
         {otherBlogs
           .slice(0, HOMEPAGE_BLOG_LIMIT)
-          .map((blog) => <Card item={blog} type="blog" />)
+          .map((blog) => (
+            <div class="hover-lift animate-fade-in">
+              <Card item={blog} type="blog" />
+            </div>
+          ))
         }
       </div>
       
       <div class="text-center">
         <a 
           href="/blogs" 
-          class="inline-flex items-center px-6 py-3 border border-gray-400 text-sm sm:text-base font-medium rounded-lg text-black bg-white hover:bg-gray-100 transition-colors duration-200"
+          class="inline-flex items-center px-8 py-4 bg-neutral-0 text-brand-600 text-base sm:text-lg font-semibold rounded-xl border-2 border-brand-500 hover:bg-brand-gradient hover:text-neutral-0 hover:shadow-brand-lg hover-lift transition-all duration-300"
         >
           Read All Posts
-          <svg class="ml-2 w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg class="ml-3 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
           </svg>
         </a>

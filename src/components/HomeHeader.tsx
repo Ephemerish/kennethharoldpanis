@@ -44,7 +44,7 @@ const TypingEffect = ({ text, delay = 40 }: TypingEffectProps) => {
       className={`${
         isComplete
           ? "after:hidden"
-          : "after:inline-block after:w-0.5 after:h-5 after:bg-black after:animate-pulse"
+          : "after:inline-block after:w-0.5 after:h-5 after:bg-neutral-900 after:animate-pulse"
       }`}
     >
       {displayText}
@@ -60,8 +60,12 @@ const HomeHeader: React.FC = () => {
   }, []);
 
   return (
-    <div className="w-full py-8 md:py-8 lg:py-12 overflow-hidden bg-gray-100">
-      <div className="max-w-7xl mx-auto px-4 md:px-6 items-center justify-center align-middle flex flex-col md:flex-row gap-8 md:gap-12">
+    <div className="w-full py-8 md:py-8 lg:py-12 overflow-hidden bg-hero-gradient relative">
+      {/* Decorative background elements */}
+      <div className="absolute inset-0 bg-gradient-to-br from-brand-50/30 to-brand-100/20"></div>
+      <div className="absolute top-0 left-0 w-96 h-96 bg-brand-100/30 rounded-full blur-3xl transform -translate-x-1/2 -translate-y-1/2"></div>
+      
+      <div className="max-w-7xl mx-auto px-4 md:px-6 items-center justify-center align-middle flex flex-col md:flex-row gap-8 md:gap-12 relative">
         {/* Avatar Section - Show first on mobile */}
         <motion.div
           className="order-1 md:order-2 flex items-center justify-center"
@@ -74,7 +78,7 @@ const HomeHeader: React.FC = () => {
             delay: 0,
           }}
         >
-          <div className="relative w-[200px] h-[200px] sm:w-[250px] sm:h-[250px] md:w-[300px] md:h-[300px] lg:w-[350px] lg:h-[350px] overflow-hidden rounded-full border-4 border-black">
+          <div className="relative w-[200px] h-[200px] sm:w-[250px] sm:h-[250px] md:w-[300px] md:h-[300px] lg:w-[350px] lg:h-[350px] overflow-hidden rounded-full border-4 border-brand-600">
             <div className="w-full h-full rounded-full overflow-hidden">
               <img
                 src="/me.jpg"
@@ -100,12 +104,12 @@ const HomeHeader: React.FC = () => {
           <div className="space-y-4">
             <h1 className="text-2xl font-bold tracking-tighter sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl/none">
               Hi, I'm{" "}
-              <span className="relative text-black">
+              <span className="relative text-brand-600">
                 <TypingEffect text="Kenneth" delay={100} />
               </span>
             </h1>
             <motion.p
-              className="max-w-[600px] mx-auto md:mx-0 text-muted-foreground text-base sm:text-lg md:text-xl"
+              className="max-w-[600px] mx-auto md:mx-0 text-neutral-600 text-base sm:text-lg md:text-xl"
               initial={{ opacity: 0 }}
               animate={{ opacity: isLoaded ? 1 : 0 }}
               transition={{ duration: 0.4, delay: 0.15 }}
@@ -113,7 +117,7 @@ const HomeHeader: React.FC = () => {
               I'm drawn to creating things that solve random problems and bring ideas to life.
             </motion.p>
             <motion.p
-              className="max-w-[600px] mx-auto md:mx-0 text-muted-foreground text-base sm:text-lg md:text-xl"
+              className="max-w-[600px] mx-auto md:mx-0 text-neutral-600 text-base sm:text-lg md:text-xl"
               initial={{ opacity: 0 }}
               animate={{ opacity: isLoaded ? 1 : 0 }}
               transition={{ duration: 0.4, delay: 0.25 }}
@@ -134,7 +138,7 @@ const HomeHeader: React.FC = () => {
               <Tooltip>
                 <TooltipTrigger asChild>
                   <Button
-                    className="w-full sm:w-auto inline-flex items-center justify-center px-6 py-3 bg-black hover:bg-gray-800 text-white rounded-lg transition-colors duration-200 text-sm sm:text-base"
+                    className="w-full sm:w-auto inline-flex items-center justify-center px-6 py-3 bg-brand-600 hover:bg-brand-700 text-neutral-0 rounded-lg transition-colors duration-200 text-sm sm:text-base"
                     onClick={() => window.location.href = '/contact'}
                   >
                     <Mail className="mr-2 h-4 w-4" />
@@ -152,7 +156,7 @@ const HomeHeader: React.FC = () => {
                 <TooltipTrigger asChild>
                   <Button
                     variant="outline"
-                    className="w-full sm:w-auto inline-flex items-center justify-center px-6 py-3 border-2 border-gray-400 text-black hover:bg-gray-100 hover:text-black rounded-lg transition-colors duration-200 text-sm sm:text-base"
+                    className="w-full sm:w-auto inline-flex items-center justify-center px-6 py-3 border-2 border-neutral-300 text-neutral-900 hover:bg-neutral-100 hover:text-neutral-900 rounded-lg transition-colors duration-200 text-sm sm:text-base"
                     onClick={() => window.location.href = '/projects'}
                   >
                     <FileText className="mr-2 h-4 w-4" />
