@@ -44,7 +44,7 @@ const TypingEffect = ({ text, delay = 40 }: TypingEffectProps) => {
       className={`${
         isComplete
           ? "after:hidden"
-          : "after:inline-block after:w-0.5 after:h-5 after:bg-[#4ECDC4] after:animate-pulse"
+          : "after:inline-block after:w-0.5 after:h-5 after:bg-black after:animate-pulse"
       }`}
     >
       {displayText}
@@ -60,7 +60,7 @@ const HomeHeader: React.FC = () => {
   }, []);
 
   return (
-    <div className="w-full py-8 md:py-8 lg:py-12 overflow-hidden bg-amber-100">
+    <div className="w-full py-8 md:py-8 lg:py-12 overflow-hidden bg-gray-100">
       <div className="max-w-7xl mx-auto px-4 md:px-6 items-center justify-center align-middle flex flex-col md:flex-row gap-8 md:gap-12">
         {/* Avatar Section - Show first on mobile */}
         <motion.div
@@ -74,19 +74,7 @@ const HomeHeader: React.FC = () => {
             delay: 0,
           }}
         >
-          <div className="relative w-[200px] h-[200px] sm:w-[250px] sm:h-[250px] md:w-[300px] md:h-[300px] lg:w-[350px] lg:h-[350px] overflow-hidden rounded-full border-4 border-primary">
-            <motion.div
-              className="absolute inset-0 bg-primary/10"
-              animate={{
-                scale: [1, 1.05, 1],
-                opacity: [0.5, 0.7, 0.5],
-              }}
-              transition={{
-                repeat: Number.POSITIVE_INFINITY,
-                duration: 4,
-                ease: "easeInOut",
-              }}
-            />
+          <div className="relative w-[200px] h-[200px] sm:w-[250px] sm:h-[250px] md:w-[300px] md:h-[300px] lg:w-[350px] lg:h-[350px] overflow-hidden rounded-full border-4 border-black">
             <div className="w-full h-full rounded-full overflow-hidden">
               <img
                 src="/me.jpg"
@@ -99,17 +87,6 @@ const HomeHeader: React.FC = () => {
                 fetchPriority="high"
               />
             </div>
-
-            {/* Decorative elements around the avatar */}
-            <motion.div
-              className="absolute -z-10 w-full h-full rounded-full border-4 border-dashed border-primary/30"
-              animate={{ rotate: 360 }}
-              transition={{
-                duration: 40,
-                repeat: Number.POSITIVE_INFINITY,
-                ease: "linear",
-              }}
-            />
           </div>
         </motion.div>
 
@@ -123,7 +100,7 @@ const HomeHeader: React.FC = () => {
           <div className="space-y-4">
             <h1 className="text-2xl font-bold tracking-tighter sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl/none">
               Hi, I'm{" "}
-              <span className="relative text-[#3b82f6]">
+              <span className="relative text-black">
                 <TypingEffect text="Kenneth" delay={100} />
               </span>
             </h1>
@@ -157,7 +134,7 @@ const HomeHeader: React.FC = () => {
               <Tooltip>
                 <TooltipTrigger asChild>
                   <Button
-                    className="w-full sm:w-auto inline-flex items-center justify-center px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors duration-200 text-sm sm:text-base"
+                    className="w-full sm:w-auto inline-flex items-center justify-center px-6 py-3 bg-black hover:bg-gray-800 text-white rounded-lg transition-colors duration-200 text-sm sm:text-base"
                     onClick={() => window.location.href = '/contact'}
                   >
                     <Mail className="mr-2 h-4 w-4" />
@@ -175,7 +152,7 @@ const HomeHeader: React.FC = () => {
                 <TooltipTrigger asChild>
                   <Button
                     variant="outline"
-                    className="w-full sm:w-auto inline-flex items-center justify-center px-6 py-3 border-2 border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white rounded-lg transition-colors duration-200 text-sm sm:text-base"
+                    className="w-full sm:w-auto inline-flex items-center justify-center px-6 py-3 border-2 border-gray-400 text-black hover:bg-gray-100 hover:text-black rounded-lg transition-colors duration-200 text-sm sm:text-base"
                     onClick={() => window.location.href = '/projects'}
                   >
                     <FileText className="mr-2 h-4 w-4" />

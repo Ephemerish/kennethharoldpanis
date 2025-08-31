@@ -74,15 +74,15 @@ export const TechCarousel: React.FC<TechCarouselProps> = ({ categories }) => {
               `}
               onClick={() => position !== 'current' && goToSlide(index)}
             >
-              <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl shadow-lg p-4 sm:p-6 lg:p-8 h-80 sm:h-96 transition-shadow duration-700 ease-out hover:shadow-xl flex flex-col">
+                            <div className="bg-white rounded-2xl shadow-lg p-4 sm:p-6 lg:p-8 h-80 sm:h-96 border border-gray-300 transition-shadow duration-700 ease-out hover:shadow-xl flex flex-col">
                 <div className="text-center flex-1 flex flex-col">
-                  {/* Category header */}
-                  <div className="mb-3 sm:mb-4 transition-all duration-700 ease-out">
+                  {/* Icon and title container */}
+                  <div className="flex-1 flex flex-col justify-center">
                     <div className="text-3xl sm:text-4xl lg:text-5xl mb-2 sm:mb-3 transition-transform duration-700 ease-out">{category.icon}</div>
-                    <h3 className="text-lg sm:text-xl lg:text-2xl font-bold text-gray-900 mb-1.5 sm:mb-2 transition-all duration-700 ease-out">
-                      {category.title}
+                    <h3 className="text-lg sm:text-xl lg:text-2xl font-bold text-black mb-1.5 sm:mb-2 transition-all duration-700 ease-out">
+                      {category.name}
                     </h3>
-                    <div className="w-12 sm:w-16 lg:w-20 h-0.5 sm:h-1 bg-blue-500 rounded-full mx-auto transition-all duration-700 ease-out"></div>
+                    <div className="w-12 sm:w-16 lg:w-20 h-0.5 sm:h-1 bg-black rounded-full mx-auto transition-all duration-700 ease-out"></div>
                   </div>
                   
                   {/* Skills grid - flexible to fill remaining space */}
@@ -90,13 +90,13 @@ export const TechCarousel: React.FC<TechCarouselProps> = ({ categories }) => {
                     {category.skills.slice(0, position === 'current' ? 8 : 4).map((skill) => (
                       <span 
                         key={skill}
-                        className="px-2 py-1 sm:px-2.5 sm:py-1 bg-white text-blue-800 rounded-full text-xs sm:text-sm font-medium shadow-sm hover:shadow-md transition-all duration-300 ease-out border border-blue-100 h-fit"
+                        className="px-2 py-1 sm:px-2.5 sm:py-1 bg-white text-black rounded-full text-xs sm:text-sm font-medium shadow-sm hover:shadow-md transition-all duration-300 ease-out border border-gray-400 h-fit"
                       >
                         {skill}
                       </span>
                     ))}
                     {category.skills.length > (position === 'current' ? 8 : 4) && (
-                      <span className="px-2 py-1 sm:px-2.5 sm:py-1 bg-gray-100 text-gray-600 rounded-full text-xs sm:text-sm font-medium border border-gray-200 transition-all duration-700 ease-out h-fit">
+                      <span className="px-2 py-1 sm:px-2.5 sm:py-1 bg-gray-200 text-gray-700 rounded-full text-xs sm:text-sm font-medium border border-gray-400 transition-all duration-700 ease-out h-fit">
                         +{category.skills.length - (position === 'current' ? 8 : 4)} more
                       </span>
                     )}
@@ -113,7 +113,7 @@ export const TechCarousel: React.FC<TechCarouselProps> = ({ categories }) => {
         <>
           <button
             onClick={prevSlide}
-            className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 w-10 h-10 sm:w-12 sm:h-12 bg-white rounded-full shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center text-gray-600 hover:text-blue-600 hover:scale-110 z-20"
+            className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 w-10 h-10 sm:w-12 sm:h-12 bg-white rounded-full shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center text-gray-600 hover:text-black hover:scale-110 z-20 border border-gray-300"
             aria-label="Previous category"
           >
             <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -123,7 +123,7 @@ export const TechCarousel: React.FC<TechCarouselProps> = ({ categories }) => {
           
           <button
             onClick={nextSlide}
-            className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 w-10 h-10 sm:w-12 sm:h-12 bg-white rounded-full shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center text-gray-600 hover:text-blue-600 hover:scale-110 z-20"
+            className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 w-10 h-10 sm:w-12 sm:h-12 bg-white rounded-full shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center text-gray-600 hover:text-black hover:scale-110 z-20 border border-gray-300"
             aria-label="Next category"
           >
             <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -142,8 +142,8 @@ export const TechCarousel: React.FC<TechCarouselProps> = ({ categories }) => {
               onClick={() => goToSlide(index)}
               className={`w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full transition-all duration-200 ${
                 index === currentIndex 
-                  ? 'bg-blue-600 scale-125' 
-                  : 'bg-gray-300 hover:bg-gray-400'
+                  ? 'bg-black scale-125' 
+                  : 'bg-gray-400 hover:bg-gray-600'
               }`}
               aria-label={`Go to ${categories[index].title}`}
             />
@@ -156,7 +156,7 @@ export const TechCarousel: React.FC<TechCarouselProps> = ({ categories }) => {
         <div className="mt-2 sm:mt-3 lg:mt-4 text-center">
           <button
             onClick={() => setIsAutoPlaying(!isAutoPlaying)}
-            className="text-xs sm:text-sm text-gray-500 hover:text-gray-700 transition-colors duration-200 flex items-center justify-center gap-1.5 sm:gap-2 mx-auto"
+            className="text-xs sm:text-sm text-gray-600 hover:text-black transition-colors duration-200 flex items-center justify-center gap-1.5 sm:gap-2 mx-auto"
           >
             {isAutoPlaying ? (
               <>

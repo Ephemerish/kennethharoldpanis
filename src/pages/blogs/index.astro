@@ -35,7 +35,7 @@ const blogsForPage: CollectionEntry<"blog">[] = allBlogs.slice(
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
     <!-- Header Section -->
     <div class="text-center mb-12 sm:mb-16">
-      <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-4 sm:mb-6">
+      <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-black mb-4 sm:mb-6">
         Blogs
       </h1>
       <p class="text-lg sm:text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed px-2">
@@ -51,12 +51,12 @@ const blogsForPage: CollectionEntry<"blog">[] = allBlogs.slice(
     <!-- Empty State -->
     {allBlogs.length === 0 && (
       <div class="text-center py-12 sm:py-16 px-4">
-        <div class="text-gray-400 mb-4">
+        <div class="text-gray-600 mb-4">
           <svg class="w-12 h-12 sm:w-16 sm:h-16 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
           </svg>
         </div>
-        <h3 class="text-lg sm:text-xl font-medium text-gray-900 mb-2">No blog posts yet</h3>
+        <h3 class="text-lg sm:text-xl font-medium text-black mb-2">No blog posts yet</h3>
         <p class="text-gray-600 text-sm sm:text-base">Check back soon for new content!</p>
       </div>
     )}
