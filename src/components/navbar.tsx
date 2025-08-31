@@ -20,7 +20,7 @@ export default function Navbar() {
           <div className="shrink-0">
             <a
               href="/"
-              className="text-xl font-bold text-neutral-900"
+              className="text-xl font-bold text-brand-gradient drop-shadow-sm"
             >
               Kenneth Harold Panis
             </a>
