@@ -1,6 +1,6 @@
 # Kenneth Harold Panis - Portfolio Website
 
-![Portfolio Preview](./public/me.jpg)
+![Portfolio Preview](./public/images/me/me.jpg)
 
 ## ✨ About
 
@@ -21,7 +21,9 @@ This portfolio showcases my journey as a developer
 /
 ├── public/
 │   ├── images/           # Project screenshots and galleries
-│   ├── me.jpg           # Profile photo
+│   │   └── me/          # Profile photos
+│   │       ├── me.jpg   # Main profile photo
+│   │       └── me2.jpg  # Additional profile photo
 │   └── favicon.ico      # Site favicon
 ├── src/
 │   ├── components/      # Reusable React/Astro components

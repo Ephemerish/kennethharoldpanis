@@ -81,7 +81,7 @@ const HomeHeader: React.FC = () => {
           <div className="relative w-[200px] h-[200px] sm:w-[250px] sm:h-[250px] md:w-[300px] md:h-[300px] lg:w-[350px] lg:h-[350px] overflow-hidden rounded-full border-4 border-brand-600">
             <div className="w-full h-full rounded-full overflow-hidden">
               <img
-                src="/me.jpg"
+                src="/images/me/me.jpg"
                 alt="Kenneth Harold Panis"
                 className="w-full h-full object-cover"
                 loading="eager"
