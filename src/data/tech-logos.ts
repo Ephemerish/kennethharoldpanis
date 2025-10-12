@@ -239,6 +239,12 @@ export const techLogos: TechLogo[] = [
     category: 'other',
     url: 'https://en.wikipedia.org/wiki/Internet_of_things'
   },
+  {
+    name: 'LoRa',
+    imagePath: '/images/tech-logos/lora.png',
+    category: 'other',
+    url: 'https://lora-alliance.org/'
+  },
   
   // Add more technologies as needed...
   // Just follow the pattern above:

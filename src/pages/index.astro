@@ -5,6 +5,8 @@ import Card from "../components/Card.astro";
 import MostRecentBlog from "../components/MostRecentBlog.astro";
 import FeaturedProject from "../components/FeaturedProject.astro";
 import { TechCarousel } from "../components/TechCarousel";
+import ButtonLink from "../components/ButtonLink.astro";
+import { ArrowRightIcon } from "@heroicons/react/24/outline";
 import { HOMEPAGE_BLOG_LIMIT, HOMEPAGE_PROJECTS_LIMIT } from "../constants";
 import { categorizeTags, getAllTagsFromContent } from "../utils/tagCategorizer";
 
@@ -115,15 +117,15 @@ const skillCategories = categorizeTags(allTags);
       )}
       
       <div class="text-center">
-        <a 
-          href="/projects" 
-          class="inline-flex items-center px-8 py-4 bg-brand-gradient text-neutral-0 text-base sm:text-lg font-semibold rounded-xl shadow-brand hover:shadow-brand-lg hover-lift transition-all duration-300"
+        <ButtonLink 
+          href="/projects"
+          variant="gradient"
+          size="lg"
+          class="text-base sm:text-lg font-semibold"
         >
           View All Projects
-          <svg class="ml-3 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
-          </svg>
-        </a>
+          <ArrowRightIcon className="ml-3 w-5 h-5" />
+        </ButtonLink>
       </div>
     </div>
   </section>
@@ -164,15 +166,15 @@ const skillCategories = categorizeTags(allTags);
       </div>
       
       <div class="text-center">
-        <a 
-          href="/blogs" 
-          class="inline-flex items-center px-8 py-4 bg-neutral-0 text-brand-600 text-base sm:text-lg font-semibold rounded-xl border-2 border-brand-500 hover:bg-brand-gradient hover:text-neutral-0 hover:shadow-brand-lg hover-lift transition-all duration-300"
+        <ButtonLink 
+          href="/blogs"
+          variant="outlineBrand"
+          size="lg"
+          class="text-base sm:text-lg font-semibold"
         >
           Read All Posts
-          <svg class="ml-3 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
-          </svg>
-        </a>
+          <ArrowRightIcon className="ml-3 w-5 h-5" />
+        </ButtonLink>
       </div>
     </div>
   </section>

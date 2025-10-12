@@ -4,6 +4,7 @@ import { getEntryBySlug, getCollection } from "astro:content";
 import HeroIcon from "../../components/HeroIcon.tsx";
 import { formatDate, calculateReadTime } from "../../utils";
 import { Image } from 'astro:assets';
+import { CalendarIcon, ClockIcon, Bars3Icon, ChevronDownIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
 
 export const prerender = true;
 
@@ -37,16 +38,12 @@ if (entry) {
         <div class="flex items-center justify-between flex-wrap gap-4 mb-6">
           <div class="flex items-center gap-4 text-neutral-700">
             <time class="flex items-center gap-1.5 text-sm">
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-              </svg>
+              <CalendarIcon className="w-4 h-4" />
               {frontmatter?.pubDate && formatDate(frontmatter.pubDate)}
             </time>
             <span class="text-neutral-400">•</span>
             <span class="flex items-center gap-1.5 text-sm">
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-              </svg>
+              <ClockIcon className="w-4 h-4" />
               {readTime}
             </span>
           </div>
