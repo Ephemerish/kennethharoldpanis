@@ -13,7 +13,7 @@ This portfolio showcases my journey as a developer
 - **[TypeScript](https://www.typescriptlang.org/)** - Type-safe development
 - **[Tailwind CSS](https://tailwindcss.com/)** - Utility-first styling
 - **[Framer Motion](https://www.framer.com/motion/)** - Smooth animations
-- **[Lucide Icons](https://lucide.dev/)** - Beautiful iconography
+- **[Heroicons](https://heroicons.com/)** - Beautiful iconography
 
 ## 🚀 Project Structure
 

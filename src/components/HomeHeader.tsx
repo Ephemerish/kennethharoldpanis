@@ -4,10 +4,9 @@ import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Button } from "./button";
 import {
-  // ChevronDown,
-  Mail,
-  FileText,
-} from "lucide-react";
+  EnvelopeIcon,
+  DocumentTextIcon,
+} from "@heroicons/react/24/outline";
 import {
   Tooltip,
   TooltipContent,
@@ -141,7 +140,7 @@ const HomeHeader: React.FC = () => {
                     className="w-full sm:w-auto inline-flex items-center justify-center px-6 py-3 bg-brand-600 hover:bg-brand-700 text-neutral-0 rounded-lg transition-colors duration-200 text-sm sm:text-base"
                     onClick={() => window.location.href = '/contact'}
                   >
-                    <Mail className="mr-2 h-4 w-4" />
+                    <EnvelopeIcon className="mr-2 h-4 w-4" />
                     Get In Touch
                   </Button>
                 </TooltipTrigger>
@@ -159,7 +158,7 @@ const HomeHeader: React.FC = () => {
                     className="w-full sm:w-auto inline-flex items-center justify-center px-6 py-3 border-2 border-neutral-300 text-neutral-900 hover:bg-neutral-100 hover:text-neutral-900 rounded-lg transition-colors duration-200 text-sm sm:text-base"
                     onClick={() => window.location.href = '/projects'}
                   >
-                    <FileText className="mr-2 h-4 w-4" />
+                    <DocumentTextIcon className="mr-2 h-4 w-4" />
                     View Projects
                   </Button>
                 </TooltipTrigger>

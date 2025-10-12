@@ -1,10 +1,10 @@
 ---
 import MainLayout from "../../layouts/MainLayout.astro";
-import { getEntryBySlug, getCollection } from "astro:content";
+import { getCollection } from "astro:content";
 import HeroIcon from "../../components/HeroIcon.tsx";
 import { formatDate, calculateReadTime } from "../../utils";
 import { Image } from 'astro:assets';
-import { CalendarIcon, ClockIcon, Bars3Icon, ChevronDownIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
+import { CalendarIcon, ClockIcon, Bars3Icon, ChevronDownIcon, ChevronRightIcon, ChevronUpDownIcon, EyeSlashIcon, EyeIcon, ArrowLeftIcon } from "@heroicons/react/24/outline";
 
 export const prerender = true;
 
@@ -138,8 +138,8 @@ if (entry) {
           // Create collapse button with improved icons
           const collapseBtn = document.createElement('button');
           collapseBtn.innerHTML = `
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 6h16M4 12h16M4 18h16"></path>
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3.98 8.223A10.477 10.477 0 001.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.45 10.45 0 0112 4.5c4.756 0 8.773 3.162 10.065 7.498a10.523 10.523 0 01-4.293 5.774M6.228 6.228L3 3m3.228 3.228l3.65 3.65m7.894 7.894L21 21m-3.228-3.228l-3.65-3.65m0 0a3 3 0 10-4.243-4.243m4.242 4.242L9.88 9.88"></path>
             </svg>
           `;
           collapseBtn.className = 'fixed top-20 right-2 sm:right-4 z-50 w-11 h-11 sm:w-12 sm:h-12 bg-white/95 backdrop-blur-sm text-slate-700 rounded-full hover:bg-white hover:scale-105 transition-all duration-200 border border-slate-200 hover:border-slate-300 shadow-lg hover:shadow-xl flex items-center justify-center';
@@ -173,8 +173,8 @@ if (entry) {
               // Add click indicator with better icon
               const indicator = document.createElement('span');
               indicator.innerHTML = `
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path>
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19.5 8.25l-7.5 7.5-7.5-7.5"></path>
                 </svg>
               `;
               indicator.className = 'absolute right-2 top-1/2 transform -translate-y-1/2 text-white/70 text-xs select-none transition-all duration-200';
@@ -219,8 +219,8 @@ if (entry) {
                     });
                     header.setAttribute('data-collapsed', 'false');
                     indicator.innerHTML = `
-                      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path>
+                      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19.5 8.25l-7.5 7.5-7.5-7.5"></path>
                       </svg>
                     `;
                   } else {
@@ -232,8 +232,8 @@ if (entry) {
                     });
                     header.setAttribute('data-collapsed', 'true');
                     indicator.innerHTML = `
-                      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"></path>
+                      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8.25 4.5l7.5 7.5-7.5 7.5"></path>
                       </svg>
                     `;
                   }
@@ -261,14 +261,14 @@ if (entry) {
                 });
                 header.setAttribute('data-collapsed', 'false');
                 if (indicator) indicator.innerHTML = `
-                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path>
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19.5 8.25l-7.5 7.5-7.5-7.5"></path>
                   </svg>
                 `;
               });
               collapseBtn.innerHTML = `
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 6h16M4 12h16M4 18h16"></path>
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3.98 8.223A10.477 10.477 0 001.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.45 10.45 0 0112 4.5c4.756 0 8.773 3.162 10.065 7.498a10.523 10.523 0 01-4.293 5.774M6.228 6.228L3 3m3.228 3.228l3.65 3.65m7.894 7.894L21 21m-3.228-3.228l-3.65-3.65m0 0a3 3 0 10-4.243-4.243m4.242 4.242L9.88 9.88"></path>
                 </svg>
               `;
               tooltip.innerHTML = 'Hide All Sections';
@@ -286,14 +286,15 @@ if (entry) {
                 });
                 header.setAttribute('data-collapsed', 'true');
                 if (indicator) indicator.innerHTML = `
-                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"></path>
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8.25 4.5l7.5 7.5-7.5 7.5"></path>
                   </svg>
                 `;
               });
               collapseBtn.innerHTML = `
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M8 9l4-4 4 4m0 6l-4 4-4-4"></path>
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z"></path>
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
                 </svg>
               `;
               tooltip.innerHTML = 'Show All Sections';
@@ -323,9 +324,7 @@ if (entry) {
           href="/blogs" 
           class="inline-flex items-center gap-2 text-black hover:text-gray-700 font-medium transition-colors"
         >
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
-          </svg>
+          <ArrowLeftIcon className="w-4 h-4" />
           Back to all posts
         </a>
       </div>
@@ -338,9 +337,7 @@ if (entry) {
         href="/blogs" 
         class="inline-flex items-center gap-2 px-6 py-3 bg-black text-white rounded-lg hover:bg-gray-800 transition-colors"
       >
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
-        </svg>
+        <ArrowLeftIcon className="w-4 h-4" />
         Back to all posts
       </a>
     </div>
