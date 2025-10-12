@@ -127,11 +127,6 @@ export const TechCarousel: React.FC<TechCarouselProps> = ({ categoryFilter }) =>
           </div>
         </div>
       </div>
-
-      {/* Instructions */}
-      <div className="text-center mt-6 text-xs text-neutral-500">
-        <p>Two layers scrolling in opposite directions • Drag to control</p>
-      </div>
     </div>
   );
 };
