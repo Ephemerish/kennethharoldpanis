@@ -1,7 +1,7 @@
 import React from 'react';
 import useEmblaCarousel from 'embla-carousel-react';
 import AutoScroll from 'embla-carousel-auto-scroll';
-import { techLogos } from '../data/tech-logos';
+import { technologies } from '../data/technologies';
 
 interface TechCarouselProps {
   categoryFilter?: string;
@@ -9,8 +9,8 @@ interface TechCarouselProps {
 
 export const TechCarousel: React.FC<TechCarouselProps> = ({ categoryFilter }) => {
   const filteredLogos = categoryFilter 
-    ? techLogos.filter(tech => tech.category === categoryFilter)
-    : techLogos;
+    ? technologies.filter(tech => tech.category === categoryFilter)
+    : technologies;
 
   const midPoint = Math.ceil(filteredLogos.length / 2);
   const firstRowLogos = filteredLogos.slice(0, midPoint);
@@ -57,7 +57,7 @@ export const TechCarousel: React.FC<TechCarouselProps> = ({ categoryFilter }) =>
     return (
       <div className="text-center py-8">
         <p className="text-neutral-600">
-          No tech logos configured yet. Add logos to <code className="bg-neutral-100 px-2 py-1 rounded">src/data/tech-logos.ts</code>
+          No tech logos configured yet. Add logos to <code className="bg-neutral-100 px-2 py-1 rounded">src/data/technologies.ts</code>
         </p>
       </div>
     );

@@ -1,26 +1,36 @@
 /**
- * Tech Logo Configuration
+ * Technologies Data
  * 
- * Add your technology logos here. Place the logo files in:
- * public/images/tech-logos/
- * 
- * Then add entries below following the pattern.
+ * Comprehensive list of all technologies used across projects.
+ * This data is used for the tech carousel, project tags, and filtering.
  */
 
-export interface TechLogo {
+export interface Technology {
   name: string;
   imagePath: string;
-  category?: 'frontend' | 'backend' | 'database' | 'devops' | 'tools' | 'cloud' | 'mobile' | 'other';
-  url?: string; // Optional link to technology website
+  category: 'frontend' | 'backend' | 'database' | 'devops' | 'tools' | 'cloud' | 'mobile' | 'other';
+  url?: string;
 }
 
-export const techLogos: TechLogo[] = [
+export const technologies: Technology[] = [
   // Frontend Technologies
   {
-    name: 'React',
-    imagePath: '/images/tech-logos/react.svg',
+    name: 'HTML5',
+    imagePath: '/images/tech-logos/html5.svg',
     category: 'frontend',
-    url: 'https://react.dev/'
+    url: 'https://developer.mozilla.org/en-US/docs/Web/HTML'
+  },
+  {
+    name: 'CSS3',
+    imagePath: '/images/tech-logos/css3.svg',
+    category: 'frontend',
+    url: 'https://developer.mozilla.org/en-US/docs/Web/CSS'
+  },
+  {
+    name: 'JavaScript',
+    imagePath: '/images/tech-logos/javascript.svg',
+    category: 'frontend',
+    url: 'https://developer.mozilla.org/en-US/docs/Web/JavaScript'
   },
   {
     name: 'TypeScript',
@@ -29,10 +39,10 @@ export const techLogos: TechLogo[] = [
     url: 'https://www.typescriptlang.org/'
   },
   {
-    name: 'JavaScript',
-    imagePath: '/images/tech-logos/javascript.svg',
+    name: 'React',
+    imagePath: '/images/tech-logos/react.svg',
     category: 'frontend',
-    url: 'https://developer.mozilla.org/en-US/docs/Web/JavaScript'
+    url: 'https://react.dev/'
   },
   {
     name: 'Astro',
@@ -47,12 +57,6 @@ export const techLogos: TechLogo[] = [
     url: 'https://tailwindcss.com/'
   },
   {
-    name: 'HTML5',
-    imagePath: '/images/tech-logos/html5.svg',
-    category: 'frontend',
-    url: 'https://developer.mozilla.org/en-US/docs/Web/HTML'
-  },
-  {
     name: 'Vite',
     imagePath: '/images/tech-logos/vite.svg',
     category: 'frontend',
@@ -64,12 +68,6 @@ export const techLogos: TechLogo[] = [
     category: 'tools',
     url: 'https://webpack.js.org/'
   },
-  // {
-  //   name: 'Micro Frontends',
-  //   imagePath: '/images/tech-logos/microfrontend.svg',
-  //   category: 'frontend',
-  //   url: 'https://micro-frontends.org/'
-  // },
   {
     name: 'Module Federation',
     imagePath: '/images/tech-logos/module-federation.png',
@@ -111,10 +109,16 @@ export const techLogos: TechLogo[] = [
   
   // Databases
   {
-    name: 'Spanner',
-    imagePath: '/images/tech-logos/spanner.png',
+    name: 'MySQL',
+    imagePath: '/images/tech-logos/mysql.svg',
     category: 'database',
-    url: 'https://cloud.google.com/spanner'
+    url: 'https://www.mysql.com/'
+  },
+  {
+    name: 'SQLite',
+    imagePath: '/images/tech-logos/sqlite.svg',
+    category: 'database',
+    url: 'https://www.sqlite.org/'
   },
   {
     name: 'Firebase',
@@ -129,12 +133,17 @@ export const techLogos: TechLogo[] = [
     url: 'https://aws.amazon.com/dynamodb/'
   },
   {
+    name: 'Spanner',
+    imagePath: '/images/tech-logos/spanner.png',
+    category: 'database',
+    url: 'https://cloud.google.com/spanner'
+  },
+  {
     name: 'Azure SQL',
     imagePath: '/images/tech-logos/azure-databases.png',
     category: 'database',
     url: 'https://azure.microsoft.com/en-us/products/azure-sql/'
   },
-
   
   // DevOps & Tools
   {
@@ -142,6 +151,12 @@ export const techLogos: TechLogo[] = [
     imagePath: '/images/tech-logos/docker.svg',
     category: 'devops',
     url: 'https://www.docker.com/'
+  },
+  {
+    name: 'Kubernetes',
+    imagePath: '/images/tech-logos/kubernetes.svg',
+    category: 'devops',
+    url: 'https://kubernetes.io/'
   },
   {
     name: 'Git',
@@ -154,6 +169,54 @@ export const techLogos: TechLogo[] = [
     imagePath: '/images/tech-logos/github.svg',
     category: 'devops',
     url: 'https://github.com/'
+  },
+  {
+    name: 'GitLab',
+    imagePath: '/images/tech-logos/gitlab.svg',
+    category: 'devops',
+    url: 'https://gitlab.com/'
+  },
+  // {
+  //   name: 'CircleCI',
+  //   imagePath: '/images/tech-logos/circleci.svg',
+  //   category: 'devops',
+  //   url: 'https://circleci.com/'
+  // },
+  // {
+  //   name: 'Cypress',
+  //   imagePath: '/images/tech-logos/cypress.svg',
+  //   category: 'tools',
+  //   url: 'https://www.cypress.io/'
+  // },
+  {
+    name: 'ESLint',
+    imagePath: '/images/tech-logos/eslint.svg',
+    category: 'tools',
+    url: 'https://eslint.org/'
+  },
+  {
+    name: 'Prettier',
+    imagePath: '/images/tech-logos/prettier.svg',
+    category: 'tools',
+    url: 'https://prettier.io/'
+  },
+  {
+    name: 'npm',
+    imagePath: '/images/tech-logos/npm.svg',
+    category: 'tools',
+    url: 'https://www.npmjs.com/'
+  },
+  {
+    name: 'pnpm',
+    imagePath: '/images/tech-logos/pnpm.svg',
+    category: 'tools',
+    url: 'https://pnpm.io/'
+  },
+  {
+    name: 'Yarn',
+    imagePath: '/images/tech-logos/yarn.svg',
+    category: 'tools',
+    url: 'https://yarnpkg.com/'
   },
   
   // Cloud Platforms
@@ -182,12 +245,6 @@ export const techLogos: TechLogo[] = [
     url: 'https://cloud.google.com/run'
   },
   {
-    name: 'Kubernetes',
-    imagePath: '/images/tech-logos/kubernetes.svg',
-    category: 'devops',
-    url: 'https://kubernetes.io/'
-  },
-  {
     name: 'Vercel',
     imagePath: '/images/tech-logos/vercel.svg',
     category: 'cloud',
@@ -212,6 +269,12 @@ export const techLogos: TechLogo[] = [
     imagePath: '/images/tech-logos/java.svg',
     category: 'mobile',
     url: 'https://www.java.com/'
+  },
+  {
+    name: 'Android',
+    imagePath: '/images/tech-logos/android.svg',
+    category: 'mobile',
+    url: 'https://www.android.com/'
   },
   {
     name: 'Jetpack Compose',
@@ -245,23 +308,21 @@ export const techLogos: TechLogo[] = [
     category: 'other',
     url: 'https://lora-alliance.org/'
   },
-  
-  // Add more technologies as needed...
-  // Just follow the pattern above:
-  // {
-  //   name: 'Technology Name',
-  //   imagePath: '/images/tech-logos/filename.svg',
-  //   category: 'appropriate-category',
-  //   url: 'https://technology-website.com/'
-  // },
 ];
 
-// Helper function to filter by category
-export const getTechByCategory = (category: TechLogo['category']) => {
-  return techLogos.filter(tech => tech.category === category);
+// Helper functions
+export const getTechByCategory = (category: Technology['category']) => {
+  return technologies.filter(tech => tech.category === category);
 };
 
-// Helper function to get all categories
+export const getTechByName = (name: string) => {
+  return technologies.find(tech => tech.name.toLowerCase() === name.toLowerCase());
+};
+
 export const getAllCategories = () => {
-  return Array.from(new Set(techLogos.map(tech => tech.category).filter(Boolean)));
+  return Array.from(new Set(technologies.map(tech => tech.category)));
+};
+
+export const getAllTechNames = () => {
+  return technologies.map(tech => tech.name);
 };

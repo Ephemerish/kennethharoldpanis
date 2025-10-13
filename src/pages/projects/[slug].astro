@@ -4,6 +4,7 @@ import Layout from "../../layouts/MainLayout.astro";
 import Tags from "../../components/Tags.astro";
 import type { CollectionEntry } from "astro:content";
 import { Image } from 'astro:assets';
+import { getTechByName } from "../../data/technologies";
 import { 
   ArrowLeftIcon, 
   ArrowTopRightOnSquareIcon, 
@@ -219,7 +220,28 @@ const formatDate = (date: Date) => {
           <CogIcon className="w-5 h-5 mr-2 text-gray-700" />
           Technologies
         </h3>
-        <Tags tags={project.data.tags} />
+        <div class="flex flex-wrap gap-3">
+          {project.data.technologies && project.data.technologies.map((techName: string) => {
+            const tech = getTechByName(techName);
+            return tech ? (
+              <div class="group relative">
+                <img 
+                  src={tech.imagePath} 
+                  alt={tech.name}
+                  class="w-10 h-10 object-contain rounded-md hover:scale-110 transition-transform"
+                  title={tech.name}
+                />
+                <span class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 bg-gray-800 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
+                  {tech.name}
+                </span>
+              </div>
+            ) : (
+              <span class="inline-block px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm">
+                {techName}
+              </span>
+            );
+          })}
+        </div>
       </div>
 
       <!-- Category Card -->
@@ -249,14 +271,14 @@ const formatDate = (date: Date) => {
       </div>
     )}
 
-    <!-- Technologies Used -->
-    {project.data.technologies && project.data.technologies.length > 0 && (
+    <!-- Technologies -->
+    {project.data.materials && project.data.materials.length > 0 && (
       <div class="mb-12">
-        <h2 class="text-2xl font-bold text-gray-900 mb-6">Technologies Used</h2>
+        <h2 class="text-2xl font-bold text-gray-900 mb-6">Materials & Tools</h2>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {project.data.technologies.map((tech) => (
+          {project.data.materials.map((material) => (
             <div class="bg-gray-50 p-4 rounded-lg border">
-              <div class="font-medium text-gray-900">{tech}</div>
+              <div class="font-medium text-gray-900">{material}</div>
             </div>
           ))}
         </div>
