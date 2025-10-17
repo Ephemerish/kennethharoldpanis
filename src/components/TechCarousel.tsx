@@ -111,7 +111,9 @@ export const TechCarousel: React.FC<TechCarouselProps> = ({ categoryFilter }) =>
         <div className="overflow-hidden" ref={emblaRefFirst}>
           <div className="flex gap-2 sm:gap-4 md:gap-5 lg:gap-6 py-2 px-2 sm:py-4 sm:px-4 md:px-5 lg:px-6">
             {firstRowDuplicates.map((tech, index) => (
-              <LogoItem key={`first-${tech.name}-${index}`} tech={tech} index={index} rowPrefix="first" />
+              <div key={`first-${tech.name}-${index}`}>
+                <LogoItem tech={tech} index={index} rowPrefix="first" />
+              </div>
             ))}
           </div>
         </div>
