@@ -2,6 +2,7 @@
 import { formatDate } from "../utils";
 import type { CollectionEntry } from "astro:content";
 import { Image } from 'astro:assets';
+import { StarIcon, DocumentTextIcon } from "@heroicons/react/24/solid";
 
 interface Props {
   blog: CollectionEntry<"blog">;
@@ -26,8 +27,9 @@ const { blog } = Astro.props;
       <div class="absolute inset-0 bg-linear-to-t from-neutral-900/80 via-neutral-900/30 to-transparent"></div>
       
       <!-- Featured badge -->
-      <div class="absolute top-4 left-4 sm:top-6 sm:left-6 bg-brand-600 text-neutral-0 px-3 py-1.5 sm:px-4 sm:py-2 rounded-full text-xs sm:text-sm font-semibold shadow-lg">
-        ⭐ Featured
+      <div class="absolute top-4 left-4 sm:top-6 sm:left-6 bg-brand-600 text-neutral-0 px-3 py-1.5 sm:px-4 sm:py-2 rounded-full text-xs sm:text-sm font-semibold shadow-lg flex items-center gap-1.5">
+        <StarIcon className="w-4 h-4" />
+        Featured
       </div>
       
       <!-- Content overlay -->
@@ -50,8 +52,9 @@ const { blog } = Astro.props;
           <div class="hidden sm:block">
             <!-- Category indicator -->
             <div class="mb-4">
-              <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-white/20 backdrop-blur-sm text-white">
-                📝 Latest Blog Post
+              <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-white/20 backdrop-blur-sm text-white">
+                <DocumentTextIcon className="w-4 h-4" />
+                Latest Blog Post
               </span>
             </div>
             
