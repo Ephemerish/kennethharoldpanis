@@ -80,8 +80,8 @@ const HomeHeader: React.FC = () => {
             delay: 0,
           }}
         >
-          <div className="relative w-[200px] h-[200px] sm:w-[250px] sm:h-[250px] md:w-[300px] md:h-[300px] lg:w-[350px] lg:h-[350px] overflow-hidden rounded-full border-4 border-brand-600">
-            <div className="w-full h-full rounded-full overflow-hidden">
+          <div className="relative w-[200px] h-[200px] sm:w-[250px] sm:h-[250px] md:w-[300px] md:h-[300px] lg:w-[350px] lg:h-[350px] overflow-hidden border-4 border-brand-600">
+            <div className="w-full h-full overflow-hidden">
               <img
                 src="/images/me/me.jpg"
                 alt="Kenneth Harold Panis"
@@ -140,7 +140,7 @@ const HomeHeader: React.FC = () => {
               <Tooltip>
                 <TooltipTrigger asChild>
                   <Button
-                    className="w-full sm:w-auto inline-flex items-center justify-center px-6 py-3 bg-brand-600 hover:bg-brand-700 text-neutral-0 rounded-lg transition-colors duration-200 text-sm sm:text-base"
+                    className="w-full sm:w-auto inline-flex items-center justify-center px-6 py-3 bg-brand-600 hover:bg-brand-700 text-neutral-0 transition-colors duration-200 text-sm sm:text-base"
                     onClick={() => window.location.href = '/contact'}
                   >
                     <EnvelopeIcon className="mr-2 h-4 w-4" />
@@ -158,7 +158,7 @@ const HomeHeader: React.FC = () => {
                 <TooltipTrigger asChild>
                   <Button
                     variant="outline"
-                    className="w-full sm:w-auto inline-flex items-center justify-center px-6 py-3 border-2 border-neutral-300 text-neutral-900 hover:bg-neutral-100 hover:text-neutral-900 rounded-lg transition-colors duration-200 text-sm sm:text-base"
+                    className="w-full sm:w-auto inline-flex items-center justify-center px-6 py-3 border-2 border-neutral-300 text-neutral-900 hover:bg-neutral-100 hover:text-neutral-900 transition-colors duration-200 text-sm sm:text-base"
                     onClick={() => window.location.href = '/projects'}
                   >
                     <DocumentTextIcon className="mr-2 h-4 w-4" />

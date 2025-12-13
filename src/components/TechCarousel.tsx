@@ -57,7 +57,7 @@ export const TechCarousel: React.FC<TechCarouselProps> = ({ categoryFilter }) =>
     return (
       <div className="text-center py-8">
         <p className="text-neutral-600">
-          No tech logos configured yet. Add logos to <code className="bg-neutral-100 px-2 py-1 rounded">src/data/technologies.ts</code>
+          No tech logos configured yet. Add logos to <code className="bg-neutral-100 px-2 py-1">src/data/technologies.ts</code>
         </p>
       </div>
     );
@@ -74,7 +74,7 @@ export const TechCarousel: React.FC<TechCarouselProps> = ({ categoryFilter }) =>
         target="_blank"
         rel="noopener noreferrer"
         className="relative w-20 h-20 sm:w-22 sm:h-22 md:w-24 md:h-24 lg:w-28 lg:h-28 flex items-center justify-center
-                 bg-white rounded-2xl shadow-md hover:shadow-xl transition-all duration-300
+                 bg-white shadow-md hover:shadow-xl transition-all duration-300
                  border border-neutral-200 hover:border-neutral-300
                  group-hover:scale-110 group-hover:-translate-y-1"
         title={tech.name}

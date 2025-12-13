@@ -69,7 +69,7 @@ const skillCategories = categorizeTags(allTags);
         <p class="mt-4 sm:mt-6 text-lg sm:text-xl text-neutral-700 max-w-3xl mx-auto px-2 leading-relaxed">
           I have used these technologies
         </p>
-        <div class="w-24 h-1 bg-brand-gradient mx-auto mt-6 rounded-full"></div>
+        <div class="w-24 h-1 bg-brand-gradient mx-auto mt-6"></div>
       </div>
       
       <div class="animate-slide-up">
@@ -95,13 +95,13 @@ const skillCategories = categorizeTags(allTags);
         <p class="mt-4 sm:mt-6 text-lg sm:text-xl text-neutral-600 max-w-3xl mx-auto px-2 leading-relaxed">
           Take a look at my recent work and creative solutions that solve real-world problems
         </p>
-        <div class="w-24 h-1 bg-brand-gradient mx-auto mt-6 rounded-full"></div>
+        <div class="w-24 h-1 bg-brand-gradient mx-auto mt-6"></div>
       </div>
       
       <!-- Featured Project with Enhanced Styling -->
       {featuredProject && (
         <div class="mb-12 sm:mb-16 animate-fade-in">
-          <div class="bg-card-gradient rounded-2xl p-6 sm:p-8 shadow-elegant hover-lift border border-neutral-200/50">
+          <div class="bg-card-gradient p-6 sm:p-8 shadow-elegant hover-lift border border-neutral-200/50">
             <FeaturedProject project={featuredProject} />
           </div>
         </div>
@@ -151,12 +151,12 @@ const skillCategories = categorizeTags(allTags);
         <p class="mt-4 sm:mt-6 text-lg sm:text-xl text-neutral-600 max-w-3xl mx-auto px-2 leading-relaxed">
           Thoughts on development, technology, and lessons learned along the way
         </p>
-        <div class="w-24 h-1 bg-brand-gradient mx-auto mt-6 rounded-full"></div>
+        <div class="w-24 h-1 bg-brand-gradient mx-auto mt-6"></div>
       </div>
       
       <!-- Featured Blog Post with Enhanced Styling -->
       <div class="mb-12 sm:mb-16 animate-fade-in">
-        <div class="bg-card-gradient rounded-2xl p-6 sm:p-8 shadow-elegant hover-lift">
+        <div class="bg-card-gradient p-6 sm:p-8 shadow-elegant hover-lift">
           <MostRecentBlog blog={mostRecentBlog} />
         </div>
       </div>

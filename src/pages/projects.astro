@@ -49,7 +49,7 @@ const pageTitle = "Projects";
       <div class="text-center mb-16 sm:mb-20 relative">
         <!-- Decorative background -->
         <div class="absolute inset-0 -z-10">
-          <div class="absolute top-0 left-1/2 w-96 h-96 bg-brand-100/30 rounded-full blur-3xl transform -translate-x-1/2 -translate-y-1/2"></div>
+          <div class="absolute top-0 left-1/2 w-96 h-96 bg-brand-100/30 blur-3xl transform -translate-x-1/2 -translate-y-1/2"></div>
         </div>
         
         <div class="animate-fade-in">
@@ -59,7 +59,7 @@ const pageTitle = "Projects";
           <p class="text-xl sm:text-2xl text-neutral-700 max-w-4xl mx-auto leading-relaxed px-2 mb-8">
             A collection of things I've built, experiments I've tried, and problems I've solved.
           </p>
-          <div class="w-32 h-1 bg-brand-gradient mx-auto rounded-full"></div>
+          <div class="w-32 h-1 bg-brand-gradient mx-auto"></div>
         </div>
       </div>
 
@@ -68,7 +68,7 @@ const pageTitle = "Projects";
         <section class="mb-16 sm:mb-20">
           <div class="space-y-12 sm:space-y-16">
             {featuredProjects.map((project) => (
-              <div class="bg-card-gradient rounded-3xl p-8 sm:p-12 shadow-floating hover-lift border border-neutral-200/50 animate-fade-in">
+              <div class="bg-card-gradient p-8 sm:p-12 shadow-floating hover-lift border border-neutral-200/50 animate-fade-in">
                 <FeaturedProject project={project} />
               </div>
             ))}
@@ -90,7 +90,7 @@ const pageTitle = "Projects";
             <p class="text-lg text-neutral-600 max-w-2xl mx-auto">
               Exploring different technologies and solving various challenges
             </p>
-            <div class="w-20 h-1 bg-brand-gradient mx-auto mt-4 rounded-full"></div>
+            <div class="w-20 h-1 bg-brand-gradient mx-auto mt-4"></div>
           </div>
           
           <div class="grid grid-cols-1 gap-8 sm:gap-10 sm:grid-cols-2 lg:grid-cols-3">
