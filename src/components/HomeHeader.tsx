@@ -59,12 +59,15 @@ const HomeHeader: React.FC = () => {
   }, []);
 
   return (
-    <div className="w-full py-8 md:py-8 lg:py-12 overflow-hidden bg-hero-gradient relative">
-      {/* Decorative background elements */}
-      <div className="absolute inset-0 bg-gradient-to-br from-brand-50/30 to-brand-100/20"></div>
-      <div className="absolute top-0 left-0 w-96 h-96 bg-brand-100/30 rounded-full blur-3xl transform -translate-x-1/2 -translate-y-1/2"></div>
-      
-      <div className="max-w-7xl mx-auto px-4 md:px-6 items-center justify-center align-middle flex flex-col md:flex-row gap-8 md:gap-12 relative">
+    <div className="w-full py-6 md:py-8 lg:py-10 overflow-hidden bg-white relative">
+      <div className="absolute inset-0">
+        <div className="max-w-7xl mx-auto h-full px-4 sm:px-6 lg:px-8">
+          <div className="bg-hero-gradient border-l border-r border-neutral-200 h-full"></div>
+        </div>
+      </div>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+        <div className="px-4 sm:px-6 lg:px-8">
+          <div className="items-center justify-center align-middle flex flex-col md:flex-row gap-8 md:gap-12">
         {/* Avatar Section - Show first on mobile */}
         <motion.div
           className="order-1 md:order-2 flex items-center justify-center"
@@ -169,9 +172,11 @@ const HomeHeader: React.FC = () => {
             </TooltipProvider>
           </motion.div>
         </motion.div>
+          </div>
+        </div>
       </div>
     </div>
   );
 };
 
-export { HomeHeader };
+export { HomeHeader };;
