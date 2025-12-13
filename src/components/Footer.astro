@@ -1,16 +1,10 @@
 ---
 ---
 
-<footer class="bg-white text-neutral-0 relative overflow-hidden border-t border-neutral-200">
+<footer class="bg-white text-neutral-900 relative overflow-hidden border-t border-neutral-200">
   <div class="absolute inset-0">
     <div class="max-w-7xl mx-auto h-full px-4 sm:px-6 lg:px-8">
-      <div class="bg-gradient-to-br from-neutral-900 via-neutral-900 to-neutral-800 border-l border-r border-neutral-200 h-full">
-        <!-- Decorative background elements -->
-        <div class="absolute inset-0">
-          <div class="absolute top-0 right-0 w-96 h-96 bg-brand-500/5 rounded-full blur-3xl"></div>
-          <div class="absolute bottom-0 left-0 w-96 h-96 bg-brand-400/5 rounded-full blur-3xl"></div>
-        </div>
-      </div>
+      <div class="bg-neutral-0 border-l border-r border-neutral-200 h-full"></div>
     </div>
   </div>
   
@@ -18,15 +12,19 @@
     <div class="px-4 sm:px-6 lg:px-8">
       <!-- Compact Footer Layout -->
       <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-        <!-- Left: Name and Social Links -->
-        <div class="flex flex-col sm:flex-row sm:items-center gap-4">
+        <!-- Left: Name -->
+        <div>
           <h3 class="text-lg font-bold text-brand-gradient whitespace-nowrap">Kenneth Harold Panis</h3>
+        </div>
+        
+        <!-- Right: Social Icons and Contact Button -->
+        <div class="flex items-center gap-4">
           <div class="flex items-center gap-3">
             <a
               href="https://github.com/kennethpanis"
               target="_blank"
               rel="noopener noreferrer"
-              class="text-neutral-400 hover:text-brand-400 transition-colors"
+              class="text-neutral-400 hover:text-brand-600 transition-colors"
               aria-label="GitHub"
             >
               <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
@@ -37,7 +35,7 @@
               href="https://linkedin.com/in/kenneth-harold-panis"
               target="_blank"
               rel="noopener noreferrer"
-              class="text-neutral-400 hover:text-brand-400 transition-colors"
+              class="text-neutral-400 hover:text-brand-600 transition-colors"
               aria-label="LinkedIn"
             >
               <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
@@ -46,18 +44,15 @@
             </a>
             <a
               href="mailto:kennethpanis24@gmail.com"
-              class="text-neutral-400 hover:text-brand-400 transition-colors"
+              class="text-neutral-400 hover:text-brand-600 transition-colors"
               aria-label="Email"
             >
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
               </svg>
             </a>
           </div>
-        </div>
-        
-        <!-- Right: Contact Button -->
-        <div>
+          
           <a
             href="/contact"
             class="inline-flex items-center gap-2 bg-brand-600 hover:bg-brand-700 text-white font-medium py-2 px-4 rounded-lg transition-colors text-sm"

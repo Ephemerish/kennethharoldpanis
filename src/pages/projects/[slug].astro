@@ -92,7 +92,16 @@ const formatDate = (date: Date) => {
   image={project.data.image ? `/images/${project.data.image}` : "/images/me/me.jpg"}
   type="article"
 >
-  <article class="max-w-5xl mx-auto px-6 py-12 bg-neutral-0 rounded-xl shadow-sm my-8">
+  <section class="bg-white text-neutral-900 relative overflow-hidden">
+    <div class="absolute inset-0">
+      <div class="max-w-7xl mx-auto h-full px-4 sm:px-6 lg:px-8">
+        <div class="bg-neutral-0 border-l border-r border-neutral-200 h-full"></div>
+      </div>
+    </div>
+    
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 relative">
+      <div class="px-4 sm:px-6 lg:px-8">
+        <article>
     <!-- Header -->
     <header class="mb-12">
       <!-- Back to Projects -->
@@ -621,5 +630,8 @@ const formatDate = (date: Date) => {
         </div>
       </div>
     </footer>
-  </article>
+    </article>
+      </div>
+    </div>
+  </section>
 </Layout>
