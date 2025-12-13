@@ -12,6 +12,7 @@ const absoluteImageUrl = new URL(image, Astro.site || 'https://kennethharoldpani
 import "../styles/global.css";
 import Navbar from "../components/navbar.tsx";
 import Footer from "../components/Footer.astro";
+import Analytics from "../components/Analytics.astro";
 ---
 
 <!doctype html>
@@ -33,6 +34,7 @@ import Footer from "../components/Footer.astro";
     <title>{title}</title>
   </head>
   <body class="w-full min-h-screen bg-neutral-0 antialiased">
+    <Analytics />
     <Navbar client:load />
     <main class="flex-1 relative">
       <slot />

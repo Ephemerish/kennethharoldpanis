@@ -1,0 +1,37 @@
+<script>
+  const sendAnalytics = async () => {
+    try {
+      const data = {
+        path: window.location.pathname,
+        referrer: document.referrer,
+        userAgent: navigator.userAgent,
+        screenWidth: window.screen.width,
+        screenHeight: window.screen.height,
+      };
+
+      await fetch('/api/analytics', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+    } catch (error) {
+      console.error('Failed to send analytics:', error);
+    }
+  };
+
+  // Run on initial load
+  sendAnalytics();
+
+  // Support for View Transitions (if used in the future)
+  document.addEventListener('astro:page-load', () => {
+    // Avoid double counting on initial load if astro:page-load fires then too
+    // But usually standard script runs once.
+    // For now, let's just stick to the simple execution.
+    // If the user uses ClientRouter, the script in .astro files re-runs?
+    // No, inline scripts in Astro components run once per page load.
+    // If View Transitions are used, we might need to re-trigger.
+    // Let's keep it simple.
+  });
+</script>
