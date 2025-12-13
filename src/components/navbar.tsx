@@ -13,9 +13,14 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="sticky top-0 z-50 w-full bg-neutral-0 shadow-sm border-b border-neutral-200">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex h-16 items-center justify-between">
+    <nav className="sticky top-0 z-50 w-full bg-white shadow-sm border-b border-neutral-200 relative">
+      <div className="absolute inset-0">
+        <div className="max-w-7xl mx-auto h-full px-4 sm:px-6 lg:px-8">
+          <div className="bg-neutral-0 border-l border-r border-neutral-200 h-full"></div>
+        </div>
+      </div>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+        <div className="flex h-16 items-center justify-between px-4 sm:px-6 lg:px-8">
           {/* Logo/Name */}
           <div className="shrink-0">
             <a
@@ -40,7 +45,7 @@ export default function Navbar() {
           <div className="flex md:hidden">
             <button
               type="button"
-              className="inline-flex items-center justify-center rounded-md p-2 text-gray-600 hover:bg-gray-100 hover:text-black"
+              className="inline-flex items-center justify-center p-2 text-gray-600 hover:bg-gray-100 hover:text-black"
               aria-controls="mobile-menu"
               aria-expanded={isMenuOpen}
               onClick={toggleMenu}
@@ -84,7 +89,7 @@ function NavLink({ to, children }: { to: string; children: React.ReactNode }) {
   return (
     <a
       href={to}
-      className="rounded-md px-3 py-2 text-sm font-medium text-black hover:bg-gray-100 hover:text-black"
+      className="px-3 py-2 text-sm font-medium text-black hover:bg-gray-100 hover:text-black"
     >
       {children}
     </a>
@@ -104,7 +109,7 @@ function MobileNavLink({
   return (
     <a
       href={to}
-      className="block rounded-md px-3 py-2 text-base font-medium text-black hover:bg-gray-100 hover:text-black"
+      className="block px-3 py-2 text-base font-medium text-black hover:bg-gray-100 hover:text-black"
       onClick={onClick}
     >
       {children}

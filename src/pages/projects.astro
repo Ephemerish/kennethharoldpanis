@@ -3,7 +3,7 @@ import Layout from "../layouts/MainLayout.astro";
 import Card from "../components/Card.astro";
 import FeaturedProject from "../components/FeaturedProject.astro";
 import ButtonLink from "../components/ButtonLink.astro";
-import { ArrowRightIcon } from "@heroicons/react/24/outline";
+import { ArrowRightIcon, RocketLaunchIcon } from "@heroicons/react/24/outline";
 import { getCollection } from "astro:content";
 import type { CollectionEntry } from "astro:content";
 
@@ -37,13 +37,19 @@ const pageTitle = "Projects";
   image="/images/me/me.jpg"
   type="website"
 >
-  <div class="min-h-screen bg-hero-gradient">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
+  <section class="py-8 sm:py-12 bg-white relative overflow-hidden border-t border-neutral-200">
+    <div class="absolute inset-0">
+      <div class="max-w-7xl mx-auto h-full px-4 sm:px-6 lg:px-8">
+        <div class="bg-hero-gradient border-l border-r border-neutral-200 h-full"></div>
+      </div>
+    </div>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+      <div class="px-4 sm:px-6 lg:px-8">
       <!-- Header Section with Enhanced Design -->
       <div class="text-center mb-16 sm:mb-20 relative">
         <!-- Decorative background -->
         <div class="absolute inset-0 -z-10">
-          <div class="absolute top-0 left-1/2 w-96 h-96 bg-brand-100/30 rounded-full blur-3xl transform -translate-x-1/2 -translate-y-1/2"></div>
+          <div class="absolute top-0 left-1/2 w-96 h-96 bg-brand-100/30 blur-3xl transform -translate-x-1/2 -translate-y-1/2"></div>
         </div>
         
         <div class="animate-fade-in">
@@ -53,7 +59,7 @@ const pageTitle = "Projects";
           <p class="text-xl sm:text-2xl text-neutral-700 max-w-4xl mx-auto leading-relaxed px-2 mb-8">
             A collection of things I've built, experiments I've tried, and problems I've solved.
           </p>
-          <div class="w-32 h-1 bg-brand-gradient mx-auto rounded-full"></div>
+          <div class="w-32 h-1 bg-brand-gradient mx-auto"></div>
         </div>
       </div>
 
@@ -62,7 +68,7 @@ const pageTitle = "Projects";
         <section class="mb-16 sm:mb-20">
           <div class="space-y-12 sm:space-y-16">
             {featuredProjects.map((project) => (
-              <div class="bg-card-gradient rounded-3xl p-8 sm:p-12 shadow-floating hover-lift border border-neutral-200/50 animate-fade-in">
+              <div class="bg-card-gradient p-8 sm:p-12 shadow-floating hover-lift border border-neutral-200/50 animate-fade-in">
                 <FeaturedProject project={project} />
               </div>
             ))}
@@ -74,17 +80,17 @@ const pageTitle = "Projects";
       {regularProjects.length > 0 && (
         <section class="mb-16 sm:mb-20">
           <div class="text-center mb-12 sm:mb-16">
-            <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-neutral-900 mb-4">
+            <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-neutral-900 mb-4 flex items-center justify-center gap-2">
               {featuredProjects.length > 0 ? (
-                <>🚀 <span class="text-brand-gradient">Other</span> Projects</>
+                <><RocketLaunchIcon className="w-8 h-8 text-brand-600" /><span class="text-brand-gradient">Other</span> Projects</>
               ) : (
-                <>🚀 <span class="text-brand-gradient">All</span> Projects</>
+                <><RocketLaunchIcon className="w-8 h-8 text-brand-600" /><span class="text-brand-gradient">All</span> Projects</>
               )}
             </h2>
             <p class="text-lg text-neutral-600 max-w-2xl mx-auto">
               Exploring different technologies and solving various challenges
             </p>
-            <div class="w-20 h-1 bg-brand-gradient mx-auto mt-4 rounded-full"></div>
+            <div class="w-20 h-1 bg-brand-gradient mx-auto mt-4"></div>
           </div>
           
           <div class="grid grid-cols-1 gap-8 sm:gap-10 sm:grid-cols-2 lg:grid-cols-3">
@@ -130,6 +136,7 @@ const pageTitle = "Projects";
           </div>
         </div>
       </section>
+      </div>
     </div>
-  </div>
+  </section>
 </Layout>

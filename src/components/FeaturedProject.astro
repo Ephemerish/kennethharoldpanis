@@ -2,6 +2,7 @@
 import type { CollectionEntry } from "astro:content";
 import Tags from "./Tags.astro";
 import { Image } from 'astro:assets';
+import { StarIcon, RocketLaunchIcon } from "@heroicons/react/24/solid";
 
 const { project } = Astro.props;
 
@@ -30,7 +31,7 @@ const formatDate = (date: Date) => {
 };
 ---
 
-<div class="relative w-full group cursor-pointer rounded-3xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-500 transform hover:scale-[1.02]">
+<div class="relative w-full group cursor-pointer overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-500 transform hover:scale-[1.02]">
   <a href={"/projects/" + project.slug} class="block">
     <div class="relative">
       <Image
@@ -46,13 +47,14 @@ const formatDate = (date: Date) => {
       <div class="absolute inset-0 bg-linear-to-t from-black/80 via-black/30 to-transparent"></div>
       
       <!-- Featured badge -->
-      <div class="absolute top-4 left-4 sm:top-6 sm:left-6 bg-black text-white px-3 py-1.5 sm:px-4 sm:py-2 rounded-full text-xs sm:text-sm font-semibold shadow-lg">
-        ⭐ Featured
+      <div class="absolute top-4 left-4 sm:top-6 sm:left-6 bg-black text-white px-3 py-1.5 sm:px-4 sm:py-2 text-xs sm:text-sm font-semibold shadow-lg flex items-center gap-1.5">
+        <StarIcon className="w-4 h-4" />
+        Featured
       </div>
       
       <!-- Status badge -->
       <div class="absolute top-4 right-4 sm:top-6 sm:right-6">
-        <span class={`px-3 py-1.5 sm:px-4 sm:py-2 rounded-full text-xs sm:text-sm font-semibold shadow-lg ${statusColors[project.data.status]}`}>
+        <span class={`px-3 py-1.5 sm:px-4 sm:py-2 text-xs sm:text-sm font-semibold shadow-lg ${statusColors[project.data.status]}`}>
           {statusText[project.data.status]}
         </span>
       </div>
@@ -82,8 +84,9 @@ const formatDate = (date: Date) => {
           <div class="hidden sm:block">
             <!-- Category indicator -->
             <div class="mb-4">
-              <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-white/20 backdrop-blur-sm text-white">
-                🚀 Latest Project
+              <span class="inline-flex items-center gap-1.5 px-3 py-1 text-xs font-medium bg-white/20 backdrop-blur-sm text-white">
+                <RocketLaunchIcon className="w-4 h-4" />
+                Latest Project
               </span>
             </div>
             
@@ -121,12 +124,12 @@ const formatDate = (date: Date) => {
             <!-- Tags -->
             <div class="flex flex-wrap gap-2 mb-6">
               {project.data.tags.slice(0, 4).map((tag) => (
-                <span class="px-3 py-1 bg-white/20 backdrop-blur-sm text-white rounded-full text-sm font-medium hover:bg-white/30 transition-colors duration-200">
+                <span class="px-3 py-1 bg-white/20 backdrop-blur-sm text-white text-sm font-medium hover:bg-white/30 transition-colors duration-200">
                   {tag}
                 </span>
               ))}
               {project.data.tags.length > 4 && (
-                <span class="px-3 py-1 bg-white/20 backdrop-blur-sm text-white rounded-full text-sm font-medium">
+                <span class="px-3 py-1 bg-white/20 backdrop-blur-sm text-white text-sm font-medium">
                   +{project.data.tags.length - 4} more
                 </span>
               )}
