@@ -179,4 +179,4 @@ const HomeHeader: React.FC = () => {
   );
 };
 
-export { HomeHeader };;
+export { HomeHeader };
