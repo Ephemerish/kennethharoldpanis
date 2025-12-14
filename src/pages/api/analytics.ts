@@ -5,6 +5,8 @@ export const POST: APIRoute = async ({ request }) => {
   try {
     const body = await request.json();
     const { 
+      visitorId,
+      sessionId,
       path, 
       referrer, 
       userAgent, 
@@ -25,6 +27,8 @@ export const POST: APIRoute = async ({ request }) => {
       .from('analytics')
       .insert([
         {
+          visitor_id: visitorId,
+          session_id: sessionId,
           path,
           referrer,
           user_agent: userAgent,

@@ -77,8 +77,8 @@ const categoryIconComponents = {
 const baseUrl = isBlog ? "/blogs/" : "/projects/";
 ---
 
-<article class="group bg-card-gradient overflow-hidden shadow-elegant border border-neutral-200/50 hover:shadow-floating hover:bg-neutral-0 hover:border-brand-300/60 cursor-pointer transition-all duration-500 ease-out hover-lift">
-  <a href={baseUrl + slug} class="block">
+<article class="group bg-card-gradient overflow-hidden shadow-elegant border border-neutral-200/50 hover:shadow-floating hover:bg-neutral-0 hover:border-brand-300/60 cursor-pointer transition-all duration-500 ease-out hover-lift h-full flex flex-col">
+  <a href={baseUrl + slug} class="block flex-1 flex flex-col">
     <!-- Image container with enhanced overlay -->
     <div class="relative aspect-video overflow-hidden">
       <!-- Gradient overlay for better text readability -->
@@ -139,7 +139,7 @@ const baseUrl = isBlog ? "/blogs/" : "/projects/";
       )}
     </div>
     
-    <div class="p-6 sm:p-8">
+    <div class="p-6 sm:p-8 flex-1 flex flex-col">
       <!-- Title with enhanced styling -->
       <h2 class="text-xl sm:text-2xl font-bold text-neutral-900 mb-4 line-clamp-2 group-hover:text-brand-700 transition-colors duration-300 leading-tight">
         {title}
@@ -207,13 +207,16 @@ const baseUrl = isBlog ? "/blogs/" : "/projects/";
       )}
       
       <!-- Tags -->
-      <div class={isProject ? "" : "mb-4"}>
+      <div class={isProject ? "mb-4" : "mb-4"}>
         <Tags tags={tags} />
       </div>
       
+      <!-- Spacer to push CTA to bottom -->
+      <div class="flex-1"></div>
+      
       <!-- CTA for blogs -->
       {isBlog && (
-        <div class="flex items-center text-neutral-900 text-sm font-medium pt-3 border-t border-neutral-100 group-hover:text-neutral-700 transition-colors duration-300">
+        <div class="flex items-center text-neutral-900 text-sm font-medium pt-3 border-t border-neutral-100 group-hover:text-neutral-700 transition-colors duration-300 mt-auto">
           <span>Read blog</span>
           <ArrowRightIcon className="w-4 h-4 ml-1.5 group-hover:translate-x-1 transition-transform duration-300" />
         </div>
@@ -221,7 +224,7 @@ const baseUrl = isBlog ? "/blogs/" : "/projects/";
       
       <!-- CTA for projects -->
       {isProject && (
-        <div class="flex items-center text-neutral-900 text-sm font-medium pt-3 border-t border-neutral-100 group-hover:text-neutral-700 transition-colors duration-300">
+        <div class="flex items-center text-neutral-900 text-sm font-medium pt-3 border-t border-neutral-100 group-hover:text-neutral-700 transition-colors duration-300 mt-auto">
           <span>View project</span>
           <ArrowRightIcon className="w-4 h-4 ml-1.5 group-hover:translate-x-1 transition-transform duration-300" />
         </div>

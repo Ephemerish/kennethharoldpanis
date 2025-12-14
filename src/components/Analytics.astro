@@ -3,9 +3,41 @@
     // Only run in browser
     if (typeof window === 'undefined') return;
 
+    // Generate or retrieve unique visitor ID
+    const getVisitorId = () => {
+      try {
+        let visitorId = localStorage.getItem('visitor_id');
+        if (!visitorId) {
+          // Generate a simple unique ID
+          visitorId = 'v_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+          localStorage.setItem('visitor_id', visitorId);
+        }
+        return visitorId;
+      } catch (e) {
+        // Fallback if localStorage is not available
+        return 'session_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+      }
+    };
+
+    // Track session ID (changes per browser session)
+    const getSessionId = () => {
+      try {
+        let sessionId = sessionStorage.getItem('session_id');
+        if (!sessionId) {
+          sessionId = 's_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+          sessionStorage.setItem('session_id', sessionId);
+        }
+        return sessionId;
+      } catch (e) {
+        return null;
+      }
+    };
+
     const sendAnalytics = async () => {
       try {
         const data = {
+          visitorId: getVisitorId(),
+          sessionId: getSessionId(),
           path: window.location.pathname,
           referrer: document.referrer,
           userAgent: navigator.userAgent,
