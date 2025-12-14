@@ -1,45 +1,47 @@
-<script>
-  const sendAnalytics = async () => {
-    try {
-      const data = {
-        path: window.location.pathname,
-        referrer: document.referrer,
-        userAgent: navigator.userAgent,
-        screenWidth: window.screen.width,
-        screenHeight: window.screen.height,
-      };
+<script is:inline>
+  (function() {
+    // Only run in browser
+    if (typeof window === 'undefined') return;
 
-      const response = await fetch('/api/analytics', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
-      });
+    const sendAnalytics = async () => {
+      try {
+        const data = {
+          path: window.location.pathname,
+          referrer: document.referrer,
+          userAgent: navigator.userAgent,
+          screenWidth: window.screen.width,
+          screenHeight: window.screen.height,
+        };
 
-      if (!response.ok) {
-        console.warn('Analytics request failed with status:', response.status);
+        const response = await fetch('/api/analytics', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data),
+        });
+
+        if (!response.ok) {
+          console.warn('Analytics request failed with status:', response.status);
+        }
+      } catch (error) {
+        // Silently fail - don't block page load
+        console.warn('Analytics not available:', error instanceof Error ? error.message : 'Unknown error');
       }
-    } catch (error) {
-      // Silently fail - don't block page load
-      console.warn('Analytics not available:', error instanceof Error ? error.message : 'Unknown error');
-    }
-  };
+    };
 
-  // Run analytics in a non-blocking way
-  if (typeof window !== 'undefined') {
-    // Use setTimeout to ensure this doesn't block page rendering
+    // Run analytics in a non-blocking way
     setTimeout(() => {
       sendAnalytics().catch(() => {
         // Fail silently - analytics should never break the page
       });
     }, 0);
-  }
 
-  // Support for View Transitions
-  document.addEventListener('astro:page-load', () => {
-    setTimeout(() => {
-      sendAnalytics().catch(() => {});
-    }, 0);
-  });
+    // Support for View Transitions
+    document.addEventListener('astro:page-load', () => {
+      setTimeout(() => {
+        sendAnalytics().catch(() => {});
+      }, 0);
+    });
+  })();
 </script>
