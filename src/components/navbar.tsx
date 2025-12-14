@@ -42,7 +42,7 @@ export default function Navbar() {
           <div className="flex md:hidden">
             <button
               type="button"
-              className="inline-flex items-center justify-center p-2 text-gray-600 hover:bg-gray-100 hover:text-black"
+              className="inline-flex items-center justify-center p-2 text-neutral-600 hover:text-brand-600 transition-colors duration-200"
               aria-controls="mobile-menu"
               aria-expanded={isMenuOpen}
               onClick={toggleMenu}
@@ -86,7 +86,7 @@ function NavLink({ to, children }: { to: string; children: React.ReactNode }) {
   return (
     <a
       href={to}
-      className="px-3 py-2 text-sm font-medium text-black hover:bg-gray-100 hover:text-black"
+      className="px-3 py-2 text-sm font-medium text-neutral-600 hover:text-brand-600 transition-colors duration-200"
     >
       {children}
     </a>
@@ -106,7 +106,7 @@ function MobileNavLink({
   return (
     <a
       href={to}
-      className="block px-3 py-2 text-base font-medium text-black hover:bg-gray-100 hover:text-black"
+      className="block px-3 py-2 text-base font-medium text-neutral-600 hover:text-brand-600 transition-colors duration-200"
       onClick={onClick}
     >
       {children}

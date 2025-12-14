@@ -45,7 +45,7 @@ import { EnvelopeIcon, MapPinIcon, ClockIcon } from "@heroicons/react/24/outline
             <!-- Name Field -->
             <div class="group">
               <label for="name" class="block text-sm font-semibold text-neutral-900 mb-3">
-                Full Name *
+                Full Name <span class="text-error-600">*</span>
               </label>
               <input
                 type="text"
@@ -60,7 +60,7 @@ import { EnvelopeIcon, MapPinIcon, ClockIcon } from "@heroicons/react/24/outline
             <!-- Email Field -->
             <div class="group">
               <label for="email" class="block text-sm font-semibold text-neutral-900 mb-3">
-                Email Address *
+                Email Address <span class="text-error-600">*</span>
               </label>
               <input
                 type="email"
@@ -75,7 +75,7 @@ import { EnvelopeIcon, MapPinIcon, ClockIcon } from "@heroicons/react/24/outline
             <!-- Subject Field -->
             <div>
               <label for="subject" class="block text-sm font-semibold text-neutral-900 mb-3">
-                Subject *
+                Subject <span class="text-error-600">*</span>
               </label>
               <SubjectSelect 
                 client:load
@@ -87,7 +87,7 @@ import { EnvelopeIcon, MapPinIcon, ClockIcon } from "@heroicons/react/24/outline
             <!-- Message Field -->
             <div>
               <label for="message" class="block text-sm font-semibold text-neutral-900 mb-3">
-                Message *
+                Message <span class="text-error-600">*</span>
               </label>
               <textarea
                 id="message"

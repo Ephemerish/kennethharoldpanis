@@ -8,7 +8,17 @@ const Select = SelectPrimitive.Root
 
 const SelectGroup = SelectPrimitive.Group
 
-const SelectValue = SelectPrimitive.Value
+const SelectValue = React.forwardRef<
+  React.ElementRef<typeof SelectPrimitive.Value>,
+  React.ComponentPropsWithoutRef<typeof SelectPrimitive.Value>
+>(({ className, ...props }, ref) => (
+  <SelectPrimitive.Value
+    ref={ref}
+    className={cn("text-neutral-500 data-[state=checked]:text-neutral-900", className)}
+    {...props}
+  />
+))
+SelectValue.displayName = SelectPrimitive.Value.displayName
 
 const SelectTrigger = React.forwardRef<
   React.ElementRef<typeof SelectPrimitive.Trigger>,
@@ -17,7 +27,7 @@ const SelectTrigger = React.forwardRef<
   <SelectPrimitive.Trigger
     ref={ref}
     className={cn(
-      "flex h-auto w-full items-center justify-between border-2 border-neutral-300 bg-neutral-0/50 backdrop-blur-sm px-4 py-4 text-base text-neutral-900 focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 hover:border-neutral-400 transition-all duration-300 disabled:cursor-not-allowed disabled:opacity-50 [&>span]:text-neutral-900",
+      "flex h-auto w-full items-center justify-between border-2 border-neutral-300 bg-neutral-0/50 backdrop-blur-sm px-4 py-4 text-base focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 hover:border-neutral-400 transition-all duration-300 disabled:cursor-not-allowed disabled:opacity-50 data-[placeholder]:text-neutral-500 text-neutral-900",
       className
     )}
     {...props}
