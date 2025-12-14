@@ -4,7 +4,22 @@ import { supabase } from '../../lib/supabase';
 export const POST: APIRoute = async ({ request }) => {
   try {
     const body = await request.json();
-    const { path, referrer, userAgent, screenWidth, screenHeight } = body;
+    const { 
+      path, 
+      referrer, 
+      userAgent, 
+      screenWidth, 
+      screenHeight,
+      viewportWidth,
+      viewportHeight,
+      devicePixelRatio,
+      language,
+      timezone,
+      colorScheme,
+      connectionType,
+      touchEnabled,
+      loadTime
+    } = body;
 
     const { error } = await supabase
       .from('analytics')
@@ -15,6 +30,15 @@ export const POST: APIRoute = async ({ request }) => {
           user_agent: userAgent,
           screen_width: screenWidth,
           screen_height: screenHeight,
+          viewport_width: viewportWidth,
+          viewport_height: viewportHeight,
+          device_pixel_ratio: devicePixelRatio,
+          language,
+          timezone,
+          color_scheme: colorScheme,
+          connection_type: connectionType,
+          touch_enabled: touchEnabled,
+          load_time: loadTime > 0 ? loadTime : null,
           timestamp: new Date().toISOString(),
         },
       ]);

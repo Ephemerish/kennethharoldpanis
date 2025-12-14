@@ -11,6 +11,35 @@
           userAgent: navigator.userAgent,
           screenWidth: window.screen.width,
           screenHeight: window.screen.height,
+          // Additional analytics data
+          viewportWidth: window.innerWidth,
+          viewportHeight: window.innerHeight,
+          devicePixelRatio: window.devicePixelRatio || 1,
+          language: navigator.language || navigator.userLanguage,
+          timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+          colorScheme: window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light',
+          // Connection info (if available)
+          connectionType: navigator.connection?.effectiveType || 'unknown',
+          // Touch capability
+          touchEnabled: 'ontouchstart' in window || navigator.maxTouchPoints > 0,
+          // Page performance (in milliseconds) - use modern Performance API
+          loadTime: (() => {
+            try {
+              // Use modern Performance API
+              const perfEntries = performance.getEntriesByType('navigation');
+              if (perfEntries && perfEntries.length > 0) {
+                const navTiming = perfEntries[0];
+                return Math.round(navTiming.loadEventEnd - navTiming.fetchStart);
+              }
+              // Fallback to deprecated API if available and valid
+              if (performance.timing && performance.timing.loadEventEnd > 0) {
+                return performance.timing.loadEventEnd - performance.timing.navigationStart;
+              }
+              return null;
+            } catch (e) {
+              return null;
+            }
+          })(),
         };
 
         const response = await fetch('/api/analytics', {
@@ -30,18 +59,22 @@
       }
     };
 
-    // Run analytics in a non-blocking way
-    setTimeout(() => {
-      sendAnalytics().catch(() => {
-        // Fail silently - analytics should never break the page
+    // Wait for page to fully load before sending analytics
+    if (document.readyState === 'complete') {
+      // Page already loaded
+      setTimeout(() => sendAnalytics().catch(() => {}), 100);
+    } else {
+      // Wait for load event
+      window.addEventListener('load', () => {
+        setTimeout(() => sendAnalytics().catch(() => {}), 100);
       });
-    }, 0);
+    }
 
     // Support for View Transitions
     document.addEventListener('astro:page-load', () => {
       setTimeout(() => {
         sendAnalytics().catch(() => {});
-      }, 0);
+      }, 100);
     });
   })();
 </script>
