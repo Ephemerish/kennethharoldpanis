@@ -9,29 +9,37 @@
         screenHeight: window.screen.height,
       };
 
-      await fetch('/api/analytics', {
+      const response = await fetch('/api/analytics', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(data),
       });
+
+      if (!response.ok) {
+        console.warn('Analytics request failed with status:', response.status);
+      }
     } catch (error) {
-      console.error('Failed to send analytics:', error);
+      // Silently fail - don't block page load
+      console.warn('Analytics not available:', error instanceof Error ? error.message : 'Unknown error');
     }
   };
 
-  // Run on initial load
-  sendAnalytics();
+  // Run analytics in a non-blocking way
+  if (typeof window !== 'undefined') {
+    // Use setTimeout to ensure this doesn't block page rendering
+    setTimeout(() => {
+      sendAnalytics().catch(() => {
+        // Fail silently - analytics should never break the page
+      });
+    }, 0);
+  }
 
-  // Support for View Transitions (if used in the future)
+  // Support for View Transitions
   document.addEventListener('astro:page-load', () => {
-    // Avoid double counting on initial load if astro:page-load fires then too
-    // But usually standard script runs once.
-    // For now, let's just stick to the simple execution.
-    // If the user uses ClientRouter, the script in .astro files re-runs?
-    // No, inline scripts in Astro components run once per page load.
-    // If View Transitions are used, we might need to re-trigger.
-    // Let's keep it simple.
+    setTimeout(() => {
+      sendAnalytics().catch(() => {});
+    }, 0);
   });
 </script>
