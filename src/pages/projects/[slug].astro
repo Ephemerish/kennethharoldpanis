@@ -1,22 +1,10 @@
 ---
 import { getCollection } from "astro:content";
-import Layout from "../../layouts/MainLayout.astro";
+import ArticleLayout from "../../layouts/ArticleLayout.astro";
 import type { CollectionEntry } from "astro:content";
-import { Image } from 'astro:assets';
-import { getTechByName } from "../../data/technologies";
-import { 
-  ArrowLeftIcon, 
-  ArrowTopRightOnSquareIcon, 
-  VideoCameraIcon,
-  CalendarIcon,
-  CogIcon,
-  TagIcon,
-  CheckIcon,
-  UsersIcon,
-  BuildingOfficeIcon,
-  UserIcon,
-  LightBulbIcon
-} from "@heroicons/react/24/outline";
+import Gallery from "../../components/Gallery.tsx";
+import ProjectDetails from "../../components/ProjectDetails.astro";
+import { ArrowTopRightOnSquareIcon, VideoCameraIcon } from "@heroicons/react/24/outline";
 
 export const prerender = true;
 
@@ -28,608 +16,81 @@ export async function getStaticPaths() {
   }));
 }
 
-const { project } = Astro.props;
-
-interface Props {
-  project: CollectionEntry<"projects">;
-}
-
+const { project } = Astro.props as { project: CollectionEntry<"projects"> };
 const { Content } = await project.render();
-
-const statusColors = {
-  completed: "bg-success-200 text-success-800",
-  "in-progress": "bg-warning-200 text-warning-800", 
-  planned: "bg-neutral-200 text-neutral-600"
-};
+const d = project.data;
 
 const statusText = {
   completed: "Completed",
   "in-progress": "In Progress",
-  planned: "Planned"
+  planned: "Planned",
 };
 
-const categoryColors = {
-  web: "bg-brand-100 text-brand-800",
-  mobile: "bg-brand-100 text-brand-800",
-  hardware: "bg-brand-100 text-brand-800",
-  iot: "bg-brand-100 text-brand-800",
-  "ai-ml": "bg-brand-100 text-brand-800",
-  game: "bg-brand-100 text-brand-800",
-  desktop: "bg-brand-100 text-brand-800",
-  thesis: "bg-brand-100 text-brand-800",
-  research: "bg-brand-100 text-brand-800"
+const statusColors = {
+  completed: "bg-success-200 text-success-800",
+  "in-progress": "bg-warning-200 text-warning-800",
+  planned: "bg-neutral-200 text-neutral-600",
 };
 
-const categoryText = {
-  web: "Web Development",
-  mobile: "Mobile App",
-  hardware: "Hardware Project",
-  iot: "IoT System",
-  "ai-ml": "AI/Machine Learning",
-  game: "Game Development",
-  desktop: "Desktop Application",
-  thesis: "Thesis Project",
-  research: "Research Project"
-};
+// Header carries only the status pill; the date comes from ArticleLayout.
+const badges = [{ label: statusText[d.status], class: statusColors[d.status] }];
 
-const formatDate = (date: Date) => {
-  return new Intl.DateTimeFormat('en-US', { 
-    year: 'numeric', 
-    month: 'long', 
-    day: 'numeric' 
-  }).format(date);
-};
+const galleryImages = (d.gallery ?? []).map((img) => `/images/${img}`);
 ---
 
-<Layout 
-  title={project.data.title}
-  description={project.data.description}
-  image={project.data.image ? `/images/${project.data.image}` : "/images/me/me.jpg"}
-  type="article"
+<ArticleLayout
+  title={d.title}
+  description={d.description}
+  heroImage={d.image}
+  date={d.startDate}
+  badges={badges}
 >
-  <section class="bg-white text-neutral-900 relative overflow-hidden">
-    <div class="absolute inset-0">
-      <div class="max-w-7xl mx-auto h-full px-4 sm:px-6 lg:px-8">
-        <div class="bg-neutral-0 border-l border-r border-neutral-200 h-full"></div>
-      </div>
-    </div>
-    
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 relative">
-      <div class="px-4 sm:px-6 lg:px-8">
-        <article>
-    <!-- Header -->
-    <header class="mb-12">
-      <!-- Back to Projects -->
-      <nav class="mb-6">
-        <a 
-          href="/projects" 
-          class="inline-flex items-center text-brand-600 hover:text-brand-700 transition-colors"
-        >
-          <ArrowLeftIcon className="w-4 h-4 mr-2" />
-          Back to Projects
-        </a>
-      </nav>
+  {d.demoUrl && (
+    <a
+      slot="actions"
+      href={d.demoUrl}
+      target="_blank"
+      rel="noopener noreferrer"
+      class="bg-brand-gradient text-neutral-0 px-6 py-3 hover:shadow-brand transition-all font-medium inline-flex items-center"
+    >
+      <ArrowTopRightOnSquareIcon className="w-4 h-4 mr-2" />
+      Live Demo
+    </a>
+  )}
+  {d.videoUrl && (
+    <a
+      slot="actions"
+      href={d.videoUrl}
+      target="_blank"
+      rel="noopener noreferrer"
+      class="bg-neutral-700 text-neutral-0 px-6 py-3 hover:bg-neutral-800 transition-colors font-medium inline-flex items-center"
+    >
+      <VideoCameraIcon className="w-4 h-4 mr-2" />
+      Watch Demo
+    </a>
+  )}
+  {d.githubUrl && (
+    <a
+      slot="actions"
+      href={d.githubUrl}
+      target="_blank"
+      rel="noopener noreferrer"
+      class="border border-brand-300 text-brand-700 px-6 py-3 hover:bg-brand-50 transition-colors font-medium inline-flex items-center"
+    >
+      <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 24 24">
+        <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
+      </svg>
+      View Code
+    </a>
+  )}
 
-      <!-- Project Title and Badges -->
-      <div class="flex flex-wrap items-center gap-3 mb-4">
-        <h1 class="text-4xl md:text-5xl font-bold text-neutral-900">
-          {project.data.title}
-        </h1>
-        <span class={`px-3 py-1 text-sm font-medium ${categoryColors[project.data.category]}`}>
-          {categoryText[project.data.category]}
-        </span>
-        <span class={`px-3 py-1 text-sm font-medium ${statusColors[project.data.status]}`}>
-          {statusText[project.data.status]}
-        </span>
-        {project.data.featured && (
-          <span class="bg-warning-200 text-warning-800 px-3 py-1 text-sm font-medium">
-            Featured
-          </span>
-        )}
-      </div>
-
-      <!-- Project Description -->
-      <p class="text-xl text-neutral-700 mb-8 leading-relaxed">
-        {project.data.description}
-      </p>
-
-      <!-- Project Actions -->
-      <div class="flex flex-wrap gap-3 mb-8">
-        {project.data.demoUrl && (
-          <a 
-            href={project.data.demoUrl} 
-            target="_blank" 
-            rel="noopener noreferrer"
-            class="bg-brand-gradient text-neutral-0 px-6 py-3 hover:shadow-brand transition-all font-medium inline-flex items-center"
-          >
-            <ArrowTopRightOnSquareIcon className="w-4 h-4 mr-2" />
-            Live Demo
-          </a>
-        )}
-        {project.data.videoUrl && (
-          <a 
-            href={project.data.videoUrl} 
-            target="_blank" 
-            rel="noopener noreferrer"
-            class="bg-neutral-700 text-neutral-0 px-6 py-3 hover:bg-neutral-800 transition-colors font-medium inline-flex items-center"
-          >
-            <VideoCameraIcon className="w-4 h-4 mr-2" />
-            Watch Demo
-          </a>
-        )}
-        {project.data.githubUrl && (
-          <a 
-            href={project.data.githubUrl} 
-            target="_blank" 
-            rel="noopener noreferrer"
-            class="border border-brand-300 text-brand-700 px-6 py-3 hover:bg-brand-50 transition-colors font-medium inline-flex items-center"
-          >
-            <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
-            </svg>
-            View Code
-          </a>
-        )}
-      </div>
-    </header>
-
-    <!-- Project Gallery -->
-    <div class="mb-12">
-      <Image
-        src={"/images/" + project.data.image}
-        alt={project.data.title}
-        class="w-full h-64 md:h-96 object-cover shadow-lg mb-6"
-        width={800}
-        height={400}
-        loading="eager"
-      />
-      
-      {project.data.gallery && project.data.gallery.length > 0 && (
-        <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
-          {project.data.gallery.map((image) => (
-            <Image
-              src={"/images/" + image}
-              alt={`${project.data.title} gallery image`}
-              class="w-full h-32 md:h-48 object-cover shadow-md hover:shadow-lg transition-shadow cursor-pointer"
-              width={300}
-              height={200}
-            />
-          ))}
-        </div>
-      )}
-    </div>
-
-    <!-- Project Overview Cards -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
-      <!-- Timeline Card -->
-      <div class="bg-white p-6 shadow-md border">
-        <h3 class="font-semibold text-gray-900 mb-3 flex items-center">
-          <CalendarIcon className="w-5 h-5 mr-2 text-gray-700" />
-          Timeline
-        </h3>
-        <p class="text-gray-600 text-sm">
-          <strong>Started:</strong> {formatDate(project.data.startDate)}<br />
-          {project.data.endDate && (
-            <><strong>Completed:</strong> {formatDate(project.data.endDate)}</>
-          )}
-          {!project.data.endDate && project.data.status === "in-progress" && (
-            <><strong>Status:</strong> In Progress</>
-          )}
-        </p>
-      </div>
-
-      <!-- Technologies Card -->
-      <div class="bg-white p-6 shadow-md border">
-        <h3 class="font-semibold text-gray-900 mb-3 flex items-center">
-          <CogIcon className="w-5 h-5 mr-2 text-gray-700" />
-          Technologies
-        </h3>
-        <div class="flex flex-wrap gap-3">
-          {project.data.technologies && project.data.technologies.map((techName: string) => {
-            const tech = getTechByName(techName);
-            return tech ? (
-              <div class="group relative">
-                <img 
-                  src={tech.imagePath} 
-                  alt={tech.name}
-                  class="w-10 h-10 object-contain hover:scale-110 transition-transform"
-                  title={tech.name}
-                />
-                <span class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 bg-gray-800 text-white text-xs opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
-                  {tech.name}
-                </span>
-              </div>
-            ) : (
-              <span class="inline-block px-3 py-1 bg-gray-100 text-gray-700 text-sm">
-                {techName}
-              </span>
-            );
-          })}
-        </div>
-      </div>
-
-      <!-- Category Card -->
-      <div class="bg-white p-6 shadow-md border">
-        <h3 class="font-semibold text-gray-900 mb-3 flex items-center">
-          <TagIcon className="w-5 h-5 mr-2 text-gray-700" />
-          Category
-        </h3>
-        <span class={`inline-block px-3 py-1 text-sm font-medium ${categoryColors[project.data.category]}`}>
-          {categoryText[project.data.category]}
-        </span>
-      </div>
-    </div>
-
-    <!-- Key Features -->
-    {project.data.keyFeatures && project.data.keyFeatures.length > 0 && (
-      <div class="mb-12">
-        <h2 class="text-2xl font-bold text-gray-900 mb-6">Key Features</h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {project.data.keyFeatures.map((feature) => (
-            <div class="flex items-start">
-              <CheckIcon className="w-5 h-5 text-gray-700 mr-3 mt-0.5 shrink-0" />
-              <span class="text-gray-700">{feature}</span>
-            </div>
-          ))}
-        </div>
-      </div>
+  {/* Lead: gallery + a single calm overview panel, before the story */}
+  <div slot="lead" class="space-y-8">
+    {galleryImages.length > 0 && (
+      <Gallery client:visible images={galleryImages} alt={d.title} />
     )}
+    <ProjectDetails data={d} />
+  </div>
 
-    <!-- Technologies -->
-    {project.data.materials && project.data.materials.length > 0 && (
-      <div class="mb-12">
-        <h2 class="text-2xl font-bold text-gray-900 mb-6">Materials & Tools</h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {project.data.materials.map((material) => (
-            <div class="bg-gray-50 p-4 border">
-              <div class="font-medium text-gray-900">{material}</div>
-            </div>
-          ))}
-        </div>
-      </div>
-    )}
-
-    <!-- Challenges -->
-    {project.data.challenges && project.data.challenges.length > 0 && (
-      <div class="mb-12">
-        <h2 class="text-2xl font-bold text-gray-900 mb-6">Challenges Overcome</h2>
-        <div class="space-y-4">
-          {project.data.challenges.map((challenge, index) => (
-            <div class="flex items-start">
-              <div class="bg-gray-200 text-black w-6 h-6 flex items-center justify-center text-sm font-medium mr-4 mt-0.5 shrink-0">
-                {index + 1}
-              </div>
-              <p class="text-gray-700">{challenge}</p>
-            </div>
-          ))}
-        </div>
-      </div>
-    )}
-
-    <!-- Project Team & Institution -->
-    {(project.data.team || project.data.institution || project.data.supervisor || project.data.researchArea) && (
-      <div class="mb-12">
-        <h2 class="text-2xl font-bold text-gray-900 mb-6">Project Information</h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {project.data.team && project.data.team.length > 0 && (
-            <div class="bg-white p-6 shadow-md border">
-              <h3 class="font-semibold text-gray-900 mb-3 flex items-center">
-                <UsersIcon className="w-5 h-5 mr-2 text-gray-700" />
-                Team Members
-              </h3>
-              <div class="space-y-2">
-                {project.data.team.map((member) => (
-                  <div class="text-gray-700">{member}</div>
-                ))}
-              </div>
-            </div>
-          )}
-          
-          {project.data.institution && (
-            <div class="bg-white p-6 shadow-md border">
-              <h3 class="font-semibold text-gray-900 mb-3 flex items-center">
-                <BuildingOfficeIcon className="w-5 h-5 mr-2 text-gray-700" />
-                Institution
-              </h3>
-              <div class="text-gray-700">{project.data.institution}</div>
-            </div>
-          )}
-          
-          {project.data.supervisor && (
-            <div class="bg-white p-6 shadow-md border">
-              <h3 class="font-semibold text-gray-900 mb-3 flex items-center">
-                <UserIcon className="w-5 h-5 mr-2 text-gray-700" />
-                Supervisor
-              </h3>
-              <div class="text-gray-700">{project.data.supervisor}</div>
-            </div>
-          )}
-          
-          {project.data.researchArea && (
-            <div class="bg-white p-6 shadow-md border">
-              <h3 class="font-semibold text-gray-900 mb-3 flex items-center">
-                <LightBulbIcon className="w-5 h-5 mr-2 text-gray-700" />
-                Research Area
-              </h3>
-              <div class="text-gray-700">{project.data.researchArea}</div>
-            </div>
-          )}
-        </div>
-      </div>
-    )}
-
-    <!-- Project Content -->
-    <article class="
-      text-neutral-700 text-sm sm:text-base lg:text-lg leading-6 sm:leading-7 lg:leading-8 font-light
-      [&>h1]:text-xl [&>h1]:sm:text-2xl [&>h1]:font-medium [&>h1]:text-neutral-900 [&>h1]:mt-6 [&>h1]:sm:mt-8 [&>h1]:mb-3 [&>h1]:sm:mb-4 [&>h1]:tracking-tight [&>h1]:pb-2 [&>h1]:border-b [&>h1]:border-neutral-100
-      [&>h2]:text-lg [&>h2]:sm:text-xl [&>h2]:font-semibold [&>h2]:text-neutral-900 [&>h2]:mt-6 [&>h2]:sm:mt-8 [&>h2]:mb-3 [&>h2]:sm:mb-4 [&>h2]:tracking-tight [&>h2]:pb-2 [&>h2]:border-b-2 [&>h2]:border-brand-500
-      [&>h3]:text-base [&>h3]:sm:text-lg [&>h3]:font-medium [&>h3]:text-neutral-900 [&>h3]:mt-5 [&>h3]:sm:mt-6 [&>h3]:mb-2 [&>h3]:sm:mb-3 [&>h3]:tracking-tight [&>h3]:pb-1.5 [&>h3]:border-b [&>h3]:border-brand-300
-      [&>h4]:text-sm [&>h4]:sm:text-base [&>h4]:font-medium [&>h4]:text-neutral-900 [&>h4]:mt-4 [&>h4]:sm:mt-5 [&>h4]:mb-2 [&>h4]:bg-neutral-50 [&>h4]:border-l-3 [&>h4]:border-brand-300 [&>h4]:px-3 [&>h4]:py-1.5
-      [&>p]:mb-3 [&>p]:sm:mb-4 [&>p]:leading-6 [&>p]:sm:leading-7 [&>p]:lg:leading-8
-      [&>ul]:mb-3 [&>ul]:sm:mb-4 [&>ul]:space-y-1 [&>ul]:sm:space-y-2 [&>ul>li]:relative [&>ul>li]:pl-6 [&>ul>li]:sm:pl-8 [&>ul>li]:before:content-['■'] [&>ul>li]:before:absolute [&>ul>li]:before:left-0 [&>ul>li]:before:text-brand-600 [&>ul>li]:before:font-bold [&>ul>li]:before:text-sm [&>ul>li]:sm:before:text-lg [&>ul>li]:before:top-0
-      [&>ol]:mb-3 [&>ol]:sm:mb-4 [&>ol]:space-y-1 [&>ol]:sm:space-y-2 [&>ol]:ml-6 [&>ol]:sm:ml-8 [&>ol]:list-decimal [&>ol]:marker:text-brand-600 [&>ol]:marker:font-semibold [&>ol]:marker:text-sm [&>ol]:sm:marker:text-lg [&>ol>li]:mb-1 [&>ol>li]:pl-1 [&>ol>li]:sm:pl-2
-      [&>blockquote]:border-l-2 [&>blockquote]:border-brand-200 [&>blockquote]:pl-3 [&>blockquote]:sm:pl-4 [&>blockquote]:text-neutral-600 [&>blockquote]:italic [&>blockquote]:my-4 [&>blockquote]:sm:my-6 [&>blockquote]:text-base [&>blockquote]:sm:text-lg
-      [&>pre]:bg-neutral-50 [&>pre]:border [&>pre]:border-neutral-100 [&>pre]:p-3 [&>pre]:sm:p-4 [&>pre]:overflow-x-auto [&>pre]:my-4 [&>pre]:sm:my-6 [&>pre]:text-xs [&>pre]:sm:text-sm [&>pre]:leading-5 [&>pre]:sm:leading-6
-      [&>:not(pre)>code]:bg-brand-100 [&>:not(pre)>code]:px-1.5 [&>:not(pre)>code]:sm:px-2 [&>:not(pre)>code]:py-0.5 [&>:not(pre)>code]:text-xs [&>:not(pre)>code]:sm:text-sm [&>:not(pre)>code]:font-mono [&>:not(pre)>code]:text-brand-800
-      [&>a]:text-brand-600 [&>a]:underline [&>a]:decoration-brand-300 [&>a]:underline-offset-4 [&>a]:transition-colors [&>a:hover]:decoration-brand-600
-      [&>img]:my-4 [&>img]:sm:my-6 [&>img]:border [&>img]:border-neutral-100
-      [&>figure]:my-6 [&>figure]:sm:my-8
-      [&>figure>img]:w-full [&>figure>img]:border [&>figure>img]:border-neutral-200 [&>figure>img]:shadow-sm
-      [&>figure>figcaption]:mt-2 [&>figure>figcaption]:sm:mt-3 [&>figure>figcaption]:text-xs [&>figure>figcaption]:sm:text-sm [&>figure>figcaption]:text-neutral-500 [&>figure>figcaption]:text-center [&>figure>figcaption]:not-italic [&>figure>figcaption]:leading-5
-      [&>hr]:border-0 [&>hr]:h-px [&>hr]:bg-neutral-200 [&>hr]:my-6 [&>hr]:sm:my-8
-      first:*:mt-0
-    " id="project-content">
-      <Content />
-    </article>
-
-    <script>
-      document.addEventListener('DOMContentLoaded', function() {
-        const article = document.getElementById('project-content');
-        if (!article) return;
-
-        // Wrap tables in responsive containers to prevent layout issues
-        const tables = article.querySelectorAll('table');
-        tables.forEach(table => {
-          const parent = table.parentElement;
-          if (parent && !parent.classList.contains('table-wrapper')) {
-            const wrapper = document.createElement('div');
-            wrapper.className = 'table-wrapper overflow-x-auto my-6 border border-gray-200 shadow-sm bg-white';
-            parent.insertBefore(wrapper, table);
-            wrapper.appendChild(table);
-            
-            // Enhanced table styling
-            table.className = 'w-full border-collapse text-sm min-w-full';
-            
-            // Style table headers
-            const headers = table.querySelectorAll('th');
-            headers.forEach(th => {
-              th.className = 'bg-gray-50 border-b-2 border-gray-200 px-4 py-3 text-left font-semibold text-gray-900 text-xs uppercase tracking-wider';
-            });
-            
-            // Style table cells
-            const cells = table.querySelectorAll('td');
-            cells.forEach(td => {
-              td.className = 'border-b border-gray-100 px-4 py-3 text-gray-700 text-sm whitespace-nowrap';
-            });
-            
-            // Add alternating row colors
-            const rows = table.querySelectorAll('tbody tr');
-            rows.forEach((row, index) => {
-              if (index % 2 === 1) {
-                row.className = 'bg-gray-25';
-              }
-            });
-          }
-        });
-
-        // Check if button already exists to prevent duplicates
-        if (document.querySelector('[data-collapse-button]')) return;
-
-        // Create collapse button with improved icons
-        const collapseBtn = document.createElement('button');
-        collapseBtn.innerHTML = `
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3.98 8.223A10.477 10.477 0 001.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.45 10.45 0 0112 4.5c4.756 0 8.773 3.162 10.065 7.498a10.523 10.523 0 01-4.293 5.774M6.228 6.228L3 3m3.228 3.228l3.65 3.65m7.894 7.894L21 21m-3.228-3.228l-3.65-3.65m0 0a3 3 0 10-4.243-4.243m4.242 4.242L9.88 9.88"></path>
-          </svg>
-        `;
-        collapseBtn.className = 'fixed top-20 right-2 sm:right-4 z-50 w-11 h-11 sm:w-12 sm:h-12 bg-white/95 backdrop-blur-sm text-slate-700 hover:bg-white hover:scale-105 transition-all duration-200 border border-slate-200 hover:border-slate-300 shadow-lg hover:shadow-xl flex items-center justify-center';
-        collapseBtn.setAttribute('data-collapse-button', 'true');
-        
-        // Create tooltip with improved wording
-        const tooltip = document.createElement('div');
-        tooltip.innerHTML = 'Hide All Sections';
-        tooltip.className = 'fixed top-20 right-14 sm:right-16 z-50 bg-slate-800 text-white px-3 py-1.5 text-xs sm:text-sm font-medium shadow-lg opacity-0 pointer-events-none transition-all duration-200 whitespace-nowrap';
-        tooltip.setAttribute('data-collapse-tooltip', 'true');
-        
-        // Add hover events for tooltip
-        collapseBtn.addEventListener('mouseenter', () => {
-          tooltip.style.opacity = '1';
-          tooltip.style.transform = 'translateX(-4px)';
-        });
-        
-        collapseBtn.addEventListener('mouseleave', () => {
-          tooltip.style.opacity = '0';
-          tooltip.style.transform = 'translateX(0)';
-        });
-        
-        let sectionsCollapsed = false;
-        
-        function initializeCollapsible() {
-          if (!article) return;
-          
-          const headers = article.querySelectorAll('h2, h3');
-          
-          headers.forEach(header => {
-            // Add click indicator with better icon
-            const indicator = document.createElement('span');
-            indicator.innerHTML = `
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19.5 8.25l-7.5 7.5-7.5-7.5"></path>
-              </svg>
-            `;
-            indicator.className = 'absolute right-2 top-1/2 transform -translate-y-1/2 text-white/70 text-xs select-none transition-all duration-200';
-            header.appendChild(indicator);
-            
-            // Find content until next header of same/higher level
-            const contentElements: Element[] = [];
-            let sibling = header.nextElementSibling;
-            const headerLevel = parseInt(header.tagName.charAt(1));
-            
-            while (sibling) {
-              const siblingLevel = sibling.tagName.match(/^H[1-6]$/) ? 
-                parseInt(sibling.tagName.charAt(1)) : null;
-              
-              if (siblingLevel && siblingLevel <= headerLevel) {
-                break;
-              }
-              
-              contentElements.push(sibling);
-              sibling = sibling.nextElementSibling;
-            }
-            
-            if (contentElements.length > 0) {
-              // Store original styles and add data attributes for tracking
-              header.setAttribute('data-collapsible', 'true');
-              
-              contentElements.forEach((el) => {
-                el.setAttribute('data-section-content', header.tagName.toLowerCase() + '-' + Array.from(article.children).indexOf(header));
-                el.setAttribute('data-original-display', window.getComputedStyle(el).display);
-              });
-              
-              // Add click handler
-              header.addEventListener('click', () => {
-                const isCollapsed = header.getAttribute('data-collapsed') === 'true';
-                
-                if (isCollapsed) {
-                  // Expand
-                  contentElements.forEach(el => {
-                    (el as HTMLElement).style.display = el.getAttribute('data-original-display') || 'block';
-                    (el as HTMLElement).style.opacity = '1';
-                    (el as HTMLElement).style.transform = 'translateY(0)';
-                  });
-                  header.setAttribute('data-collapsed', 'false');
-                  indicator.innerHTML = `
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19.5 8.25l-7.5 7.5-7.5-7.5"></path>
-                    </svg>
-                  `;
-                } else {
-                  // Collapse
-                  contentElements.forEach(el => {
-                    (el as HTMLElement).style.display = 'none';
-                    (el as HTMLElement).style.opacity = '0';
-                    (el as HTMLElement).style.transform = 'translateY(-10px)';
-                  });
-                  header.setAttribute('data-collapsed', 'true');
-                  indicator.innerHTML = `
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8.25 4.5l7.5 7.5-7.5 7.5"></path>
-                    </svg>
-                  `;
-                }
-              });
-            }
-          });
-        }
-        
-        collapseBtn.addEventListener('click', () => {
-          if (!article) return;
-          
-          const collapsibleHeaders = article.querySelectorAll('[data-collapsible="true"]');
-          
-          if (sectionsCollapsed) {
-            // Expand all
-            collapsibleHeaders.forEach(header => {
-              const indicator = header.querySelector('span');
-              const sectionId = header.tagName.toLowerCase() + '-' + Array.from(article.children).indexOf(header);
-              const contentElements = article.querySelectorAll('[data-section-content="' + sectionId + '"]');
-              
-              contentElements.forEach(el => {
-                (el as HTMLElement).style.display = el.getAttribute('data-original-display') || 'block';
-                (el as HTMLElement).style.opacity = '1';
-                (el as HTMLElement).style.transform = 'translateY(0)';
-              });
-              header.setAttribute('data-collapsed', 'false');
-              if (indicator) indicator.innerHTML = `
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19.5 8.25l-7.5 7.5-7.5-7.5"></path>
-                </svg>
-              `;
-            });
-            collapseBtn.innerHTML = `
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3.98 8.223A10.477 10.477 0 001.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.45 10.45 0 0112 4.5c4.756 0 8.773 3.162 10.065 7.498a10.523 10.523 0 01-4.293 5.774M6.228 6.228L3 3m3.228 3.228l3.65 3.65m7.894 7.894L21 21m-3.228-3.228l-3.65-3.65m0 0a3 3 0 10-4.243-4.243m4.242 4.242L9.88 9.88"></path>
-              </svg>
-            `;
-            tooltip.innerHTML = 'Hide All Sections';
-          } else {
-            // Collapse all
-            collapsibleHeaders.forEach(header => {
-              const indicator = header.querySelector('span');
-              const sectionId = header.tagName.toLowerCase() + '-' + Array.from(article.children).indexOf(header);
-              const contentElements = article.querySelectorAll('[data-section-content="' + sectionId + '"]');
-              
-              contentElements.forEach(el => {
-                (el as HTMLElement).style.display = 'none';
-                (el as HTMLElement).style.opacity = '0';
-                (el as HTMLElement).style.transform = 'translateY(-10px)';
-              });
-              header.setAttribute('data-collapsed', 'true');
-              if (indicator) indicator.innerHTML = `
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8.25 4.5l7.5 7.5-7.5 7.5"></path>
-                </svg>
-              `;
-            });
-            collapseBtn.innerHTML = `
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z"></path>
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-              </svg>
-            `;
-            tooltip.innerHTML = 'Show All Sections';
-          }
-          
-          sectionsCollapsed = !sectionsCollapsed;
-        });
-        
-        // Clean up any existing buttons/tooltips before adding new ones
-        const existingButton = document.querySelector('[data-collapse-button]');
-        const existingTooltip = document.querySelector('[data-collapse-tooltip]');
-        if (existingButton) existingButton.remove();
-        if (existingTooltip) existingTooltip.remove();
-        
-        // Add floating button and tooltip to body
-        document.body.appendChild(collapseBtn);
-        document.body.appendChild(tooltip);
-        
-        // Initialize
-        initializeCollapsible();
-      });
-    </script>
-
-    <!-- Navigation to Other Projects -->
-    <footer class="mt-16 pt-8 border-t border-gray-200">
-      <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-        <a 
-          href="/projects" 
-          class="inline-flex items-center gap-2 text-black hover:text-gray-700 font-medium transition-colors"
-        >
-          <ArrowLeftIcon className="w-4 h-4" />
-          Back to all projects
-        </a>
-        <div class="flex flex-wrap gap-4">
-          <a 
-            href="/contact" 
-            class="inline-block px-4 py-2 bg-black text-white hover:bg-gray-800 transition-colors font-medium text-sm"
-          >
-            Discuss This Project
-          </a>
-        </div>
-      </div>
-    </footer>
-    </article>
-      </div>
-    </div>
-  </section>
-</Layout>
+  <Content />
+</ArticleLayout>

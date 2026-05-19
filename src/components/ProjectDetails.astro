@@ -1,0 +1,166 @@
+---
+/**
+ * ProjectDetails — a polished "overview" card shown above the story.
+ *
+ * White card with a quiet header strip. "Built with" is a single section
+ * split into two parts — Technology (logo chips) and Materials & tools —
+ * followed by a facts grid and Key features / Challenges side by side.
+ */
+import type { CollectionEntry } from "astro:content";
+import { getTechByName } from "../data/technologies";
+import {
+  Squares2X2Icon,
+  SparklesIcon,
+  BoltIcon,
+  CpuChipIcon,
+} from "@heroicons/react/24/outline";
+
+interface Props {
+  data: CollectionEntry<"projects">["data"];
+}
+
+const { data } = Astro.props;
+
+const fmt = (date: Date) =>
+  new Intl.DateTimeFormat("en-US", { year: "numeric", month: "short" }).format(date);
+
+const techs = (data.technologies ?? []).map((name) => ({
+  name,
+  tech: getTechByName(name),
+}));
+const materials = data.materials ?? [];
+const hasBuiltWith = techs.length > 0 || materials.length > 0;
+
+// Timeline only when there's an end date — the header already shows the start.
+const facts = [
+  data.endDate
+    ? { label: "Timeline", value: `${fmt(data.startDate)} – ${fmt(data.endDate)}` }
+    : null,
+  data.team?.length ? { label: "Team", value: data.team.join(", ") } : null,
+  data.institution ? { label: "Institution", value: data.institution } : null,
+  data.supervisor ? { label: "Supervisor", value: data.supervisor } : null,
+  data.researchArea ? { label: "Research area", value: data.researchArea } : null,
+].filter(Boolean) as { label: string; value: string }[];
+
+const keyFeatures = data.keyFeatures ?? [];
+const challenges = data.challenges ?? [];
+
+const hasLists = keyFeatures.length > 0 || challenges.length > 0;
+const hasAnything = hasBuiltWith || facts.length > 0 || hasLists;
+
+const label = "text-[11px] font-semibold uppercase tracking-wider text-neutral-400";
+const sub = "text-xs font-medium text-neutral-500 mb-2";
+---
+
+{hasAnything && (
+  <section class="border border-neutral-200 bg-white shadow-sm">
+    {/* Header strip */}
+    <div class="flex items-center gap-2 px-6 sm:px-8 py-3.5 bg-neutral-50 border-b border-neutral-200">
+      <Squares2X2Icon className="w-4 h-4 text-brand-500" />
+      <span class="text-sm font-semibold text-neutral-700 tracking-tight">Overview</span>
+    </div>
+
+    {/* Built with — Technology + Materials & tools */}
+    {hasBuiltWith && (
+      <div class="px-6 sm:px-8 py-6 border-b border-neutral-200">
+        <h3 class={`${label} mb-4 flex items-center gap-2`}>
+          <CpuChipIcon className="w-4 h-4 text-brand-500" />
+          Built with
+        </h3>
+        <div class="space-y-5">
+          {techs.length > 0 && (
+            <div>
+              <p class={sub}>Technology</p>
+              <div class="flex flex-wrap gap-2">
+                {techs.map(({ name, tech }) => (
+                  <span class="inline-flex items-center gap-2 py-1.5 pl-2 pr-3 bg-neutral-50 border border-neutral-200 hover:border-brand-300 hover:bg-brand-50 transition-colors">
+                    {tech ? (
+                      <img
+                        src={tech.imagePath}
+                        alt={tech.name}
+                        class="w-5 h-5 object-contain"
+                        loading="lazy"
+                      />
+                    ) : (
+                      <span class="w-1.5 h-1.5 bg-brand-400" />
+                    )}
+                    <span class="text-sm text-neutral-700">{tech?.name ?? name}</span>
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {materials.length > 0 && (
+            <div>
+              <p class={sub}>Materials & tools</p>
+              <div class="flex flex-wrap gap-2">
+                {materials.map((m) => (
+                  <span class="py-1.5 px-3 bg-neutral-50 border border-neutral-200 text-sm text-neutral-600">
+                    {m}
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+    )}
+
+    {/* Facts */}
+    {facts.length > 0 && (
+      <dl class="px-6 sm:px-8 py-6 grid grid-cols-2 sm:grid-cols-3 gap-x-8 gap-y-5 border-b border-neutral-200">
+        {facts.map((f) => (
+          <div>
+            <dt class={label}>{f.label}</dt>
+            <dd class="mt-1 text-sm text-neutral-800">{f.value}</dd>
+          </div>
+        ))}
+      </dl>
+    )}
+
+    {/* Key features / Challenges */}
+    {hasLists && (
+      <div class="grid md:grid-cols-2">
+        {keyFeatures.length > 0 && (
+          <div class="px-6 sm:px-8 py-6">
+            <h3 class={`${label} mb-4 flex items-center gap-2`}>
+              <SparklesIcon className="w-4 h-4 text-brand-500" />
+              Key features
+            </h3>
+            <ul class="space-y-2.5 text-sm text-neutral-700">
+              {keyFeatures.map((f) => (
+                <li class="flex gap-2.5">
+                  <span class="mt-2 w-1.5 h-1.5 bg-brand-500 shrink-0" />
+                  <span class="leading-relaxed">{f}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+        {challenges.length > 0 && (
+          <div
+            class={`px-6 sm:px-8 py-6 ${
+              keyFeatures.length > 0
+                ? "border-t md:border-t-0 md:border-l border-neutral-200"
+                : ""
+            }`}
+          >
+            <h3 class={`${label} mb-4 flex items-center gap-2`}>
+              <BoltIcon className="w-4 h-4 text-neutral-400" />
+              Challenges
+            </h3>
+            <ul class="space-y-2.5 text-sm text-neutral-700">
+              {challenges.map((c) => (
+                <li class="flex gap-2.5">
+                  <span class="mt-2 w-1.5 h-1.5 bg-neutral-300 shrink-0" />
+                  <span class="leading-relaxed">{c}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+      </div>
+    )}
+  </section>
+)}

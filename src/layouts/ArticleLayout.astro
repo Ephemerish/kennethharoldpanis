@@ -1,0 +1,157 @@
+---
+/**
+ * ArticleLayout — the shared page shell for any long-form entry.
+ *
+ * Blog posts and projects both render through this layout so the page
+ * chrome (bordered shell, header, meta row, hero image, back-nav, footer)
+ * and the content engine (<Prose />) are defined once. Collection-specific
+ * UI (e.g. a project's overview cards) is passed via the `before-content`
+ * and `actions` slots.
+ */
+import MainLayout from "./MainLayout.astro";
+import Prose from "../components/Prose.astro";
+import { Image } from "astro:assets";
+import { formatDate } from "../utils";
+import { CalendarIcon, ClockIcon } from "@heroicons/react/24/outline";
+
+interface Badge {
+  label: string;
+  class: string;
+}
+
+interface Props {
+  title: string;
+  description?: string;
+  heroImage?: string;
+  ogType?: string;
+  date?: Date;
+  readTime?: string;
+  tags?: string[];
+  badges?: Badge[];
+}
+
+const {
+  title,
+  description,
+  heroImage,
+  ogType = "article",
+  date,
+  readTime,
+  tags,
+  badges,
+} = Astro.props;
+
+const ogImage = heroImage ? `/images/${heroImage}` : "/images/me/me.jpg";
+const hasActions = Astro.slots.has("actions");
+const hasLead = Astro.slots.has("lead");
+const hasAppendix = Astro.slots.has("appendix");
+---
+
+<MainLayout title={title} description={description} image={ogImage} type={ogType}>
+  <section class="bg-white text-neutral-900 relative overflow-hidden">
+    <div class="absolute inset-0">
+      <div class="max-w-7xl mx-auto h-full px-4 sm:px-6 lg:px-8">
+        <div class="bg-neutral-0 border-l border-r border-neutral-200 h-full"></div>
+      </div>
+    </div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 relative">
+      <div class="px-4 sm:px-6 lg:px-8">
+        <article>
+          <header class="mb-8">
+            {/* Title + badges */}
+            <div class="flex flex-wrap items-center gap-3 mb-4">
+              <h1 class="text-4xl md:text-5xl font-bold text-neutral-900 leading-tight">
+                {title}
+              </h1>
+              {badges?.map((badge) => (
+                <span class={`px-3 py-1 text-sm font-medium ${badge.class}`}>
+                  {badge.label}
+                </span>
+              ))}
+            </div>
+
+            {/* Meta row: date + read time + tags */}
+            <div class="flex items-center justify-between flex-wrap gap-4 mb-6">
+              <div class="flex items-center gap-4 text-neutral-700">
+                {date && (
+                  <time class="flex items-center gap-1.5 text-sm">
+                    <CalendarIcon className="w-4 h-4" />
+                    {formatDate(date)}
+                  </time>
+                )}
+                {date && readTime && <span class="text-neutral-400">•</span>}
+                {readTime && (
+                  <span class="flex items-center gap-1.5 text-sm">
+                    <ClockIcon className="w-4 h-4" />
+                    {readTime}
+                  </span>
+                )}
+              </div>
+              {tags && tags.length > 0 && (
+                <div class="flex flex-wrap gap-2">
+                  {tags.map((tag) => (
+                    <span class="px-3 py-1.5 bg-brand-500 text-white text-sm font-medium hover:bg-brand-600 transition-colors shadow-sm">
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* Optional description */}
+            {description && (
+              <p class="text-xl text-neutral-700 mb-8 leading-relaxed">
+                {description}
+              </p>
+            )}
+
+            {/* Hero image */}
+            {heroImage && (
+              <div class="mb-8">
+                <Image
+                  src={`/images/${heroImage}`}
+                  alt={title}
+                  class="w-full h-64 md:h-96 object-cover shadow-lg"
+                  width={800}
+                  height={400}
+                  loading="eager"
+                />
+              </div>
+            )}
+
+            {/* Collection-specific actions (e.g. project demo/github buttons) */}
+            {hasActions && (
+              <div class="flex flex-wrap gap-3">
+                <slot name="actions" />
+              </div>
+            )}
+          </header>
+
+          {/* Lead: visuals / quick context shown before the story */}
+          {hasLead && (
+            <div class="mb-12 space-y-8">
+              <slot name="lead" />
+            </div>
+          )}
+
+          {/* The single content engine */}
+          <Prose>
+            <slot />
+          </Prose>
+
+          {/* Optional compact appendix, kept below the story */}
+          {hasAppendix && (
+            <section class="mt-16 pt-8 border-t border-neutral-200">
+              <h2 class="text-xs font-semibold uppercase tracking-wider text-neutral-400 mb-8">
+                Details
+              </h2>
+              <slot name="appendix" />
+            </section>
+          )}
+
+        </article>
+      </div>
+    </div>
+  </section>
+</MainLayout>
