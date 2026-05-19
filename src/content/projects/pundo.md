@@ -3,8 +3,8 @@ title: "Pundo"
 description: "A personal finance tracker built for Filipinos who want clarity over their money without the complexity other apps pile on. It uses the 50/30/20 rule as a starting point while leaving you in control of every peso. This is the story of why I built it, how it grew from a one-person weekend project into a closed beta, and where it is headed."
 image: "pundo/01-hero.png"
 gallery: ["pundo/02-first-transaction.png", "pundo/04-budget-plan.png", "pundo/05-before-after.png", "pundo/07-roadmap.png"]
-tags: ["Personal Finance", "Budgeting", "50/30/20", "SvelteKit", "Beta", "Side Project", "Web App", "Fintech"]
-technologies: ["SvelteKit", "Svelte 5", "TypeScript", "Tailwind CSS", "Drizzle ORM", "Neon", "PostgreSQL", "better-auth", "Bun", "Docker", "Cloud Run", "Paraglide", "shadcn/ui"]
+tags: ["Personal Finance", "Budgeting", "50/30/20", "Svelte 5", "Beta", "Side Project", "Web App", "Fintech"]
+technologies: ["Svelte 5", "TypeScript", "Tailwind CSS", "Drizzle ORM", "Neon", "PostgreSQL", "better-auth", "Bun", "Docker", "Cloud Run", "Paraglide", "shadcn/ui", "Lottie"]
 category: "web"
 demoUrl: ""
 videoUrl: ""
@@ -97,11 +97,11 @@ That is roughly seven weeks from the very first commit to where Pundo sits now.
 
 Every choice in the stack was made for one of three reasons, either it lets a single developer move fast, or it keeps the app feeling instant, or it removes a whole class of bugs entirely, and ideally all three at once whenever I could swing it.
 
-![A plain architecture sketch: browser to SvelteKit to Drizzle and Neon Postgres, with better-auth alongside, running in Docker on Cloud Run.](/images/pundo/06-architecture.png)
+![A plain architecture sketch: browser to Svelte 5 to Drizzle and Neon Postgres, with better-auth alongside, running in Docker on Cloud Run.](/images/pundo/06-architecture.png)
 
 | Choice | Why |
 | ------ | --- |
-| **SvelteKit with Svelte 5 runes** (`$state`, `$derived`, `$effect`, `$props`) | Reactive state that just reads like normal code, with no reducers and no boilerplate, and server actions that live next to the page that uses them, so a feature ends up being one folder instead of three. |
+| **Svelte 5 with runes** (`$state`, `$derived`, `$effect`, `$props`) | Reactive state that just reads like normal code, with no reducers and no boilerplate, and server actions that live next to the page that uses them, so a feature ends up being one folder instead of three. |
 | **Tailwind CSS** | Consistent spacing and color without a separate stylesheet to babysit, and the design system rules (no rounding, neutral palette, sharp edges) become trivial to enforce while still being easy to break loudly if I slip. |
 | **Drizzle ORM** | Type-safe queries straight from TypeScript to SQL, with explicit reviewable migrations and no hidden ORM magic between me and what is actually running against the database, which matters a lot when the data is money. |
 | **Neon PostgreSQL** | Serverless Postgres with branching for safe testing, and a real relational database underneath rather than a key-value store pretending to be one, because money data has real relationships and it has to add up at the end. |

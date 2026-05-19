@@ -308,28 +308,22 @@ export const technologies: Technology[] = [
     category: 'other',
     url: 'https://lora-alliance.org/'
   },
-  // Pundo stack (placeholder logos until real SVGs are dropped in)
-  {
-    name: 'SvelteKit',
-    imagePath: '/images/tech-logos/placeholder.svg',
-    category: 'frontend',
-    url: 'https://kit.svelte.dev/'
-  },
+  // Pundo stack
   {
     name: 'Svelte 5',
-    imagePath: '/images/tech-logos/placeholder.svg',
+    imagePath: '/images/tech-logos/svelte.svg',
     category: 'frontend',
     url: 'https://svelte.dev/'
   },
   {
     name: 'Drizzle ORM',
-    imagePath: '/images/tech-logos/placeholder.svg',
+    imagePath: '/images/tech-logos/drizzle-orm.svg',
     category: 'backend',
     url: 'https://orm.drizzle.team/'
   },
   {
     name: 'Neon',
-    imagePath: '/images/tech-logos/placeholder.svg',
+    imagePath: '/images/tech-logos/neon.svg',
     category: 'database',
     url: 'https://neon.tech/'
   },
@@ -341,27 +335,33 @@ export const technologies: Technology[] = [
   },
   {
     name: 'better-auth',
-    imagePath: '/images/tech-logos/placeholder.svg',
+    imagePath: '/images/tech-logos/better-auth.svg',
     category: 'backend',
     url: 'https://www.better-auth.com/'
   },
   {
     name: 'Bun',
-    imagePath: '/images/tech-logos/placeholder.svg',
+    imagePath: '/images/tech-logos/bun.svg',
     category: 'tools',
     url: 'https://bun.sh/'
   },
   {
     name: 'Paraglide',
-    imagePath: '/images/tech-logos/placeholder.svg',
+    imagePath: '/images/tech-logos/paraglide.jpg',
     category: 'tools',
     url: 'https://inlang.com/m/gerre34r/library-inlang-paraglideJs'
   },
   {
     name: 'shadcn/ui',
-    imagePath: '/images/tech-logos/placeholder.svg',
+    imagePath: '/images/tech-logos/shadcn-ui.svg',
     category: 'frontend',
     url: 'https://ui.shadcn.com/'
+  },
+  {
+    name: 'Lottie',
+    imagePath: '/images/tech-logos/lottie.svg',
+    category: 'frontend',
+    url: 'https://lottiefiles.com/'
   },
 ];
 
