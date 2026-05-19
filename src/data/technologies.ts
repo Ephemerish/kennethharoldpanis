@@ -308,6 +308,61 @@ export const technologies: Technology[] = [
     category: 'other',
     url: 'https://lora-alliance.org/'
   },
+  // Pundo stack (placeholder logos until real SVGs are dropped in)
+  {
+    name: 'SvelteKit',
+    imagePath: '/images/tech-logos/placeholder.svg',
+    category: 'frontend',
+    url: 'https://kit.svelte.dev/'
+  },
+  {
+    name: 'Svelte 5',
+    imagePath: '/images/tech-logos/placeholder.svg',
+    category: 'frontend',
+    url: 'https://svelte.dev/'
+  },
+  {
+    name: 'Drizzle ORM',
+    imagePath: '/images/tech-logos/placeholder.svg',
+    category: 'backend',
+    url: 'https://orm.drizzle.team/'
+  },
+  {
+    name: 'Neon',
+    imagePath: '/images/tech-logos/placeholder.svg',
+    category: 'database',
+    url: 'https://neon.tech/'
+  },
+  {
+    name: 'PostgreSQL',
+    imagePath: '/images/tech-logos/postgresql.svg',
+    category: 'database',
+    url: 'https://www.postgresql.org/'
+  },
+  {
+    name: 'better-auth',
+    imagePath: '/images/tech-logos/placeholder.svg',
+    category: 'backend',
+    url: 'https://www.better-auth.com/'
+  },
+  {
+    name: 'Bun',
+    imagePath: '/images/tech-logos/placeholder.svg',
+    category: 'tools',
+    url: 'https://bun.sh/'
+  },
+  {
+    name: 'Paraglide',
+    imagePath: '/images/tech-logos/placeholder.svg',
+    category: 'tools',
+    url: 'https://inlang.com/m/gerre34r/library-inlang-paraglideJs'
+  },
+  {
+    name: 'shadcn/ui',
+    imagePath: '/images/tech-logos/placeholder.svg',
+    category: 'frontend',
+    url: 'https://ui.shadcn.com/'
+  },
 ];
 
 // Helper functions

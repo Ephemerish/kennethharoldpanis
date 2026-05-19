@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import { XMarkIcon, ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
+import { XIcon as XMarkIcon, CaretLeftIcon as ChevronLeftIcon, CaretRightIcon as ChevronRightIcon } from "@phosphor-icons/react";
 
 interface GalleryProps {
   images: string[];

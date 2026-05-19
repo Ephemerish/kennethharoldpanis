@@ -1,6 +1,6 @@
 import type React from "react";
 import { useState } from "react";
-import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
+import { ListIcon as Bars3Icon, XIcon as XMarkIcon } from "@phosphor-icons/react";
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);

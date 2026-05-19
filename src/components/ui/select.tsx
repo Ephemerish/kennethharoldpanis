@@ -1,6 +1,6 @@
 import * as React from "react"
 import * as SelectPrimitive from "@radix-ui/react-select"
-import { ChevronDownIcon, ChevronUpIcon } from "@heroicons/react/24/outline"
+import { CaretDownIcon as ChevronDownIcon, CaretUpIcon as ChevronUpIcon } from "@phosphor-icons/react"
 
 import { cn } from "../../lib/utils"
 

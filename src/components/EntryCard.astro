@@ -1,0 +1,253 @@
+---
+/**
+ * EntryCard — the ONE card for blog posts and projects.
+ *
+ * `kind`     "blog" | "project"   — which collection the entry is from
+ * `variant`  "default" | "featured"
+ *              default  = grid card (used in listings/grids)
+ *              featured = full-width hero card (the lead/featured slot)
+ *
+ * One component so blog and project cards stay identical in structure and
+ * styling. Kind-specific bits (status vs read-time, description, links) are
+ * the only differences. Change the look here once and everything follows.
+ */
+import { formatDate, calculateReadTime } from "../utils";
+import type { CollectionEntry } from "astro:content";
+import Tags from "./Tags.astro";
+import { Image } from "astro:assets";
+import {
+  CalendarBlankIcon as CalendarIcon,
+  ClockIcon,
+  ArrowRightIcon,
+  ArrowSquareOutIcon as ArrowTopRightOnSquareIcon,
+  VideoCameraIcon,
+  GithubLogoIcon as GithubIcon,
+  StarIcon,
+  RocketLaunchIcon,
+  BookOpenIcon,
+  GlobeIcon as GlobeAltIcon,
+  DeviceMobileIcon as DevicePhoneMobileIcon,
+  WrenchIcon as WrenchScrewdriverIcon,
+  CpuIcon as CpuChipIcon,
+  PuzzlePieceIcon,
+  DesktopIcon as ComputerDesktopIcon,
+  StackIcon as CircleStackIcon,
+  FileTextIcon as DocumentTextIcon,
+  FlaskIcon as BeakerIcon,
+} from "@phosphor-icons/react";
+
+interface Props {
+  entry: CollectionEntry<"blog"> | CollectionEntry<"projects">;
+  kind: "blog" | "project";
+  variant?: "default" | "featured";
+}
+
+const { entry, kind, variant = "default" } = Astro.props;
+const isBlog = kind === "blog";
+
+const title = entry.data.title;
+const image = entry.data.image;
+const tags = entry.data.tags ?? [];
+const href = `${isBlog ? "/blogs" : "/projects"}/${entry.slug}`;
+
+const blog = isBlog ? (entry.data as CollectionEntry<"blog">["data"]) : null;
+const project = !isBlog ? (entry.data as CollectionEntry<"projects">["data"]) : null;
+const readTime = isBlog ? calculateReadTime(entry.body) : null;
+
+const statusText = {
+  completed: "Completed",
+  "in-progress": "In Progress",
+  planned: "Planned",
+};
+const statusClass = {
+  completed: "bg-success-100/95 text-success-800 border-success-200",
+  "in-progress": "bg-warning-100/95 text-warning-800 border-warning-200",
+  planned: "bg-neutral-100/95 text-neutral-700 border-neutral-200",
+};
+const categoryIcon = {
+  web: GlobeAltIcon,
+  mobile: DevicePhoneMobileIcon,
+  hardware: WrenchScrewdriverIcon,
+  iot: CircleStackIcon,
+  "ai-ml": CpuChipIcon,
+  game: PuzzlePieceIcon,
+  desktop: ComputerDesktopIcon,
+  thesis: DocumentTextIcon,
+  research: BeakerIcon,
+};
+
+const date = isBlog ? blog!.pubDate : project!.endDate ?? project!.startDate;
+const ctaLabel = isBlog ? "Read post" : "View project";
+const KindIcon = isBlog ? BookOpenIcon : RocketLaunchIcon;
+const kindLabel = isBlog ? "Latest post" : "Latest project";
+---
+
+{variant === "featured" ? (
+  <article class="relative w-full group cursor-pointer overflow-hidden shadow-elegant hover:shadow-floating transition-all duration-500">
+    <a href={href} class="block">
+      <div class="relative">
+        <Image
+          src={`/images/${image}`}
+          alt={title}
+          class="w-full h-[300px] sm:h-[400px] lg:h-[500px] object-cover group-hover:scale-[1.03] transition-transform duration-700"
+          width={800}
+          height={600}
+          loading="eager"
+        />
+        <div class="absolute inset-0 bg-gradient-to-t from-neutral-900/85 via-neutral-900/35 to-transparent"></div>
+
+        {/* Featured + status badges */}
+        <div class="absolute top-4 left-4 sm:top-6 sm:left-6 flex items-center gap-1.5 bg-brand-600 text-neutral-0 px-3 py-1.5 sm:px-4 sm:py-2 text-xs sm:text-sm font-semibold shadow-lg">
+          <StarIcon className="w-4 h-4" weight="fill" />
+          Featured
+        </div>
+        {project && (
+          <div class={`absolute top-4 right-4 sm:top-6 sm:right-6 px-3 py-1.5 sm:px-4 sm:py-2 text-xs sm:text-sm font-semibold border shadow-lg ${statusClass[project.status]}`}>
+            {statusText[project.status]}
+          </div>
+        )}
+
+        <div class="absolute inset-0 flex flex-col justify-end p-5 sm:p-8 lg:p-10 text-neutral-0">
+          <div class="max-w-4xl">
+            <span class="inline-flex items-center gap-1.5 px-3 py-1 mb-4 text-xs font-medium bg-white/20 backdrop-blur-sm">
+              <KindIcon className="w-4 h-4" />
+              {kindLabel}
+            </span>
+
+            <h2 class="text-2xl sm:text-3xl lg:text-4xl font-bold mb-3 sm:mb-4 leading-tight group-hover:text-neutral-200 transition-colors duration-300">
+              {title}
+            </h2>
+
+            <div class="flex flex-wrap items-center gap-x-4 gap-y-2 mb-4 sm:mb-5 text-neutral-200 text-sm">
+              <time class="flex items-center gap-1.5">
+                <CalendarIcon className="w-4 h-4" />
+                {formatDate(date)}
+              </time>
+              {readTime && (
+                <span class="flex items-center gap-1.5">
+                  <ClockIcon className="w-4 h-4" />
+                  {readTime}
+                </span>
+              )}
+              {project?.institution && (
+                <span class="hidden sm:inline">{project.institution}</span>
+              )}
+            </div>
+
+            {project?.description && (
+              <p class="hidden sm:block text-base lg:text-lg text-neutral-100 mb-5 leading-relaxed max-w-3xl line-clamp-2">
+                {project.description}
+              </p>
+            )}
+
+            <div class="flex flex-wrap gap-2 mb-5">
+              {tags.slice(0, 4).map((tag) => (
+                <span class="px-3 py-1 bg-white/20 backdrop-blur-sm text-sm font-medium">
+                  {tag}
+                </span>
+              ))}
+              {tags.length > 4 && (
+                <span class="px-3 py-1 bg-white/20 backdrop-blur-sm text-sm font-medium">
+                  +{tags.length - 4} more
+                </span>
+              )}
+            </div>
+
+            <div class="flex items-center text-sm sm:text-base font-semibold">
+              <span>{ctaLabel}</span>
+              <ArrowRightIcon className="w-5 h-5 ml-2 group-hover:translate-x-1.5 transition-transform duration-300" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </a>
+  </article>
+) : (
+  <article class="group bg-card-gradient overflow-hidden shadow-elegant border border-neutral-200/50 hover:shadow-floating hover:bg-neutral-0 hover:border-brand-300/60 cursor-pointer transition-all duration-500 ease-out hover-lift h-full flex flex-col">
+    <a href={href} class="block flex-1 flex flex-col">
+      <div class="relative aspect-video overflow-hidden">
+        <div class="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-neutral-900/20 z-10"></div>
+        <Image
+          src={`/images/${image}`}
+          alt={title}
+          class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+          width={400}
+          height={225}
+        />
+
+        {readTime && (
+          <div class="absolute top-4 right-4 bg-neutral-0/95 backdrop-blur-md px-3 py-1.5 text-xs font-semibold text-neutral-700 border border-neutral-200/50 shadow-sm z-20 flex items-center gap-1.5">
+            <ClockIcon className="w-3.5 h-3.5" />
+            {readTime}
+          </div>
+        )}
+
+        {project && (
+          <div class={`absolute top-4 right-4 px-3 py-1.5 text-xs font-semibold border shadow-sm z-20 ${statusClass[project.status]}`}>
+            {statusText[project.status]}
+          </div>
+        )}
+
+        {project && categoryIcon[project.category] && (
+          <div class="absolute top-4 left-4 bg-brand-500/90 backdrop-blur-md p-1.5 text-neutral-0 z-20">
+            {(() => {
+              const C = categoryIcon[project.category];
+              return <C className="w-4 h-4" />;
+            })()}
+          </div>
+        )}
+      </div>
+
+      <div class="p-6 sm:p-8 flex-1 flex flex-col">
+        <h2 class="text-xl sm:text-2xl font-bold text-neutral-900 mb-3 line-clamp-2 group-hover:text-brand-700 transition-colors duration-300 leading-tight">
+          {title}
+        </h2>
+
+        <div class="flex items-center gap-1.5 text-sm text-neutral-500 mb-4">
+          <CalendarIcon className="w-4 h-4" />
+          <time>{formatDate(date)}</time>
+        </div>
+
+        {project?.description && (
+          <p class="text-neutral-600 text-sm mb-4 line-clamp-3">
+            {project.description}
+          </p>
+        )}
+
+        {project && (project.demoUrl || project.videoUrl || project.githubUrl) && (
+          <div class="flex gap-3 mb-4 text-sm">
+            {project.demoUrl && (
+              <a href={project.demoUrl} target="_blank" rel="noopener noreferrer" class="text-brand-600 hover:text-brand-700 font-medium flex items-center gap-1" onclick="event.stopPropagation()">
+                <ArrowTopRightOnSquareIcon className="w-3.5 h-3.5" />
+                Demo
+              </a>
+            )}
+            {project.videoUrl && (
+              <a href={project.videoUrl} target="_blank" rel="noopener noreferrer" class="text-brand-600 hover:text-brand-700 font-medium flex items-center gap-1" onclick="event.stopPropagation()">
+                <VideoCameraIcon className="w-3.5 h-3.5" />
+                Video
+              </a>
+            )}
+            {project.githubUrl && (
+              <a href={project.githubUrl} target="_blank" rel="noopener noreferrer" class="text-neutral-600 hover:text-neutral-800 font-medium flex items-center gap-1" onclick="event.stopPropagation()">
+                <GithubIcon className="w-3.5 h-3.5" />
+                Code
+              </a>
+            )}
+          </div>
+        )}
+
+        <div class="mb-4">
+          <Tags tags={tags} />
+        </div>
+
+        <div class="flex-1"></div>
+
+        <div class="flex items-center text-neutral-900 text-sm font-medium pt-3 border-t border-neutral-100 group-hover:text-brand-700 transition-colors duration-300 mt-auto">
+          <span>{ctaLabel}</span>
+          <ArrowRightIcon className="w-4 h-4 ml-1.5 group-hover:translate-x-1 transition-transform duration-300" />
+        </div>
+      </div>
+    </a>
+  </article>
+)}

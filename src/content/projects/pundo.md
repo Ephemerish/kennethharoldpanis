@@ -4,7 +4,7 @@ description: "A personal finance tracker built for Filipinos who want clarity ov
 image: "pundo/01-hero.png"
 gallery: ["pundo/02-first-transaction.png", "pundo/04-budget-plan.png", "pundo/05-before-after.png", "pundo/07-roadmap.png"]
 tags: ["Personal Finance", "Budgeting", "50/30/20", "SvelteKit", "Beta", "Side Project", "Web App", "Fintech"]
-technologies: ["SvelteKit", "TypeScript", "Tailwind CSS", "Drizzle", "PostgreSQL", "Docker"]
+technologies: ["SvelteKit", "Svelte 5", "TypeScript", "Tailwind CSS", "Drizzle ORM", "Neon", "PostgreSQL", "better-auth", "Bun", "Docker", "Cloud Run", "Paraglide", "shadcn/ui"]
 category: "web"
 demoUrl: ""
 videoUrl: ""
