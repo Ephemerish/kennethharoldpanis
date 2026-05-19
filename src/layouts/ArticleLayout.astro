@@ -10,7 +10,7 @@
  */
 import MainLayout from "./MainLayout.astro";
 import Prose from "../components/Prose.astro";
-import { Image } from "astro:assets";
+import ContentImageViewer from "../components/ContentImageViewer.tsx";
 import { formatDate } from "../utils";
 import { CalendarBlankIcon as CalendarIcon, ClockIcon } from "@phosphor-icons/react";
 
@@ -109,12 +109,11 @@ const hasAppendix = Astro.slots.has("appendix");
             {/* Hero image */}
             {heroImage && (
               <div class="mb-8">
-                <Image
+                <img
+                  id="article-hero"
                   src={`/images/${heroImage}`}
                   alt={title}
-                  class="w-full h-64 md:h-96 object-cover shadow-lg"
-                  width={800}
-                  height={400}
+                  class="w-full h-auto shadow-lg"
                   loading="eager"
                 />
               </div>
@@ -153,5 +152,8 @@ const hasAppendix = Astro.slots.has("appendix");
         </article>
       </div>
     </div>
+
+    {/* Wires the hero + every markdown image to the zoomable viewer */}
+    <ContentImageViewer client:idle />
   </section>
 </MainLayout>
