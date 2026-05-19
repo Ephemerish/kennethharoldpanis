@@ -8,7 +8,6 @@ import { TechCarousel } from "../components/TechCarousel";
 import ButtonLink from "../components/ButtonLink.astro";
 import { ArrowRightIcon } from "@heroicons/react/24/outline";
 import { HOMEPAGE_BLOG_LIMIT, HOMEPAGE_PROJECTS_LIMIT } from "../constants";
-import { categorizeTags, getAllTagsFromContent } from "../utils/tagCategorizer";
 
 import { getCollection } from "astro:content";
 import type { CollectionEntry } from "astro:content";
@@ -39,9 +38,6 @@ const otherBlogs: CollectionEntry<"blog">[] = allBlogs.slice(1);
 const featuredProject = allProjects[0]; // Get the first (most recent/featured) project
 const otherProjects = allProjects.slice(1); // Get any additional projects
 
-// Generate dynamic skill categories from project and blog tags
-const allTags = getAllTagsFromContent(allProjects, allBlogs);
-const skillCategories = categorizeTags(allTags);
 ---
 
 <Layout 

@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 import sharp from 'sharp';
-import { readdir, stat, mkdir } from 'fs/promises';
+import { readdir, stat } from 'fs/promises';
 import { join, extname, basename, dirname } from 'path';
 import { fileURLToPath } from 'url';
 
@@ -24,14 +24,6 @@ const CONFIG = {
   // Supported extensions
   supportedExts: ['.jpg', '.jpeg', '.png', '.webp']
 };
-
-async function ensureDir(dirPath) {
-  try {
-    await mkdir(dirPath, { recursive: true });
-  } catch (error) {
-    if (error.code !== 'EEXIST') throw error;
-  }
-}
 
 async function getImageFiles(dir) {
   const files = [];
@@ -64,8 +56,7 @@ async function getImageFiles(dir) {
 async function optimizeImage(inputPath) {
   try {
     const ext = extname(inputPath).toLowerCase();
-    const filename = basename(inputPath, ext);
-    
+
     // Create a temporary file path
     const tempPath = inputPath + '.tmp';
     

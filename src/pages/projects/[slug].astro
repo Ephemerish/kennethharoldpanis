@@ -1,7 +1,6 @@
 ---
 import { getCollection } from "astro:content";
 import Layout from "../../layouts/MainLayout.astro";
-import Tags from "../../components/Tags.astro";
 import type { CollectionEntry } from "astro:content";
 import { Image } from 'astro:assets';
 import { getTechByName } from "../../data/technologies";
@@ -16,11 +15,7 @@ import {
   UsersIcon,
   BuildingOfficeIcon,
   UserIcon,
-  LightBulbIcon,
-  EyeSlashIcon,
-  EyeIcon,
-  ChevronDownIcon,
-  ChevronRightIcon
+  LightBulbIcon
 } from "@heroicons/react/24/outline";
 
 export const prerender = true;
@@ -378,6 +373,9 @@ const formatDate = (date: Date) => {
       [&>:not(pre)>code]:bg-brand-100 [&>:not(pre)>code]:px-1.5 [&>:not(pre)>code]:sm:px-2 [&>:not(pre)>code]:py-0.5 [&>:not(pre)>code]:text-xs [&>:not(pre)>code]:sm:text-sm [&>:not(pre)>code]:font-mono [&>:not(pre)>code]:text-brand-800
       [&>a]:text-brand-600 [&>a]:underline [&>a]:decoration-brand-300 [&>a]:underline-offset-4 [&>a]:transition-colors [&>a:hover]:decoration-brand-600
       [&>img]:my-4 [&>img]:sm:my-6 [&>img]:border [&>img]:border-neutral-100
+      [&>figure]:my-6 [&>figure]:sm:my-8
+      [&>figure>img]:w-full [&>figure>img]:border [&>figure>img]:border-neutral-200 [&>figure>img]:shadow-sm
+      [&>figure>figcaption]:mt-2 [&>figure>figcaption]:sm:mt-3 [&>figure>figcaption]:text-xs [&>figure>figcaption]:sm:text-sm [&>figure>figcaption]:text-neutral-500 [&>figure>figcaption]:text-center [&>figure>figcaption]:not-italic [&>figure>figcaption]:leading-5
       [&>hr]:border-0 [&>hr]:h-px [&>hr]:bg-neutral-200 [&>hr]:my-6 [&>hr]:sm:my-8
       first:*:mt-0
     " id="project-content">
@@ -493,7 +491,7 @@ const formatDate = (date: Date) => {
               // Store original styles and add data attributes for tracking
               header.setAttribute('data-collapsible', 'true');
               
-              contentElements.forEach((el, index) => {
+              contentElements.forEach((el) => {
                 el.setAttribute('data-section-content', header.tagName.toLowerCase() + '-' + Array.from(article.children).indexOf(header));
                 el.setAttribute('data-original-display', window.getComputedStyle(el).display);
               });

@@ -27,8 +27,6 @@ const allProjects: CollectionEntry<"projects">[] = (
 // Get featured projects
 const featuredProjects = allProjects.filter(project => project.data.featured);
 const regularProjects = allProjects.filter(project => !project.data.featured);
-
-const pageTitle = "Projects";
 ---
 
 <Layout 

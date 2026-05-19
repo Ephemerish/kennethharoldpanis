@@ -39,7 +39,6 @@ const slug = item.slug;
 // Blog-specific data
 const readTime = isBlog ? calculateReadTime(item.body) : null;
 const pubDate = isBlog ? (item.data as CollectionEntry<"blog">["data"]).pubDate : null;
-const author = isBlog ? (item.data as CollectionEntry<"blog">["data"]).author : null;
 
 // Project-specific data
 const description = isProject ? (item.data as CollectionEntry<"projects">["data"]).description : null;
@@ -50,12 +49,6 @@ const videoUrl = isProject ? (item.data as CollectionEntry<"projects">["data"]).
 const githubUrl = isProject ? (item.data as CollectionEntry<"projects">["data"]).githubUrl : null;
 
 // Project status and category configurations
-const statusColors = {
-  completed: "bg-success-200 text-success-800",
-  "in-progress": "bg-warning-200 text-warning-800", 
-  planned: "bg-neutral-200 text-neutral-700"
-};
-
 const statusText = {
   completed: "Completed",
   "in-progress": "In Progress",

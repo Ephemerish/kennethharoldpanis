@@ -9,13 +9,13 @@
         let visitorId = localStorage.getItem('visitor_id');
         if (!visitorId) {
           // Generate a simple unique ID
-          visitorId = 'v_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+          visitorId = 'v_' + Date.now() + '_' + Math.random().toString(36).slice(2, 11);
           localStorage.setItem('visitor_id', visitorId);
         }
         return visitorId;
       } catch (e) {
         // Fallback if localStorage is not available
-        return 'session_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+        return 'session_' + Date.now() + '_' + Math.random().toString(36).slice(2, 11);
       }
     };
 
@@ -24,7 +24,7 @@
       try {
         let sessionId = sessionStorage.getItem('session_id');
         if (!sessionId) {
-          sessionId = 's_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+          sessionId = 's_' + Date.now() + '_' + Math.random().toString(36).slice(2, 11);
           sessionStorage.setItem('session_id', sessionId);
         }
         return sessionId;
