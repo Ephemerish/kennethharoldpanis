@@ -1,6 +1,6 @@
 ---
 title: "Pundo"
-description: "A personal finance tracker built for Filipinos who want clarity over their money without the complexity other apps pile on. It uses the 50/30/20 rule as a starting point while leaving you in control of every peso. This is the story of why I built it, how it grew from a one-person weekend project into a closed beta, and where it is headed."
+description: "A personal budgeting app for Filipinos who want clarity over their money without the complexity other apps pile on. You record income, expenses, and transfers, set monthly budgets, and track your spending over time, with the data staying yours. This is the story of why I built it, how it grew from a one-person weekend project into a closed beta, and where it is headed."
 image: "pundo/01-hero.png"
 gallery: ["pundo/02-first-transaction.png", "pundo/04-budget-plan.png", "pundo/05-before-after.png", "pundo/07-roadmap.png"]
 tags: ["Personal Finance", "Budgeting", "50/30/20", "Svelte 5", "Beta", "Side Project", "Web App", "Fintech"]
@@ -13,8 +13,8 @@ featured: true
 status: "in-progress"
 startDate: 2025-03-22
 keyFeatures:
-  - "50/30/20 needs, wants, and savings budgeting with full per-peso control"
-  - "Accounts, parent and child categories, and transactions with add, edit, delete"
+  - "Monthly budgets with full per-peso control, with an optional 50/30/20 needs, wants, and savings split"
+  - "Income, expense, and transfer transactions across multiple accounts and parent and child categories"
   - "Transfer transactions with fees and proper savings transfer rules"
   - "Money Manager import with a preview screen before anything is committed"
   - "Privacy mode that masks every amount on screen with one toggle"
@@ -33,7 +33,7 @@ team: ["Kenneth Harold Panis"]
 
 A small app for thinking about money clearly, or at least trying to.
 
-![The Pundo dashboard right after login, showing the 50/30/20 overview for a month that looks lived in.](/images/pundo/01-hero.png)
+![The dashboard, mid-month and lived in.](/images/pundo/01-hero.png)
 
 ## Why I built it
 
@@ -45,13 +45,13 @@ So in March I decided to stop hunting and just build the thing I wished existed,
 
 The first time I added a real transaction in my own app and watched it land in the table I had built that same morning, something clicked in a way that is honestly hard to explain, because suddenly I was excited to open the app, excited to record, excited to look at the numbers at the end of the day, not because I had to but because I wanted to see what the day looked like, and any time something felt off I could just go fix it right then, and that feeling is most of what kept this whole project moving.
 
-![Recording a transaction, the everyday action the whole app is built around.](/images/pundo/02-first-transaction.png)
+![Recording a transaction, the everyday action.](/images/pundo/02-first-transaction.png)
 
 ## A second pair of eyes
 
 About a month in I asked my girlfriend to try it, and she had been a Money Manager person for years so honestly I figured she would humor me for a few days and then quietly switch back, but instead she stayed, moved her records across, and started using Pundo as her main app, which changed pretty much everything about how the project felt from that point onward.
 
-![Two people in this story, not just one: both of us actually using Pundo day to day.](/images/pundo/03-two-of-us.png)
+![Two people using it day to day, not one.](/images/pundo/03-two-of-us.png)
 
 Suddenly there were two people opening it every day, and her feedback hit completely different from my own, because the things I had stopped seeing thanks to having built them she would notice immediately, the things she liked I now had a real reason to make better, the loop got shorter, the questions got sharper, and development sped up in a way that would have been impossible if I were the only one looking at it.
 
@@ -59,17 +59,19 @@ She was the one who suggested the closed beta, and her thinking was simple, that
 
 ## What Pundo is, basically
 
-Pundo is a personal finance tracker built for Filipinos who want clarity over their money without all the complexity that other apps tend to pile on, and it uses the 50/30/20 rule of needs, wants, and savings as a starting point while leaving you in control of how every single peso gets allocated each month.
+Pundo is a personal budgeting app, the kind you open to record an income, an expense, or a transfer, set a monthly budget against, and watch your spending take shape over time, and the data you put into it belongs to you and nobody else, because Pundo is a tool you use to think about your own money, not a financial service sitting between you and it.
+
+Pundo does not give financial advice, it does not offer credit or banking or anything that lives under that regulated umbrella, and nothing on any screen in the app should be read as professional guidance, because the whole point is that the person looking at the numbers is you, and Pundo is just the quiet thing helping you see them clearly.
 
 Simple and easy is what I am building toward, and I want to be honest that Pundo is not there yet, since there is still clutter on certain screens and parts of the app that take more thinking than they should, but the picture in my head is for it to feel less like a dashboard fighting for your attention and more like a notebook that quietly does the math for you while you think, and most of what ships from one version to the next is really just slowly closing the gap between where Pundo is now and that picture.
 
-![The budget planning screen where the 50/30/20 split lives, with money allocated into needs, wants, and savings.](/images/pundo/04-budget-plan.png)
+![The monthly budget screen, with 50/30/20 as a starting split.](/images/pundo/04-budget-plan.png)
 
 ## A history map
 
 The repository tells most of the story in dates, and here is the rough shape of it, pulled straight from the commits.
 
-![Before and after: the roughest early March version next to the same screen today.](/images/pundo/05-before-after.png)
+![Early March, next to the same screen today.](/images/pundo/05-before-after.png)
 
 ### Foundations (March 22 to early April)
 
@@ -97,7 +99,7 @@ That is roughly seven weeks from the very first commit to where Pundo sits now.
 
 I did not pick any of this to look impressive on a resume, I picked it because each piece either kept the project shippable as a one-person thing, or made the app feel quicker to use than the apps I had already given up on, or moved a whole category of bugs from "you find them in production" down to "the compiler tells you before you commit," and the best pieces did all three at once.
 
-![A plain architecture sketch: browser to Svelte 5 to Drizzle and Neon Postgres, with better-auth alongside, running in Docker on Cloud Run.](/images/pundo/06-architecture.png)
+![Architecture sketch: Svelte 5, Drizzle, Neon, better-auth, Docker, Cloud Run.](/images/pundo/06-architecture.png)
 
 | Choice | Why |
 | ------ | --- |
@@ -129,7 +131,7 @@ If the closed beta tells us that Pundo has merit beyond the two of us, the next 
 
 That is the direction we want to go, and whether we actually get there depends on what the next few people who try Pundo end up telling us.
 
-![The in-app roadmap page with the release filter, where the offline-first and open-source plans are tracked.](/images/pundo/07-roadmap.png)
+![The in-app roadmap, where offline-first and open-source are tracked.](/images/pundo/07-roadmap.png)
 
 ## An invitation
 
@@ -141,6 +143,6 @@ The most useful thing you can give us is honest feedback, whether that is what c
 
 If it ends up working for you the way it has worked for the two of us, you might catch yourself getting a little excited to record a transaction at the end of the day, and that small bit of excitement is the whole feeling we are trying to share with this thing. And if Pundo grows past the two of us, we promise to keep it the way it started, calm and honest and built for the person looking at the numbers, not for anyone else.
 
-![The first screen a new tester sees: the welcome step of onboarding, nothing filled in yet.](/images/pundo/08-welcome.png)
+![Onboarding, the first screen a new tester sees.](/images/pundo/08-welcome.png)
 
 Thanks for trying it, and welcome to Pundo.
