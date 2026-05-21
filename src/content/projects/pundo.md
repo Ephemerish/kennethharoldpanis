@@ -6,7 +6,7 @@ gallery: ["pundo/02-first-transaction.png", "pundo/04-budget-plan.png", "pundo/0
 tags: ["Personal Finance", "Budgeting", "50/30/20", "Svelte 5", "Beta", "Side Project", "Web App", "Fintech"]
 technologies: ["Svelte 5", "TypeScript", "Tailwind CSS", "Drizzle ORM", "Neon", "PostgreSQL", "better-auth", "pnpm", "Vite", "Docker", "Cloud Run", "Paraglide", "shadcn", "Lottie"]
 category: "web"
-demoUrl: ""
+demoUrl: "https://pundo.kennethharoldpanis.com/"
 videoUrl: ""
 githubUrl: ""
 featured: true
@@ -157,3 +157,5 @@ If it ends up working for you the way it has worked for the two of us, you might
 ![Onboarding, the first screen a new tester sees.](/images/pundo/08-welcome.png)
 
 Thanks for trying it, and welcome to Pundo.
+
+You can try it live at [pundo.kennethharoldpanis.com](https://pundo.kennethharoldpanis.com/).

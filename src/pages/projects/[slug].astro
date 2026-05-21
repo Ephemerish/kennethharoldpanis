@@ -51,10 +51,14 @@ const galleryImages = (d.gallery ?? []).map((img) => `/images/${img}`);
       href={d.demoUrl}
       target="_blank"
       rel="noopener noreferrer"
-      class="bg-brand-gradient text-neutral-0 px-6 py-3 hover:shadow-brand transition-all font-medium inline-flex items-center"
+      class="group/live bg-brand-gradient text-neutral-0 px-6 py-3 hover:shadow-brand hover:-translate-y-0.5 transition-all duration-300 font-semibold flex w-full justify-center items-center gap-2.5"
     >
-      <ArrowTopRightOnSquareIcon className="w-4 h-4 mr-2" />
-      Live Demo
+      <span class="relative flex h-2.5 w-2.5" aria-hidden="true">
+        <span class="absolute inline-flex h-full w-full bg-neutral-0 opacity-75 animate-ping"></span>
+        <span class="relative inline-flex h-2.5 w-2.5 bg-neutral-0"></span>
+      </span>
+      Visit Live Site
+      <ArrowTopRightOnSquareIcon className="w-4 h-4 opacity-80 transition-transform duration-300 group-hover/live:translate-x-0.5 group-hover/live:-translate-y-0.5" />
     </a>
   )}
   {d.videoUrl && (
