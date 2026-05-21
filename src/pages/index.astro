@@ -1,14 +1,11 @@
 ---
 import Layout from "../layouts/MainLayout.astro";
 import { HomeHeader } from "../components/HomeHeader";
-import Card from "../components/Card.astro";
-import MostRecentBlog from "../components/MostRecentBlog.astro";
-import FeaturedProject from "../components/FeaturedProject.astro";
+import EntryCard from "../components/EntryCard.astro";
 import { TechCarousel } from "../components/TechCarousel";
 import ButtonLink from "../components/ButtonLink.astro";
-import { ArrowRightIcon } from "@heroicons/react/24/outline";
+import { ArrowRightIcon } from "@phosphor-icons/react";
 import { HOMEPAGE_BLOG_LIMIT, HOMEPAGE_PROJECTS_LIMIT } from "../constants";
-import { categorizeTags, getAllTagsFromContent } from "../utils/tagCategorizer";
 
 import { getCollection } from "astro:content";
 import type { CollectionEntry } from "astro:content";
@@ -39,9 +36,6 @@ const otherBlogs: CollectionEntry<"blog">[] = allBlogs.slice(1);
 const featuredProject = allProjects[0]; // Get the first (most recent/featured) project
 const otherProjects = allProjects.slice(1); // Get any additional projects
 
-// Generate dynamic skill categories from project and blog tags
-const allTags = getAllTagsFromContent(allProjects, allBlogs);
-const skillCategories = categorizeTags(allTags);
 ---
 
 <Layout 
@@ -101,9 +95,7 @@ const skillCategories = categorizeTags(allTags);
       <!-- Featured Project with Enhanced Styling -->
       {featuredProject && (
         <div class="mb-12 sm:mb-16 animate-fade-in">
-          <div class="bg-card-gradient p-6 sm:p-8 shadow-elegant hover-lift border border-neutral-200/50">
-            <FeaturedProject project={featuredProject} />
-          </div>
+          <EntryCard entry={featuredProject} kind="project" variant="featured" />
         </div>
       )}
       
@@ -114,7 +106,7 @@ const skillCategories = categorizeTags(allTags);
             .slice(0, HOMEPAGE_PROJECTS_LIMIT - 1)
             .map((project: CollectionEntry<"projects">) => (
               <div class="hover-lift animate-fade-in">
-                <Card item={project} type="project" />
+                <EntryCard entry={project} kind="project" />
               </div>
             ))
           }
@@ -156,9 +148,7 @@ const skillCategories = categorizeTags(allTags);
       
       <!-- Featured Blog Post with Enhanced Styling -->
       <div class="mb-12 sm:mb-16 animate-fade-in">
-        <div class="bg-card-gradient p-6 sm:p-8 shadow-elegant hover-lift">
-          <MostRecentBlog blog={mostRecentBlog} />
-        </div>
+        <EntryCard entry={mostRecentBlog} kind="blog" variant="featured" />
       </div>
       
       <!-- Other Blog Posts Grid with Enhanced Cards -->
@@ -167,7 +157,7 @@ const skillCategories = categorizeTags(allTags);
           .slice(0, HOMEPAGE_BLOG_LIMIT)
           .map((blog) => (
             <div class="hover-lift animate-fade-in">
-              <Card item={blog} type="blog" />
+              <EntryCard entry={blog} kind="blog" />
             </div>
           ))
         }

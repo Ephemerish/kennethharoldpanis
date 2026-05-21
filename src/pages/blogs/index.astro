@@ -1,8 +1,8 @@
 ---
 import MainLayout from "../../layouts/MainLayout.astro";
-import Card from "../../components/Card.astro";
+import EntryCard from "../../components/EntryCard.astro";
 import Pagination from "../../components/Pagination.astro";
-import { DocumentTextIcon } from "@heroicons/react/24/outline";
+import { FileTextIcon as DocumentTextIcon } from "@phosphor-icons/react";
 import { getCollection } from "astro:content";
 import type { CollectionEntry } from "astro:content";
 import { BLOGS_PER_PAGE } from "../../constants";
@@ -43,7 +43,7 @@ const blogsForPage: CollectionEntry<"blog">[] = allBlogs.slice(
       <!-- Header Section with Enhanced Design -->
       <div class="text-center mb-16 sm:mb-20 animate-fade-in">
         <h1 class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-6">
-          <span class="text-neutral-900">My</span> <span class="text-brand-gradient">Blog</span>
+          <span class="text-neutral-900">My</span> <span class="text-brand-gradient">Blogs</span>
         </h1>
         <p class="text-xl sm:text-2xl text-neutral-700 max-w-4xl mx-auto leading-relaxed px-2 mb-8">
           Thoughts, tutorials, and insights from my journey in technology and development.
@@ -55,7 +55,7 @@ const blogsForPage: CollectionEntry<"blog">[] = allBlogs.slice(
       <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-8 sm:gap-10">
         {blogsForPage.map((blog, index) => (
           <div class="hover-lift animate-fade-in h-full" style={`animation-delay: ${index * 0.1}s`}>
-            <Card item={blog} type="blog" />
+            <EntryCard entry={blog} kind="blog" />
           </div>
         ))}
       </div>

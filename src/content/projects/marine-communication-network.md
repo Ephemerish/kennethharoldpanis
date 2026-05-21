@@ -9,7 +9,7 @@ category: "iot"
 demoUrl: ""
 videoUrl: ""
 githubUrl: ""
-featured: true
+featured: false
 status: "completed"
 startDate: 2023-09-01
 endDate: 2024-05-01

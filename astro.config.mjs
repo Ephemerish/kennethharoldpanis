@@ -9,6 +9,8 @@ import react from "@astrojs/react";
 
 import node from "@astrojs/node";
 
+import rehypeFigure from "./src/lib/rehype-figure.mjs";
+
 // https://astro.build/config
 export default defineConfig({
   site: 'https://kennethharoldpanis.com',
@@ -23,8 +25,26 @@ export default defineConfig({
     ],
   },
 
+  markdown: {
+    rehypePlugins: [rehypeFigure],
+  },
+
   vite: {
     plugins: [tailwindcss()],
+    ssr: {
+      // Bundle Supabase so the alias below is applied to the server build.
+      noExternal: ["@supabase/supabase-js"],
+    },
+    resolve: {
+      alias: {
+        // Supabase's ESM entry (dist/esm/wrapper.mjs) re-imports its
+        // CommonJS build (dist/main/index.js). Bundled into Astro's ESM
+        // server output that CJS file throws "exports is not defined".
+        // dist/module/index.js is the pure-ESM build, so pin to it.
+        "@supabase/supabase-js":
+          "@supabase/supabase-js/dist/module/index.js",
+      },
+    },
   },
 
   integrations: [mdx(), react()],

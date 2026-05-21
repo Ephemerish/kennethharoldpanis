@@ -1,10 +1,7 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Button } from "./button";
-import {
-  EnvelopeIcon,
-  DocumentTextIcon,
-} from "@heroicons/react/24/outline";
+import { EnvelopeIcon, FileTextIcon as DocumentTextIcon } from "@phosphor-icons/react";
 import {
   Tooltip,
   TooltipContent,

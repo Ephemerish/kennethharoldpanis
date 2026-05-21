@@ -19,6 +19,10 @@ const projectCollection = defineCollection({
     gallery: z.array(z.string()).optional(),
     tags: z.array(z.string()),
     category: z.enum(["web", "mobile", "hardware", "iot", "ai-ml", "game", "desktop", "thesis", "research"]),
+    // "Built with" is rendered in two parts in the Overview card:
+    //   technologies -> "Technology" (shown as logo chips via getTechByName)
+    //   materials    -> "Materials & tools" (shown as plain chips)
+    // Use technologies for software/stack; materials for hardware/tools.
     technologies: z.array(z.string()).optional(),
     demoUrl: z.string().optional(),
     videoUrl: z.string().optional(),

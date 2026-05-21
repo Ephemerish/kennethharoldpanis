@@ -308,6 +308,61 @@ export const technologies: Technology[] = [
     category: 'other',
     url: 'https://lora-alliance.org/'
   },
+  // Pundo stack
+  {
+    name: 'Svelte 5',
+    imagePath: '/images/tech-logos/svelte.svg',
+    category: 'frontend',
+    url: 'https://svelte.dev/'
+  },
+  {
+    name: 'Drizzle ORM',
+    imagePath: '/images/tech-logos/drizzle-orm.svg',
+    category: 'backend',
+    url: 'https://orm.drizzle.team/'
+  },
+  {
+    name: 'Neon',
+    imagePath: '/images/tech-logos/neon.svg',
+    category: 'database',
+    url: 'https://neon.tech/'
+  },
+  {
+    name: 'PostgreSQL',
+    imagePath: '/images/tech-logos/postgresql.svg',
+    category: 'database',
+    url: 'https://www.postgresql.org/'
+  },
+  {
+    name: 'better-auth',
+    imagePath: '/images/tech-logos/better-auth.svg',
+    category: 'backend',
+    url: 'https://www.better-auth.com/'
+  },
+  {
+    name: 'Bun',
+    imagePath: '/images/tech-logos/bun.svg',
+    category: 'tools',
+    url: 'https://bun.sh/'
+  },
+  {
+    name: 'Paraglide',
+    imagePath: '/images/tech-logos/paraglide.jpg',
+    category: 'tools',
+    url: 'https://inlang.com/m/gerre34r/library-inlang-paraglideJs'
+  },
+  {
+    name: 'shadcn',
+    imagePath: '/images/tech-logos/shadcn-ui.svg',
+    category: 'frontend',
+    url: 'https://ui.shadcn.com/'
+  },
+  {
+    name: 'Lottie',
+    imagePath: '/images/tech-logos/lottie.svg',
+    category: 'frontend',
+    url: 'https://lottiefiles.com/'
+  },
 ];
 
 // Helper functions

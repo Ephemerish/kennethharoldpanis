@@ -1,0 +1,292 @@
+---
+/**
+ * Prose — the single rendering engine for long-form markdown content.
+ *
+ * Both blog posts and projects render their `<Content />` through this
+ * component, so the article typography, figure/caption styling, table
+ * enhancement and collapsible-section behaviour are defined exactly once.
+ * Change it here and every blog and project updates together.
+ *
+ * Usage:
+ *   <Prose><Content /></Prose>
+ */
+---
+
+<article
+  id="article-content"
+  class="
+    text-neutral-700 text-sm sm:text-base lg:text-lg leading-6 sm:leading-7 lg:leading-8 font-light
+    [&>h1]:text-xl [&>h1]:sm:text-2xl [&>h1]:font-medium [&>h1]:text-neutral-900 [&>h1]:mt-6 [&>h1]:sm:mt-8 [&>h1]:mb-3 [&>h1]:sm:mb-4 [&>h1]:tracking-tight [&>h1]:pb-2 [&>h1]:border-b [&>h1]:border-neutral-100
+    [&>h2]:text-lg [&>h2]:sm:text-xl [&>h2]:font-semibold [&>h2]:text-neutral-900 [&>h2]:mt-6 [&>h2]:sm:mt-8 [&>h2]:mb-3 [&>h2]:sm:mb-4 [&>h2]:tracking-tight [&>h2]:pb-2 [&>h2]:border-b-2 [&>h2]:border-brand-500
+    [&>h3]:text-base [&>h3]:sm:text-lg [&>h3]:font-medium [&>h3]:text-neutral-900 [&>h3]:mt-5 [&>h3]:sm:mt-6 [&>h3]:mb-2 [&>h3]:sm:mb-3 [&>h3]:tracking-tight [&>h3]:pb-1.5 [&>h3]:border-b [&>h3]:border-brand-300
+    [&>h4]:text-sm [&>h4]:sm:text-base [&>h4]:font-medium [&>h4]:text-neutral-900 [&>h4]:mt-4 [&>h4]:sm:mt-5 [&>h4]:mb-2 [&>h4]:bg-neutral-50 [&>h4]:border-l-3 [&>h4]:border-brand-300 [&>h4]:px-3 [&>h4]:py-1.5
+    [&>p]:mb-3 [&>p]:sm:mb-4 [&>p]:leading-6 [&>p]:sm:leading-7 [&>p]:lg:leading-8
+    [&>ul]:mb-3 [&>ul]:sm:mb-4 [&>ul]:space-y-1 [&>ul]:sm:space-y-2 [&>ul>li]:relative [&>ul>li]:pl-6 [&>ul>li]:sm:pl-8 [&>ul>li]:before:content-['■'] [&>ul>li]:before:absolute [&>ul>li]:before:left-0 [&>ul>li]:before:text-brand-600 [&>ul>li]:before:font-bold [&>ul>li]:before:text-sm [&>ul>li]:sm:before:text-lg [&>ul>li]:before:top-0
+    [&>ol]:mb-3 [&>ol]:sm:mb-4 [&>ol]:space-y-1 [&>ol]:sm:space-y-2 [&>ol]:ml-6 [&>ol]:sm:ml-8 [&>ol]:list-decimal [&>ol]:marker:text-brand-600 [&>ol]:marker:font-semibold [&>ol]:marker:text-sm [&>ol]:sm:marker:text-lg [&>ol>li]:mb-1 [&>ol>li]:pl-1 [&>ol>li]:sm:pl-2
+    [&>blockquote]:border-l-2 [&>blockquote]:border-brand-200 [&>blockquote]:pl-3 [&>blockquote]:sm:pl-4 [&>blockquote]:text-neutral-600 [&>blockquote]:italic [&>blockquote]:my-4 [&>blockquote]:sm:my-6 [&>blockquote]:text-base [&>blockquote]:sm:text-lg
+    [&>pre]:bg-neutral-50 [&>pre]:border [&>pre]:border-neutral-100 [&>pre]:p-3 [&>pre]:sm:p-4 [&>pre]:overflow-x-auto [&>pre]:my-4 [&>pre]:sm:my-6 [&>pre]:text-xs [&>pre]:sm:text-sm [&>pre]:leading-5 [&>pre]:sm:leading-6
+    [&>:not(pre)>code]:bg-brand-100 [&>:not(pre)>code]:px-1.5 [&>:not(pre)>code]:sm:px-2 [&>:not(pre)>code]:py-0.5 [&>:not(pre)>code]:text-xs [&>:not(pre)>code]:sm:text-sm [&>:not(pre)>code]:font-mono [&>:not(pre)>code]:text-brand-800
+    [&>a]:text-brand-600 [&>a]:underline [&>a]:decoration-brand-300 [&>a]:underline-offset-4 [&>a]:transition-colors [&>a:hover]:decoration-brand-600
+    [&>img]:my-4 [&>img]:sm:my-6 [&>img]:border [&>img]:border-neutral-100
+    [&>figure]:my-6 [&>figure]:sm:my-8
+    [&>figure>img]:w-full [&>figure>img]:border [&>figure>img]:border-neutral-200 [&>figure>img]:shadow-sm
+    [&>figure>figcaption]:mt-2 [&>figure>figcaption]:sm:mt-3 [&>figure>figcaption]:text-xs [&>figure>figcaption]:sm:text-sm [&>figure>figcaption]:text-neutral-500 [&>figure>figcaption]:text-center [&>figure>figcaption]:not-italic [&>figure>figcaption]:leading-5
+    [&>hr]:border-0 [&>hr]:h-px [&>hr]:bg-neutral-200 [&>hr]:my-6 [&>hr]:sm:my-8
+    first:*:mt-0
+  "
+>
+  <slot />
+</article>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const article = document.getElementById('article-content');
+    if (!article) return;
+
+    // Enhance tables: wrap in a scroll-safe container, then style for readability
+    // with a narrow first column and a wrapping body column.
+    const tables = article.querySelectorAll('table');
+    tables.forEach(table => {
+      const parent = table.parentElement;
+      if (parent && !parent.classList.contains('table-wrapper')) {
+        const wrapper = document.createElement('div');
+        wrapper.className = 'table-wrapper overflow-x-auto my-6 border border-neutral-200 shadow-sm bg-white';
+        parent.insertBefore(wrapper, table);
+        wrapper.appendChild(table);
+
+        table.className = 'w-full border-collapse text-sm';
+
+        // Walk every row so we can give the first column its own treatment
+        // (compact, bold, no-wrap) and let the rest wrap naturally.
+        const allRows = table.querySelectorAll('tr');
+        allRows.forEach(row => {
+          const cells = row.querySelectorAll('th, td');
+          cells.forEach((cell, idx) => {
+            const isFirst = idx === 0;
+            if (cell.tagName === 'TH') {
+              cell.className = [
+                'bg-brand-50 border-b-2 border-brand-200',
+                'px-4 py-3 text-left align-top',
+                'text-[11px] font-semibold uppercase tracking-wider text-neutral-900',
+                isFirst ? 'w-1/3 md:w-1/4' : '',
+              ].join(' ');
+            } else {
+              cell.className = [
+                'border-b border-neutral-100 px-4 py-3 align-top text-sm',
+                'leading-relaxed break-words',
+                isFirst
+                  ? 'w-1/3 md:w-1/4 font-medium text-neutral-900'
+                  : 'text-neutral-700',
+              ].join(' ');
+            }
+          });
+        });
+
+        // Zebra striping — use a real Tailwind utility (the old bg-gray-25 didn't exist)
+        const bodyRows = table.querySelectorAll('tbody tr');
+        bodyRows.forEach((row, index) => {
+          row.classList.add('transition-colors', 'hover:bg-brand-50/40');
+          if (index % 2 === 1) {
+            row.classList.add('bg-neutral-50/60');
+          }
+        });
+      }
+    });
+
+    // Check if button already exists to prevent duplicates
+    if (document.querySelector('[data-collapse-button]')) return;
+
+    // Create collapse button with improved icons
+    const collapseBtn = document.createElement('button');
+    collapseBtn.innerHTML = `
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3.98 8.223A10.477 10.477 0 001.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.45 10.45 0 0112 4.5c4.756 0 8.773 3.162 10.065 7.498a10.523 10.523 0 01-4.293 5.774M6.228 6.228L3 3m3.228 3.228l3.65 3.65m7.894 7.894L21 21m-3.228-3.228l-3.65-3.65m0 0a3 3 0 10-4.243-4.243m4.242 4.242L9.88 9.88"></path>
+      </svg>
+    `;
+    collapseBtn.className = 'fixed top-20 right-2 sm:right-4 z-50 w-11 h-11 sm:w-12 sm:h-12 bg-white/95 backdrop-blur-sm text-slate-700 hover:bg-white hover:scale-105 transition-all duration-200 border border-slate-200 hover:border-slate-300 shadow-lg hover:shadow-xl flex items-center justify-center';
+    collapseBtn.setAttribute('data-collapse-button', 'true');
+
+    // Create tooltip with improved wording
+    const tooltip = document.createElement('div');
+    tooltip.innerHTML = 'Hide All Sections';
+    tooltip.className = 'fixed top-20 right-14 sm:right-16 z-50 bg-slate-800 text-white px-3 py-1.5 text-xs sm:text-sm font-medium shadow-lg opacity-0 pointer-events-none transition-all duration-200 whitespace-nowrap';
+    tooltip.setAttribute('data-collapse-tooltip', 'true');
+
+    // Add hover events for tooltip
+    collapseBtn.addEventListener('mouseenter', () => {
+      tooltip.style.opacity = '1';
+      tooltip.style.transform = 'translateX(-4px)';
+    });
+
+    collapseBtn.addEventListener('mouseleave', () => {
+      tooltip.style.opacity = '0';
+      tooltip.style.transform = 'translateX(0)';
+    });
+
+    let sectionsCollapsed = false;
+
+    function initializeCollapsible() {
+      if (!article) return;
+
+      const headers = article.querySelectorAll('h2, h3');
+
+      headers.forEach(header => {
+        // Make the whole header read as a button: pointer cursor, hover wash,
+        // visible chevron on the right that rotates with state.
+        header.classList.add(
+          'group',
+          'relative',
+          'cursor-pointer',
+          'select-none',
+          'pr-10',
+          'transition-colors',
+          'duration-150',
+          'hover:text-brand-700'
+        );
+
+        const indicator = document.createElement('span');
+        indicator.innerHTML = `
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.5 8.25l-7.5 7.5-7.5-7.5"></path>
+          </svg>
+        `;
+        indicator.className = 'absolute right-1 top-1/2 -translate-y-1/2 flex items-center justify-center w-7 h-7 text-brand-500 group-hover:text-brand-700 group-hover:bg-brand-50 transition-all duration-200 pointer-events-none';
+        header.appendChild(indicator);
+
+        // Find content until next header of same/higher level
+        const contentElements: Element[] = [];
+        let sibling = header.nextElementSibling;
+        const headerLevel = parseInt(header.tagName.charAt(1));
+
+        while (sibling) {
+          const siblingLevel = sibling.tagName.match(/^H[1-6]$/) ?
+            parseInt(sibling.tagName.charAt(1)) : null;
+
+          if (siblingLevel && siblingLevel <= headerLevel) {
+            break;
+          }
+
+          contentElements.push(sibling);
+          sibling = sibling.nextElementSibling;
+        }
+
+        if (contentElements.length > 0) {
+          // Store original styles and add data attributes for tracking
+          header.setAttribute('data-collapsible', 'true');
+
+          contentElements.forEach((el) => {
+            el.setAttribute('data-section-content', header.tagName.toLowerCase() + '-' + Array.from(article.children).indexOf(header));
+            el.setAttribute('data-original-display', window.getComputedStyle(el).display);
+          });
+
+          // Add click handler
+          header.addEventListener('click', () => {
+            const isCollapsed = header.getAttribute('data-collapsed') === 'true';
+
+            if (isCollapsed) {
+              // Expand
+              contentElements.forEach(el => {
+                (el as HTMLElement).style.display = el.getAttribute('data-original-display') || 'block';
+                (el as HTMLElement).style.opacity = '1';
+                (el as HTMLElement).style.transform = 'translateY(0)';
+              });
+              header.setAttribute('data-collapsed', 'false');
+              indicator.innerHTML = `
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.5 8.25l-7.5 7.5-7.5-7.5"></path>
+                </svg>
+              `;
+            } else {
+              // Collapse
+              contentElements.forEach(el => {
+                (el as HTMLElement).style.display = 'none';
+                (el as HTMLElement).style.opacity = '0';
+                (el as HTMLElement).style.transform = 'translateY(-10px)';
+              });
+              header.setAttribute('data-collapsed', 'true');
+              indicator.innerHTML = `
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.25 4.5l7.5 7.5-7.5 7.5"></path>
+                </svg>
+              `;
+            }
+          });
+        }
+      });
+    }
+
+    collapseBtn.addEventListener('click', () => {
+      if (!article) return;
+
+      const collapsibleHeaders = article.querySelectorAll('[data-collapsible="true"]');
+
+      if (sectionsCollapsed) {
+        // Expand all
+        collapsibleHeaders.forEach(header => {
+          const indicator = header.querySelector('span');
+          const sectionId = header.tagName.toLowerCase() + '-' + Array.from(article.children).indexOf(header);
+          const contentElements = article.querySelectorAll('[data-section-content="' + sectionId + '"]');
+
+          contentElements.forEach(el => {
+            (el as HTMLElement).style.display = el.getAttribute('data-original-display') || 'block';
+            (el as HTMLElement).style.opacity = '1';
+            (el as HTMLElement).style.transform = 'translateY(0)';
+          });
+          header.setAttribute('data-collapsed', 'false');
+          if (indicator) indicator.innerHTML = `
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.5 8.25l-7.5 7.5-7.5-7.5"></path>
+            </svg>
+          `;
+        });
+        collapseBtn.innerHTML = `
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3.98 8.223A10.477 10.477 0 001.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.45 10.45 0 0112 4.5c4.756 0 8.773 3.162 10.065 7.498a10.523 10.523 0 01-4.293 5.774M6.228 6.228L3 3m3.228 3.228l3.65 3.65m7.894 7.894L21 21m-3.228-3.228l-3.65-3.65m0 0a3 3 0 10-4.243-4.243m4.242 4.242L9.88 9.88"></path>
+          </svg>
+        `;
+        tooltip.innerHTML = 'Hide All Sections';
+      } else {
+        // Collapse all
+        collapsibleHeaders.forEach(header => {
+          const indicator = header.querySelector('span');
+          const sectionId = header.tagName.toLowerCase() + '-' + Array.from(article.children).indexOf(header);
+          const contentElements = article.querySelectorAll('[data-section-content="' + sectionId + '"]');
+
+          contentElements.forEach(el => {
+            (el as HTMLElement).style.display = 'none';
+            (el as HTMLElement).style.opacity = '0';
+            (el as HTMLElement).style.transform = 'translateY(-10px)';
+          });
+          header.setAttribute('data-collapsed', 'true');
+          if (indicator) indicator.innerHTML = `
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.25 4.5l7.5 7.5-7.5 7.5"></path>
+            </svg>
+          `;
+        });
+        collapseBtn.innerHTML = `
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z"></path>
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+          </svg>
+        `;
+        tooltip.innerHTML = 'Show All Sections';
+      }
+
+      sectionsCollapsed = !sectionsCollapsed;
+    });
+
+    // Clean up any existing buttons/tooltips before adding new ones
+    const existingButton = document.querySelector('[data-collapse-button]');
+    const existingTooltip = document.querySelector('[data-collapse-tooltip]');
+    if (existingButton) existingButton.remove();
+    if (existingTooltip) existingTooltip.remove();
+
+    // Add floating button and tooltip to body
+    document.body.appendChild(collapseBtn);
+    document.body.appendChild(tooltip);
+
+    // Initialize
+    initializeCollapsible();
+  });
+</script>

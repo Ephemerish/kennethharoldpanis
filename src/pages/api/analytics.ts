@@ -3,6 +3,12 @@ import { supabase } from '../../lib/supabase';
 
 export const POST: APIRoute = async ({ request }) => {
   try {
+    // Analytics is non-critical telemetry: if Supabase isn't configured,
+    // accept the request and no-op rather than 500-ing the client.
+    if (!supabase) {
+      return new Response(JSON.stringify({ skipped: true }), { status: 200 });
+    }
+
     const body = await request.json();
     const { 
       visitorId,
