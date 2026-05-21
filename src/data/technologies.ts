@@ -352,7 +352,7 @@ export const technologies: Technology[] = [
     url: 'https://inlang.com/m/gerre34r/library-inlang-paraglideJs'
   },
   {
-    name: 'shadcn/ui',
+    name: 'shadcn',
     imagePath: '/images/tech-logos/shadcn-ui.svg',
     category: 'frontend',
     url: 'https://ui.shadcn.com/'
