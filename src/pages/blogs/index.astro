@@ -41,7 +41,7 @@ const blogsForPage: CollectionEntry<"blog">[] = allBlogs.slice(
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
       <div class="px-4 sm:px-6 lg:px-8">
       <!-- Header Section with Enhanced Design -->
-      <div class="text-center mb-16 sm:mb-20 animate-fade-in">
+      <div class="text-center mb-16 sm:mb-20 ">
         <h1 class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-6">
           <span class="text-neutral-900">My</span> <span class="text-brand-gradient">Blogs</span>
         </h1>
@@ -54,7 +54,7 @@ const blogsForPage: CollectionEntry<"blog">[] = allBlogs.slice(
       <!-- Blogs Grid with Enhanced Styling -->
       <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-8 sm:gap-10">
         {blogsForPage.map((blog, index) => (
-          <div class="hover-lift animate-fade-in h-full" style={`animation-delay: ${index * 0.1}s`}>
+          <div class="  h-full" style={`animation-delay: ${index * 0.1}s`}>
             <EntryCard entry={blog} kind="blog" />
           </div>
         ))}

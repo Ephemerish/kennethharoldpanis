@@ -56,7 +56,7 @@ const otherProjects = allProjects.slice(1); // Get any additional projects
     </div>
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
       <div class="px-4 sm:px-6 lg:px-8">
-      <div class="text-center mb-12 sm:mb-16 animate-fade-in">
+      <div class="text-center mb-12 sm:mb-16 ">
         <h2 class="text-3xl sm:text-4xl md:text-5xl font-bold text-neutral-900 mb-4">
           <span class="text-brand-gradient">Technologies</span> I Work With
         </h2>
@@ -66,7 +66,7 @@ const otherProjects = allProjects.slice(1); // Get any additional projects
         <div class="w-24 h-1 bg-brand-gradient mx-auto mt-6"></div>
       </div>
       
-      <div class="animate-slide-up">
+      <div class="">
         <TechCarousel client:load />
       </div>
       </div>
@@ -94,7 +94,7 @@ const otherProjects = allProjects.slice(1); // Get any additional projects
       
       <!-- Featured Project with Enhanced Styling -->
       {featuredProject && (
-        <div class="mb-12 sm:mb-16 animate-fade-in">
+        <div class="mb-12 sm:mb-16 ">
           <EntryCard entry={featuredProject} kind="project" variant="featured" />
         </div>
       )}
@@ -105,7 +105,7 @@ const otherProjects = allProjects.slice(1); // Get any additional projects
           {otherProjects
             .slice(0, HOMEPAGE_PROJECTS_LIMIT - 1)
             .map((project: CollectionEntry<"projects">) => (
-              <div class="hover-lift animate-fade-in">
+              <div class=" ">
                 <EntryCard entry={project} kind="project" />
               </div>
             ))
@@ -147,7 +147,7 @@ const otherProjects = allProjects.slice(1); // Get any additional projects
       </div>
       
       <!-- Featured Blog Post with Enhanced Styling -->
-      <div class="mb-12 sm:mb-16 animate-fade-in">
+      <div class="mb-12 sm:mb-16 ">
         <EntryCard entry={mostRecentBlog} kind="blog" variant="featured" />
       </div>
       
@@ -156,7 +156,7 @@ const otherProjects = allProjects.slice(1); // Get any additional projects
         {otherBlogs
           .slice(0, HOMEPAGE_BLOG_LIMIT)
           .map((blog) => (
-            <div class="hover-lift animate-fade-in">
+            <div class=" ">
               <EntryCard entry={blog} kind="blog" />
             </div>
           ))

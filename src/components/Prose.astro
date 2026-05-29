@@ -26,7 +26,7 @@
     [&>blockquote]:border-l-2 [&>blockquote]:border-brand-200 [&>blockquote]:pl-3 [&>blockquote]:sm:pl-4 [&>blockquote]:text-neutral-600 [&>blockquote]:italic [&>blockquote]:my-4 [&>blockquote]:sm:my-6 [&>blockquote]:text-base [&>blockquote]:sm:text-lg
     [&>pre]:bg-neutral-50 [&>pre]:border [&>pre]:border-neutral-100 [&>pre]:p-3 [&>pre]:sm:p-4 [&>pre]:overflow-x-auto [&>pre]:my-4 [&>pre]:sm:my-6 [&>pre]:text-xs [&>pre]:sm:text-sm [&>pre]:leading-5 [&>pre]:sm:leading-6
     [&>:not(pre)>code]:bg-brand-100 [&>:not(pre)>code]:px-1.5 [&>:not(pre)>code]:sm:px-2 [&>:not(pre)>code]:py-0.5 [&>:not(pre)>code]:text-xs [&>:not(pre)>code]:sm:text-sm [&>:not(pre)>code]:font-mono [&>:not(pre)>code]:text-brand-800
-    [&_a]:text-brand-700 [&_a]:font-medium [&_a]:underline [&_a]:decoration-2 [&_a]:decoration-brand-400 [&_a]:underline-offset-2 [&_a]:transition-colors [&_a:hover]:text-brand-800 [&_a:hover]:decoration-brand-700
+    [&_a]:text-brand-700 [&_a]:font-medium [&_a]:underline [&_a]:decoration-2 [&_a]:decoration-brand-400 [&_a]:underline-offset-2 [&_a]: [&_a:hover]:text-brand-800 [&_a:hover]:decoration-brand-700
     [&>img]:my-4 [&>img]:sm:my-6 [&>img]:border [&>img]:border-neutral-100
     [&>figure]:my-6 [&>figure]:sm:my-8
     [&>figure>img]:w-full [&>figure>img]:border [&>figure>img]:border-neutral-200 [&>figure>img]:shadow-sm
@@ -85,7 +85,7 @@
         // Zebra striping — use a real Tailwind utility (the old bg-gray-25 didn't exist)
         const bodyRows = table.querySelectorAll('tbody tr');
         bodyRows.forEach((row, index) => {
-          row.classList.add('transition-colors', 'hover:bg-brand-50/40');
+          row.classList.add('', 'hover:bg-brand-50/40');
           if (index % 2 === 1) {
             row.classList.add('bg-neutral-50/60');
           }
@@ -103,13 +103,13 @@
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3.98 8.223A10.477 10.477 0 001.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.45 10.45 0 0112 4.5c4.756 0 8.773 3.162 10.065 7.498a10.523 10.523 0 01-4.293 5.774M6.228 6.228L3 3m3.228 3.228l3.65 3.65m7.894 7.894L21 21m-3.228-3.228l-3.65-3.65m0 0a3 3 0 10-4.243-4.243m4.242 4.242L9.88 9.88"></path>
       </svg>
     `;
-    collapseBtn.className = 'fixed top-20 right-2 sm:right-4 z-50 w-11 h-11 sm:w-12 sm:h-12 bg-white/95 backdrop-blur-sm text-slate-700 hover:bg-white hover:scale-105 transition-all duration-200 border border-slate-200 hover:border-slate-300 shadow-lg hover:shadow-xl flex items-center justify-center';
+    collapseBtn.className = 'fixed top-20 right-2 sm:right-4 z-50 w-11 h-11 sm:w-12 sm:h-12 bg-white/95 backdrop-blur-sm text-slate-700 hover:bg-white    border border-slate-200 hover:border-slate-300 shadow-lg  flex items-center justify-center';
     collapseBtn.setAttribute('data-collapse-button', 'true');
 
     // Create tooltip with improved wording
     const tooltip = document.createElement('div');
     tooltip.innerHTML = 'Hide All Sections';
-    tooltip.className = 'fixed top-20 right-14 sm:right-16 z-50 bg-slate-800 text-white px-3 py-1.5 text-xs sm:text-sm font-medium shadow-lg opacity-0 pointer-events-none transition-all duration-200 whitespace-nowrap';
+    tooltip.className = 'fixed top-20 right-14 sm:right-16 z-50 bg-slate-800 text-white px-3 py-1.5 text-xs sm:text-sm font-medium shadow-lg opacity-0 pointer-events-none   whitespace-nowrap';
     tooltip.setAttribute('data-collapse-tooltip', 'true');
 
     // Add hover events for tooltip
@@ -139,8 +139,8 @@
           'cursor-pointer',
           'select-none',
           'pr-10',
-          'transition-colors',
-          'duration-150',
+          '',
+          '',
           'hover:text-brand-700'
         );
 
@@ -150,7 +150,7 @@
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.5 8.25l-7.5 7.5-7.5-7.5"></path>
           </svg>
         `;
-        indicator.className = 'absolute right-1 top-1/2 -translate-y-1/2 flex items-center justify-center w-7 h-7 text-brand-500 group-hover:text-brand-700 group-hover:bg-brand-50 transition-all duration-200 pointer-events-none';
+        indicator.className = 'absolute right-1 top-1/2 -translate-y-1/2 flex items-center justify-center w-7 h-7 text-brand-500 group-hover:text-brand-700 group-hover:bg-brand-50   pointer-events-none';
         header.appendChild(indicator);
 
         // Find content until next header of same/higher level

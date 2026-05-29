@@ -49,7 +49,7 @@ const regularProjects = allProjects.filter(project => !project.data.featured);
           <div class="absolute top-0 left-1/2 w-96 h-96 bg-brand-100/30 blur-3xl transform -translate-x-1/2 -translate-y-1/2"></div>
         </div>
         
-        <div class="animate-fade-in">
+        <div class="">
           <h1 class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-6">
             <span class="text-neutral-900">My</span> <span class="text-brand-gradient">Projects</span>
           </h1>
@@ -65,7 +65,7 @@ const regularProjects = allProjects.filter(project => !project.data.featured);
         <section class="mb-16 sm:mb-20">
           <div class="space-y-12 sm:space-y-16">
             {featuredProjects.map((project) => (
-              <div class="animate-fade-in">
+              <div class="">
                 <EntryCard entry={project} kind="project" variant="featured" />
               </div>
             ))}
@@ -78,7 +78,7 @@ const regularProjects = allProjects.filter(project => !project.data.featured);
         <section class="mb-16 sm:mb-20">
           <div class="grid grid-cols-1 gap-8 sm:gap-10 sm:grid-cols-2 lg:grid-cols-3">
             {regularProjects.map((project, index) => (
-              <div class="hover-lift animate-fade-in" style={`animation-delay: ${index * 0.1}s`}>
+              <div class=" " style={`animation-delay: ${index * 0.1}s`}>
                 <EntryCard entry={project} kind="project" />
               </div>
             ))}

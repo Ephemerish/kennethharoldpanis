@@ -63,7 +63,7 @@ const quickLinks = [
               />
             </div>
           </div>
-          <div class="text-center md:text-left animate-fade-in">
+          <div class="text-center md:text-left ">
             <h1 class="text-4xl sm:text-5xl md:text-6xl font-bold mb-4 leading-tight">
               <span class="text-neutral-900">About</span>
               <span class="text-brand-gradient">Me</span>
@@ -82,7 +82,7 @@ const quickLinks = [
 
         <!-- What I'm into -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 mb-12 sm:mb-16">
-          <div class="bg-card-gradient border border-neutral-200 shadow-elegant p-6 sm:p-8 hover-lift transition-all duration-500">
+          <div class="bg-card-gradient border border-neutral-200 shadow-elegant p-6 sm:p-8   ">
             <div class="w-12 h-12 bg-brand-600 text-neutral-0 flex items-center justify-center mb-4 shadow-md">
               <CodeIcon className="w-6 h-6" weight="fill" />
             </div>
@@ -94,7 +94,7 @@ const quickLinks = [
               hardware/IoT side project. Always sharpening the fundamentals.
             </p>
           </div>
-          <div class="bg-card-gradient border border-neutral-200 shadow-elegant p-6 sm:p-8 hover-lift transition-all duration-500">
+          <div class="bg-card-gradient border border-neutral-200 shadow-elegant p-6 sm:p-8   ">
             <div class="w-12 h-12 bg-brand-600 text-neutral-0 flex items-center justify-center mb-4 shadow-md">
               <CloudIcon className="w-6 h-6" weight="fill" />
             </div>
@@ -106,7 +106,7 @@ const quickLinks = [
               and working toward the AWS Solutions Architect cert.
             </p>
           </div>
-          <div class="bg-card-gradient border border-neutral-200 shadow-elegant p-6 sm:p-8 hover-lift transition-all duration-500">
+          <div class="bg-card-gradient border border-neutral-200 shadow-elegant p-6 sm:p-8   ">
             <div class="w-12 h-12 bg-brand-600 text-neutral-0 flex items-center justify-center mb-4 shadow-md">
               <HeartIcon className="w-6 h-6" weight="fill" />
             </div>
@@ -132,12 +132,12 @@ const quickLinks = [
             {quickLinks.map((link) => (
               <a
                 href={link.href}
-                class="group bg-card-gradient border border-neutral-200 shadow-elegant hover:border-brand-300/60 hover:shadow-floating transition-all duration-500 ease-out hover-lift p-6 sm:p-8 flex flex-col"
+                class="group bg-card-gradient border border-neutral-200 shadow-elegant hover:border-brand-300/60      p-6 sm:p-8 flex flex-col"
               >
                 <div class="w-10 h-10 sm:w-12 sm:h-12 bg-brand-600 text-neutral-0 flex items-center justify-center mb-4 shadow-md">
                   <link.Icon className="w-5 h-5 sm:w-6 sm:h-6" weight="fill" />
                 </div>
-                <h3 class="text-lg sm:text-xl font-bold text-neutral-900 mb-2 group-hover:text-brand-700 transition-colors duration-300">
+                <h3 class="text-lg sm:text-xl font-bold text-neutral-900 mb-2 group-hover:text-brand-700  ">
                   {link.title}
                 </h3>
                 <p class="text-sm sm:text-base text-neutral-600 mb-4 flex-1 leading-relaxed">
@@ -145,7 +145,7 @@ const quickLinks = [
                 </p>
                 <div class="flex items-center text-sm font-semibold text-brand-700 group-hover:text-brand-800">
                   <span>Visit</span>
-                  <ArrowRightIcon className="w-4 h-4 ml-1.5 group-hover:translate-x-1 transition-transform duration-300" />
+                  <ArrowRightIcon className="w-4 h-4 ml-1.5   " />
                 </div>
               </a>
             ))}

@@ -12,11 +12,11 @@ const Toaster = ({ ...props }: ToasterProps) => {
             "group toast group-[.toaster]:bg-white group-[.toaster]:text-default-font group-[.toaster]:border group-[.toaster]:border-neutral-border group-[.toaster]:shadow-lg group-[.toaster]:backdrop-blur-sm group-[.toaster]:p-4",
           description: "group-[.toast]:text-subtext-color group-[.toast]:text-sm group-[.toast]:mt-1",
           actionButton:
-            "group-[.toast]:bg-neutral-900 group-[.toast]:text-white group-[.toast]:hover:bg-neutral-800 group-[.toast]:px-3 group-[.toast]:py-1.5 group-[.toast]:text-sm group-[.toast]:font-medium group-[.toast]:transition-all group-[.toast]:duration-200",
+            "group-[.toast]:bg-neutral-900 group-[.toast]:text-white group-[.toast]:hover:bg-neutral-800 group-[.toast]:px-3 group-[.toast]:py-1.5 group-[.toast]:text-sm group-[.toast]:font-medium group-[.toast]: group-[.toast]:",
           cancelButton:
-            "group-[.toast]:bg-neutral-100 group-[.toast]:text-neutral-700 group-[.toast]:hover:bg-neutral-200 group-[.toast]:px-3 group-[.toast]:py-1.5 group-[.toast]:text-sm group-[.toast]:font-medium group-[.toast]:transition-all group-[.toast]:duration-200",
+            "group-[.toast]:bg-neutral-100 group-[.toast]:text-neutral-700 group-[.toast]:hover:bg-neutral-200 group-[.toast]:px-3 group-[.toast]:py-1.5 group-[.toast]:text-sm group-[.toast]:font-medium group-[.toast]: group-[.toast]:",
           closeButton:
-            "group-[.toast]:bg-white group-[.toast]:border group-[.toast]:border-neutral-border group-[.toast]:text-neutral-500 group-[.toast]:hover:text-neutral-700 group-[.toast]:hover:bg-neutral-50 group-[.toast]:w-6 group-[.toast]:h-6 group-[.toast]:flex group-[.toast]:items-center group-[.toast]:justify-center group-[.toast]:transition-all group-[.toast]:duration-200",
+            "group-[.toast]:bg-white group-[.toast]:border group-[.toast]:border-neutral-border group-[.toast]:text-neutral-500 group-[.toast]:hover:text-neutral-700 group-[.toast]:hover:bg-neutral-50 group-[.toast]:w-6 group-[.toast]:h-6 group-[.toast]:flex group-[.toast]:items-center group-[.toast]:justify-center group-[.toast]: group-[.toast]:",
           success:
             "group-[.toast]:border-success-300 group-[.toast]:bg-success-50 group-[.toast]:text-success-800",
           error:

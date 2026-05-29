@@ -137,7 +137,7 @@ export default function Navbar() {
           <div className="flex md:hidden">
             <button
               type="button"
-              className="inline-flex items-center justify-center p-2 text-neutral-600 hover:text-brand-600 transition-colors duration-200"
+              className="inline-flex items-center justify-center p-2 text-neutral-600 hover:text-brand-600  "
               aria-controls="mobile-menu"
               aria-expanded={isMenuOpen}
               onClick={toggleMenu}
@@ -169,14 +169,14 @@ export default function Navbar() {
 
             <button
               type="button"
-              className="w-full flex items-center justify-between px-3 py-2 text-base font-medium text-neutral-600 hover:text-brand-600 transition-colors duration-200"
+              className="w-full flex items-center justify-between px-3 py-2 text-base font-medium text-neutral-600 hover:text-brand-600  "
               aria-expanded={isBioOpenMobile}
               onClick={() => setIsBioOpenMobile((v) => !v)}
             >
               <span>Bio</span>
               <CaretDownIcon
                 className={cn(
-                  "h-4 w-4 transition-transform duration-200",
+                  "h-4 w-4  ",
                   isBioOpenMobile && "rotate-180"
                 )}
                 aria-hidden="true"
@@ -213,7 +213,7 @@ function BioListItem({ title, href, description, Icon }: BioSubLink) {
       <NavigationMenuLink asChild>
         <a
           href={href}
-          className="group block select-none space-y-1 p-3 leading-none no-underline outline-none transition-colors hover:bg-brand-50/60 focus:bg-brand-50/60"
+          className="group block select-none space-y-1 p-3 leading-none no-underline outline-none  hover:bg-brand-50/60 focus:bg-brand-50/60"
         >
           <div className="flex items-center gap-2 text-sm font-semibold text-neutral-900 group-hover:text-brand-700">
             <Icon className="h-4 w-4" />
@@ -240,7 +240,7 @@ function MobileNavLink({
   return (
     <a
       href={to}
-      className="block px-3 py-2 text-base font-medium text-neutral-600 hover:text-brand-600 transition-colors duration-200"
+      className="block px-3 py-2 text-base font-medium text-neutral-600 hover:text-brand-600  "
       onClick={onClick}
     >
       {children}
@@ -262,7 +262,7 @@ function MobileSubLink({
   return (
     <a
       href={to}
-      className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-neutral-600 hover:text-brand-600 transition-colors duration-200"
+      className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-neutral-600 hover:text-brand-600  "
       onClick={onClick}
     >
       <Icon className="h-4 w-4" />

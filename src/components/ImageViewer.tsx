@@ -113,7 +113,7 @@ export function ImageViewer({
   };
 
   const btn =
-    "p-2 text-white/70 hover:text-white transition-colors disabled:opacity-30";
+    "p-2 text-white/70 hover:text-white  disabled:opacity-30";
 
   return (
     <div
@@ -156,7 +156,7 @@ export function ImageViewer({
             go(-1);
           }}
           aria-label="Previous image"
-          className="absolute left-2 sm:left-6 z-10 p-2 text-white/70 hover:text-white transition-colors"
+          className="absolute left-2 sm:left-6 z-10 p-2 text-white/70 hover:text-white "
         >
           <ChevronLeftIcon className="w-8 h-8 sm:w-10 sm:h-10" />
         </button>
@@ -175,8 +175,8 @@ export function ImageViewer({
         onPointerCancel={endDrag}
         style={{
           transform: `translate(${pos.x}px, ${pos.y}px) scale(${scale})`,
-          transition: dragging ? "none" : "transform 0.15s ease-out",
-          cursor: scale === 1 ? "zoom-in" : dragging ? "grabbing" : "grab",
+          transition: dragging ? "none" : "transform 0.15s ",
+          cursor: scale === 1 ? "" : dragging ? "grabbing" : "grab",
           touchAction: "none",
         }}
         className="max-h-[90vh] max-w-[92vw] object-contain select-none shadow-2xl"
@@ -190,7 +190,7 @@ export function ImageViewer({
             go(1);
           }}
           aria-label="Next image"
-          className="absolute right-2 sm:right-6 z-10 p-2 text-white/70 hover:text-white transition-colors"
+          className="absolute right-2 sm:right-6 z-10 p-2 text-white/70 hover:text-white "
         >
           <ChevronRightIcon className="w-8 h-8 sm:w-10 sm:h-10" />
         </button>
@@ -225,7 +225,7 @@ export function ZoomableImage({ src, alt = "Image", className, loading = "lazy" 
         alt={alt}
         loading={loading}
         onClick={() => setOpen(true)}
-        className={`cursor-zoom-in ${className ?? ""}`}
+        className={`cursor- ${className ?? ""}`}
       />
       <ImageViewer
         images={[src]}

@@ -27,7 +27,7 @@ export default function ContentImageViewer({
     setImages(nodes.map((n) => n.currentSrc || n.src));
 
     const cleanups = nodes.map((node, i) => {
-      node.style.cursor = "zoom-in";
+      node.style.cursor = "";
       const onClick = (e: MouseEvent) => {
         e.preventDefault();
         setIndex(i);

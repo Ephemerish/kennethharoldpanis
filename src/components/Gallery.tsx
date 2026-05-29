@@ -30,7 +30,7 @@ export default function Gallery({ images, alt = "Project image" }: GalleryProps)
               src={src}
               alt={`${alt} ${i + 1}`}
               loading="lazy"
-              className="w-full h-auto transition-transform duration-300 group-hover:scale-105"
+              className="w-full h-auto   "
             />
           </button>
         ))}
