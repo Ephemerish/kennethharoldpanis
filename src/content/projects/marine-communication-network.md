@@ -5,10 +5,6 @@ image: "Theses 5.jpg"
 gallery: ["Theses.jpg", "Theses 2.jpg", "Theses 3.jpg", "Theses 4.jpg", "Theses.svg"]
 tags: ["LoRa", "IoT", "Maritime Safety", "ESP32", "Mobile App", "Emergency Response", "GPS Tracking", "Microcontroller", "Thesis", "Hardware"]
 technologies: ["Arduino", "LoRa", "IoT", "Flutter", "Firebase", "Raspberry Pi"]
-category: "iot"
-demoUrl: ""
-videoUrl: ""
-githubUrl: ""
 featured: false
 status: "completed"
 startDate: 2023-09-01
@@ -38,9 +34,6 @@ keyFeatures:
   - "Waterproof enclosures for maritime durability"
   - "RSSI and SNR signal quality monitoring"
 team: ["Kenneth Harold Panis", "Daisy Marie Bernante", "Hannah Mae Mascardo"]
-institution: "Bohol Island State University"
-supervisor: "Julius C. Castro, MEng, CpE"
-researchArea: "Maritime IoT Communication Systems"
 ---
 
 ## Project Overview

@@ -5,10 +5,7 @@ image: "pundo/01-hero.png"
 gallery: ["pundo/02-first-transaction.png", "pundo/04-budget-plan.png", "pundo/05-before-after.png", "pundo/07-roadmap.png"]
 tags: ["Personal Finance", "Budgeting", "50/30/20", "Svelte 5", "Beta", "Side Project", "Web App", "Fintech"]
 technologies: ["Svelte 5", "TypeScript", "Tailwind CSS", "Drizzle ORM", "Neon", "PostgreSQL", "better-auth", "pnpm", "Vite", "Docker", "Cloud Run", "Paraglide", "shadcn", "Lottie"]
-category: "web"
 demoUrl: "https://pundo.kennethharoldpanis.com/"
-videoUrl: ""
-githubUrl: ""
 featured: true
 status: "in-progress"
 startDate: 2026-03-22

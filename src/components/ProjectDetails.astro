@@ -37,9 +37,6 @@ const facts = [
     ? { label: "Timeline", value: `${fmt(data.startDate)} – ${fmt(data.endDate)}` }
     : null,
   data.team?.length ? { label: "Team", value: data.team.join(", ") } : null,
-  data.institution ? { label: "Institution", value: data.institution } : null,
-  data.supervisor ? { label: "Supervisor", value: data.supervisor } : null,
-  data.researchArea ? { label: "Research area", value: data.researchArea } : null,
 ].filter(Boolean) as { label: string; value: string }[];
 
 const keyFeatures = data.keyFeatures ?? [];
