@@ -128,8 +128,9 @@ export function getAllTagsFromContent(
     if (project.data.tags) {
       allTags.push(...project.data.tags);
     }
-    if (project.data.technologies) {
-      allTags.push(...project.data.technologies);
+    const technology = project.data.overview?.builtWith?.technology;
+    if (technology) {
+      allTags.push(...technology);
     }
   });
   

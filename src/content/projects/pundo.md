@@ -4,31 +4,34 @@ description: "A personal budgeting app for tracking income, expenses, and transf
 image: "pundo/01-hero.png"
 gallery: ["pundo/02-first-transaction.png", "pundo/04-budget-plan.png", "pundo/05-before-after.png", "pundo/07-roadmap.png"]
 tags: ["Personal Finance", "Budgeting", "50/30/20", "Svelte 5", "Beta", "Side Project", "Web App", "Fintech"]
-technologies: ["Svelte 5", "TypeScript", "Tailwind CSS", "Drizzle ORM", "Neon", "PostgreSQL", "better-auth", "pnpm", "Vite", "Docker", "Cloud Run", "Paraglide", "shadcn", "Lottie"]
-demoUrl: "https://pundo.kennethharoldpanis.com/"
 featured: true
 status: "in-progress"
 startDate: 2026-03-22
-keyFeatures:
-  - "Income, expense, and transfer transactions across multiple accounts and parent and child categories"
-  - "Monthly budgets with full per-peso control, with an optional 50/30/20 needs, wants, and savings split"
-  - "Transfer transactions with fees and proper savings transfer rules"
-  - "Spending, donut, and monthly trend charts with daily cash flow per account"
-  - "Recurring transactions, export, and a full JSON backup and restore engine"
-  - "Money Manager and Pundo CSV import with a preview screen before anything is committed"
-  - "Activity history that logs every create, edit, and delete, with undo on recent changes"
-  - "Privacy mode that masks every amount on screen with one toggle"
-  - "Partner linking with bill splitting, a shared balance view, and counter-offers"
-  - "Onboarding flow with preferences and starter categories"
-  - "In-app feedback system, roadmap, and contextual help links"
-challenges:
-  - "Distributing budget cents across buckets so the totals always add up (largest remainder method)"
-  - "Replacing a manual export flow with a real backup engine for JSON import and restore"
-  - "Keeping the app feeling instant while staying cheap to run on scale-to-zero infrastructure"
-  - "Splitting bills between partners with counter-offers while keeping each account's balance correct"
-  - "Carrying account and category metadata cleanly through import and export"
-  - "Reducing clutter on the busier screens without dropping the detail people rely on"
-team: ["Kenneth Harold Panis"]
+links:
+  live: "https://pundo.kennethharoldpanis.com/"
+overview:
+  builtWith:
+    technology: ["Svelte 5", "TypeScript", "Tailwind CSS", "Drizzle ORM", "Neon", "PostgreSQL", "better-auth", "pnpm", "Vite", "Docker", "Cloud Run", "Paraglide", "shadcn", "Lottie"]
+  keyFeatures:
+    - "Income, expense, and transfer transactions across multiple accounts and parent and child categories"
+    - "Monthly budgets with full per-peso control, with an optional 50/30/20 needs, wants, and savings split"
+    - "Transfer transactions with fees and proper savings transfer rules"
+    - "Spending, donut, and monthly trend charts with daily cash flow per account"
+    - "Recurring transactions, export, and a full JSON backup and restore engine"
+    - "Money Manager and Pundo CSV import with a preview screen before anything is committed"
+    - "Activity history that logs every create, edit, and delete, with undo on recent changes"
+    - "Privacy mode that masks every amount on screen with one toggle"
+    - "Partner linking with bill splitting, a shared balance view, and counter-offers"
+    - "Onboarding flow with preferences and starter categories"
+    - "In-app feedback system, roadmap, and contextual help links"
+  challenges:
+    - "Distributing budget cents across buckets so the totals always add up (largest remainder method)"
+    - "Replacing a manual export flow with a real backup engine for JSON import and restore"
+    - "Keeping the app feeling instant while staying cheap to run on scale-to-zero infrastructure"
+    - "Splitting bills between partners with counter-offers while keeping each account's balance correct"
+    - "Carrying account and category metadata cleanly through import and export"
+    - "Reducing clutter on the busier screens without dropping the detail people rely on"
+  team: ["Kenneth Harold Panis"]
 ---
 
 A small app I built to keep track of my own money, or at least that is how it started.

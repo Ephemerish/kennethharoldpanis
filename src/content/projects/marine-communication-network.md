@@ -4,36 +4,42 @@ description: "An undergraduate thesis project developing a LoRa-based communicat
 image: "Theses 5.jpg"
 gallery: ["Theses.jpg", "Theses 2.jpg", "Theses 3.jpg", "Theses 4.jpg", "Theses.svg"]
 tags: ["LoRa", "IoT", "Maritime Safety", "ESP32", "Mobile App", "Emergency Response", "GPS Tracking", "Microcontroller", "Thesis", "Hardware"]
-technologies: ["Arduino", "LoRa", "IoT", "Flutter", "Firebase", "Raspberry Pi"]
 featured: false
 status: "completed"
 startDate: 2023-09-01
 endDate: 2024-05-01
-challenges:
-  - "Achieving maximum communication range of 882 meters in open sea conditions (target: 2+ kilometers)"
-  - "Implementing XOR encryption for secure data transmission"
-  - "Developing waterproof enclosures for harsh maritime environments"
-  - "Integrating real-time GPS tracking with LoRa communication protocol"
-  - "Optimizing power consumption for extended battery operation"
-  - "Testing signal quality (RSSI/SNR) across various distances"
-materials:
-  - "ESP32 NodeMCU-32S"
-  - "LoRa SX1278 433MHz"
-  - "GPS NEO-M8N"
-  - "Firebase Realtime Database"
-  - "Flutter Mobile App"
-keyFeatures:
-  - "Real-time GPS location tracking and transmission"
-  - "Emergency alert system with instant notification"
-  - "882-meter maximum communication range tested"
-  - "Star network topology with centralized gateway"
-  - "Cross-platform mobile application for monitoring"
-  - "XOR encryption for data security"
-  - "LED indicators for network connection status"
-  - "Low-power LoRa technology for extended battery life"
-  - "Waterproof enclosures for maritime durability"
-  - "RSSI and SNR signal quality monitoring"
-team: ["Kenneth Harold Panis", "Daisy Marie Bernante", "Hannah Mae Mascardo"]
+overview:
+  builtWith:
+    technology: ["Arduino", "LoRa", "IoT", "Flutter", "Firebase", "Raspberry Pi"]
+    materials:
+      - "ESP32 NodeMCU-32S"
+      - "LoRa SX1278 433MHz"
+      - "GPS NEO-M8N"
+      - "Firebase Realtime Database"
+      - "Flutter Mobile App"
+  keyFeatures:
+    - "Real-time GPS location tracking and transmission"
+    - "Emergency alert system with instant notification"
+    - "882-meter maximum communication range tested"
+    - "Star network topology with centralized gateway"
+    - "Cross-platform mobile application for monitoring"
+    - "XOR encryption for data security"
+    - "LED indicators for network connection status"
+    - "Low-power LoRa technology for extended battery life"
+    - "Waterproof enclosures for maritime durability"
+    - "RSSI and SNR signal quality monitoring"
+  challenges:
+    - "Achieving maximum communication range of 882 meters in open sea conditions (target: 2+ kilometers)"
+    - "Implementing XOR encryption for secure data transmission"
+    - "Developing waterproof enclosures for harsh maritime environments"
+    - "Integrating real-time GPS tracking with LoRa communication protocol"
+    - "Optimizing power consumption for extended battery operation"
+    - "Testing signal quality (RSSI/SNR) across various distances"
+  team: ["Kenneth Harold Panis", "Daisy Marie Bernante", "Hannah Mae Mascardo"]
+  academic:
+    institution: "Bohol Island State University"
+    supervisor: "Julius C. Castro, MEng, CpE"
+    researchArea: "Maritime IoT Communication Systems"
 ---
 
 ## Project Overview

@@ -24,23 +24,28 @@ const { data } = Astro.props;
 const fmt = (date: Date) =>
   new Intl.DateTimeFormat("en-US", { year: "numeric", month: "short" }).format(date);
 
-const techs = (data.technologies ?? []).map((name) => ({
+const overview = data.overview;
+const techs = (overview?.builtWith?.technology ?? []).map((name) => ({
   name,
   tech: getTechByName(name),
 }));
-const materials = data.materials ?? [];
+const materials = overview?.builtWith?.materials ?? [];
 const hasBuiltWith = techs.length > 0 || materials.length > 0;
 
+const academic = overview?.academic;
 // Timeline only when there's an end date, the header already shows the start.
 const facts = [
   data.endDate
     ? { label: "Timeline", value: `${fmt(data.startDate)} – ${fmt(data.endDate)}` }
     : null,
-  data.team?.length ? { label: "Team", value: data.team.join(", ") } : null,
+  overview?.team?.length ? { label: "Team", value: overview.team.join(", ") } : null,
+  academic?.institution ? { label: "Institution", value: academic.institution } : null,
+  academic?.supervisor ? { label: "Supervisor", value: academic.supervisor } : null,
+  academic?.researchArea ? { label: "Research area", value: academic.researchArea } : null,
 ].filter(Boolean) as { label: string; value: string }[];
 
-const keyFeatures = data.keyFeatures ?? [];
-const challenges = data.challenges ?? [];
+const keyFeatures = overview?.keyFeatures ?? [];
+const challenges = overview?.challenges ?? [];
 
 const hasLists = keyFeatures.length > 0 || challenges.length > 0;
 const hasAnything = hasBuiltWith || facts.length > 0 || hasLists;
