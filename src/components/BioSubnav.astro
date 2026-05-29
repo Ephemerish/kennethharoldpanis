@@ -2,7 +2,7 @@
 interface Props {
   current: "about" | "certifications" | "experience" | "resume";
 }
-const { current } = Astro.props;
+const { current } = Astro.props as Props;
 
 const links = [
   { key: "about", label: "About", href: "/bio" },
@@ -12,27 +12,31 @@ const links = [
 ] as const;
 ---
 
-<nav aria-label="Bio sections" class="max-w-3xl mx-auto pt-8 mt-12 border-t border-neutral-200">
-  <p class="text-xs uppercase tracking-wider text-neutral-500 mb-3 text-center">
+<nav aria-label="Bio sections" class="max-w-4xl mx-auto pt-6 mt-12">
+  <p class="text-[11px] uppercase tracking-[0.18em] text-neutral-500 mb-4 text-center font-medium">
     More in this section
   </p>
-  <div class="flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-sm">
-    {links.map((link, i) => {
+  <div class="flex items-center justify-center flex-wrap border-b border-neutral-200">
+    {links.map((link) => {
       const isActive = link.key === current;
-      return (
-        <>
-          {i > 0 && <span class="text-neutral-300" aria-hidden="true">·</span>}
-          {isActive ? (
-            <span class="text-neutral-400" aria-current="page">{link.label}</span>
-          ) : (
-            <a
-              href={link.href}
-              class="text-neutral-600 hover:text-brand-700  "
-            >
-              {link.label}
-            </a>
-          )}
-        </>
+      return isActive ? (
+        <span
+          aria-current="page"
+          class="relative px-5 py-3 text-sm font-semibold text-brand-700"
+        >
+          {link.label}
+          <span
+            class="absolute inset-x-3 -bottom-px h-0.5 bg-brand-600"
+            aria-hidden="true"
+          />
+        </span>
+      ) : (
+        <a
+          href={link.href}
+          class="px-5 py-3 text-sm font-medium text-neutral-600 hover:text-brand-700 hover:bg-brand-50/40"
+        >
+          {link.label}
+        </a>
       );
     })}
   </div>
