@@ -1,11 +1,9 @@
 ---
 import Layout from "../../layouts/MainLayout.astro";
 import BioSubnav from "../../components/BioSubnav.astro";
-import ButtonLink from "../../components/ButtonLink.astro";
 import PageSection from "../../components/PageSection.astro";
 import Card from "../../components/Card.astro";
 import IconBadge from "../../components/IconBadge.astro";
-import CtaSection from "../../components/CtaSection.astro";
 import {
   ArrowRightIcon,
   CertificateIcon,
@@ -131,21 +129,5 @@ const quickLinks = [
     </div>
 
     <BioSubnav current="about" />
-
-    <CtaSection
-      prefix="Want to"
-      accent="collaborate"
-      suffix="or chat?"
-      subtitle="Drop me a message — I'm always up for talking through cloud and software dev ideas."
-    >
-      <ButtonLink href="/contact" variant="gradient" size="lg" class="text-lg font-semibold">
-        Get In Touch
-        <ArrowRightIcon className="ml-3 w-5 h-5" />
-      </ButtonLink>
-      <ButtonLink href="/projects" variant="outlineBrand" size="lg" class="text-lg font-semibold">
-        See Projects
-        <ArrowRightIcon className="ml-3 w-5 h-5" />
-      </ButtonLink>
-    </CtaSection>
   </PageSection>
 </Layout>

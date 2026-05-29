@@ -1,7 +1,6 @@
 ---
 import Layout from "../../layouts/MainLayout.astro";
 import BioSubnav from "../../components/BioSubnav.astro";
-import ButtonLink from "../../components/ButtonLink.astro";
 import PageSection from "../../components/PageSection.astro";
 import PageHeader from "../../components/PageHeader.astro";
 import SectionHeader from "../../components/SectionHeader.astro";
@@ -9,9 +8,7 @@ import Card from "../../components/Card.astro";
 import IconBadge from "../../components/IconBadge.astro";
 import StatusPill from "../../components/StatusPill.astro";
 import Chip from "../../components/Chip.astro";
-import CtaSection from "../../components/CtaSection.astro";
 import {
-  ArrowRightIcon,
   ArrowSquareOutIcon as ArrowTopRightOnSquareIcon,
   ChartLineUpIcon,
   CloudIcon,
@@ -248,20 +245,5 @@ const cloudJourney = [
     </section>
 
     <BioSubnav current="certifications" />
-
-    <CtaSection
-      prefix="Building something or want to chat?"
-      accent="Let's connect."
-      subtitle="I'm always up for learning, collaborating on projects, or talking through cloud and software dev ideas."
-    >
-      <ButtonLink href="/contact" variant="gradient" size="lg" class="text-lg font-semibold">
-        Get In Touch
-        <ArrowRightIcon className="ml-3 w-5 h-5" />
-      </ButtonLink>
-      <ButtonLink href="/projects" variant="outlineBrand" size="lg" class="text-lg font-semibold">
-        See Projects
-        <ArrowRightIcon className="ml-3 w-5 h-5" />
-      </ButtonLink>
-    </CtaSection>
   </PageSection>
 </Layout>

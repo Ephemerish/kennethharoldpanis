@@ -1,11 +1,8 @@
 ---
 import Layout from "../layouts/MainLayout.astro";
 import EntryCard from "../components/EntryCard.astro";
-import ButtonLink from "../components/ButtonLink.astro";
 import PageSection from "../components/PageSection.astro";
 import PageHeader from "../components/PageHeader.astro";
-import CtaSection from "../components/CtaSection.astro";
-import { ArrowRightIcon } from "@phosphor-icons/react";
 import { getCollection } from "astro:content";
 import type { CollectionEntry } from "astro:content";
 
@@ -49,7 +46,7 @@ const regularProjects = allProjects.filter((project) => !project.data.featured);
     )}
 
     {regularProjects.length > 0 && (
-      <section class="mb-16 sm:mb-20">
+      <section>
         <div class="grid grid-cols-1 gap-8 sm:gap-10 sm:grid-cols-2 lg:grid-cols-3">
           {regularProjects.map((project) => (
             <EntryCard entry={project} kind="project" />
@@ -57,28 +54,5 @@ const regularProjects = allProjects.filter((project) => !project.data.featured);
         </div>
       </section>
     )}
-
-    <CtaSection
-      prefix="Like what you see?"
-      accent="Let's collaborate!"
-      subtitle="I'm always interested in working on exciting projects and solving challenging problems."
-      size="lg"
-    >
-      <ButtonLink href="/contact" variant="gradient" size="lg" class="text-lg font-semibold">
-        Get In Touch
-        <ArrowRightIcon className="ml-3 w-5 h-5" />
-      </ButtonLink>
-      <ButtonLink
-        href="https://github.com/Ephemerish"
-        target="_blank"
-        rel="noopener noreferrer"
-        variant="outlineBrand"
-        size="lg"
-        class="text-lg font-semibold"
-      >
-        View GitHub
-        <ArrowRightIcon className="ml-3 w-5 h-5" />
-      </ButtonLink>
-    </CtaSection>
   </PageSection>
 </Layout>
