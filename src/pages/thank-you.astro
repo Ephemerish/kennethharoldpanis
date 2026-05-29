@@ -2,6 +2,7 @@
 export const prerender = true;
 import Layout from "../layouts/MainLayout.astro";
 import ButtonLink from "../components/ButtonLink.astro";
+import EmailLink from "../components/EmailLink.astro";
 import { CheckCircleIcon, HouseIcon as HomeIcon, BriefcaseIcon } from "@phosphor-icons/react";
 ---
 
@@ -84,12 +85,11 @@ import { CheckCircleIcon, HouseIcon as HomeIcon, BriefcaseIcon } from "@phosphor
       <!-- Additional Contact Info -->
       <div class="mt-8 sm:mt-12 pt-6 sm:pt-8 border-t border-neutral-400">
         <p class="text-neutral-600 mb-3 sm:mb-4 text-sm sm:text-base">Need to reach me urgently?</p>
-        <a
-          href="mailto:kennethpanis24@gmail.com"
+        <EmailLink
+          address="kennethpanis24@gmail.com"
           class="text-brand-600 hover:text-brand-700 font-medium  text-sm sm:text-base break-all"
-        >
-          kennethpanis24@gmail.com
-        </a>
+          showAddress
+        />
       </div>
     </div>
   </div>

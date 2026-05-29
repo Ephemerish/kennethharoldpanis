@@ -7,14 +7,14 @@ import PageSection from "../components/PageSection.astro";
 import PageHeader from "../components/PageHeader.astro";
 import Card from "../components/Card.astro";
 import Chip from "../components/Chip.astro";
+import EmailLink from "../components/EmailLink.astro";
 import { EnvelopeIcon, MapPinIcon, ClockIcon } from "@phosphor-icons/react";
 
 const contactInfo = [
   {
     Icon: EnvelopeIcon,
     title: "Email",
-    body: null,
-    link: { href: "mailto:kennethpanis24@gmail.com", label: "kennethpanis24@gmail.com" },
+    email: "kennethpanis24@gmail.com",
   },
   {
     Icon: MapPinIcon,
@@ -131,13 +131,12 @@ const stackChips = [
                 </div>
                 <div>
                   <h3 class="font-semibold text-neutral-900 text-sm sm:text-base">{info.title}</h3>
-                  {info.link ? (
-                    <a
-                      href={info.link.href}
+                  {info.email ? (
+                    <EmailLink
+                      address={info.email}
                       class="text-brand-600 hover:text-brand-700 text-sm sm:text-base break-all"
-                    >
-                      {info.link.label}
-                    </a>
+                      showAddress
+                    />
                   ) : (
                     <p class="text-neutral-600 text-sm sm:text-base">{info.body}</p>
                   )}

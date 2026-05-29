@@ -1,0 +1,47 @@
+---
+/**
+ * Email link that never emits a real address in the server HTML, so
+ * Cloudflare's Email Address Obfuscation leaves it alone. The address is
+ * split into harmless data attributes and reassembled on the client, and the
+ * decode runs on `astro:page-load` so it also works across view transitions.
+ *
+ * - Pass a `slot` (e.g. an icon) for icon-only links.
+ * - Set `showAddress` to render the address as the visible text.
+ */
+interface Props {
+  address: string;
+  class?: string;
+  showAddress?: boolean;
+  ariaLabel?: string;
+}
+
+const { address, class: className, showAddress = false, ariaLabel } = Astro.props;
+const [user, domain] = address.split("@");
+---
+
+<a
+  data-email-user={user}
+  data-email-domain={domain}
+  data-email-text={showAddress ? "" : undefined}
+  class={className}
+  aria-label={ariaLabel}
+>
+  {showAddress ? `${user} [at] ${domain}` : <slot />}
+</a>
+
+<script>
+  function decodeEmails() {
+    document
+      .querySelectorAll<HTMLAnchorElement>("a[data-email-user]")
+      .forEach((a) => {
+        const user = a.dataset.emailUser;
+        const domain = a.dataset.emailDomain;
+        if (!user || !domain) return;
+        const addr = `${user}@${domain}`;
+        a.href = `mailto:${addr}`;
+        if (a.hasAttribute("data-email-text")) a.textContent = addr;
+      });
+  }
+
+  document.addEventListener("astro:page-load", decodeEmails);
+</script>
