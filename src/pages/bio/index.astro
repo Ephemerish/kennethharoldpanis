@@ -1,0 +1,192 @@
+---
+import Layout from "../../layouts/MainLayout.astro";
+import BioSubnav from "../../components/BioSubnav.astro";
+import ButtonLink from "../../components/ButtonLink.astro";
+import {
+  ArrowRightIcon,
+  CertificateIcon,
+  BriefcaseIcon,
+  FileTextIcon,
+  CloudIcon,
+  CodeIcon,
+  HeartIcon,
+} from "@phosphor-icons/react";
+
+const quickLinks = [
+  {
+    title: "Certifications",
+    description: "FinOps, Google Cloud, and the AWS path I'm currently learning.",
+    href: "/bio/certifications",
+    Icon: CertificateIcon,
+  },
+  {
+    title: "Experience",
+    description: "Roles, internships, and project work — a timeline of how I got here.",
+    href: "/bio/experience",
+    Icon: BriefcaseIcon,
+  },
+  {
+    title: "Resume / CV",
+    description: "Quick on-page summary and a downloadable PDF.",
+    href: "/bio/resume",
+    Icon: FileTextIcon,
+  },
+];
+---
+
+<Layout
+  title="Bio - Kenneth Harold Panis"
+  description="About Kenneth Harold Panis — software developer growing his cloud and software development skills, with certifications across FinOps and Google Cloud, and ongoing AWS learning."
+  image="/images/me/me.jpg"
+  type="profile"
+>
+  <section class="py-8 sm:py-12 bg-white relative overflow-hidden border-t border-neutral-200">
+    <div class="absolute inset-0">
+      <div class="max-w-7xl mx-auto h-full px-4 sm:px-6 lg:px-8">
+        <div class="bg-hero-gradient border-l border-r border-neutral-200 h-full"></div>
+      </div>
+    </div>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+      <div class="px-4 sm:px-6 lg:px-8">
+        <!-- Header with avatar -->
+        <div class="grid grid-cols-1 md:grid-cols-[260px_1fr] gap-8 sm:gap-12 items-center mb-12 sm:mb-16">
+          <div class="mx-auto md:mx-0">
+            <div class="relative w-[200px] h-[200px] sm:w-[240px] sm:h-[240px] md:w-[260px] md:h-[260px] overflow-hidden border-4 border-brand-600">
+              <img
+                src="/images/me/me.jpg"
+                alt="Kenneth Harold Panis"
+                class="w-full h-full object-cover"
+                loading="eager"
+                width="260"
+                height="260"
+                decoding="async"
+              />
+            </div>
+          </div>
+          <div class="text-center md:text-left animate-fade-in">
+            <h1 class="text-4xl sm:text-5xl md:text-6xl font-bold mb-4 leading-tight">
+              <span class="text-neutral-900">About</span>
+              <span class="text-brand-gradient">Me</span>
+            </h1>
+            <p class="text-lg sm:text-xl text-neutral-700 leading-relaxed mb-4">
+              I'm Kenneth — a developer who likes turning random ideas into
+              real things, and who's actively working on his cloud and
+              software development skills.
+            </p>
+            <p class="text-base sm:text-lg text-neutral-600 leading-relaxed">
+              This bio section is the long version: where I'm coming from,
+              what I'm learning, and what I've put on paper so far.
+            </p>
+          </div>
+        </div>
+
+        <!-- What I'm into -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 mb-12 sm:mb-16">
+          <div class="bg-card-gradient border border-neutral-200 shadow-elegant p-6 sm:p-8 hover-lift transition-all duration-500">
+            <div class="w-12 h-12 bg-brand-600 text-neutral-0 flex items-center justify-center mb-4 shadow-md">
+              <CodeIcon className="w-6 h-6" weight="fill" />
+            </div>
+            <h3 class="text-lg sm:text-xl font-bold text-neutral-900 mb-2">
+              Software development
+            </h3>
+            <p class="text-sm sm:text-base text-neutral-700 leading-relaxed">
+              Building full-stack web things, mobile apps, and the occasional
+              hardware/IoT side project. Always sharpening the fundamentals.
+            </p>
+          </div>
+          <div class="bg-card-gradient border border-neutral-200 shadow-elegant p-6 sm:p-8 hover-lift transition-all duration-500">
+            <div class="w-12 h-12 bg-brand-600 text-neutral-0 flex items-center justify-center mb-4 shadow-md">
+              <CloudIcon className="w-6 h-6" weight="fill" />
+            </div>
+            <h3 class="text-lg sm:text-xl font-bold text-neutral-900 mb-2">
+              Cloud
+            </h3>
+            <p class="text-sm sm:text-base text-neutral-700 leading-relaxed">
+              Shipping on Google Cloud day-to-day, learning AWS in parallel,
+              and working toward the AWS Solutions Architect cert.
+            </p>
+          </div>
+          <div class="bg-card-gradient border border-neutral-200 shadow-elegant p-6 sm:p-8 hover-lift transition-all duration-500">
+            <div class="w-12 h-12 bg-brand-600 text-neutral-0 flex items-center justify-center mb-4 shadow-md">
+              <HeartIcon className="w-6 h-6" weight="fill" />
+            </div>
+            <h3 class="text-lg sm:text-xl font-bold text-neutral-900 mb-2">
+              Why I build
+            </h3>
+            <p class="text-sm sm:text-base text-neutral-700 leading-relaxed">
+              I'm drawn to making things that solve random problems and bring
+              ideas to life — weekend experiments included.
+            </p>
+          </div>
+        </div>
+
+        <!-- Quick links into sub-sections -->
+        <div class="mb-16 sm:mb-20">
+          <div class="text-center mb-8 sm:mb-10">
+            <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-neutral-900 mb-3">
+              More in this section
+            </h2>
+            <div class="w-24 h-1 bg-brand-gradient mx-auto"></div>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
+            {quickLinks.map((link) => (
+              <a
+                href={link.href}
+                class="group bg-card-gradient border border-neutral-200 shadow-elegant hover:border-brand-300/60 hover:shadow-floating transition-all duration-500 ease-out hover-lift p-6 sm:p-8 flex flex-col"
+              >
+                <div class="w-10 h-10 sm:w-12 sm:h-12 bg-brand-600 text-neutral-0 flex items-center justify-center mb-4 shadow-md">
+                  <link.Icon className="w-5 h-5 sm:w-6 sm:h-6" weight="fill" />
+                </div>
+                <h3 class="text-lg sm:text-xl font-bold text-neutral-900 mb-2 group-hover:text-brand-700 transition-colors duration-300">
+                  {link.title}
+                </h3>
+                <p class="text-sm sm:text-base text-neutral-600 mb-4 flex-1 leading-relaxed">
+                  {link.description}
+                </p>
+                <div class="flex items-center text-sm font-semibold text-brand-700 group-hover:text-brand-800">
+                  <span>Visit</span>
+                  <ArrowRightIcon className="w-4 h-4 ml-1.5 group-hover:translate-x-1 transition-transform duration-300" />
+                </div>
+              </a>
+            ))}
+          </div>
+        </div>
+
+        <BioSubnav current="about" />
+
+        <!-- CTA -->
+        <section class="text-center py-12 sm:py-16">
+          <div class="max-w-3xl mx-auto">
+            <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-neutral-900 mb-6">
+              Want to <span class="text-brand-gradient">collaborate</span> or chat?
+            </h2>
+            <p class="text-lg sm:text-xl text-neutral-600 mb-8 leading-relaxed">
+              Drop me a message — I'm always up for talking through cloud
+              and software dev ideas.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+              <ButtonLink
+                href="/contact"
+                variant="gradient"
+                size="lg"
+                class="text-lg font-semibold"
+              >
+                Get In Touch
+                <ArrowRightIcon className="ml-3 w-5 h-5" />
+              </ButtonLink>
+              <ButtonLink
+                href="/projects"
+                variant="outlineBrand"
+                size="lg"
+                class="text-lg font-semibold"
+              >
+                See Projects
+                <ArrowRightIcon className="ml-3 w-5 h-5" />
+              </ButtonLink>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </section>
+</Layout>

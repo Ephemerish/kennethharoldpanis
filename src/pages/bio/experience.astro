@@ -1,0 +1,79 @@
+---
+import Layout from "../../layouts/MainLayout.astro";
+import BioSubnav from "../../components/BioSubnav.astro";
+import ButtonLink from "../../components/ButtonLink.astro";
+import {
+  ArrowRightIcon,
+  BriefcaseIcon,
+  HourglassIcon,
+} from "@phosphor-icons/react";
+---
+
+<Layout
+  title="Experience - Kenneth Harold Panis"
+  description="Roles, internships, and project work — a timeline of how I got here."
+  image="/images/me/me.jpg"
+  type="website"
+>
+  <section class="py-8 sm:py-12 bg-white relative overflow-hidden border-t border-neutral-200">
+    <div class="absolute inset-0">
+      <div class="max-w-7xl mx-auto h-full px-4 sm:px-6 lg:px-8">
+        <div class="bg-hero-gradient border-l border-r border-neutral-200 h-full"></div>
+      </div>
+    </div>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+      <div class="px-4 sm:px-6 lg:px-8">
+        <!-- Header -->
+        <div class="text-center mb-12 sm:mb-16 animate-fade-in">
+          <h1 class="text-4xl sm:text-5xl md:text-6xl font-bold mb-6">
+            <span class="text-neutral-900">My</span>
+            <span class="text-brand-gradient">Experience</span>
+          </h1>
+          <p class="text-lg sm:text-xl text-neutral-700 max-w-3xl mx-auto leading-relaxed px-2">
+            Roles, internships, and project work — a timeline of how I got here.
+          </p>
+          <div class="w-32 h-1 bg-brand-gradient mx-auto mt-6"></div>
+        </div>
+
+        <!-- Placeholder -->
+        <div class="max-w-3xl mx-auto mb-16 sm:mb-20">
+          <div class="bg-card-gradient border border-neutral-200 shadow-elegant p-8 sm:p-12 text-center">
+            <div class="inline-flex items-center justify-center w-16 h-16 sm:w-20 sm:h-20 bg-warning-100 text-warning-800 mb-6 border border-warning-200">
+              <HourglassIcon className="w-8 h-8 sm:w-10 sm:h-10" weight="fill" />
+            </div>
+            <h2 class="text-2xl sm:text-3xl font-bold text-neutral-900 mb-4">
+              Coming soon
+            </h2>
+            <p class="text-base sm:text-lg text-neutral-700 leading-relaxed mb-6">
+              I'm still putting this page together — a proper timeline of roles
+              and project work is on the way. In the meantime, the projects
+              page is the best place to see what I've been building.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-3 justify-center">
+              <ButtonLink
+                href="/projects"
+                variant="gradient"
+                size="lg"
+                class="text-base sm:text-lg font-semibold"
+              >
+                <BriefcaseIcon className="mr-2 w-5 h-5" />
+                See Projects
+                <ArrowRightIcon className="ml-3 w-5 h-5" />
+              </ButtonLink>
+              <ButtonLink
+                href="/bio"
+                variant="outlineBrand"
+                size="lg"
+                class="text-base sm:text-lg font-semibold"
+              >
+                Back to Bio
+              </ButtonLink>
+            </div>
+          </div>
+        </div>
+
+        <BioSubnav current="experience" />
+      </div>
+    </div>
+  </section>
+</Layout>

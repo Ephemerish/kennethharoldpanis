@@ -1,0 +1,351 @@
+---
+import Layout from "../../layouts/MainLayout.astro";
+import BioSubnav from "../../components/BioSubnav.astro";
+import ButtonLink from "../../components/ButtonLink.astro";
+import {
+  ArrowRightIcon,
+  ArrowSquareOutIcon as ArrowTopRightOnSquareIcon,
+  ChartLineUpIcon,
+  CloudIcon,
+  CertificateIcon,
+  StarIcon,
+  HourglassIcon,
+  CheckCircleIcon,
+  BookOpenIcon,
+} from "@phosphor-icons/react";
+
+type Certification = {
+  title: string;
+  issuer: string;
+  issuedDate?: string;
+  credentialUrl?: string;
+  badge?: string; // path under /public/images, e.g. "certs/finops.png"
+  summary: string;
+  focusAreas: string[];
+  Icon: any;
+  accent: "finops" | "cloud";
+  highlighted?: boolean;
+};
+
+const certifications: Certification[] = [
+  {
+    title: "FinOps Certified Practitioner",
+    issuer: "FinOps Foundation",
+    summary:
+      "Practitioner-level certification covering the principles, personas, and lifecycle of FinOps — bringing engineering, finance, and product together to drive accountable cloud spend and business value.",
+    focusAreas: [
+      "FinOps Framework & Principles",
+      "Cloud Cost Allocation & Showback",
+      "Rate & Usage Optimization",
+      "Forecasting & Budgeting",
+      "Unit Economics",
+    ],
+    Icon: ChartLineUpIcon,
+    accent: "finops",
+    highlighted: true,
+    // badge: "certs/finops-certified-practitioner.png",
+    // credentialUrl: "",
+    // issuedDate: "",
+  },
+  {
+    title: "Google Associate Cloud Engineer",
+    issuer: "Google Cloud",
+    summary:
+      "Associate-level certification validating the ability to deploy applications, monitor operations, and manage enterprise solutions on Google Cloud Platform.",
+    focusAreas: [
+      "Compute Engine & GKE",
+      "Cloud Storage & Databases",
+      "IAM & Networking",
+      "Monitoring & Logging",
+      "Deployment & Operations",
+    ],
+    Icon: CloudIcon,
+    accent: "cloud",
+    // badge: "certs/google-associate-cloud-engineer.png",
+    // credentialUrl: "",
+    // issuedDate: "",
+  },
+];
+
+const accentClasses = {
+  finops: {
+    ring: "border-brand-300/60 hover:border-brand-500",
+    iconBg: "bg-brand-600 text-neutral-0",
+    chip: "bg-brand-50 text-brand-800 border-brand-200",
+    glow: "bg-brand-100/40",
+  },
+  cloud: {
+    ring: "border-neutral-200 hover:border-brand-300/60",
+    iconBg: "bg-neutral-900 text-neutral-0",
+    chip: "bg-neutral-100 text-neutral-700 border-neutral-200",
+    glow: "bg-neutral-100/40",
+  },
+};
+---
+
+<Layout
+  title="Certifications - Kenneth Harold Panis"
+  description="Certifications and ongoing learning across cloud and software development — FinOps Certified Practitioner, Google Associate Cloud Engineer, and working toward AWS Solutions Architect."
+  image="/images/me/me.jpg"
+  type="website"
+>
+  <section class="py-8 sm:py-12 bg-white relative overflow-hidden border-t border-neutral-200">
+    <div class="absolute inset-0">
+      <div class="max-w-7xl mx-auto h-full px-4 sm:px-6 lg:px-8">
+        <div class="bg-hero-gradient border-l border-r border-neutral-200 h-full"></div>
+      </div>
+    </div>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+      <div class="px-4 sm:px-6 lg:px-8">
+        <!-- Header -->
+        <div class="text-center mb-12 sm:mb-16 relative">
+          <div class="absolute inset-0 -z-10">
+            <div class="absolute top-0 left-1/2 w-96 h-96 bg-brand-100/30 blur-3xl transform -translate-x-1/2 -translate-y-1/2"></div>
+          </div>
+          <div class="animate-fade-in">
+            <h1 class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-6">
+              <span class="text-neutral-900">My</span>
+              <span class="text-brand-gradient">Certifications</span>
+            </h1>
+            <p class="text-lg sm:text-xl text-neutral-700 max-w-3xl mx-auto leading-relaxed px-2 mb-6">
+              Markers of where I've been learning — across software development
+              and cloud. Currently shipping projects on Google Cloud, learning
+              AWS, and using my FinOps cert as a financial lens on how I
+              architect.
+            </p>
+            <div class="w-32 h-1 bg-brand-gradient mx-auto"></div>
+          </div>
+        </div>
+
+        <!-- Currently Focused On -->
+        <div class="mb-12 sm:mb-16 animate-fade-in">
+          <div class="bg-card-gradient border border-brand-200/60 shadow-elegant p-6 sm:p-10">
+            <div class="flex flex-col md:flex-row items-start md:items-center gap-6">
+              <div class="shrink-0 w-16 h-16 sm:w-20 sm:h-20 bg-brand-600 text-neutral-0 flex items-center justify-center shadow-lg">
+                <ChartLineUpIcon className="w-8 h-8 sm:w-10 sm:h-10" weight="fill" />
+              </div>
+              <div class="flex-1">
+                <span class="inline-flex items-center gap-1.5 px-3 py-1 mb-3 text-xs font-semibold bg-brand-100 text-brand-800 border border-brand-200">
+                  <StarIcon className="w-3.5 h-3.5" weight="fill" />
+                  Currently focused on
+                </span>
+                <h2 class="text-2xl sm:text-3xl font-bold text-neutral-900 mb-3">
+                  Growing my <span class="text-brand-gradient">cloud &amp; software dev</span> skills
+                </h2>
+                <p class="text-base sm:text-lg text-neutral-700 leading-relaxed">
+                  I'm actively working on my cloud and software development
+                  skills — building projects on Google Cloud, learning AWS in
+                  parallel, and using the FinOps cert to think about cost and
+                  architecture together. These certifications mark where I am
+                  on that journey, not a finish line.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Certifications Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-10 mb-16 sm:mb-20">
+          {certifications.map((cert) => {
+            const accent = accentClasses[cert.accent];
+            const Icon = cert.Icon;
+            return (
+              <article
+                class={`group relative bg-card-gradient overflow-hidden shadow-elegant border ${accent.ring} hover:shadow-floating transition-all duration-500 ease-out hover-lift flex flex-col`}
+              >
+                {cert.highlighted && (
+                  <div class="absolute top-4 right-4 z-10 flex items-center gap-1.5 bg-brand-600 text-neutral-0 px-3 py-1.5 text-xs font-semibold shadow-lg">
+                    <StarIcon className="w-3.5 h-3.5" weight="fill" />
+                    Featured
+                  </div>
+                )}
+
+                {/* Badge / Icon Area */}
+                <div class="relative px-6 sm:px-8 pt-8 sm:pt-10 pb-4 flex items-center justify-center">
+                  <div class={`absolute inset-0 ${accent.glow} blur-2xl`}></div>
+                  {cert.badge ? (
+                    <img
+                      src={`/images/${cert.badge}`}
+                      alt={`${cert.title} badge`}
+                      class="relative w-32 h-32 sm:w-40 sm:h-40 object-contain"
+                      loading="lazy"
+                    />
+                  ) : (
+                    <div class={`relative w-24 h-24 sm:w-28 sm:h-28 ${accent.iconBg} flex items-center justify-center shadow-lg`}>
+                      <Icon className="w-12 h-12 sm:w-14 sm:h-14" weight="fill" />
+                    </div>
+                  )}
+                </div>
+
+                <div class="px-6 sm:px-8 pb-6 sm:pb-8 flex-1 flex flex-col">
+                  <div class="text-center mb-5">
+                    <h3 class="text-xl sm:text-2xl font-bold text-neutral-900 mb-2 leading-tight">
+                      {cert.title}
+                    </h3>
+                    <p class="text-sm sm:text-base text-neutral-600 font-medium">
+                      {cert.issuer}
+                      {cert.issuedDate && (
+                        <span class="text-neutral-400"> · {cert.issuedDate}</span>
+                      )}
+                    </p>
+                  </div>
+
+                  <p class="text-sm sm:text-base text-neutral-700 mb-5 leading-relaxed">
+                    {cert.summary}
+                  </p>
+
+                  <div class="mb-5">
+                    <p class="text-xs font-semibold uppercase tracking-wider text-neutral-500 mb-3">
+                      Focus areas
+                    </p>
+                    <div class="flex flex-wrap gap-2">
+                      {cert.focusAreas.map((area) => (
+                        <span class={`px-3 py-1 text-xs sm:text-sm font-medium border ${accent.chip}`}>
+                          {area}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div class="flex-1"></div>
+
+                  {cert.credentialUrl && (
+                    <a
+                      href={cert.credentialUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="inline-flex items-center justify-center gap-1.5 mt-4 pt-4 border-t border-neutral-100 text-sm font-semibold text-brand-700 hover:text-brand-800 transition-colors duration-300"
+                    >
+                      <CertificateIcon className="w-4 h-4" />
+                      Verify credential
+                      <ArrowTopRightOnSquareIcon className="w-4 h-4" />
+                    </a>
+                  )}
+                </div>
+              </article>
+            );
+          })}
+        </div>
+
+        <!-- Cloud Learning Journey -->
+        <section class="mb-16 sm:mb-20">
+          <div class="text-center mb-10 sm:mb-12 animate-fade-in">
+            <h2 class="text-3xl sm:text-4xl md:text-5xl font-bold text-neutral-900 mb-4">
+              My <span class="text-brand-gradient">Cloud Journey</span>
+            </h2>
+            <p class="text-base sm:text-lg text-neutral-600 max-w-2xl mx-auto leading-relaxed">
+              Currently shipping on Google Cloud while actively learning AWS — building toward multi-cloud fluency.
+            </p>
+            <div class="w-24 h-1 bg-brand-gradient mx-auto mt-6"></div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
+            {/* Google Cloud — active */}
+            <article class="group relative bg-card-gradient overflow-hidden shadow-elegant border border-brand-200/60 hover:border-brand-400 hover:shadow-floating transition-all duration-500 ease-out hover-lift flex flex-col">
+              <div class="absolute top-4 right-4 z-10 flex items-center gap-1.5 bg-success-100 text-success-800 border border-success-200 px-3 py-1.5 text-xs font-semibold shadow-sm">
+                <CheckCircleIcon className="w-3.5 h-3.5" weight="fill" />
+                Active
+              </div>
+
+              <div class="relative px-6 sm:px-8 pt-8 sm:pt-10 pb-4 flex items-center justify-center">
+                <div class="absolute inset-0 bg-brand-100/40 blur-2xl"></div>
+                <div class="relative w-20 h-20 sm:w-24 sm:h-24 bg-brand-600 text-neutral-0 flex items-center justify-center shadow-lg">
+                  <CloudIcon className="w-10 h-10 sm:w-12 sm:h-12" weight="fill" />
+                </div>
+              </div>
+
+              <div class="px-6 sm:px-8 pb-6 sm:pb-8 flex-1 flex flex-col text-center">
+                <h3 class="text-xl sm:text-2xl font-bold text-neutral-900 mb-2">
+                  Google Cloud Platform
+                </h3>
+                <p class="text-sm sm:text-base text-neutral-600 font-medium mb-4">
+                  My primary cloud
+                </p>
+                <p class="text-sm sm:text-base text-neutral-700 leading-relaxed mb-5">
+                  Day-to-day I deploy, monitor, and operate projects on GCP — backed by my Associate Cloud Engineer certification.
+                </p>
+                <div class="flex flex-wrap justify-center gap-2 mt-auto">
+                  {["Compute Engine", "Cloud Run", "Cloud Storage", "IAM", "Cloud SQL"].map((t) => (
+                    <span class="px-3 py-1 text-xs sm:text-sm font-medium bg-brand-50 text-brand-800 border border-brand-200">
+                      {t}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </article>
+
+            {/* AWS — in progress */}
+            <article class="group relative bg-card-gradient overflow-hidden shadow-elegant border border-warning-200/70 hover:border-warning-400 hover:shadow-floating transition-all duration-500 ease-out hover-lift flex flex-col">
+              <div class="absolute top-4 right-4 z-10 flex items-center gap-1.5 bg-warning-100 text-warning-800 border border-warning-200 px-3 py-1.5 text-xs font-semibold shadow-sm">
+                <HourglassIcon className="w-3.5 h-3.5" weight="fill" />
+                In progress
+              </div>
+
+              <div class="relative px-6 sm:px-8 pt-8 sm:pt-10 pb-4 flex items-center justify-center">
+                <div class="absolute inset-0 bg-warning-100/40 blur-2xl"></div>
+                <div class="relative w-20 h-20 sm:w-24 sm:h-24 bg-neutral-900 text-neutral-0 flex items-center justify-center shadow-lg">
+                  <BookOpenIcon className="w-10 h-10 sm:w-12 sm:h-12" weight="fill" />
+                </div>
+              </div>
+
+              <div class="px-6 sm:px-8 pb-6 sm:pb-8 flex-1 flex flex-col text-center">
+                <h3 class="text-xl sm:text-2xl font-bold text-neutral-900 mb-2">
+                  AWS Solutions Architect
+                </h3>
+                <p class="text-sm sm:text-base text-neutral-600 font-medium mb-4">
+                  Learning &amp; certifying — ongoing
+                </p>
+                <p class="text-sm sm:text-base text-neutral-700 leading-relaxed mb-5">
+                  Actively learning AWS and integrating it into my workflow, working toward the Solutions Architect certification to extend my cloud range beyond GCP.
+                </p>
+                <div class="flex flex-wrap justify-center gap-2 mt-auto">
+                  {["EC2", "S3", "VPC", "Lambda", "RDS", "Well-Architected"].map((t) => (
+                    <span class="px-3 py-1 text-xs sm:text-sm font-medium bg-neutral-100 text-neutral-700 border border-neutral-200">
+                      {t}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <BioSubnav current="certifications" />
+
+        <!-- Call to Action -->
+        <section class="text-center py-12 sm:py-16">
+          <div class="max-w-3xl mx-auto">
+            <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-neutral-900 mb-6">
+              Building something or want to chat?
+              <span class="text-brand-gradient">Let's connect.</span>
+            </h2>
+            <p class="text-lg sm:text-xl text-neutral-600 mb-8 leading-relaxed">
+              I'm always up for learning, collaborating on projects, or talking
+              through cloud and software dev ideas.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+              <ButtonLink
+                href="/contact"
+                variant="gradient"
+                size="lg"
+                class="text-lg font-semibold"
+              >
+                Get In Touch
+                <ArrowRightIcon className="ml-3 w-5 h-5" />
+              </ButtonLink>
+              <ButtonLink
+                href="/projects"
+                variant="outlineBrand"
+                size="lg"
+                class="text-lg font-semibold"
+              >
+                See Projects
+                <ArrowRightIcon className="ml-3 w-5 h-5" />
+              </ButtonLink>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </section>
+</Layout>

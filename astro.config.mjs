@@ -15,6 +15,9 @@ import rehypeFigure from "./src/lib/rehype-figure.mjs";
 export default defineConfig({
   site: 'https://kennethharoldpanis.com',
   output: 'server', // Enable server-side rendering
+  redirects: {
+    '/certifications': '/bio/certifications',
+  },
   server: {
     port: 3000, // Ensure it matches the Docker exposed port
     host: "0.0.0.0",
