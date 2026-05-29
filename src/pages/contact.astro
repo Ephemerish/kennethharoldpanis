@@ -2,212 +2,200 @@
 import Layout from "../layouts/MainLayout.astro";
 import { SubjectSelect } from "../components/SubjectSelect";
 import { Toaster } from "../components/ui/sonner";
+import PageSection from "../components/PageSection.astro";
+import PageHeader from "../components/PageHeader.astro";
+import Card from "../components/Card.astro";
+import Chip from "../components/Chip.astro";
 import { EnvelopeIcon, MapPinIcon, ClockIcon } from "@phosphor-icons/react";
+
+const contactInfo = [
+  {
+    Icon: EnvelopeIcon,
+    title: "Email",
+    body: null,
+    link: { href: "mailto:kennethpanis24@gmail.com", label: "kennethpanis24@gmail.com" },
+  },
+  {
+    Icon: MapPinIcon,
+    title: "Location",
+    body: "Philippines",
+  },
+  {
+    Icon: ClockIcon,
+    title: "Response Time",
+    body: "Usually within 24 hours",
+    subtext: "Monday to Friday, 9 AM - 6 PM PHT",
+  },
+];
+
+const stackChips = [
+  "Frontend Development",
+  "React & Next.js",
+  "TypeScript",
+  "Computer Engineering",
+];
 ---
 
-<Layout 
+<Layout
   title="Contact - Kenneth Harold Panis"
   description="Get in touch with Kenneth Harold Panis for collaboration, job opportunities, or project inquiries. Let's build something amazing together."
   image="/images/me/me.jpg"
   type="website"
 >
-  <section class="py-8 sm:py-12 bg-white relative overflow-hidden border-t border-neutral-200">
-    <div class="absolute inset-0">
-      <div class="max-w-7xl mx-auto h-full px-4 sm:px-6 lg:px-8">
-        <div class="bg-hero-gradient border-l border-r border-neutral-200 h-full"></div>
-      </div>
-    </div>
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
-      <div class="px-4 sm:px-6 lg:px-8">
-      <!-- Header Section with Enhanced Design -->
-      <div class="text-center mb-16 sm:mb-20 ">
-        <h1 class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-6">
-          <span class="text-neutral-900">Let's</span> <span class="text-brand-gradient">Connect</span>
-        </h1>
-        <p class="text-xl sm:text-2xl text-neutral-700 max-w-4xl mx-auto leading-relaxed px-2 mb-8">
-          I'm always interested in discussing new opportunities, collaborations, or just having a conversation about technology and development.
-        </p>
-        <div class="w-32 h-1 bg-brand-gradient mx-auto"></div>
-      </div>
+  <PageSection variant="hero">
+    <PageHeader
+      prefix="Let's"
+      accent="Connect"
+      subtitle="I'm always interested in discussing new opportunities, collaborations, or just having a conversation about technology and development."
+    />
 
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 sm:gap-16 lg:gap-20">
-        <!-- Contact Form with Premium Styling -->
-        <div class="bg-card-gradient shadow-floating p-8 sm:p-10 lg:p-12 border border-neutral-200/50 order-2 lg:order-1 ">
-          <div class="text-center mb-8">
-            <h2 class="text-2xl sm:text-3xl font-bold text-neutral-900 mb-3">
-              💬 Send me a message
-            </h2>
-            <p class="text-neutral-600">I'll get back to you within 24 hours</p>
-            <div class="w-16 h-0.5 bg-brand-gradient mx-auto mt-4"></div>
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 sm:gap-16 lg:gap-20">
+      <Card variant="floating" padding="lg" class="order-2 lg:order-1">
+        <div class="text-center mb-8">
+          <h2 class="text-2xl sm:text-3xl font-bold text-neutral-900 mb-3">
+            💬 Send me a message
+          </h2>
+          <p class="text-neutral-600">I'll get back to you within 24 hours</p>
+          <div class="w-16 h-0.5 bg-brand-gradient mx-auto mt-4"></div>
+        </div>
+
+        <form class="space-y-6 sm:space-y-8" id="contact-form" method="POST">
+          <div class="group">
+            <label for="name" class="block text-sm font-semibold text-neutral-900 mb-3">
+              Full Name <span class="text-error-600">*</span>
+            </label>
+            <input
+              type="text"
+              id="name"
+              name="name"
+              required
+              class="w-full px-4 py-4 border-2 border-neutral-300 focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 hover:border-neutral-400 text-base bg-neutral-0/50 backdrop-blur-sm"
+              placeholder="Your full name"
+            />
           </div>
-          
-          <form class="space-y-6 sm:space-y-8" id="contact-form" method="POST">
-            <!-- Name Field -->
-            <div class="group">
-              <label for="name" class="block text-sm font-semibold text-neutral-900 mb-3">
-                Full Name <span class="text-error-600">*</span>
-              </label>
-              <input
-                type="text"
-                id="name"
-                name="name"
-                required
-                class="w-full px-4 py-4 border-2 border-neutral-300 focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500   hover:border-neutral-400 text-base bg-neutral-0/50 backdrop-blur-sm "
-                placeholder="Your full name"
-              />
-            </div>
 
-            <!-- Email Field -->
-            <div class="group">
-              <label for="email" class="block text-sm font-semibold text-neutral-900 mb-3">
-                Email Address <span class="text-error-600">*</span>
-              </label>
-              <input
-                type="email"
-                id="email"
-                name="email"
-                required
-                class="w-full px-4 py-4 border-2 border-neutral-300 focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500   hover:border-neutral-400 text-base bg-neutral-0/50 backdrop-blur-sm "
-                placeholder="your.email@example.com"
-              />
-            </div>
+          <div class="group">
+            <label for="email" class="block text-sm font-semibold text-neutral-900 mb-3">
+              Email Address <span class="text-error-600">*</span>
+            </label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              required
+              class="w-full px-4 py-4 border-2 border-neutral-300 focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 hover:border-neutral-400 text-base bg-neutral-0/50 backdrop-blur-sm"
+              placeholder="your.email@example.com"
+            />
+          </div>
 
-            <!-- Subject Field -->
-            <div>
-              <label for="subject" class="block text-sm font-semibold text-neutral-900 mb-3">
-                Subject <span class="text-error-600">*</span>
-              </label>
-              <SubjectSelect 
-                client:load
-                name="subject"
-                required
-              />
-            </div>
+          <div>
+            <label for="subject" class="block text-sm font-semibold text-neutral-900 mb-3">
+              Subject <span class="text-error-600">*</span>
+            </label>
+            <SubjectSelect client:load name="subject" required />
+          </div>
 
-            <!-- Message Field -->
-            <div>
-              <label for="message" class="block text-sm font-semibold text-neutral-900 mb-3">
-                Message <span class="text-error-600">*</span>
-              </label>
-              <textarea
-                id="message"
-                name="message"
-                rows="5"
-                required
-                class="w-full px-4 py-4 border-2 border-neutral-300 focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500   hover:border-neutral-400 resize-vertical text-base bg-neutral-0/50 backdrop-blur-sm"
-                placeholder="Tell me about your project, question, or how I can help you..."
-              ></textarea>
-            </div>
+          <div>
+            <label for="message" class="block text-sm font-semibold text-neutral-900 mb-3">
+              Message <span class="text-error-600">*</span>
+            </label>
+            <textarea
+              id="message"
+              name="message"
+              rows="5"
+              required
+              class="w-full px-4 py-4 border-2 border-neutral-300 focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 hover:border-neutral-400 resize-vertical text-base bg-neutral-0/50 backdrop-blur-sm"
+              placeholder="Tell me about your project, question, or how I can help you..."
+            ></textarea>
+          </div>
 
-            <!-- Submit Button -->
-            <button
-              type="submit"
-              class="w-full bg-brand-gradient text-white font-semibold py-4 px-6  transform    shadow-brand text-base"
+          <button
+            type="submit"
+            class="w-full bg-brand-gradient text-white font-semibold py-4 px-6 shadow-brand text-base"
+          >
+            Send Message
+          </button>
+        </form>
+      </Card>
+
+      <div class="space-y-6 sm:space-y-8 order-1 lg:order-2">
+        <Card variant="floating">
+          <h2 class="text-xl sm:text-2xl font-bold text-neutral-900 mb-4 sm:mb-6">Get in touch</h2>
+
+          <div class="space-y-4 sm:space-y-6">
+            {contactInfo.map((info) => (
+              <div class="flex items-start gap-3 sm:gap-4">
+                <div class="w-10 h-10 sm:w-12 sm:h-12 bg-brand-100 flex items-center justify-center shrink-0">
+                  <info.Icon className="w-5 h-5 sm:w-6 sm:h-6 text-brand-700" />
+                </div>
+                <div>
+                  <h3 class="font-semibold text-neutral-900 text-sm sm:text-base">{info.title}</h3>
+                  {info.link ? (
+                    <a
+                      href={info.link.href}
+                      class="text-brand-600 hover:text-brand-700 text-sm sm:text-base break-all"
+                    >
+                      {info.link.label}
+                    </a>
+                  ) : (
+                    <p class="text-neutral-600 text-sm sm:text-base">{info.body}</p>
+                  )}
+                  {info.subtext && (
+                    <p class="text-xs sm:text-sm text-neutral-500">{info.subtext}</p>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+        </Card>
+
+        <Card variant="floating">
+          <h2 class="text-xl sm:text-2xl font-bold text-neutral-900 mb-4 sm:mb-6">Connect with me</h2>
+
+          <div class="flex gap-4">
+            <a
+              href="https://www.linkedin.com/in/kenneth-harold-panis/"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="flex items-center gap-2 px-4 py-2 bg-white border-2 border-brand-600 text-brand-700 hover:bg-brand-50 hover:border-brand-700 hover:text-brand-800 text-sm font-medium"
             >
-              Send Message
-            </button>
-          </form>
-        </div>
-
-        <!-- Contact Information -->
-        <div class="space-y-6 sm:space-y-8 order-1 lg:order-2">
-          <!-- Contact Details -->
-          <div class="bg-card-gradient shadow-floating p-6 sm:p-8 border border-neutral-200/50 ">
-            <h2 class="text-xl sm:text-2xl font-bold text-neutral-900 mb-4 sm:mb-6">Get in touch</h2>
-            
-            <div class="space-y-4 sm:space-y-6">
-              <!-- Email -->
-              <div class="flex items-start gap-3 sm:gap-4">
-                <div class="w-10 h-10 sm:w-12 sm:h-12 bg-brand-100 flex items-center justify-center shrink-0">
-                  <EnvelopeIcon className="w-5 h-5 sm:w-6 sm:h-6 text-brand-700" />
-                </div>
-                <div>
-                  <h3 class="font-semibold text-neutral-900 text-sm sm:text-base">Email</h3>
-                  <a href="mailto:kennethpanis24@gmail.com" class="text-brand-600 hover:text-brand-700  text-sm sm:text-base break-all">
-                    kennethpanis24@gmail.com
-                  </a>
-                </div>
-              </div>
-
-              <!-- Location -->
-              <div class="flex items-start gap-3 sm:gap-4">
-                <div class="w-10 h-10 sm:w-12 sm:h-12 bg-brand-100 flex items-center justify-center shrink-0">
-                  <MapPinIcon className="w-5 h-5 sm:w-6 sm:h-6 text-brand-700" />
-                </div>
-                <div>
-                  <h3 class="font-semibold text-neutral-900 text-sm sm:text-base">Location</h3>
-                  <p class="text-neutral-600 text-sm sm:text-base">Philippines</p>
-                </div>
-              </div>
-
-              <!-- Response Time -->
-              <div class="flex items-start gap-3 sm:gap-4">
-                <div class="w-10 h-10 sm:w-12 sm:h-12 bg-brand-100 flex items-center justify-center shrink-0">
-                  <ClockIcon className="w-5 h-5 sm:w-6 sm:h-6 text-brand-700" />
-                </div>
-                <div>
-                  <h3 class="font-semibold text-neutral-900 text-sm sm:text-base">Response Time</h3>
-                  <p class="text-neutral-600 text-sm sm:text-base">Usually within 24 hours</p>
-                  <p class="text-xs sm:text-sm text-neutral-500">Monday to Friday, 9 AM - 6 PM PHT</p>
-                </div>
-              </div>
-            </div>
+              <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+              </svg>
+              LinkedIn
+            </a>
+            <a
+              href="https://github.com/Ephemerish"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="flex items-center gap-2 px-4 py-2 bg-white border-2 border-brand-600 text-brand-700 hover:bg-brand-50 hover:border-brand-700 hover:text-brand-800 text-sm font-medium"
+            >
+              <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+              </svg>
+              GitHub
+            </a>
           </div>
+        </Card>
 
-          <!-- Social Media Links -->
-          <div class="bg-card-gradient shadow-floating p-6 sm:p-8 border border-neutral-200/50 ">
-            <h2 class="text-xl sm:text-2xl font-bold text-neutral-900 mb-4 sm:mb-6">Connect with me</h2>
-            
-            <div class="flex gap-4">
-              <!-- LinkedIn -->
-              <a
-                href="https://www.linkedin.com/in/kenneth-harold-panis/"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="flex items-center gap-2 px-4 py-2 bg-white border-2 border-brand-600 text-brand-700 hover:bg-brand-50 hover:border-brand-700 hover:text-brand-800   text-sm font-medium"
-              >
-                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
-                </svg>
-                LinkedIn
-              </a>
-
-              <!-- GitHub -->
-              <a
-                href="https://github.com/Ephemerish"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="flex items-center gap-2 px-4 py-2 bg-white border-2 border-brand-600 text-brand-700 hover:bg-brand-50 hover:border-brand-700 hover:text-brand-800   text-sm font-medium"
-              >
-                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
-                </svg>
-                GitHub
-              </a>
-            </div>
+        <Card variant="brand">
+          <h2 class="text-xl sm:text-2xl font-bold mb-3 sm:mb-4">Ready to work together?</h2>
+          <p class="text-brand-50 mb-4 sm:mb-6 text-sm sm:text-base">
+            Software Engineer with Computer Engineering background. Currently
+            specializing in frontend development while maintaining knowledge
+            across the full technology stack.
+          </p>
+          <div class="flex flex-wrap gap-2">
+            {stackChips.map((chip) => (
+              <Chip variant="white">{chip}</Chip>
+            ))}
           </div>
-
-          <!-- Additional Info -->
-          <div class="bg-brand-gradient shadow-floating p-6 sm:p-8 text-white "
-            <h2 class="text-xl sm:text-2xl font-bold mb-3 sm:mb-4">Ready to work together?</h2>
-            <p class="text-brand-50 mb-4 sm:mb-6 text-sm sm:text-base">
-              Software Engineer with Computer Engineering background. Currently specializing in frontend development while maintaining knowledge across the full technology stack.
-            </p>
-            <div class="flex flex-wrap gap-2">
-              <span class="px-2 sm:px-3 py-1 bg-white/20 text-xs sm:text-sm">Frontend Development</span>
-              <span class="px-2 sm:px-3 py-1 bg-white/20 text-xs sm:text-sm">React & Next.js</span>
-              <span class="px-2 sm:px-3 py-1 bg-white/20 text-xs sm:text-sm">TypeScript</span>
-              <span class="px-2 sm:px-3 py-1 bg-white/20 text-xs sm:text-sm">Computer Engineering</span>
-            </div>
-          </div>
-        </div>
+        </Card>
       </div>
     </div>
-  </div>
+  </PageSection>
 
-  <!-- Form submission handling -->
   <script>
-    // Import toast function dynamically
     async function showToast(type: 'success' | 'error', title: string, description: string) {
       try {
         const { toast } = await import('sonner');
@@ -217,69 +205,54 @@ import { EnvelopeIcon, MapPinIcon, ClockIcon } from "@phosphor-icons/react";
           toast.error(title, { description, duration: 5000 });
         }
       } catch (error) {
-        // Fallback to native notification
         alert(`${title}: ${description}`);
       }
     }
 
-    // Handle form submission
     const form = document.getElementById('contact-form') as HTMLFormElement;
     if (form) {
       form.addEventListener('submit', async function(e) {
         e.preventDefault();
-        
+
         const submitBtn = form.querySelector('button[type="submit"]') as HTMLButtonElement;
         const originalText = submitBtn.textContent;
-        
+
         try {
-          // Show loading state
           submitBtn.textContent = 'Sending...';
           submitBtn.disabled = true;
-          
-          // Prepare form data with proper content type
+
           const formData = new FormData(form);
-          
-          // Send to API route
           const response = await fetch('/api/contact', {
             method: 'POST',
             body: formData,
-            // Don't set Content-Type header - let browser set it with boundary for FormData
           });
-          
+
           const result = await response.json();
-          
+
           if (result.success) {
-            // Show success message with Sonner
             await showToast('success', 'Message sent successfully!', "I'll get back to you soon.");
             form.reset();
-            
-            // Trigger a custom event to reset the React component
             window.dispatchEvent(new CustomEvent('form-reset'));
           } else {
             throw new Error(result.error || 'Failed to send message');
           }
-          
         } catch (error) {
-          // Show error message with Sonner
           await showToast('error', 'Failed to send message', 'Please try again or email me directly.');
           console.error('Form submission error:', error);
         } finally {
-          // Reset button
           submitBtn.textContent = originalText;
           submitBtn.disabled = false;
         }
       });
     }
 
-    // Check for success parameter in URL (for Netlify compatibility)
     const urlParams = new URLSearchParams(window.location.search);
     if (urlParams.get('success') === 'true') {
       showToast('success', 'Message sent successfully!', "I'll get back to you soon.");
     }
   </script>
 
-  <!-- Add Sonner Toaster -->
-  <Toaster 
+  <Toaster
     client:load
     position="top-right"
     richColors
@@ -287,7 +260,4 @@ import { EnvelopeIcon, MapPinIcon, ClockIcon } from "@phosphor-icons/react";
     expand={false}
     visibleToasts={3}
   />
-      </div>
-    </div>
-  </section>
 </Layout>

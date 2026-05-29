@@ -1,0 +1,32 @@
+---
+/**
+ * SectionHeader — in-page H2 block. Compose title from prefix + accent + suffix.
+ * Smaller sibling of PageHeader, used for sections within a page.
+ *
+ *   <SectionHeader accent="Technologies" suffix="I Work With" subtitle="…" />
+ *   <SectionHeader prefix="Featured" accent="Projects" subtitle="…" />
+ */
+interface Props {
+  prefix?: string;
+  accent: string;
+  suffix?: string;
+  subtitle?: string;
+  class?: string;
+}
+
+const { prefix, accent, suffix, subtitle, class: extraClass = "" } = Astro.props as Props;
+---
+
+<div class:list={["text-center mb-12 sm:mb-16", extraClass]}>
+  <h2 class="text-3xl sm:text-4xl md:text-5xl font-bold text-neutral-900 mb-4">
+    {prefix && <>{prefix} </>}
+    <span class="text-brand-gradient">{accent}</span>
+    {suffix && <> {suffix}</>}
+  </h2>
+  {subtitle && (
+    <p class="mt-4 sm:mt-6 text-lg sm:text-xl text-neutral-600 max-w-3xl mx-auto px-2 leading-relaxed">
+      {subtitle}
+    </p>
+  )}
+  <div class="w-24 h-1 bg-brand-gradient mx-auto mt-6" />
+</div>

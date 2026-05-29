@@ -1,0 +1,45 @@
+---
+/**
+ * CtaSection — closing call-to-action block used at the bottom of most pages.
+ *
+ * Provides a heading (prefix + accent + suffix), a subtitle, and a default
+ * slot for the buttons. Pass `<ButtonLink>` children for the actions.
+ */
+interface Props {
+  prefix?: string;
+  accent: string;
+  suffix?: string;
+  subtitle?: string;
+  size?: "md" | "lg";
+  class?: string;
+}
+
+const {
+  prefix,
+  accent,
+  suffix,
+  subtitle,
+  size = "md",
+  class: extraClass = "",
+} = Astro.props as Props;
+
+const padY = size === "lg" ? "py-16 sm:py-20" : "py-12 sm:py-16";
+---
+
+<section class:list={["text-center", padY, extraClass]}>
+  <div class="max-w-3xl mx-auto">
+    <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-neutral-900 mb-6">
+      {prefix && <>{prefix} </>}
+      <span class="text-brand-gradient">{accent}</span>
+      {suffix && <> {suffix}</>}
+    </h2>
+    {subtitle && (
+      <p class="text-lg sm:text-xl text-neutral-600 mb-8 leading-relaxed">
+        {subtitle}
+      </p>
+    )}
+    <div class="flex flex-col sm:flex-row gap-4 justify-center">
+      <slot />
+    </div>
+  </div>
+</section>

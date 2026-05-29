@@ -2,6 +2,10 @@
 import Layout from "../../layouts/MainLayout.astro";
 import BioSubnav from "../../components/BioSubnav.astro";
 import ButtonLink from "../../components/ButtonLink.astro";
+import PageSection from "../../components/PageSection.astro";
+import PageHeader from "../../components/PageHeader.astro";
+import Card from "../../components/Card.astro";
+import IconBadge from "../../components/IconBadge.astro";
 import {
   ArrowRightIcon,
   FileTextIcon,
@@ -20,90 +24,58 @@ const resumeAvailable = false;
   image="/images/me/me.jpg"
   type="website"
 >
-  <section class="py-8 sm:py-12 bg-white relative overflow-hidden border-t border-neutral-200">
-    <div class="absolute inset-0">
-      <div class="max-w-7xl mx-auto h-full px-4 sm:px-6 lg:px-8">
-        <div class="bg-hero-gradient border-l border-r border-neutral-200 h-full"></div>
-      </div>
-    </div>
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
-      <div class="px-4 sm:px-6 lg:px-8">
-        <!-- Header -->
-        <div class="text-center mb-12 sm:mb-16 ">
-          <h1 class="text-4xl sm:text-5xl md:text-6xl font-bold mb-6">
-            <span class="text-neutral-900">Resume</span>
-            <span class="text-brand-gradient">/ CV</span>
-          </h1>
-          <p class="text-lg sm:text-xl text-neutral-700 max-w-3xl mx-auto leading-relaxed px-2">
-            A quick on-page summary plus a downloadable PDF — for the
-            recruiter-y skim.
-          </p>
-          <div class="w-32 h-1 bg-brand-gradient mx-auto mt-6"></div>
-        </div>
+  <PageSection variant="hero">
+    <PageHeader
+      accent="Resume"
+      suffix="/ CV"
+      subtitle="A quick on-page summary plus a downloadable PDF — for the recruiter-y skim."
+    />
 
-        <!-- Download card -->
-        <div class="max-w-3xl mx-auto mb-16 sm:mb-20">
-          <div class="bg-card-gradient border border-neutral-200 shadow-elegant p-8 sm:p-12 text-center">
-            {resumeAvailable ? (
-              <>
-                <div class="inline-flex items-center justify-center w-16 h-16 sm:w-20 sm:h-20 bg-brand-600 text-neutral-0 mb-6 shadow-md">
-                  <FileTextIcon className="w-8 h-8 sm:w-10 sm:h-10" weight="fill" />
-                </div>
-                <h2 class="text-2xl sm:text-3xl font-bold text-neutral-900 mb-4">
-                  Download my resume
-                </h2>
-                <p class="text-base sm:text-lg text-neutral-700 leading-relaxed mb-6">
-                  Latest version of my CV — printable PDF.
-                </p>
-                <ButtonLink
-                  href={resumePdfPath}
-                  variant="gradient"
-                  size="lg"
-                  class="text-base sm:text-lg font-semibold"
-                >
-                  <DownloadSimpleIcon className="mr-2 w-5 h-5" />
-                  Download PDF
-                </ButtonLink>
-              </>
-            ) : (
-              <>
-                <div class="inline-flex items-center justify-center w-16 h-16 sm:w-20 sm:h-20 bg-warning-100 text-warning-800 mb-6 border border-warning-200">
-                  <HourglassIcon className="w-8 h-8 sm:w-10 sm:h-10" weight="fill" />
-                </div>
-                <h2 class="text-2xl sm:text-3xl font-bold text-neutral-900 mb-4">
-                  Resume coming soon
-                </h2>
-                <p class="text-base sm:text-lg text-neutral-700 leading-relaxed mb-6">
-                  I'm putting the latest version together. Once it's ready,
-                  drop the PDF at <code class="text-sm bg-neutral-100 px-2 py-0.5">public/resume/kenneth-harold-panis-resume.pdf</code>
-                  and flip <code class="text-sm bg-neutral-100 px-2 py-0.5">resumeAvailable</code> to <code class="text-sm bg-neutral-100 px-2 py-0.5">true</code> in this file.
-                </p>
-                <div class="flex flex-col sm:flex-row gap-3 justify-center">
-                  <ButtonLink
-                    href="/contact"
-                    variant="gradient"
-                    size="lg"
-                    class="text-base sm:text-lg font-semibold"
-                  >
-                    Get In Touch
-                    <ArrowRightIcon className="ml-3 w-5 h-5" />
-                  </ButtonLink>
-                  <ButtonLink
-                    href="/bio"
-                    variant="outlineBrand"
-                    size="lg"
-                    class="text-base sm:text-lg font-semibold"
-                  >
-                    Back to Bio
-                  </ButtonLink>
-                </div>
-              </>
-            )}
-          </div>
-        </div>
-
-        <BioSubnav current="resume" />
-      </div>
+    <div class="max-w-3xl mx-auto mb-16 sm:mb-20">
+      <Card padding="lg" class="text-center">
+        {resumeAvailable ? (
+          <>
+            <div class="flex justify-center mb-6">
+              <IconBadge Icon={FileTextIcon} variant="brand" size="lg" />
+            </div>
+            <h2 class="text-2xl sm:text-3xl font-bold text-neutral-900 mb-4">
+              Download my resume
+            </h2>
+            <p class="text-base sm:text-lg text-neutral-700 leading-relaxed mb-6">
+              Latest version of my CV — printable PDF.
+            </p>
+            <ButtonLink href={resumePdfPath} variant="gradient" size="lg" class="text-base sm:text-lg font-semibold">
+              <DownloadSimpleIcon className="mr-2 w-5 h-5" />
+              Download PDF
+            </ButtonLink>
+          </>
+        ) : (
+          <>
+            <div class="flex justify-center mb-6">
+              <IconBadge Icon={HourglassIcon} variant="warning" size="lg" />
+            </div>
+            <h2 class="text-2xl sm:text-3xl font-bold text-neutral-900 mb-4">
+              Resume coming soon
+            </h2>
+            <p class="text-base sm:text-lg text-neutral-700 leading-relaxed mb-6">
+              I'm putting the latest version together. Once it's ready, drop the
+              PDF at <code class="text-sm bg-neutral-100 px-2 py-0.5">public/resume/kenneth-harold-panis-resume.pdf</code>
+              and flip <code class="text-sm bg-neutral-100 px-2 py-0.5">resumeAvailable</code> to <code class="text-sm bg-neutral-100 px-2 py-0.5">true</code> in this file.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-3 justify-center">
+              <ButtonLink href="/contact" variant="gradient" size="lg" class="text-base sm:text-lg font-semibold">
+                Get In Touch
+                <ArrowRightIcon className="ml-3 w-5 h-5" />
+              </ButtonLink>
+              <ButtonLink href="/bio" variant="outlineBrand" size="lg" class="text-base sm:text-lg font-semibold">
+                Back to Bio
+              </ButtonLink>
+            </div>
+          </>
+        )}
+      </Card>
     </div>
-  </section>
+
+    <BioSubnav current="resume" />
+  </PageSection>
 </Layout>

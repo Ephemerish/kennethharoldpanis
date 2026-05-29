@@ -1,0 +1,30 @@
+---
+/**
+ * Chip — small tag-style label.
+ * Used for focus areas, tech stacks, category tags, etc.
+ */
+interface Props {
+  variant?: "brand" | "neutral" | "success" | "warning" | "white";
+  size?: "xs" | "sm";
+  class?: string;
+}
+
+const { variant = "neutral", size = "sm", class: extraClass = "" } = Astro.props as Props;
+
+const variantClass = {
+  brand: "bg-brand-50 text-brand-800 border border-brand-200",
+  neutral: "bg-neutral-100 text-neutral-700 border border-neutral-200",
+  success: "bg-success-50 text-success-800 border border-success-200",
+  warning: "bg-warning-50 text-warning-800 border border-warning-200",
+  white: "bg-white/20 backdrop-blur-sm text-neutral-0",
+}[variant];
+
+const sizeClass = {
+  xs: "px-2 py-1 text-xs",
+  sm: "px-3 py-1 text-xs sm:text-sm",
+}[size];
+---
+
+<span class:list={["inline-flex items-center font-medium", sizeClass, variantClass, extraClass]}>
+  <slot />
+</span>

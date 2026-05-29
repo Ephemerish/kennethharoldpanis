@@ -4,6 +4,8 @@ import { HomeHeader } from "../components/HomeHeader";
 import EntryCard from "../components/EntryCard.astro";
 import { TechCarousel } from "../components/TechCarousel";
 import ButtonLink from "../components/ButtonLink.astro";
+import PageSection from "../components/PageSection.astro";
+import SectionHeader from "../components/SectionHeader.astro";
 import { ArrowRightIcon } from "@phosphor-icons/react";
 import { HOMEPAGE_BLOG_LIMIT, HOMEPAGE_PROJECTS_LIMIT } from "../constants";
 
@@ -20,160 +22,103 @@ const allBlogs: CollectionEntry<"blog">[] = (
 const allProjects: CollectionEntry<"projects">[] = (
   await getCollection("projects")
 ).sort((a, b) => {
-  // Sort by featured first, then by end date (or start date if no end date)
   if (a.data.featured && !b.data.featured) return -1;
   if (!a.data.featured && b.data.featured) return 1;
-  
-  // Use endDate if available, otherwise use startDate
   const aDate = a.data.endDate || a.data.startDate;
   const bDate = b.data.endDate || b.data.startDate;
-  
   return bDate.getTime() - aDate.getTime();
 });
 
 const mostRecentBlog: CollectionEntry<"blog"> = allBlogs[0];
 const otherBlogs: CollectionEntry<"blog">[] = allBlogs.slice(1);
-const featuredProject = allProjects[0]; // Get the first (most recent/featured) project
-const otherProjects = allProjects.slice(1); // Get any additional projects
-
+const featuredProject = allProjects[0];
+const otherProjects = allProjects.slice(1);
 ---
 
-<Layout 
+<Layout
   title="Kenneth Harold Panis - Full-Stack Developer & Designer"
   description="Full-stack developer and designer specializing in modern web technologies, IoT systems, and mobile applications. Creating beautiful and functional digital experiences."
   image="/images/me/me.jpg"
   type="website"
 >
-  <!-- Hero Section -->
   <HomeHeader client:load />
-  
-  <!-- Skills Section with Enhanced Design -->
-  <section class="py-8 sm:py-12 bg-white relative overflow-hidden border-t border-neutral-200">
-    <div class="absolute inset-0">
-      <div class="max-w-7xl mx-auto h-full px-4 sm:px-6 lg:px-8">
-        <div class="bg-neutral-0 border-l border-r border-neutral-200 h-full"></div>
-      </div>
-    </div>
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
-      <div class="px-4 sm:px-6 lg:px-8">
-      <div class="text-center mb-12 sm:mb-16 ">
-        <h2 class="text-3xl sm:text-4xl md:text-5xl font-bold text-neutral-900 mb-4">
-          <span class="text-brand-gradient">Technologies</span> I Work With
-        </h2>
-        <p class="mt-4 sm:mt-6 text-lg sm:text-xl text-neutral-700 max-w-3xl mx-auto px-2 leading-relaxed">
-          I have used these technologies
-        </p>
-        <div class="w-24 h-1 bg-brand-gradient mx-auto mt-6"></div>
-      </div>
-      
-      <div class="">
-        <TechCarousel client:load />
-      </div>
-      </div>
-    </div>
-  </section>
 
-  <!-- Featured Projects Section with Enhanced Visual Design -->
-  <section class="py-8 sm:py-12 bg-white relative overflow-hidden border-t border-neutral-200">
-    <div class="absolute inset-0">
-      <div class="max-w-7xl mx-auto h-full px-4 sm:px-6 lg:px-8">
-        <div class="bg-hero-gradient border-l border-r border-neutral-200 h-full"></div>
-      </div>
-    </div>
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
-      <div class="px-4 sm:px-6 lg:px-8">
-      <div class="text-center mb-12 sm:mb-16">
-        <h2 class="text-3xl sm:text-4xl md:text-5xl font-bold text-neutral-900 mb-4">
-          Featured <span class="text-brand-gradient">Projects</span>
-        </h2>
-        <p class="mt-4 sm:mt-6 text-lg sm:text-xl text-neutral-600 max-w-3xl mx-auto px-2 leading-relaxed">
-          Take a look at my recent work and creative solutions that solve real-world problems
-        </p>
-        <div class="w-24 h-1 bg-brand-gradient mx-auto mt-6"></div>
-      </div>
-      
-      <!-- Featured Project with Enhanced Styling -->
-      {featuredProject && (
-        <div class="mb-12 sm:mb-16 ">
-          <EntryCard entry={featuredProject} kind="project" variant="featured" />
-        </div>
-      )}
-      
-      <!-- Other Projects Grid with Enhanced Cards -->
-      {otherProjects.length > 0 && (
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 sm:gap-10 mb-8 sm:mb-12">
-          {otherProjects
-            .slice(0, HOMEPAGE_PROJECTS_LIMIT - 1)
-            .map((project: CollectionEntry<"projects">) => (
-              <div class=" ">
-                <EntryCard entry={project} kind="project" />
-              </div>
-            ))
-          }
-        </div>
-      )}
-      
-      <div class="text-center">
-        <ButtonLink 
-          href="/projects"
-          variant="gradient"
-          size="lg"
-          class="text-base sm:text-lg font-semibold"
-        >
-          View All Projects
-          <ArrowRightIcon className="ml-3 w-5 h-5" />
-        </ButtonLink>
-      </div>
-    </div>
-  </section>
+  <PageSection variant="plain">
+    <SectionHeader
+      accent="Technologies"
+      suffix="I Work With"
+      subtitle="I have used these technologies"
+    />
+    <TechCarousel client:load />
+  </PageSection>
 
-  <!-- Latest Blog Posts Section with Premium Design -->
-  <section class="py-8 sm:py-12 bg-white relative overflow-hidden border-t border-neutral-200">
-    <div class="absolute inset-0">
-      <div class="max-w-7xl mx-auto h-full px-4 sm:px-6 lg:px-8">
-        <div class="bg-neutral-0 border-l border-r border-neutral-200 h-full"></div>
+  <PageSection variant="hero">
+    <SectionHeader
+      prefix="Featured"
+      accent="Projects"
+      subtitle="Take a look at my recent work and creative solutions that solve real-world problems"
+    />
+
+    {featuredProject && (
+      <div class="mb-12 sm:mb-16">
+        <EntryCard entry={featuredProject} kind="project" variant="featured" />
       </div>
-    </div>
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
-      <div class="px-4 sm:px-6 lg:px-8">
-      <div class="text-center mb-12 sm:mb-16">
-        <h2 class="text-3xl sm:text-4xl md:text-5xl font-bold text-neutral-900 mb-4">
-          Latest from the <span class="text-brand-gradient">Blog</span>
-        </h2>
-        <p class="mt-4 sm:mt-6 text-lg sm:text-xl text-neutral-600 max-w-3xl mx-auto px-2 leading-relaxed">
-          Thoughts on development, technology, and lessons learned along the way
-        </p>
-        <div class="w-24 h-1 bg-brand-gradient mx-auto mt-6"></div>
-      </div>
-      
-      <!-- Featured Blog Post with Enhanced Styling -->
-      <div class="mb-12 sm:mb-16 ">
-        <EntryCard entry={mostRecentBlog} kind="blog" variant="featured" />
-      </div>
-      
-      <!-- Other Blog Posts Grid with Enhanced Cards -->
+    )}
+
+    {otherProjects.length > 0 && (
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 sm:gap-10 mb-8 sm:mb-12">
-        {otherBlogs
-          .slice(0, HOMEPAGE_BLOG_LIMIT)
-          .map((blog) => (
-            <div class=" ">
-              <EntryCard entry={blog} kind="blog" />
-            </div>
+        {otherProjects
+          .slice(0, HOMEPAGE_PROJECTS_LIMIT - 1)
+          .map((project: CollectionEntry<"projects">) => (
+            <EntryCard entry={project} kind="project" />
           ))
         }
       </div>
-      
-      <div class="text-center">
-        <ButtonLink 
-          href="/blogs"
-          variant="outlineBrand"
-          size="lg"
-          class="text-base sm:text-lg font-semibold"
-        >
-          Read All Posts
-          <ArrowRightIcon className="ml-3 w-5 h-5" />
-        </ButtonLink>
-      </div>
+    )}
+
+    <div class="text-center">
+      <ButtonLink
+        href="/projects"
+        variant="gradient"
+        size="lg"
+        class="text-base sm:text-lg font-semibold"
+      >
+        View All Projects
+        <ArrowRightIcon className="ml-3 w-5 h-5" />
+      </ButtonLink>
     </div>
-  </section>
+  </PageSection>
+
+  <PageSection variant="plain">
+    <SectionHeader
+      prefix="Latest from the"
+      accent="Blog"
+      subtitle="Thoughts on development, technology, and lessons learned along the way"
+    />
+
+    <div class="mb-12 sm:mb-16">
+      <EntryCard entry={mostRecentBlog} kind="blog" variant="featured" />
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 sm:gap-10 mb-8 sm:mb-12">
+      {otherBlogs
+        .slice(0, HOMEPAGE_BLOG_LIMIT)
+        .map((blog) => (
+          <EntryCard entry={blog} kind="blog" />
+        ))
+      }
+    </div>
+
+    <div class="text-center">
+      <ButtonLink
+        href="/blogs"
+        variant="outlineBrand"
+        size="lg"
+        class="text-base sm:text-lg font-semibold"
+      >
+        Read All Posts
+        <ArrowRightIcon className="ml-3 w-5 h-5" />
+      </ButtonLink>
+    </div>
+  </PageSection>
 </Layout>
