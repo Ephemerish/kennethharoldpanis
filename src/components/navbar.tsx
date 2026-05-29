@@ -111,6 +111,7 @@ export default function Navbar() {
                     Blogs
                   </NavigationMenuLink>
                 </NavigationMenuItem>
+                {/* Bio nav hidden for now; routes remain available
                 <NavigationMenuItem>
                   <NavigationMenuTrigger>Bio</NavigationMenuTrigger>
                   <NavigationMenuContent>
@@ -121,6 +122,7 @@ export default function Navbar() {
                     </ul>
                   </NavigationMenuContent>
                 </NavigationMenuItem>
+                */}
                 <NavigationMenuItem>
                   <NavigationMenuLink
                     href="/contact"
@@ -167,6 +169,7 @@ export default function Navbar() {
               Blogs
             </MobileNavLink>
 
+            {/* Bio nav hidden for now; routes remain available
             <button
               type="button"
               className="w-full flex items-center justify-between px-3 py-2 text-base font-medium text-neutral-600 hover:text-brand-600  "
@@ -196,6 +199,7 @@ export default function Navbar() {
                 ))}
               </div>
             )}
+            */}
 
             <MobileNavLink to="/contact" onClick={closeMenu}>
               Contact
