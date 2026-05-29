@@ -39,7 +39,10 @@
 </article>
 
 <script>
-  document.addEventListener('DOMContentLoaded', function() {
+  // Use astro:page-load instead of DOMContentLoaded so the script also runs
+  // after a same-app navigation through ClientRouter (view transitions).
+  // astro:page-load fires on both initial load and every in-app navigation.
+  document.addEventListener('astro:page-load', function() {
     const article = document.getElementById('article-content');
     if (!article) return;
 

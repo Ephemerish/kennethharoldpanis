@@ -1,4 +1,5 @@
 ---
+export const prerender = true;
 import Layout from "../layouts/MainLayout.astro";
 import { SubjectSelect } from "../components/SubjectSelect";
 import { Toaster } from "../components/ui/sonner";
@@ -92,7 +93,7 @@ const stackChips = [
             <label for="subject" class="block text-sm font-semibold text-neutral-900 mb-3">
               Subject <span class="text-error-600">*</span>
             </label>
-            <SubjectSelect client:load name="subject" required />
+            <SubjectSelect client:idle name="subject" required />
           </div>
 
           <div>
@@ -253,7 +254,7 @@ const stackChips = [
   </script>
 
   <Toaster
-    client:load
+    client:idle
     position="top-right"
     richColors
     closeButton

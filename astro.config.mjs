@@ -14,7 +14,15 @@ import rehypeFigure from "./src/lib/rehype-figure.mjs";
 // https://astro.build/config
 export default defineConfig({
   site: 'https://kennethharoldpanis.com',
-  output: 'server', // Enable server-side rendering
+  output: 'server', // Per-page prerender flags promote static pages to SSG; the
+  // rest stay SSR. Keeps the contact API + any future dynamic routes working.
+  prefetch: {
+    // Prefetch every internal link on hover so navigations feel instant.
+    // viewport mode would also prefetch all in-viewport links; hover is the
+    // best balance of speed vs. wasted bandwidth on a portfolio site.
+    prefetchAll: true,
+    defaultStrategy: 'hover',
+  },
   redirects: {
     '/certifications': '/bio/certifications',
   },

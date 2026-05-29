@@ -1,6 +1,7 @@
 ---
+export const prerender = true;
 import Layout from "../layouts/MainLayout.astro";
-import { HomeHeader } from "../components/HomeHeader";
+import HomeHeader from "../components/HomeHeader.astro";
 import EntryCard from "../components/EntryCard.astro";
 import { TechCarousel } from "../components/TechCarousel";
 import ButtonLink from "../components/ButtonLink.astro";
@@ -41,7 +42,7 @@ const otherProjects = allProjects.slice(1);
   image="/images/me/me.jpg"
   type="website"
 >
-  <HomeHeader client:load />
+  <HomeHeader />
 
   <PageSection variant="plain">
     <SectionHeader
@@ -49,7 +50,7 @@ const otherProjects = allProjects.slice(1);
       suffix="I Work With"
       subtitle="I have used these technologies"
     />
-    <TechCarousel client:load />
+    <TechCarousel client:idle />
   </PageSection>
 
   <PageSection variant="hero">
