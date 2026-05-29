@@ -20,7 +20,7 @@ interface ImageViewerProps {
 }
 
 /**
- * ImageViewer — the single fullscreen image overlay used everywhere.
+ * ImageViewer, the single fullscreen image overlay used everywhere.
  *
  * Controlled: render it with `index` (null = closed). Supports zoom
  * (wheel, buttons, double-click), drag-to-pan when zoomed, prev/next,
@@ -213,7 +213,7 @@ interface ZoomableImageProps {
 }
 
 /**
- * ZoomableImage — drop-in for any single image. Renders the image and
+ * ZoomableImage, drop-in for any single image. Renders the image and
  * opens the shared ImageViewer (with zoom) on click.
  */
 export function ZoomableImage({ src, alt = "Image", className, loading = "lazy" }: ZoomableImageProps) {

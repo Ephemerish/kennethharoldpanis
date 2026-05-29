@@ -20,16 +20,12 @@ const resumeAvailable = false;
 
 <Layout
   title="Resume - Kenneth Harold Panis"
-  description="Resume and CV — quick on-page summary plus a downloadable PDF."
+  description="Resume and CV, quick on-page summary plus a downloadable PDF."
   image="/images/me/me.jpg"
   type="website"
 >
   <PageSection variant="hero">
-    <PageHeader
-      accent="Resume"
-      suffix="/ CV"
-      subtitle="A quick on-page summary plus a downloadable PDF — for the recruiter-y skim."
-    />
+    <PageHeader prefix="My" accent="CV" />
 
     <div class="max-w-3xl mx-auto mb-16 sm:mb-20">
       <Card padding="lg" class="text-center">
@@ -42,7 +38,7 @@ const resumeAvailable = false;
               Download my resume
             </h2>
             <p class="text-base sm:text-lg text-neutral-700 leading-relaxed mb-6">
-              Latest version of my CV — printable PDF.
+              Latest version of my CV, printable PDF.
             </p>
             <ButtonLink href={resumePdfPath} variant="gradient" size="lg" class="text-base sm:text-lg font-semibold">
               <DownloadSimpleIcon className="mr-2 w-5 h-5" />

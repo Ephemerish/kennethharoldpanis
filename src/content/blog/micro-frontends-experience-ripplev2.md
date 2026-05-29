@@ -44,9 +44,9 @@ But after working together for a few months, the senior developer left the team,
 
 ### The Tech Stack
 
-After a lot of back and forth and experimentation, this is the stack we finally settled on, Nx 21.1.2 made monorepo management bearable, Vite 6.2.2 delivered on fast builds and a smooth dev server, Vite Module Federation (@originjs/vite-plugin-federation) was the glue for our micro frontends—the Webpack version is more mature, but this worked perfectly with our Vite setup. React 18.3.1 was the one constant everyone agreed on.
+After a lot of back and forth and experimentation, this is the stack we finally settled on, Nx 21.1.2 made monorepo management bearable, Vite 6.2.2 delivered on fast builds and a smooth dev server, Vite Module Federation (@originjs/vite-plugin-federation) was the glue for our micro frontends, the Webpack version is more mature, but this worked perfectly with our Vite setup. React 18.3.1 was the one constant everyone agreed on.
 
-Our final architecture: one host application as the main shell, four remote apps each handling a key feature, and seven shared libraries—because duplicating code across micro frontends is a nightmare we learned to avoid.
+Our final architecture: one host application as the main shell, four remote apps each handling a key feature, and seven shared libraries, because duplicating code across micro frontends is a nightmare we learned to avoid.
 
 ### The Module Federation Dance
 

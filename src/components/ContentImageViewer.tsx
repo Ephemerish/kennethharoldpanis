@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { ImageViewer } from "./ImageViewer";
 
 /**
- * ContentImageViewer — makes every server-rendered article image (the hero
+ * ContentImageViewer, makes every server-rendered article image (the hero
  * and all markdown/figure images) open the shared zoomable ImageViewer.
  *
  * Mounted once per article page. It scans the DOM (those images are static

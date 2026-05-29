@@ -1,9 +1,9 @@
 ---
 /**
- * ProjectDetails — a polished "overview" card shown above the story.
+ * ProjectDetails, a polished "overview" card shown above the story.
  *
  * White card with a quiet header strip. "Built with" is a single section
- * split into two parts — Technology (logo chips) and Materials & tools —
+ * split into two parts, Technology (logo chips) and Materials & tools, 
  * followed by a facts grid and Key features / Challenges side by side.
  */
 import type { CollectionEntry } from "astro:content";
@@ -31,7 +31,7 @@ const techs = (data.technologies ?? []).map((name) => ({
 const materials = data.materials ?? [];
 const hasBuiltWith = techs.length > 0 || materials.length > 0;
 
-// Timeline only when there's an end date — the header already shows the start.
+// Timeline only when there's an end date, the header already shows the start.
 const facts = [
   data.endDate
     ? { label: "Timeline", value: `${fmt(data.startDate)} – ${fmt(data.endDate)}` }
@@ -60,7 +60,7 @@ const sub = "text-xs font-medium text-neutral-500 mb-2";
       <span class="text-sm font-semibold text-neutral-700 tracking-tight">Overview</span>
     </div>
 
-    {/* Built with — Technology + Materials & tools */}
+    {/* Built with, Technology + Materials & tools */}
     {hasBuiltWith && (
       <div class="px-6 sm:px-8 py-6 border-b border-neutral-200">
         <h3 class={`${label} mb-4 flex items-center gap-2`}>

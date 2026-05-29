@@ -1,6 +1,6 @@
 ---
 /**
- * Prose — the single rendering engine for long-form markdown content.
+ * Prose, the single rendering engine for long-form markdown content.
  *
  * Both blog posts and projects render their `<Content />` through this
  * component, so the article typography, figure/caption styling, table
@@ -82,7 +82,7 @@
           });
         });
 
-        // Zebra striping — use a real Tailwind utility (the old bg-gray-25 didn't exist)
+        // Zebra striping, use a real Tailwind utility (the old bg-gray-25 didn't exist)
         const bodyRows = table.querySelectorAll('tbody tr');
         bodyRows.forEach((row, index) => {
           row.classList.add('', 'hover:bg-brand-50/40');

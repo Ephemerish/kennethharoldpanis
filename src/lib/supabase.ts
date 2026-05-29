@@ -19,6 +19,6 @@ export const supabase: SupabaseClient | null = isSupabaseConfigured
 
 if (!isSupabaseConfigured) {
   console.warn(
-    '[supabase] SUPABASE_URL / SUPABASE_ANON_KEY not set — Supabase features are disabled.'
+    '[supabase] SUPABASE_URL / SUPABASE_ANON_KEY not set, Supabase features are disabled.'
   );
 }
