@@ -1,0 +1,43 @@
+---
+/**
+ * PageSection, the canonical full-width section wrapper.
+ *
+ * Every page section uses the same structure: an outer `<section>`, a
+ * positioned gradient backdrop confined to the 7xl container, and an inner
+ * max-w-7xl content well with consistent padding.
+ *
+ *   variant   "hero", bg-hero-gradient backdrop (warmer, used for primary content)
+ *             "plain", bg-neutral-0 backdrop (denser pages, between hero sections)
+ *
+ *   topBorder when false, omits the section's top border (use for the first section).
+ */
+interface Props {
+  variant?: "hero" | "plain";
+  topBorder?: boolean;
+  class?: string;
+}
+
+const { variant = "hero", topBorder = true, class: extraClass = "" } = Astro.props as Props;
+
+const backdropClass =
+  variant === "hero" ? "bg-hero-gradient" : "bg-neutral-0";
+---
+
+<section
+  class:list={[
+    "py-8 sm:py-12 bg-white relative overflow-hidden",
+    topBorder && "border-t border-neutral-200",
+    extraClass,
+  ]}
+>
+  <div class="absolute inset-0">
+    <div class="max-w-7xl mx-auto h-full px-4 sm:px-6 lg:px-8">
+      <div class:list={[backdropClass, "border-l border-r border-neutral-200 h-full"]} />
+    </div>
+  </div>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+    <div class="px-4 sm:px-6 lg:px-8">
+      <slot />
+    </div>
+  </div>
+</section>

@@ -1,125 +1,59 @@
 ---
+export const prerender = true;
 import Layout from "../layouts/MainLayout.astro";
 import EntryCard from "../components/EntryCard.astro";
-import ButtonLink from "../components/ButtonLink.astro";
-import { ArrowRightIcon } from "@phosphor-icons/react";
+import PageSection from "../components/PageSection.astro";
+import PageHeader from "../components/PageHeader.astro";
 import { getCollection } from "astro:content";
 import type { CollectionEntry } from "astro:content";
 
-// Get all projects and sort by status and date
 const allProjects: CollectionEntry<"projects">[] = (
   await getCollection("projects")
 ).sort((a, b) => {
-  // Featured projects first
   if (a.data.featured && !b.data.featured) return -1;
   if (!a.data.featured && b.data.featured) return 1;
-  
-  // Then by status priority (completed, in-progress, planned)
   const statusPriority = { completed: 0, "in-progress": 1, planned: 2 };
   const statusDiff = statusPriority[a.data.status] - statusPriority[b.data.status];
   if (statusDiff !== 0) return statusDiff;
-  
-  // Finally by start date (newest first)
   return b.data.startDate.valueOf() - a.data.startDate.valueOf();
 });
 
-// Get featured projects
-const featuredProjects = allProjects.filter(project => project.data.featured);
-const regularProjects = allProjects.filter(project => !project.data.featured);
+const featuredProjects = allProjects.filter((project) => project.data.featured);
+const regularProjects = allProjects.filter((project) => !project.data.featured);
 ---
 
-<Layout 
+<Layout
   title="Projects - Kenneth Harold Panis"
   description="Explore my portfolio of projects including IoT systems, web applications, mobile apps, and hardware prototypes. From LoRa communication networks to modern web development."
   image="/images/me/me.jpg"
   type="website"
 >
-  <section class="py-8 sm:py-12 bg-white relative overflow-hidden border-t border-neutral-200">
-    <div class="absolute inset-0">
-      <div class="max-w-7xl mx-auto h-full px-4 sm:px-6 lg:px-8">
-        <div class="bg-hero-gradient border-l border-r border-neutral-200 h-full"></div>
-      </div>
-    </div>
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
-      <div class="px-4 sm:px-6 lg:px-8">
-      <!-- Header Section with Enhanced Design -->
-      <div class="text-center mb-16 sm:mb-20 relative">
-        <!-- Decorative background -->
-        <div class="absolute inset-0 -z-10">
-          <div class="absolute top-0 left-1/2 w-96 h-96 bg-brand-100/30 blur-3xl transform -translate-x-1/2 -translate-y-1/2"></div>
-        </div>
-        
-        <div class="animate-fade-in">
-          <h1 class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-6">
-            <span class="text-neutral-900">My</span> <span class="text-brand-gradient">Projects</span>
-          </h1>
-          <p class="text-xl sm:text-2xl text-neutral-700 max-w-4xl mx-auto leading-relaxed px-2 mb-8">
-            A collection of things I've built, experiments I've tried, and problems I've solved.
-          </p>
-          <div class="w-32 h-1 bg-brand-gradient mx-auto"></div>
-        </div>
-      </div>
+  <PageSection variant="hero">
+    <PageHeader
+      prefix="My"
+      accent="Projects"
+      subtitle="A collection of things I've built, experiments I've tried, and problems I've solved."
+      glow
+    />
 
-      <!-- Featured Projects with Simplified Styling -->
-      {featuredProjects.length > 0 && (
-        <section class="mb-16 sm:mb-20">
-          <div class="space-y-12 sm:space-y-16">
-            {featuredProjects.map((project) => (
-              <div class="animate-fade-in">
-                <EntryCard entry={project} kind="project" variant="featured" />
-              </div>
-            ))}
-          </div>
-        </section>
-      )}
-
-      <!-- Regular Projects Grid with Enhanced Styling -->
-      {regularProjects.length > 0 && (
-        <section class="mb-16 sm:mb-20">
-          <div class="grid grid-cols-1 gap-8 sm:gap-10 sm:grid-cols-2 lg:grid-cols-3">
-            {regularProjects.map((project, index) => (
-              <div class="hover-lift animate-fade-in" style={`animation-delay: ${index * 0.1}s`}>
-                <EntryCard entry={project} kind="project" />
-              </div>
-            ))}
-          </div>
-        </section>
-      )}
-
-      <!-- Call to Action Section -->
-      <section class="text-center py-16 sm:py-20">
-        <div class="max-w-4xl mx-auto">
-          <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-neutral-900 mb-6">
-            Like what you see? <span class="text-brand-gradient">Let's collaborate!</span>
-          </h2>
-          <p class="text-lg sm:text-xl text-neutral-600 mb-8 max-w-2xl mx-auto leading-relaxed">
-            I'm always interested in working on exciting projects and solving challenging problems.
-          </p>
-          <div class="flex flex-col sm:flex-row gap-4 justify-center">
-            <ButtonLink 
-              href="/contact"
-              variant="gradient"
-              size="lg"
-              class="text-lg font-semibold"
-            >
-              Get In Touch
-              <ArrowRightIcon className="ml-3 w-5 h-5" />
-            </ButtonLink>
-            <ButtonLink 
-              href="https://github.com/Ephemerish"
-              target="_blank"
-              rel="noopener noreferrer"
-              variant="outlineBrand"
-              size="lg"
-              class="text-lg font-semibold"
-            >
-              View GitHub
-              <ArrowRightIcon className="ml-3 w-5 h-5" />
-            </ButtonLink>
-          </div>
+    {featuredProjects.length > 0 && (
+      <section class="mb-16 sm:mb-20">
+        <div class="space-y-12 sm:space-y-16">
+          {featuredProjects.map((project) => (
+            <EntryCard entry={project} kind="project" variant="featured" />
+          ))}
         </div>
       </section>
-      </div>
-    </div>
-  </section>
+    )}
+
+    {regularProjects.length > 0 && (
+      <section>
+        <div class="grid grid-cols-1 gap-8 sm:gap-10 sm:grid-cols-2 lg:grid-cols-3">
+          {regularProjects.map((project) => (
+            <EntryCard entry={project} kind="project" />
+          ))}
+        </div>
+      </section>
+    )}
+  </PageSection>
 </Layout>

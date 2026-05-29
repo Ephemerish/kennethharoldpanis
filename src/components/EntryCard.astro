@@ -1,8 +1,8 @@
 ---
 /**
- * EntryCard — the ONE card for blog posts and projects.
+ * EntryCard, the ONE card for blog posts and projects.
  *
- * `kind`     "blog" | "project"   — which collection the entry is from
+ * `kind`     "blog" | "project", which collection the entry is from
  * `variant`  "default" | "featured"
  *              default  = grid card (used in listings/grids)
  *              featured = full-width hero card (the lead/featured slot)
@@ -82,16 +82,16 @@ const kindLabel = isBlog ? "Latest post" : "Latest project";
 ---
 
 {variant === "featured" ? (
-  <article class="relative w-full group cursor-pointer overflow-hidden shadow-elegant hover:shadow-floating transition-all duration-500">
+  <article class="relative w-full group cursor-pointer overflow-hidden shadow-elegant border-2 border-transparent hover:border-brand-500">
     <a href={href} class="block">
       <div class="relative">
         <img
           src={`/images/${image}`}
           alt={title}
-          class="w-full h-auto group-hover:scale-[1.03] transition-transform duration-700"
+          class="w-full h-auto"
           loading="eager"
         />
-        <div class="absolute inset-0 bg-gradient-to-t from-neutral-900/85 via-neutral-900/35 to-transparent"></div>
+        <div class="absolute inset-0 bg-gradient-to-t from-neutral-900/85 via-neutral-900/35 to-transparent group-hover:from-neutral-900/75 group-hover:via-neutral-900/25"></div>
 
         {/* Featured + status badges */}
         <div class="absolute top-4 left-4 sm:top-6 sm:left-6 flex items-center gap-1.5 bg-brand-600 text-neutral-0 px-3 py-1.5 sm:px-4 sm:py-2 text-xs sm:text-sm font-semibold shadow-lg">
@@ -111,7 +111,7 @@ const kindLabel = isBlog ? "Latest post" : "Latest project";
               {kindLabel}
             </span>
 
-            <h2 class="text-2xl sm:text-3xl lg:text-4xl font-bold mb-3 sm:mb-4 leading-tight group-hover:text-neutral-200 transition-colors duration-300">
+            <h2 class="text-2xl sm:text-3xl lg:text-4xl font-bold mb-3 sm:mb-4 leading-tight group-hover:text-brand-300">
               {title}
             </h2>
 
@@ -150,9 +150,9 @@ const kindLabel = isBlog ? "Latest post" : "Latest project";
               )}
             </div>
 
-            <div class="flex items-center text-sm sm:text-base font-semibold">
+            <div class="flex items-center text-sm sm:text-base font-semibold group-hover:text-brand-300">
               <span>{ctaLabel}</span>
-              <ArrowRightIcon className="w-5 h-5 ml-2 group-hover:translate-x-1.5 transition-transform duration-300" />
+              <ArrowRightIcon className="w-5 h-5 ml-2" />
             </div>
           </div>
         </div>
@@ -160,14 +160,14 @@ const kindLabel = isBlog ? "Latest post" : "Latest project";
     </a>
   </article>
 ) : (
-  <article class="group bg-card-gradient overflow-hidden shadow-elegant border border-neutral-200/50 hover:shadow-floating hover:bg-neutral-0 hover:border-brand-300/60 cursor-pointer transition-all duration-500 ease-out hover-lift h-full flex flex-col">
+  <article class="group bg-card-gradient overflow-hidden shadow-elegant border border-neutral-200/50  hover:bg-neutral-0 hover:border-brand-300/60 cursor-pointer     h-full flex flex-col">
     <a href={href} class="block flex-1 flex flex-col">
       <div class="relative overflow-hidden">
         <div class="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-neutral-900/20 z-10"></div>
         <img
           src={`/images/${image}`}
           alt={title}
-          class="w-full h-auto group-hover:scale-105 transition-transform duration-500"
+          class="w-full h-auto   "
           loading="lazy"
         />
 
@@ -195,7 +195,7 @@ const kindLabel = isBlog ? "Latest post" : "Latest project";
       </div>
 
       <div class="p-6 sm:p-8 flex-1 flex flex-col">
-        <h2 class="text-xl sm:text-2xl font-bold text-neutral-900 mb-3 line-clamp-2 group-hover:text-brand-700 transition-colors duration-300 leading-tight">
+        <h2 class="text-xl sm:text-2xl font-bold text-neutral-900 mb-3 line-clamp-2 group-hover:text-brand-700   leading-tight">
           {title}
         </h2>
 
@@ -215,7 +215,7 @@ const kindLabel = isBlog ? "Latest post" : "Latest project";
             {project.demoUrl && (
               <a href={project.demoUrl} target="_blank" rel="noopener noreferrer" class="text-brand-700 hover:text-brand-800 font-semibold flex items-center gap-1.5" onclick="event.stopPropagation()">
                 <span class="relative flex h-2 w-2" aria-hidden="true">
-                  <span class="absolute inline-flex h-full w-full bg-brand-500 opacity-75 animate-ping"></span>
+                  <span class="absolute inline-flex h-full w-full bg-brand-500 opacity-75 "></span>
                   <span class="relative inline-flex h-2 w-2 bg-brand-600"></span>
                 </span>
                 Live Site
@@ -242,9 +242,9 @@ const kindLabel = isBlog ? "Latest post" : "Latest project";
 
         <div class="flex-1"></div>
 
-        <div class="flex items-center text-neutral-900 text-sm font-medium pt-3 border-t border-neutral-100 group-hover:text-brand-700 transition-colors duration-300 mt-auto">
+        <div class="flex items-center text-neutral-900 text-sm font-medium pt-3 border-t border-neutral-100 group-hover:text-brand-700   mt-auto">
           <span>{ctaLabel}</span>
-          <ArrowRightIcon className="w-4 h-4 ml-1.5 group-hover:translate-x-1 transition-transform duration-300" />
+          <ArrowRightIcon className="w-4 h-4 ml-1.5   " />
         </div>
       </div>
     </a>

@@ -259,6 +259,6 @@ This project contributes to:
 
 ---
 
-**P.S.** It's not included in the paper, but one assumption affecting SNR rapidly is because we are sending big data. Implementing more sophisticated algorithms for compressing and decompressing the data might increase the communication range, as the signal itself was not the problem at 882 meters—rather, it was the SNR (signal-to-noise ratio) or the clarity of the signal that limited performance.
+**P.S.** It's not included in the paper, but one assumption affecting SNR rapidly is because we are sending big data. Implementing more sophisticated algorithms for compressing and decompressing the data might increase the communication range, as the signal itself was not the problem at 882 meters, rather, it was the SNR (signal-to-noise ratio) or the clarity of the signal that limited performance.
 
 *This project represents the successful application of LoRa wireless technology for maritime safety, demonstrating how modern IoT solutions can address real-world challenges faced by fishing communities in the Philippines.*

@@ -1,0 +1,33 @@
+---
+/**
+ * StatusPill, small label pill (Active, In progress, Featured, Completed…).
+ * Use as a corner badge on cards or an inline status indicator.
+ */
+import type { Icon } from "@phosphor-icons/react";
+
+interface Props {
+  variant: "brand" | "neutral" | "success" | "warning" | "error";
+  Icon?: Icon;
+  iconWeight?: "regular" | "fill" | "duotone" | "bold";
+  class?: string;
+}
+
+const { variant, Icon, iconWeight = "fill", class: extraClass = "" } = Astro.props as Props;
+
+const variantClass = {
+  brand: "bg-brand-600 text-neutral-0",
+  neutral: "bg-neutral-100/95 text-neutral-700 border border-neutral-200",
+  success: "bg-success-100 text-success-800 border border-success-200",
+  warning: "bg-warning-100 text-warning-800 border border-warning-200",
+  error: "bg-error-100 text-error-800 border border-error-200",
+}[variant];
+---
+
+<span class:list={[
+  "inline-flex items-center gap-1.5 px-3 py-1.5 text-xs sm:text-sm font-semibold shadow-sm",
+  variantClass,
+  extraClass,
+]}>
+  {Icon && <Icon className="w-3.5 h-3.5" weight={iconWeight} />}
+  <slot />
+</span>

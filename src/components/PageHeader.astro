@@ -1,0 +1,65 @@
+---
+/**
+ * PageHeader, top-of-page H1 block with brand-gradient accent + subtitle + divider.
+ *
+ * Compose the title from `prefix` (neutral) + `accent` (brand gradient) + optional `suffix`.
+ *
+ *   <PageHeader prefix="My" accent="Certifications" subtitle="..." />
+ *   <PageHeader accent="Let's connect" subtitle="..." />
+ *
+ * `glow` adds the decorative brand-100 blur behind the heading (used on hero pages).
+ * `size` controls h1 scale: "lg" (default, 4xl→7xl) or "md" (3xl→5xl) for sub-pages.
+ */
+interface Props {
+  prefix?: string;
+  accent: string;
+  suffix?: string;
+  subtitle?: string;
+  glow?: boolean;
+  size?: "md" | "lg";
+  class?: string;
+}
+
+const {
+  prefix,
+  accent,
+  suffix,
+  subtitle,
+  glow = false,
+  size = "lg",
+  class: extraClass = "",
+} = Astro.props as Props;
+
+const headingClass =
+  size === "lg"
+    ? "text-4xl sm:text-5xl md:text-6xl lg:text-7xl"
+    : "text-3xl sm:text-4xl md:text-5xl";
+
+const subtitleClass =
+  size === "lg"
+    ? "text-lg sm:text-xl md:text-2xl"
+    : "text-base sm:text-lg";
+
+const dividerWidth = size === "lg" ? "w-32" : "w-24";
+---
+
+<div class:list={["text-center mb-12 sm:mb-16 relative", extraClass]}>
+  {glow && (
+    <div class="absolute inset-0 -z-10">
+      <div class="absolute top-0 left-1/2 w-96 h-96 bg-brand-100/30 blur-3xl transform -translate-x-1/2 -translate-y-1/2" />
+    </div>
+  )}
+  <div>
+    <h1 class:list={["font-bold mb-6", headingClass]}>
+      {prefix && <span class="text-neutral-900">{prefix} </span>}
+      <span class="text-brand-gradient">{accent}</span>
+      {suffix && <span class="text-neutral-900"> {suffix}</span>}
+    </h1>
+    {subtitle && (
+      <p class:list={["text-neutral-700 max-w-3xl mx-auto leading-relaxed px-2 mb-6", subtitleClass]}>
+        {subtitle}
+      </p>
+    )}
+    <div class:list={[dividerWidth, "h-1 bg-brand-gradient mx-auto"]} />
+  </div>
+</div>

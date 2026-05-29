@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { ImageViewer } from "./ImageViewer";
 
 /**
- * ContentImageViewer — makes every server-rendered article image (the hero
+ * ContentImageViewer, makes every server-rendered article image (the hero
  * and all markdown/figure images) open the shared zoomable ImageViewer.
  *
  * Mounted once per article page. It scans the DOM (those images are static
@@ -27,7 +27,7 @@ export default function ContentImageViewer({
     setImages(nodes.map((n) => n.currentSrc || n.src));
 
     const cleanups = nodes.map((node, i) => {
-      node.style.cursor = "zoom-in";
+      node.style.cursor = "";
       const onClick = (e: MouseEvent) => {
         e.preventDefault();
         setIndex(i);

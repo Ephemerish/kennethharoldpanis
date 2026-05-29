@@ -1,0 +1,250 @@
+---
+export const prerender = true;
+import Layout from "../../layouts/MainLayout.astro";
+import BioSubnav from "../../components/BioSubnav.astro";
+import PageSection from "../../components/PageSection.astro";
+import PageHeader from "../../components/PageHeader.astro";
+import SectionHeader from "../../components/SectionHeader.astro";
+import Card from "../../components/Card.astro";
+import IconBadge from "../../components/IconBadge.astro";
+import StatusPill from "../../components/StatusPill.astro";
+import Chip from "../../components/Chip.astro";
+import {
+  ArrowSquareOutIcon as ArrowTopRightOnSquareIcon,
+  ChartLineUpIcon,
+  CloudIcon,
+  CertificateIcon,
+  StarIcon,
+  HourglassIcon,
+  CheckCircleIcon,
+  BookOpenIcon,
+} from "@phosphor-icons/react";
+import type { Icon } from "@phosphor-icons/react";
+
+type Certification = {
+  title: string;
+  issuer: string;
+  issuedDate?: string;
+  credentialUrl?: string;
+  badge?: string;
+  summary: string;
+  focusAreas: string[];
+  Icon: Icon;
+  accent: "brand" | "dark";
+  chipVariant: "brand" | "neutral";
+  highlighted?: boolean;
+};
+
+const certifications: Certification[] = [
+  {
+    title: "FinOps Certified Practitioner",
+    issuer: "FinOps Foundation",
+    summary:
+      "Practitioner-level certification covering the principles, personas, and lifecycle of FinOps, bringing engineering, finance, and product together to drive accountable cloud spend and business value.",
+    focusAreas: [
+      "FinOps Framework & Principles",
+      "Cloud Cost Allocation & Showback",
+      "Rate & Usage Optimization",
+      "Forecasting & Budgeting",
+      "Unit Economics",
+    ],
+    Icon: ChartLineUpIcon,
+    accent: "brand",
+    chipVariant: "brand",
+    highlighted: true,
+  },
+  {
+    title: "Google Associate Cloud Engineer",
+    issuer: "Google Cloud",
+    summary:
+      "Associate-level certification validating the ability to deploy applications, monitor operations, and manage enterprise solutions on Google Cloud Platform.",
+    focusAreas: [
+      "Compute Engine & GKE",
+      "Cloud Storage & Databases",
+      "IAM & Networking",
+      "Monitoring & Logging",
+      "Deployment & Operations",
+    ],
+    Icon: CloudIcon,
+    accent: "dark",
+    chipVariant: "neutral",
+  },
+];
+
+const cloudJourney = [
+  {
+    title: "Google Cloud Platform",
+    role: "My primary cloud",
+    body: "Day-to-day I deploy, monitor, and operate projects on GCP, backed by my Associate Cloud Engineer certification.",
+    chips: ["Compute Engine", "Cloud Run", "Cloud Storage", "IAM", "Cloud SQL"],
+    Icon: CloudIcon,
+    iconVariant: "brand" as const,
+    chipVariant: "brand" as const,
+    statusVariant: "success" as const,
+    statusIcon: CheckCircleIcon,
+    statusLabel: "Active",
+  },
+  {
+    title: "AWS Solutions Architect",
+    role: "Learning & certifying, ongoing",
+    body: "Actively learning AWS and integrating it into my workflow, working toward the Solutions Architect certification to extend my cloud range beyond GCP.",
+    chips: ["EC2", "S3", "VPC", "Lambda", "RDS", "Well-Architected"],
+    Icon: BookOpenIcon,
+    iconVariant: "dark" as const,
+    chipVariant: "neutral" as const,
+    statusVariant: "warning" as const,
+    statusIcon: HourglassIcon,
+    statusLabel: "In progress",
+  },
+];
+---
+
+<Layout
+  title="Certifications - Kenneth Harold Panis"
+  description="Certifications and ongoing learning across cloud and software development, FinOps Certified Practitioner, Google Associate Cloud Engineer, and working toward AWS Solutions Architect."
+  image="/images/me/me.jpg"
+  type="website"
+>
+  <PageSection variant="hero">
+    <PageHeader
+      prefix="My"
+      accent="Certifications"
+      subtitle="Markers of where I've been learning, across software development and cloud. Currently shipping projects on Google Cloud, learning AWS, and using my FinOps cert as a financial lens on how I architect."
+      glow
+    />
+
+    <Card padding="lg" class="mb-12 sm:mb-16">
+      <div class="flex flex-col md:flex-row items-start md:items-center gap-6">
+        <IconBadge Icon={ChartLineUpIcon} variant="brand" size="lg" />
+        <div class="flex-1">
+          <StatusPill variant="brand" Icon={StarIcon} class="mb-3">
+            Currently focused on
+          </StatusPill>
+          <h2 class="text-2xl sm:text-3xl font-bold text-neutral-900 mb-3">
+            Growing my <span class="text-brand-gradient">cloud &amp; software dev</span> skills
+          </h2>
+          <p class="text-base sm:text-lg text-neutral-700 leading-relaxed">
+            I'm actively working on my cloud and software development skills, 
+            building projects on Google Cloud, learning AWS in parallel, and
+            using the FinOps cert to think about cost and architecture together.
+            These certifications mark where I am on that journey, not a finish line.
+          </p>
+        </div>
+      </div>
+    </Card>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-10 mb-16 sm:mb-20">
+      {certifications.map((cert) => (
+        <Card padding="none" class="relative flex flex-col overflow-hidden">
+          {cert.highlighted && (
+            <div class="absolute top-4 right-4 z-10">
+              <StatusPill variant="brand" Icon={StarIcon}>Featured</StatusPill>
+            </div>
+          )}
+
+          <div class="relative px-6 sm:px-8 pt-8 sm:pt-10 pb-4 flex items-center justify-center">
+            <div class:list={[
+              "absolute inset-0 blur-2xl",
+              cert.accent === "brand" ? "bg-brand-100/40" : "bg-neutral-100/40",
+            ]} />
+            {cert.badge ? (
+              <img
+                src={`/images/${cert.badge}`}
+                alt={`${cert.title} badge`}
+                class="relative w-32 h-32 sm:w-40 sm:h-40 object-contain"
+                loading="lazy"
+              />
+            ) : (
+              <IconBadge Icon={cert.Icon} variant={cert.accent} size="xl" class="relative shadow-lg" />
+            )}
+          </div>
+
+          <div class="px-6 sm:px-8 pb-6 sm:pb-8 flex-1 flex flex-col">
+            <div class="text-center mb-5">
+              <h3 class="text-xl sm:text-2xl font-bold text-neutral-900 mb-2 leading-tight">
+                {cert.title}
+              </h3>
+              <p class="text-sm sm:text-base text-neutral-600 font-medium">
+                {cert.issuer}
+                {cert.issuedDate && (
+                  <span class="text-neutral-400"> · {cert.issuedDate}</span>
+                )}
+              </p>
+            </div>
+
+            <p class="text-sm sm:text-base text-neutral-700 mb-5 leading-relaxed">
+              {cert.summary}
+            </p>
+
+            <div class="mb-5">
+              <p class="text-xs font-semibold uppercase tracking-wider text-neutral-500 mb-3">
+                Focus areas
+              </p>
+              <div class="flex flex-wrap gap-2">
+                {cert.focusAreas.map((area) => (
+                  <Chip variant={cert.chipVariant}>{area}</Chip>
+                ))}
+              </div>
+            </div>
+
+            <div class="flex-1" />
+
+            {cert.credentialUrl && (
+              <a
+                href={cert.credentialUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="inline-flex items-center justify-center gap-1.5 mt-4 pt-4 border-t border-neutral-100 text-sm font-semibold text-brand-700 hover:text-brand-800"
+              >
+                <CertificateIcon className="w-4 h-4" />
+                Verify credential
+                <ArrowTopRightOnSquareIcon className="w-4 h-4" />
+              </a>
+            )}
+          </div>
+        </Card>
+      ))}
+    </div>
+
+    <section class="mb-16 sm:mb-20">
+      <SectionHeader
+        prefix="My"
+        accent="Cloud Journey"
+        subtitle="Currently shipping on Google Cloud while actively learning AWS, building toward multi-cloud fluency."
+      />
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
+        {cloudJourney.map((entry) => (
+          <Card padding="none" class="relative flex flex-col overflow-hidden">
+            <div class="absolute top-4 right-4 z-10">
+              <StatusPill variant={entry.statusVariant} Icon={entry.statusIcon}>
+                {entry.statusLabel}
+              </StatusPill>
+            </div>
+
+            <div class="relative px-6 sm:px-8 pt-8 sm:pt-10 pb-4 flex items-center justify-center">
+              <div class:list={[
+                "absolute inset-0 blur-2xl",
+                entry.iconVariant === "brand" ? "bg-brand-100/40" : "bg-warning-100/40",
+              ]} />
+              <IconBadge Icon={entry.Icon} variant={entry.iconVariant} size="xl" class="relative shadow-lg" />
+            </div>
+
+            <div class="px-6 sm:px-8 pb-6 sm:pb-8 flex-1 flex flex-col text-center">
+              <h3 class="text-xl sm:text-2xl font-bold text-neutral-900 mb-2">{entry.title}</h3>
+              <p class="text-sm sm:text-base text-neutral-600 font-medium mb-4">{entry.role}</p>
+              <p class="text-sm sm:text-base text-neutral-700 leading-relaxed mb-5">{entry.body}</p>
+              <div class="flex flex-wrap justify-center gap-2 mt-auto">
+                {entry.chips.map((chip) => (
+                  <Chip variant={entry.chipVariant}>{chip}</Chip>
+                ))}
+              </div>
+            </div>
+          </Card>
+        ))}
+      </div>
+    </section>
+
+    <BioSubnav current="certifications" />
+  </PageSection>
+</Layout>

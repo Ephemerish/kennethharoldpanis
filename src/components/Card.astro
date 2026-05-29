@@ -1,0 +1,59 @@
+---
+/**
+ * Card, the canonical content container.
+ *
+ *   variant   "default", bg-card-gradient + soft elegant shadow (most pages)
+ *             "subtle", flat neutral-0 background (denser content surfaces)
+ *             "floating", bg-card-gradient + floating shadow (form / sidebar surfaces)
+ *             "brand", brand-gradient background, white text (CTA highlights)
+ *
+ *   hoverable when true, applies the standard brand border + bg shift on hover.
+ *             Use on cards that link somewhere.
+ *
+ *   padding   "none" | "sm" | "md" | "lg"  (defaults to "md" = p-6 sm:p-8)
+ */
+interface Props {
+  variant?: "default" | "subtle" | "floating" | "brand";
+  hoverable?: boolean;
+  padding?: "none" | "sm" | "md" | "lg";
+  as?: "div" | "article" | "section" | "a";
+  href?: string;
+  class?: string;
+}
+
+const {
+  variant = "default",
+  hoverable = false,
+  padding = "md",
+  as = "div",
+  href,
+  class: extraClass = "",
+} = Astro.props as Props;
+
+const Tag = href ? "a" : as;
+
+const variantClass = {
+  default: "bg-card-gradient border border-neutral-200 shadow-elegant",
+  subtle: "bg-neutral-0 border border-neutral-200",
+  floating: "bg-card-gradient border border-neutral-200/50 shadow-floating",
+  brand: "bg-brand-gradient text-neutral-0 shadow-floating",
+}[variant];
+
+const hoverClass = hoverable
+  ? "group hover:bg-neutral-0 hover:border-brand-300/60 cursor-pointer"
+  : "";
+
+const paddingClass = {
+  none: "",
+  sm: "p-4 sm:p-5",
+  md: "p-6 sm:p-8",
+  lg: "p-8 sm:p-10",
+}[padding];
+---
+
+<Tag
+  href={href}
+  class:list={[variantClass, hoverClass, paddingClass, extraClass]}
+>
+  <slot />
+</Tag>

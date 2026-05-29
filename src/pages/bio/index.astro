@@ -1,0 +1,134 @@
+---
+export const prerender = true;
+import Layout from "../../layouts/MainLayout.astro";
+import BioSubnav from "../../components/BioSubnav.astro";
+import PageSection from "../../components/PageSection.astro";
+import Card from "../../components/Card.astro";
+import IconBadge from "../../components/IconBadge.astro";
+import {
+  ArrowRightIcon,
+  CertificateIcon,
+  BriefcaseIcon,
+  FileTextIcon,
+  CloudIcon,
+  CodeIcon,
+  HeartIcon,
+} from "@phosphor-icons/react";
+
+const focusItems = [
+  {
+    title: "Software development",
+    Icon: CodeIcon,
+    body: "Building full-stack web things, mobile apps, and the occasional hardware/IoT side project. Always sharpening the fundamentals.",
+  },
+  {
+    title: "Cloud",
+    Icon: CloudIcon,
+    body: "Shipping on Google Cloud day-to-day, learning AWS in parallel, and working toward the AWS Solutions Architect cert.",
+  },
+  {
+    title: "Why I build",
+    Icon: HeartIcon,
+    body: "I'm drawn to making things that solve random problems and bring ideas to life, weekend experiments included.",
+  },
+];
+
+const quickLinks = [
+  {
+    title: "Certifications",
+    description: "FinOps, Google Cloud, and the AWS path I'm currently learning.",
+    href: "/bio/certifications",
+    Icon: CertificateIcon,
+  },
+  {
+    title: "Experience",
+    description: "Roles, internships, and project work, a timeline of how I got here.",
+    href: "/bio/experience",
+    Icon: BriefcaseIcon,
+  },
+  {
+    title: "Resume / CV",
+    description: "Quick on-page summary and a downloadable PDF.",
+    href: "/bio/resume",
+    Icon: FileTextIcon,
+  },
+];
+---
+
+<Layout
+  title="Bio - Kenneth Harold Panis"
+  description="About Kenneth Harold Panis, software developer growing his cloud and software development skills, with certifications across FinOps and Google Cloud, and ongoing AWS learning."
+  image="/images/me/me.jpg"
+  type="profile"
+>
+  <PageSection variant="hero">
+    <div class="grid grid-cols-1 md:grid-cols-[260px_1fr] gap-8 sm:gap-12 items-center mb-12 sm:mb-16">
+      <div class="mx-auto md:mx-0">
+        <div class="relative w-[200px] h-[200px] sm:w-[240px] sm:h-[240px] md:w-[260px] md:h-[260px] overflow-hidden border-4 border-brand-600">
+          <img
+            src="/images/me/me.jpg"
+            alt="Kenneth Harold Panis"
+            class="w-full h-full object-cover"
+            loading="eager"
+            width="260"
+            height="260"
+            decoding="async"
+          />
+        </div>
+      </div>
+      <div class="text-center md:text-left">
+        <h1 class="text-4xl sm:text-5xl md:text-6xl font-bold mb-4 leading-tight">
+          <span class="text-neutral-900">About </span>
+          <span class="text-brand-gradient">Me</span>
+        </h1>
+        <p class="text-lg sm:text-xl text-neutral-700 leading-relaxed mb-4">
+          I'm Kenneth, a developer who likes turning random ideas into
+          real things, and who's actively working on his cloud and
+          software development skills.
+        </p>
+        <p class="text-base sm:text-lg text-neutral-600 leading-relaxed">
+          This bio section is the long version: where I'm coming from,
+          what I'm learning, and what I've put on paper so far.
+        </p>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 mb-12 sm:mb-16">
+      {focusItems.map((item) => (
+        <Card>
+          <IconBadge Icon={item.Icon} variant="brand" size="md" class="mb-4" />
+          <h3 class="text-lg sm:text-xl font-bold text-neutral-900 mb-2">{item.title}</h3>
+          <p class="text-sm sm:text-base text-neutral-700 leading-relaxed">{item.body}</p>
+        </Card>
+      ))}
+    </div>
+
+    <div class="mb-16 sm:mb-20">
+      <div class="text-center mb-8 sm:mb-10">
+        <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-neutral-900 mb-3">
+          More in this section
+        </h2>
+        <div class="w-24 h-1 bg-brand-gradient mx-auto"></div>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
+        {quickLinks.map((link) => (
+          <Card hoverable href={link.href} class="flex flex-col">
+            <IconBadge Icon={link.Icon} variant="brand" size="md" class="mb-4" />
+            <h3 class="text-lg sm:text-xl font-bold text-neutral-900 mb-2 group-hover:text-brand-700">
+              {link.title}
+            </h3>
+            <p class="text-sm sm:text-base text-neutral-600 mb-4 flex-1 leading-relaxed">
+              {link.description}
+            </p>
+            <div class="flex items-center text-sm font-semibold text-brand-700 group-hover:text-brand-800">
+              <span>Visit</span>
+              <ArrowRightIcon className="w-4 h-4 ml-1.5" />
+            </div>
+          </Card>
+        ))}
+      </div>
+    </div>
+
+    <BioSubnav current="about" />
+  </PageSection>
+</Layout>

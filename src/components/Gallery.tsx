@@ -7,7 +7,7 @@ interface GalleryProps {
 }
 
 /**
- * Gallery — just a thumbnail grid. Clicking a thumbnail opens the shared
+ * Gallery, just a thumbnail grid. Clicking a thumbnail opens the shared
  * ImageViewer (zoom + prev/next). No lightbox logic lives here.
  */
 export default function Gallery({ images, alt = "Project image" }: GalleryProps) {
@@ -30,7 +30,7 @@ export default function Gallery({ images, alt = "Project image" }: GalleryProps)
               src={src}
               alt={`${alt} ${i + 1}`}
               loading="lazy"
-              className="w-full h-auto transition-transform duration-300 group-hover:scale-105"
+              className="w-full h-auto   "
             />
           </button>
         ))}

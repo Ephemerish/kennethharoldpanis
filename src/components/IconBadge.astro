@@ -1,0 +1,49 @@
+---
+/**
+ * IconBadge, square colored container with a phosphor icon.
+ * Used as the visual anchor for card headers, feature blocks, callouts.
+ */
+import type { Icon } from "@phosphor-icons/react";
+
+interface Props {
+  Icon: Icon;
+  variant?: "brand" | "dark" | "warning" | "success" | "subtle";
+  size?: "sm" | "md" | "lg" | "xl";
+  weight?: "regular" | "fill" | "duotone" | "bold";
+  class?: string;
+}
+
+const {
+  Icon,
+  variant = "brand",
+  size = "md",
+  weight = "fill",
+  class: extraClass = "",
+} = Astro.props as Props;
+
+const variantClass = {
+  brand: "bg-brand-600 text-neutral-0 shadow-md",
+  dark: "bg-neutral-900 text-neutral-0 shadow-md",
+  warning: "bg-warning-100 text-warning-800 border border-warning-200",
+  success: "bg-success-100 text-success-800 border border-success-200",
+  subtle: "bg-brand-100 text-brand-700",
+}[variant];
+
+const sizeClass = {
+  sm: "w-10 h-10",
+  md: "w-12 h-12",
+  lg: "w-16 h-16 sm:w-20 sm:h-20",
+  xl: "w-20 h-20 sm:w-24 sm:h-24",
+}[size];
+
+const iconSizeClass = {
+  sm: "w-5 h-5",
+  md: "w-6 h-6",
+  lg: "w-8 h-8 sm:w-10 sm:h-10",
+  xl: "w-10 h-10 sm:w-12 sm:h-12",
+}[size];
+---
+
+<div class:list={["flex items-center justify-center shrink-0", sizeClass, variantClass, extraClass]}>
+  <Icon className={iconSizeClass} weight={weight} />
+</div>

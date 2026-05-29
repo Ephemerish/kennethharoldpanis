@@ -1,0 +1,43 @@
+---
+interface Props {
+  current: "about" | "certifications" | "experience" | "resume";
+}
+const { current } = Astro.props as Props;
+
+const links = [
+  { key: "about", label: "About", href: "/bio" },
+  { key: "certifications", label: "Certifications", href: "/bio/certifications" },
+  { key: "experience", label: "Experience", href: "/bio/experience" },
+  { key: "resume", label: "Resume", href: "/bio/resume" },
+] as const;
+---
+
+<nav aria-label="Bio sections" class="max-w-4xl mx-auto pt-6 mt-12">
+  <p class="text-[11px] uppercase tracking-[0.18em] text-neutral-500 mb-4 text-center font-medium">
+    More in this section
+  </p>
+  <div class="flex items-center justify-center flex-wrap border-b border-neutral-200">
+    {links.map((link) => {
+      const isActive = link.key === current;
+      return isActive ? (
+        <span
+          aria-current="page"
+          class="relative px-5 py-3 text-sm font-semibold text-brand-700"
+        >
+          {link.label}
+          <span
+            class="absolute inset-x-3 -bottom-px h-0.5 bg-brand-600"
+            aria-hidden="true"
+          />
+        </span>
+      ) : (
+        <a
+          href={link.href}
+          class="px-5 py-3 text-sm font-medium text-neutral-600 hover:text-brand-700 hover:bg-brand-50/40"
+        >
+          {link.label}
+        </a>
+      );
+    })}
+  </div>
+</nav>
