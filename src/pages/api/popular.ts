@@ -11,9 +11,15 @@ export const prerender = false;
  * island falls back to static usage counts.
  */
 
-const supabaseUrl = import.meta.env.SUPABASE_URL;
+// Match lib/supabase.ts: non-PUBLIC import.meta.env vars are inlined at build
+// time (often undefined in CI/Docker), so fall back to runtime process.env,
+// which is where the deployed server actually gets its Supabase config.
+const supabaseUrl = import.meta.env.SUPABASE_URL || process.env.SUPABASE_URL;
 const supabaseKey =
-  import.meta.env.SUPABASE_ANON_KEY || import.meta.env.SUPABASE_KEY;
+  import.meta.env.SUPABASE_ANON_KEY ||
+  import.meta.env.SUPABASE_KEY ||
+  process.env.SUPABASE_ANON_KEY ||
+  process.env.SUPABASE_KEY;
 
 const FN_BASE = supabaseUrl
   ? `${supabaseUrl}/functions/v1/popular-route-segments`
