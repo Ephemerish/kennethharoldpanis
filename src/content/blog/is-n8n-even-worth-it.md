@@ -4,6 +4,7 @@ author: 'Kenneth Harold Panis'
 pubDate: 2025-11-16
 image: 'n8n.png'
 tags: ['n8n', 'automation', 'workflow', 'developer-tools', 'integration']
+tech: ['n8n', 'Node.js']
 ---
 
 ## When n8n Actually Earns Its Keep

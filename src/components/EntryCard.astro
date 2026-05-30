@@ -13,26 +13,17 @@
  */
 import { formatDate, calculateReadTime } from "../utils";
 import type { CollectionEntry } from "astro:content";
+import { getTagLabel } from "../data/tags";
 import Tags from "./Tags.astro";
 import {
   CalendarBlankIcon as CalendarIcon,
   ClockIcon,
   ArrowRightIcon,
   ArrowSquareOutIcon as ArrowTopRightOnSquareIcon,
-  VideoCameraIcon,
   GithubLogoIcon as GithubIcon,
   StarIcon,
   RocketLaunchIcon,
   BookOpenIcon,
-  GlobeIcon as GlobeAltIcon,
-  DeviceMobileIcon as DevicePhoneMobileIcon,
-  WrenchIcon as WrenchScrewdriverIcon,
-  CpuIcon as CpuChipIcon,
-  PuzzlePieceIcon,
-  DesktopIcon as ComputerDesktopIcon,
-  StackIcon as CircleStackIcon,
-  FileTextIcon as DocumentTextIcon,
-  FlaskIcon as BeakerIcon,
 } from "@phosphor-icons/react";
 
 interface Props {
@@ -63,18 +54,6 @@ const statusClass = {
   "in-progress": "bg-warning-100/95 text-warning-800 border-warning-200",
   planned: "bg-neutral-100/95 text-neutral-700 border-neutral-200",
 };
-const categoryIcon = {
-  web: GlobeAltIcon,
-  mobile: DevicePhoneMobileIcon,
-  hardware: WrenchScrewdriverIcon,
-  iot: CircleStackIcon,
-  "ai-ml": CpuChipIcon,
-  game: PuzzlePieceIcon,
-  desktop: ComputerDesktopIcon,
-  thesis: DocumentTextIcon,
-  research: BeakerIcon,
-};
-
 const date = isBlog ? blog!.pubDate : project!.endDate ?? project!.startDate;
 const ctaLabel = isBlog ? "Read post" : "View project";
 const KindIcon = isBlog ? BookOpenIcon : RocketLaunchIcon;
@@ -126,8 +105,8 @@ const kindLabel = isBlog ? "Latest post" : "Latest project";
                   {readTime}
                 </span>
               )}
-              {project?.institution && (
-                <span class="hidden sm:inline">{project.institution}</span>
+              {project?.overview?.academic?.institution && (
+                <span class="hidden sm:inline">{project.overview.academic.institution}</span>
               )}
             </div>
 
@@ -140,7 +119,7 @@ const kindLabel = isBlog ? "Latest post" : "Latest project";
             <div class="flex flex-wrap gap-2 mb-5">
               {tags.slice(0, 4).map((tag) => (
                 <span class="px-3 py-1 bg-white/20 backdrop-blur-sm text-sm font-medium">
-                  {tag}
+                  {getTagLabel(tag)}
                 </span>
               ))}
               {tags.length > 4 && (
@@ -183,15 +162,6 @@ const kindLabel = isBlog ? "Latest post" : "Latest project";
             {statusText[project.status]}
           </div>
         )}
-
-        {project && categoryIcon[project.category] && (
-          <div class="absolute top-4 left-4 bg-brand-500/90 backdrop-blur-md p-1.5 text-neutral-0 z-20">
-            {(() => {
-              const C = categoryIcon[project.category];
-              return <C className="w-4 h-4" />;
-            })()}
-          </div>
-        )}
       </div>
 
       <div class="p-6 sm:p-8 flex-1 flex flex-col">
@@ -210,10 +180,10 @@ const kindLabel = isBlog ? "Latest post" : "Latest project";
           </p>
         )}
 
-        {project && (project.demoUrl || project.videoUrl || project.githubUrl) && (
+        {project && (project.links?.live || project.links?.code) && (
           <div class="flex gap-3 mb-4 text-sm">
-            {project.demoUrl && (
-              <a href={project.demoUrl} target="_blank" rel="noopener noreferrer" class="text-brand-700 hover:text-brand-800 font-semibold flex items-center gap-1.5" onclick="event.stopPropagation()">
+            {project.links?.live && (
+              <a href={project.links.live} target="_blank" rel="noopener noreferrer" class="text-brand-700 hover:text-brand-800 font-semibold flex items-center gap-1.5" onclick="event.stopPropagation()">
                 <span class="relative flex h-2 w-2" aria-hidden="true">
                   <span class="absolute inline-flex h-full w-full bg-brand-500 opacity-75 "></span>
                   <span class="relative inline-flex h-2 w-2 bg-brand-600"></span>
@@ -221,14 +191,8 @@ const kindLabel = isBlog ? "Latest post" : "Latest project";
                 Live Site
               </a>
             )}
-            {project.videoUrl && (
-              <a href={project.videoUrl} target="_blank" rel="noopener noreferrer" class="text-brand-600 hover:text-brand-700 font-medium flex items-center gap-1" onclick="event.stopPropagation()">
-                <VideoCameraIcon className="w-3.5 h-3.5" />
-                Video
-              </a>
-            )}
-            {project.githubUrl && (
-              <a href={project.githubUrl} target="_blank" rel="noopener noreferrer" class="text-neutral-600 hover:text-neutral-800 font-medium flex items-center gap-1" onclick="event.stopPropagation()">
+            {project.links?.code && (
+              <a href={project.links.code} target="_blank" rel="noopener noreferrer" class="text-neutral-600 hover:text-neutral-800 font-medium flex items-center gap-1" onclick="event.stopPropagation()">
                 <GithubIcon className="w-3.5 h-3.5" />
                 Code
               </a>

@@ -7,7 +7,7 @@
 
 export interface Technology {
   name: string;
-  imagePath: string;
+  imagePath?: string;
   category: 'frontend' | 'backend' | 'database' | 'devops' | 'tools' | 'cloud' | 'mobile' | 'other';
   url?: string;
 }
@@ -363,7 +363,25 @@ export const technologies: Technology[] = [
     category: 'frontend',
     url: 'https://lottiefiles.com/'
   },
+
+  // Tooling / automation
+  {
+    name: 'n8n',
+    imagePath: '/images/tech-logos/n8n.svg',
+    category: 'tools',
+    url: 'https://n8n.io/'
+  },
+  {
+    name: 'Nx',
+    imagePath: '/images/tech-logos/nx.svg',
+    category: 'tools',
+    url: 'https://nx.dev/'
+  },
 ];
+
+// Stable URL slug for a tech name, e.g. "Tailwind CSS" -> "tailwind-css".
+export const techSlug = (name: string) =>
+  name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
 
 // Helper functions
 export const getTechByCategory = (category: Technology['category']) => {
@@ -374,10 +392,18 @@ export const getTechByName = (name: string) => {
   return technologies.find(tech => tech.name.toLowerCase() === name.toLowerCase());
 };
 
+export const getTechBySlug = (slug: string) => {
+  return technologies.find(tech => techSlug(tech.name) === slug);
+};
+
 export const getAllCategories = () => {
   return Array.from(new Set(technologies.map(tech => tech.category)));
 };
 
 export const getAllTechNames = () => {
   return technologies.map(tech => tech.name);
+};
+
+export const getAllTechSlugs = () => {
+  return technologies.map(tech => techSlug(tech.name));
 };

@@ -3,15 +3,8 @@ title: 'Our Journey Building an App with Micro Frontends'
 author: 'Kenneth Harold Panis'
 pubDate: 2025-08-16
 image: 'Microfrontend.png'
-tags:
-  [
-    'micro-frontends',
-    'architecture',
-    'frontend',
-    'module-federation',
-    'nx',
-    'react',
-  ]
+tags: ['micro-frontends', 'architecture', 'module-federation', 'nx']
+tech: ['React', 'Nx', 'Module Federation', 'TypeScript']
 ---
 
 ## Introduction

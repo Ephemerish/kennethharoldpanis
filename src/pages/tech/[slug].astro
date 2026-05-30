@@ -1,0 +1,95 @@
+---
+export const prerender = true;
+import MainLayout from "../../layouts/MainLayout.astro";
+import EntryCard from "../../components/EntryCard.astro";
+import PageSection from "../../components/PageSection.astro";
+import PageHeader from "../../components/PageHeader.astro";
+import { getCollection } from "astro:content";
+import type { CollectionEntry } from "astro:content";
+import { getTechBySlug, techSlug } from "../../data/technologies";
+
+type Tagged =
+  | { entry: CollectionEntry<"projects">; kind: "project" }
+  | { entry: CollectionEntry<"blog">; kind: "blog" };
+
+// Newest first; blogs use pubDate, projects fall back to end/start date.
+const dateOf = ({ entry }: Tagged) =>
+  ("pubDate" in entry.data && entry.data.pubDate) ||
+  ("endDate" in entry.data && entry.data.endDate) ||
+  (entry.data as CollectionEntry<"projects">["data"]).startDate;
+
+export async function getStaticPaths() {
+  const [projects, blogs] = await Promise.all([
+    getCollection("projects"),
+    getCollection("blog"),
+  ]);
+
+  const all: Tagged[] = [
+    ...projects.map((entry) => ({ entry, kind: "project" as const })),
+    ...blogs.map((entry) => ({ entry, kind: "blog" as const })),
+  ];
+
+  // One page per tech slug actually used by at least one entry.
+  const slugs = new Set<string>();
+  for (const { entry } of all) for (const name of entry.data.tech) slugs.add(techSlug(name));
+
+  return [...slugs].map((slug) => ({
+    params: { slug },
+    props: {
+      slug,
+      entries: all.filter(({ entry }) =>
+        entry.data.tech.some((name) => techSlug(name) === slug)
+      ),
+    },
+  }));
+}
+
+const { slug, entries } = Astro.props as { slug: string; entries: Tagged[] };
+const tech = getTechBySlug(slug);
+const label = tech?.name ?? slug;
+const sorted = [...entries].sort((a, b) => dateOf(b).valueOf() - dateOf(a).valueOf());
+const count = `${sorted.length} ${sorted.length === 1 ? "entry" : "entries"}`;
+---
+
+<MainLayout
+  title={`Built with ${label} - Kenneth Harold Panis`}
+  description={`Projects and posts built with ${label}.`}
+>
+  <PageSection variant="hero">
+    <PageHeader
+      prefix="Built with"
+      accent={label}
+      subtitle={`${count} built with ${label}.`}
+      size="md"
+    />
+
+    {tech?.url && (
+      <div class="-mt-6 mb-12 text-center">
+        <a
+          href={tech.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-brand-700 border border-brand-200 bg-brand-50 hover:bg-brand-100"
+        >
+          Visit website
+        </a>
+      </div>
+    )}
+
+    <div class="grid grid-cols-1 gap-8 sm:gap-10 sm:grid-cols-2 lg:grid-cols-3">
+      {sorted.map(({ entry, kind }) => (
+        <EntryCard entry={entry} kind={kind} />
+      ))}
+    </div>
+
+    <div class="mt-12 sm:mt-16 text-center">
+      <button
+        type="button"
+        onclick="window.dispatchEvent(new CustomEvent('open-search'))"
+        class="text-brand-700 hover:text-brand-800 font-medium"
+      >
+        Search for something else
+      </button>
+    </div>
+  </PageSection>
+</MainLayout>

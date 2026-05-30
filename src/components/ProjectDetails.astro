@@ -2,17 +2,16 @@
 /**
  * ProjectDetails, a polished "overview" card shown above the story.
  *
- * White card with a quiet header strip. "Built with" is a single section
- * split into two parts, Technology (logo chips) and Materials & tools, 
- * followed by a facts grid and Key features / Challenges side by side.
+ * White card with a quiet header strip. Tech now lives in the shared article
+ * header (TechChips); this card holds the project-only detail: materials,
+ * a facts grid, and Key features / Challenges side by side.
  */
 import type { CollectionEntry } from "astro:content";
-import { getTechByName } from "../data/technologies";
 import {
   SquaresFourIcon as Squares2X2Icon,
   SparkleIcon as SparklesIcon,
   LightningIcon as BoltIcon,
-  CpuIcon as CpuChipIcon,
+  WrenchIcon,
 } from "@phosphor-icons/react";
 
 interface Props {
@@ -24,32 +23,29 @@ const { data } = Astro.props;
 const fmt = (date: Date) =>
   new Intl.DateTimeFormat("en-US", { year: "numeric", month: "short" }).format(date);
 
-const techs = (data.technologies ?? []).map((name) => ({
-  name,
-  tech: getTechByName(name),
-}));
-const materials = data.materials ?? [];
-const hasBuiltWith = techs.length > 0 || materials.length > 0;
+const overview = data.overview;
+const materials = overview?.materials ?? [];
+const hasMaterials = materials.length > 0;
 
+const academic = overview?.academic;
 // Timeline only when there's an end date, the header already shows the start.
 const facts = [
   data.endDate
     ? { label: "Timeline", value: `${fmt(data.startDate)} – ${fmt(data.endDate)}` }
     : null,
-  data.team?.length ? { label: "Team", value: data.team.join(", ") } : null,
-  data.institution ? { label: "Institution", value: data.institution } : null,
-  data.supervisor ? { label: "Supervisor", value: data.supervisor } : null,
-  data.researchArea ? { label: "Research area", value: data.researchArea } : null,
+  overview?.team?.length ? { label: "Team", value: overview.team.join(", ") } : null,
+  academic?.institution ? { label: "Institution", value: academic.institution } : null,
+  academic?.supervisor ? { label: "Supervisor", value: academic.supervisor } : null,
+  academic?.researchArea ? { label: "Research area", value: academic.researchArea } : null,
 ].filter(Boolean) as { label: string; value: string }[];
 
-const keyFeatures = data.keyFeatures ?? [];
-const challenges = data.challenges ?? [];
+const keyFeatures = overview?.keyFeatures ?? [];
+const challenges = overview?.challenges ?? [];
 
 const hasLists = keyFeatures.length > 0 || challenges.length > 0;
-const hasAnything = hasBuiltWith || facts.length > 0 || hasLists;
+const hasAnything = hasMaterials || facts.length > 0 || hasLists;
 
 const label = "text-[11px] font-semibold uppercase tracking-wider text-neutral-400";
-const sub = "text-xs font-medium text-neutral-500 mb-2";
 ---
 
 {hasAnything && (
@@ -60,49 +56,19 @@ const sub = "text-xs font-medium text-neutral-500 mb-2";
       <span class="text-sm font-semibold text-neutral-700 tracking-tight">Overview</span>
     </div>
 
-    {/* Built with, Technology + Materials & tools */}
-    {hasBuiltWith && (
+    {/* Materials & tools (hardware / physical parts) */}
+    {hasMaterials && (
       <div class="px-6 sm:px-8 py-6 border-b border-neutral-200">
         <h3 class={`${label} mb-4 flex items-center gap-2`}>
-          <CpuChipIcon className="w-4 h-4 text-brand-500" />
-          Built with
+          <WrenchIcon className="w-4 h-4 text-brand-500" />
+          Materials & tools
         </h3>
-        <div class="space-y-5">
-          {techs.length > 0 && (
-            <div>
-              <p class={sub}>Technology</p>
-              <div class="flex flex-wrap gap-2">
-                {techs.map(({ name, tech }) => (
-                  <span class="inline-flex items-center gap-2 py-1.5 pl-2 pr-3 bg-neutral-50 border border-neutral-200 hover:border-brand-300 hover:bg-brand-50 ">
-                    {tech ? (
-                      <img
-                        src={tech.imagePath}
-                        alt={tech.name}
-                        class="w-5 h-5 object-contain"
-                        loading="lazy"
-                      />
-                    ) : (
-                      <span class="w-1.5 h-1.5 bg-brand-400" />
-                    )}
-                    <span class="text-sm text-neutral-700">{tech?.name ?? name}</span>
-                  </span>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {materials.length > 0 && (
-            <div>
-              <p class={sub}>Materials & tools</p>
-              <div class="flex flex-wrap gap-2">
-                {materials.map((m) => (
-                  <span class="py-1.5 px-3 bg-neutral-50 border border-neutral-200 text-sm text-neutral-600">
-                    {m}
-                  </span>
-                ))}
-              </div>
-            </div>
-          )}
+        <div class="flex flex-wrap gap-2">
+          {materials.map((m) => (
+            <span class="py-1.5 px-3 bg-neutral-50 border border-neutral-200 text-sm text-neutral-600">
+              {m}
+            </span>
+          ))}
         </div>
       </div>
     )}
