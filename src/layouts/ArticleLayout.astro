@@ -92,9 +92,12 @@ const hasAppendix = Astro.slots.has("appendix");
               {tags && tags.length > 0 && (
                 <div class="flex flex-wrap gap-2">
                   {tags.map((tag) => (
-                    <span class="px-3 py-1.5 bg-brand-500 text-white text-sm font-medium hover:bg-brand-600  shadow-sm">
+                    <a
+                      href={`/tags/${tag}`}
+                      class="px-3 py-1.5 bg-brand-500 text-white text-sm font-medium hover:bg-brand-600  shadow-sm"
+                    >
                       {getTagLabel(tag)}
-                    </span>
+                    </a>
                   ))}
                 </div>
               )}

@@ -21,7 +21,6 @@ export interface Tag {
 export const tags: Tag[] = [
   // Domain — subject area / industry
   { slug: "maritime-safety", label: "Maritime Safety", group: "domain" },
-  { slug: "personal-finance", label: "Personal Finance", group: "domain" },
   { slug: "fintech", label: "Fintech", group: "domain" },
 
   // Type — what kind of thing it is

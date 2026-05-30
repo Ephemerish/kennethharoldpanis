@@ -7,7 +7,8 @@ interface Props {
   tags: string[];
 }
 
-// should be clickable in the future and navigate to a tag page
+// Plain (non-link) chips: this renders inside the card's anchor, so it can't
+// nest links. Clickable tags live on the detail pages and /tags.
 ---
 
 <div class="flex flex-wrap">
