@@ -4,19 +4,18 @@ description: "An undergraduate thesis project developing a LoRa-based communicat
 image: "Theses 5.jpg"
 gallery: ["Theses.jpg", "Theses 2.jpg", "Theses 3.jpg", "Theses 4.jpg", "Theses.svg"]
 tags: ["maritime-safety", "mobile-app", "emergency-response", "gps-tracking", "microcontroller", "thesis", "hardware"]
+tech: ["Arduino", "LoRa", "IoT", "Flutter", "Firebase", "Raspberry Pi"]
 featured: false
 status: "completed"
 startDate: 2023-09-01
 endDate: 2024-05-01
 overview:
-  builtWith:
-    technology: ["Arduino", "LoRa", "IoT", "Flutter", "Firebase", "Raspberry Pi"]
-    materials:
-      - "ESP32 NodeMCU-32S"
-      - "LoRa SX1278 433MHz"
-      - "GPS NEO-M8N"
-      - "Firebase Realtime Database"
-      - "Flutter Mobile App"
+  materials:
+    - "ESP32 NodeMCU-32S"
+    - "LoRa SX1278 433MHz"
+    - "GPS NEO-M8N"
+    - "Firebase Realtime Database"
+    - "Flutter Mobile App"
   keyFeatures:
     - "Real-time GPS location tracking and transmission"
     - "Emergency alert system with instant notification"

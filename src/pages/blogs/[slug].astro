@@ -25,10 +25,12 @@ const readTime = entry ? calculateReadTime(entry.body) : undefined;
 {entry && Content && frontmatter ? (
   <ArticleLayout
     title={frontmatter.title}
+    description={frontmatter.description}
     heroImage={frontmatter.image}
     date={frontmatter.pubDate}
     readTime={readTime}
     tags={frontmatter.tags}
+    tech={frontmatter.tech}
   >
     <Content />
   </ArticleLayout>

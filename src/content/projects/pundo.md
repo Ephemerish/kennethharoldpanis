@@ -4,14 +4,13 @@ description: "A personal budgeting app for tracking income, expenses, and transf
 image: "pundo/01-hero.png"
 gallery: ["pundo/02-first-transaction.png", "pundo/04-budget-plan.png", "pundo/05-before-after.png", "pundo/07-roadmap.png"]
 tags: ["fintech", "budgeting", "50-30-20", "beta", "side-project", "web-app"]
+tech: ["Svelte 5", "TypeScript", "Tailwind CSS", "Drizzle ORM", "Neon", "PostgreSQL", "better-auth", "pnpm", "Vite", "Docker", "Cloud Run", "Paraglide", "shadcn", "Lottie"]
 featured: true
 status: "in-progress"
 startDate: 2026-03-22
 links:
   live: "https://pundo.kennethharoldpanis.com/"
 overview:
-  builtWith:
-    technology: ["Svelte 5", "TypeScript", "Tailwind CSS", "Drizzle ORM", "Neon", "PostgreSQL", "better-auth", "pnpm", "Vite", "Docker", "Cloud Run", "Paraglide", "shadcn", "Lottie"]
   keyFeatures:
     - "Income, expense, and transfer transactions across multiple accounts and parent and child categories"
     - "Monthly budgets with full per-peso control, with an optional 50/30/20 needs, wants, and savings split"

@@ -1,0 +1,81 @@
+---
+export const prerender = true;
+import MainLayout from "../../layouts/MainLayout.astro";
+import PageSection from "../../components/PageSection.astro";
+import PageHeader from "../../components/PageHeader.astro";
+import { getCollection } from "astro:content";
+import { technologies, techSlug, type Technology } from "../../data/technologies";
+
+const [projects, blogs] = await Promise.all([
+  getCollection("projects"),
+  getCollection("blog"),
+]);
+
+// Count entries per tech slug, so we only list tech that is actually in use.
+const counts = new Map<string, number>();
+for (const entry of [...projects, ...blogs])
+  for (const name of entry.data.tech) {
+    const slug = techSlug(name);
+    counts.set(slug, (counts.get(slug) ?? 0) + 1);
+  }
+
+const groups: { key: Technology["category"]; title: string }[] = [
+  { key: "frontend", title: "Frontend" },
+  { key: "backend", title: "Backend" },
+  { key: "database", title: "Database" },
+  { key: "mobile", title: "Mobile" },
+  { key: "cloud", title: "Cloud" },
+  { key: "devops", title: "DevOps" },
+  { key: "tools", title: "Tools" },
+  { key: "other", title: "Hardware & IoT" },
+];
+
+const sections = groups
+  .map((group) => ({
+    ...group,
+    items: technologies
+      .filter((tech) => tech.category === group.key && counts.has(techSlug(tech.name)))
+      .map((tech) => ({ ...tech, slug: techSlug(tech.name), count: counts.get(techSlug(tech.name))! })),
+  }))
+  .filter((section) => section.items.length > 0);
+---
+
+<MainLayout
+  title="Tech - Kenneth Harold Panis"
+  description="Browse projects and posts by the technology they're built with."
+>
+  <PageSection variant="hero">
+    <PageHeader
+      prefix="Built with"
+      accent="Tech"
+      subtitle="Find projects and posts by the technology behind them."
+      glow
+    />
+
+    <div class="space-y-10 sm:space-y-12 max-w-4xl mx-auto">
+      {sections.map((section) => (
+        <section>
+          <h2 class="text-[11px] font-semibold uppercase tracking-wider text-neutral-400 mb-4">
+            {section.title}
+          </h2>
+          <div class="flex flex-wrap gap-2.5">
+            {section.items.map((tech) => (
+              <a
+                href={`/tech/${tech.slug}`}
+                class="inline-flex items-center gap-2 py-1.5 pl-2 pr-3 bg-neutral-50 border border-neutral-200 hover:border-brand-300 hover:bg-brand-50"
+              >
+                {tech.imagePath ? (
+                  <img src={tech.imagePath} alt={tech.name} class="w-5 h-5 object-contain" loading="lazy" />
+                ) : (
+                  <span class="w-1.5 h-1.5 bg-brand-400"></span>
+                )}
+                <span class="text-sm text-neutral-700">{tech.name}</span>
+                <span class="text-xs text-neutral-500">{tech.count}</span>
+              </a>
+            ))}
+          </div>
+        </section>
+      ))}
+    </div>
+  </PageSection>
+</MainLayout>

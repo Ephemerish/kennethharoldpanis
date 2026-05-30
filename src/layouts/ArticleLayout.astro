@@ -11,6 +11,7 @@
 import MainLayout from "./MainLayout.astro";
 import Prose from "../components/Prose.astro";
 import ContentImageViewer from "../components/ContentImageViewer.tsx";
+import TechChips from "../components/TechChips.astro";
 import { formatDate } from "../utils";
 import { getTagLabel } from "../data/tags";
 import { CalendarBlankIcon as CalendarIcon, ClockIcon } from "@phosphor-icons/react";
@@ -28,6 +29,7 @@ interface Props {
   date?: Date;
   readTime?: string;
   tags?: string[];
+  tech?: string[];
   badges?: Badge[];
 }
 
@@ -39,8 +41,11 @@ const {
   date,
   readTime,
   tags,
+  tech,
   badges,
 } = Astro.props;
+
+const hasFacets = (tech && tech.length > 0) || (tags && tags.length > 0);
 
 const ogImage = heroImage ? `/images/${heroImage}` : "/images/me/me.jpg";
 const hasActions = Astro.slots.has("actions");
@@ -72,34 +77,20 @@ const hasAppendix = Astro.slots.has("appendix");
               ))}
             </div>
 
-            {/* Meta row: date + read time + tags */}
-            <div class="flex items-center justify-between flex-wrap gap-4 mb-6">
-              <div class="flex items-center gap-4 text-neutral-700">
-                {date && (
-                  <time class="flex items-center gap-1.5 text-sm">
-                    <CalendarIcon className="w-4 h-4" />
-                    {formatDate(date)}
-                  </time>
-                )}
-                {date && readTime && <span class="text-neutral-400">•</span>}
-                {readTime && (
-                  <span class="flex items-center gap-1.5 text-sm">
-                    <ClockIcon className="w-4 h-4" />
-                    {readTime}
-                  </span>
-                )}
-              </div>
-              {tags && tags.length > 0 && (
-                <div class="flex flex-wrap gap-2">
-                  {tags.map((tag) => (
-                    <a
-                      href={`/tags/${tag}`}
-                      class="px-3 py-1.5 bg-brand-500 text-white text-sm font-medium hover:bg-brand-600  shadow-sm"
-                    >
-                      {getTagLabel(tag)}
-                    </a>
-                  ))}
-                </div>
+            {/* Meta row: date + read time */}
+            <div class="flex items-center gap-4 text-neutral-700 mb-6">
+              {date && (
+                <time class="flex items-center gap-1.5 text-sm">
+                  <CalendarIcon className="w-4 h-4" />
+                  {formatDate(date)}
+                </time>
+              )}
+              {date && readTime && <span class="text-neutral-400">•</span>}
+              {readTime && (
+                <span class="flex items-center gap-1.5 text-sm">
+                  <ClockIcon className="w-4 h-4" />
+                  {readTime}
+                </span>
               )}
             </div>
 
@@ -127,6 +118,37 @@ const hasAppendix = Astro.slots.has("appendix");
             {hasActions && (
               <div class="flex flex-wrap gap-3">
                 <slot name="actions" />
+              </div>
+            )}
+
+            {/* Shared facets — identical for blogs and projects */}
+            {hasFacets && (
+              <div class="mt-8 pt-6 border-t border-neutral-200 space-y-4">
+                {tech && tech.length > 0 && (
+                  <div class="flex flex-col sm:flex-row sm:items-baseline gap-2 sm:gap-5">
+                    <span class="text-[11px] font-semibold uppercase tracking-wider text-neutral-400 sm:w-20 shrink-0">
+                      Built with
+                    </span>
+                    <TechChips tech={tech} />
+                  </div>
+                )}
+                {tags && tags.length > 0 && (
+                  <div class="flex flex-col sm:flex-row sm:items-baseline gap-2 sm:gap-5">
+                    <span class="text-[11px] font-semibold uppercase tracking-wider text-neutral-400 sm:w-20 shrink-0">
+                      Tagged
+                    </span>
+                    <div class="flex flex-wrap gap-2">
+                      {tags.map((tag) => (
+                        <a
+                          href={`/tags/${tag}`}
+                          class="px-3 py-1.5 text-sm font-medium text-brand-700 bg-brand-50 border border-brand-200 hover:bg-brand-100"
+                        >
+                          {getTagLabel(tag)}
+                        </a>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </div>
             )}
           </header>
