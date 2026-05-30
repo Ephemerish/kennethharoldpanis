@@ -43,6 +43,80 @@ async function loadIndex(): Promise<SearchItem[]> {
   return inflight;
 }
 
+// Analytics-driven popularity from /api/popular, flattened across every
+// content type into one list ranked by visit count. Cached like the index;
+// falls back to static usage counts.
+type PopularEntry = { type: ItemType; slug: string; count: number };
+
+// Maps an /api/popular section key to its search item type.
+const POPULAR_TYPES: Record<string, ItemType> = {
+  tech: "tech",
+  tags: "tag",
+  projects: "project",
+  blogs: "blog",
+};
+
+let popularCache: PopularEntry[] | null = null;
+let popularInflight: Promise<PopularEntry[]> | null = null;
+
+// /api/popular passes the edge function through verbatim: each section is a
+// { segment, count }[]. Flatten all sections and sort by count, descending.
+function parsePopular(data: unknown): PopularEntry[] {
+  const out: PopularEntry[] = [];
+  if (data && typeof data === "object") {
+    for (const [key, type] of Object.entries(POPULAR_TYPES)) {
+      const list = (data as Record<string, unknown>)[key];
+      if (!Array.isArray(list)) continue;
+      for (const e of list) {
+        const slug = e && typeof e === "object" ? (e as { segment?: unknown }).segment : e;
+        const count = e && typeof e === "object" ? (e as { count?: unknown }).count : 0;
+        if (typeof slug === "string" && slug) {
+          out.push({ type, slug, count: typeof count === "number" ? count : 0 });
+        }
+      }
+    }
+  }
+  return out.sort((a, b) => b.count - a.count);
+}
+
+async function loadPopular(): Promise<PopularEntry[]> {
+  if (popularCache) return popularCache;
+  if (!popularInflight) {
+    popularInflight = fetch("/api/popular")
+      .then((r) => r.json())
+      .then((d): PopularEntry[] => (popularCache = parsePopular(d)))
+      .catch(() => (popularCache = []));
+  }
+  return popularInflight;
+}
+
+// Items to show for an empty query: most-visited first across all types, then
+// topped up with static usage counts so the list is never empty before traffic.
+function buildPopular(items: SearchItem[], popular: PopularEntry[], max = 6): SearchItem[] {
+  const picked: SearchItem[] = [];
+  const seen = new Set<string>();
+  const add = (it?: SearchItem) => {
+    if (it && !seen.has(it.url)) {
+      seen.add(it.url);
+      picked.push(it);
+    }
+  };
+  const find = (type: ItemType, slug: string) =>
+    items.find((i) => i.type === type && i.url.endsWith(`/${slug}`));
+
+  for (const { type, slug } of popular) {
+    if (picked.length >= max) break;
+    add(find(type, slug));
+  }
+  if (picked.length < max) {
+    [...items]
+      .filter((i) => i.type === "tag" || i.type === "tech")
+      .sort((a, b) => (b.count ?? 0) - (a.count ?? 0))
+      .forEach(add);
+  }
+  return picked.slice(0, max);
+}
+
 const escapeRegExp = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 
 function scoreItem(item: SearchItem, tokens: string[]): number {
@@ -89,6 +163,7 @@ function Highlight({ text, tokens }: { text: string; tokens: string[] }) {
 export default function Search({ className }: { className?: string }) {
   const [query, setQuery] = useState("");
   const [items, setItems] = useState<SearchItem[]>([]);
+  const [popular, setPopular] = useState<PopularEntry[]>([]);
   const [open, setOpen] = useState(false);
   const [active, setActive] = useState(0);
   const rootRef = useRef<HTMLDivElement>(null);
@@ -98,6 +173,8 @@ export default function Search({ className }: { className?: string }) {
   const ensureLoaded = () => {
     if (!cache) loadIndex().then(setItems);
     else if (!items.length) setItems(cache);
+    if (!popularCache) loadPopular().then(setPopular);
+    else setPopular(popularCache);
   };
 
   // Close when clicking outside.
@@ -128,10 +205,7 @@ export default function Search({ className }: { className?: string }) {
   const results = useMemo<SearchItem[]>(() => {
     if (!items.length) return [];
     if (tokens.length === 0) {
-      return [...items]
-        .filter((i) => i.type === "tag" || i.type === "tech")
-        .sort((a, b) => (b.count ?? 0) - (a.count ?? 0))
-        .slice(0, 6);
+      return buildPopular(items, popular);
     }
     return items
       .map((it) => ({ it, sc: scoreItem(it, tokens) }))
@@ -139,7 +213,7 @@ export default function Search({ className }: { className?: string }) {
       .sort((a, b) => b.sc - a.sc)
       .slice(0, 8)
       .map((x) => x.it);
-  }, [items, tokens]);
+  }, [items, tokens, popular]);
 
   useEffect(() => setActive(0), [query, open]);
 
@@ -187,6 +261,7 @@ export default function Search({ className }: { className?: string }) {
           }}
           onKeyDown={onKeyDown}
           placeholder="Search"
+          data-search-input
           className="w-full bg-transparent text-sm text-neutral-900 placeholder:text-neutral-400 outline-none"
           autoComplete="off"
           spellCheck={false}
@@ -197,7 +272,7 @@ export default function Search({ className }: { className?: string }) {
       {(showResults || showEmpty) && (
         <div
           ref={listRef}
-          className="absolute right-0 mt-2 w-80 max-w-[calc(100vw-2rem)] max-h-[70vh] overflow-y-auto bg-white border border-neutral-200 shadow-lg z-50 py-1"
+          className="absolute left-0 right-0 mt-2 min-w-[16rem] max-w-[calc(100vw-2rem)] max-h-[70vh] overflow-y-auto bg-white border border-neutral-200 shadow-lg z-50 py-1"
         >
           {showEmpty ? (
             <p className="px-3 py-6 text-center text-sm text-neutral-500">

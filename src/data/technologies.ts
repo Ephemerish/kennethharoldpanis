@@ -364,14 +364,16 @@ export const technologies: Technology[] = [
     url: 'https://lottiefiles.com/'
   },
 
-  // Tooling / automation (logos optional — chips fall back to a dot)
+  // Tooling / automation
   {
     name: 'n8n',
+    imagePath: '/images/tech-logos/n8n.svg',
     category: 'tools',
     url: 'https://n8n.io/'
   },
   {
     name: 'Nx',
+    imagePath: '/images/tech-logos/nx.svg',
     category: 'tools',
     url: 'https://nx.dev/'
   },
