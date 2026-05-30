@@ -3,7 +3,7 @@ title: "Pundo"
 description: "A personal budgeting app for tracking income, expenses, and transfers across your accounts. You set monthly budgets, see where your money goes over time, and all the data you enter belongs to you, because Pundo is a tool, not a financial service. This is the story of why I built it, how it grew from a one-person weekend project into a closed beta, and where it is headed."
 image: "pundo/01-hero.png"
 gallery: ["pundo/02-first-transaction.png", "pundo/04-budget-plan.png", "pundo/05-before-after.png", "pundo/07-roadmap.png"]
-tags: ["Personal Finance", "Budgeting", "50/30/20", "Svelte 5", "Beta", "Side Project", "Web App", "Fintech"]
+tags: ["personal-finance", "budgeting", "50-30-20", "beta", "side-project", "web-app", "fintech"]
 featured: true
 status: "in-progress"
 startDate: 2026-03-22

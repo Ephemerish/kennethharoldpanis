@@ -1,4 +1,11 @@
 import { defineCollection, z } from "astro:content";
+import { getAllTagSlugs } from "../data/tags";
+
+// Tags must be registered slugs in src/data/tags.ts — an unknown or
+// misspelled tag fails the build, keeping the vocabulary consistent.
+const tagSlugs = getAllTagSlugs() as [string, ...string[]];
+const tagsSchema = z.array(z.enum(tagSlugs));
+
 const blogCollection = defineCollection({
   type: "content",
   schema: z.object({
@@ -6,7 +13,7 @@ const blogCollection = defineCollection({
     pubDate: z.date(),
     author: z.string(),
     image: z.string(),
-    tags: z.array(z.string()),
+    tags: tagsSchema,
   }),
 });
 
@@ -18,7 +25,7 @@ const projectCollection = defineCollection({
     description: z.string(),
     image: z.string(),
     gallery: z.array(z.string()).optional(),
-    tags: z.array(z.string()),
+    tags: tagsSchema,
     featured: z.boolean().default(false),
     status: z.enum(["completed", "in-progress", "planned"]),
     startDate: z.date(),

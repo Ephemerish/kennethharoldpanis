@@ -13,6 +13,7 @@
  */
 import { formatDate, calculateReadTime } from "../utils";
 import type { CollectionEntry } from "astro:content";
+import { getTagLabel } from "../data/tags";
 import Tags from "./Tags.astro";
 import {
   CalendarBlankIcon as CalendarIcon,
@@ -118,7 +119,7 @@ const kindLabel = isBlog ? "Latest post" : "Latest project";
             <div class="flex flex-wrap gap-2 mb-5">
               {tags.slice(0, 4).map((tag) => (
                 <span class="px-3 py-1 bg-white/20 backdrop-blur-sm text-sm font-medium">
-                  {tag}
+                  {getTagLabel(tag)}
                 </span>
               ))}
               {tags.length > 4 && (
