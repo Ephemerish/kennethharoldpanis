@@ -64,16 +64,16 @@ const count = `${sorted.length} ${sorted.length === 1 ? "entry" : "entries"}`;
     />
 
     {tech?.url && (
-      <p class="-mt-6 mb-12 text-center">
+      <div class="-mt-6 mb-12 text-center">
         <a
           href={tech.url}
           target="_blank"
           rel="noopener noreferrer"
-          class="text-sm text-brand-700 hover:text-brand-800 font-medium"
+          class="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-brand-700 border border-brand-200 bg-brand-50 hover:bg-brand-100"
         >
-          Visit {label} ↗
+          Visit website
         </a>
-      </p>
+      </div>
     )}
 
     <div class="grid grid-cols-1 gap-8 sm:gap-10 sm:grid-cols-2 lg:grid-cols-3">
@@ -83,9 +83,13 @@ const count = `${sorted.length} ${sorted.length === 1 ? "entry" : "entries"}`;
     </div>
 
     <div class="mt-12 sm:mt-16 text-center">
-      <a href="/tech" class="text-brand-700 hover:text-brand-800 font-medium">
-        ← Browse all tech
-      </a>
+      <button
+        type="button"
+        onclick="window.dispatchEvent(new CustomEvent('open-search'))"
+        class="text-brand-700 hover:text-brand-800 font-medium"
+      >
+        Search for something else
+      </button>
     </div>
   </PageSection>
 </MainLayout>
