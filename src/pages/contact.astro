@@ -196,6 +196,8 @@ const stackChips = [
   </PageSection>
 
   <script>
+    import { $sendContact } from '../lib/stores/api';
+
     async function showToast(type: 'success' | 'error', title: string, description: string) {
       try {
         const { toast } = await import('sonner');
@@ -221,21 +223,12 @@ const stackChips = [
           submitBtn.textContent = 'Sending...';
           submitBtn.disabled = true;
 
-          const formData = new FormData(form);
-          const response = await fetch('/api/contact', {
-            method: 'POST',
-            body: formData,
-          });
+          // Shared store helper: throws on a non-success response.
+          await $sendContact.mutate(new FormData(form));
 
-          const result = await response.json();
-
-          if (result.success) {
-            await showToast('success', 'Message sent successfully!', "I'll get back to you soon.");
-            form.reset();
-            window.dispatchEvent(new CustomEvent('form-reset'));
-          } else {
-            throw new Error(result.error || 'Failed to send message');
-          }
+          await showToast('success', 'Message sent successfully!', "I'll get back to you soon.");
+          form.reset();
+          window.dispatchEvent(new CustomEvent('form-reset'));
         } catch (error) {
           await showToast('error', 'Failed to send message', 'Please try again or email me directly.');
           console.error('Form submission error:', error);

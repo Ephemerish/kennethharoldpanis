@@ -29,6 +29,8 @@ export const GET: APIRoute = async () => {
     group?: string;
     count?: number;
     imagePath?: string;
+    // ISO date for blog/project items, so the search island can show "Latest".
+    date?: string;
   };
 
   const items: Item[] = [];
@@ -42,6 +44,7 @@ export const GET: APIRoute = async () => {
       url: `/projects/${p.slug}`,
       description: p.data.description,
       keywords: [...p.data.tags, ...p.data.tech],
+      date: (p.data.endDate ?? p.data.startDate).toISOString(),
     });
   }
 
@@ -54,6 +57,7 @@ export const GET: APIRoute = async () => {
       url: `/blogs/${b.slug}`,
       description: b.data.description,
       keywords: [...b.data.tags, ...b.data.tech],
+      date: b.data.pubDate.toISOString(),
     });
   }
 

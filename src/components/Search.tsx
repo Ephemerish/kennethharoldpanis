@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
+import { useStore } from "@nanostores/react";
 import {
   MagnifyingGlassIcon,
   RocketLaunchIcon,
@@ -8,70 +9,44 @@ import {
 } from "@phosphor-icons/react";
 import type { Icon } from "@phosphor-icons/react";
 import { cn } from "../lib/utils";
-
-type ItemType = "project" | "blog" | "tag" | "tech";
-
-interface SearchItem {
-  type: ItemType;
-  title: string;
-  url: string;
-  description?: string;
-  keywords?: string[];
-  count?: number;
-  imagePath?: string;
-}
+import {
+  $searchIndex,
+  $popular,
+  enableSearch,
+  type ItemType,
+  type SearchItem,
+  type PopularResponse,
+} from "../lib/stores/api";
 
 const TYPE_META: Record<ItemType, { label: string; Icon: Icon }> = {
   project: { label: "Project", Icon: RocketLaunchIcon },
-  blog: { label: "Post", Icon: BookOpenIcon },
+  blog: { label: "Blog", Icon: BookOpenIcon },
   tag: { label: "Tag", Icon: TagIcon },
   tech: { label: "Tech", Icon: CpuIcon },
 };
 
-// Fetched once per session and reused across instances / SPA navigations.
-let cache: SearchItem[] | null = null;
-let inflight: Promise<SearchItem[]> | null = null;
-
-async function loadIndex(): Promise<SearchItem[]> {
-  if (cache) return cache;
-  if (!inflight) {
-    inflight = fetch("/search.json")
-      .then((r) => r.json())
-      .then((data: SearchItem[]) => (cache = data))
-      .catch(() => (cache = []));
-  }
-  return inflight;
-}
-
 // Analytics-driven popularity from /api/popular, flattened across every
-// content type into one list ranked by visit count. Cached like the index;
-// falls back to static usage counts.
+// content type into one list ranked by visit count.
 type PopularEntry = { type: ItemType; slug: string; count: number };
 
 // Maps an /api/popular section key to its search item type.
-const POPULAR_TYPES: Record<string, ItemType> = {
+const POPULAR_TYPES: Record<keyof PopularResponse, ItemType> = {
   tech: "tech",
   tags: "tag",
   projects: "project",
   blogs: "blog",
 };
 
-let popularCache: PopularEntry[] | null = null;
-let popularInflight: Promise<PopularEntry[]> | null = null;
-
-// /api/popular passes the edge function through verbatim: each section is a
-// { segment, count }[]. Flatten all sections and sort by count, descending.
-function parsePopular(data: unknown): PopularEntry[] {
+// Flatten all sections of the /api/popular payload, sort by count descending.
+function parsePopular(data: PopularResponse | undefined): PopularEntry[] {
   const out: PopularEntry[] = [];
   if (data && typeof data === "object") {
-    for (const [key, type] of Object.entries(POPULAR_TYPES)) {
-      const list = (data as Record<string, unknown>)[key];
+    for (const key of Object.keys(POPULAR_TYPES) as (keyof PopularResponse)[]) {
+      const list = data[key];
       if (!Array.isArray(list)) continue;
-      for (const e of list) {
-        const slug = e && typeof e === "object" ? (e as { segment?: unknown }).segment : e;
-        const count = e && typeof e === "object" ? (e as { count?: unknown }).count : 0;
-        if (typeof slug === "string" && slug) {
-          out.push({ type, slug, count: typeof count === "number" ? count : 0 });
+      for (const row of list) {
+        if (row?.segment) {
+          out.push({ type: POPULAR_TYPES[key], slug: row.segment, count: row.count ?? 0 });
         }
       }
     }
@@ -79,42 +54,27 @@ function parsePopular(data: unknown): PopularEntry[] {
   return out.sort((a, b) => b.count - a.count);
 }
 
-async function loadPopular(): Promise<PopularEntry[]> {
-  if (popularCache) return popularCache;
-  if (!popularInflight) {
-    popularInflight = fetch("/api/popular")
-      .then((r) => r.json())
-      .then((d): PopularEntry[] => (popularCache = parsePopular(d)))
-      .catch(() => (popularCache = []));
-  }
-  return popularInflight;
-}
-
-// Items to show for an empty query: most-visited first across all types, then
-// topped up with static usage counts so the list is never empty before traffic.
-function buildPopular(items: SearchItem[], popular: PopularEntry[], max = 6): SearchItem[] {
-  const picked: SearchItem[] = [];
+// Resolve the analytics ranking back to indexed items, most-visited first.
+function popularItems(items: SearchItem[], popular: PopularEntry[], max = 6): SearchItem[] {
   const seen = new Set<string>();
-  const add = (it?: SearchItem) => {
+  const picked: SearchItem[] = [];
+  for (const { type, slug } of popular) {
+    if (picked.length >= max) break;
+    const it = items.find((i) => i.type === type && i.url.endsWith(`/${slug}`));
     if (it && !seen.has(it.url)) {
       seen.add(it.url);
       picked.push(it);
     }
-  };
-  const find = (type: ItemType, slug: string) =>
-    items.find((i) => i.type === type && i.url.endsWith(`/${slug}`));
+  }
+  return picked;
+}
 
-  for (const { type, slug } of popular) {
-    if (picked.length >= max) break;
-    add(find(type, slug));
-  }
-  if (picked.length < max) {
-    [...items]
-      .filter((i) => i.type === "tag" || i.type === "tech")
-      .sort((a, b) => (b.count ?? 0) - (a.count ?? 0))
-      .forEach(add);
-  }
-  return picked.slice(0, max);
+// Newest posts + projects by date, for when there's no popularity data yet.
+function latestItems(items: SearchItem[], max = 6): SearchItem[] {
+  return items
+    .filter((i) => (i.type === "blog" || i.type === "project") && i.date)
+    .sort((a, b) => (b.date! < a.date! ? -1 : 1))
+    .slice(0, max);
 }
 
 const escapeRegExp = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
@@ -162,20 +122,19 @@ function Highlight({ text, tokens }: { text: string; tokens: string[] }) {
 
 export default function Search({ className }: { className?: string }) {
   const [query, setQuery] = useState("");
-  const [items, setItems] = useState<SearchItem[]>([]);
-  const [popular, setPopular] = useState<PopularEntry[]>([]);
   const [open, setOpen] = useState(false);
   const [active, setActive] = useState(0);
   const rootRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const listRef = useRef<HTMLDivElement>(null);
 
-  const ensureLoaded = () => {
-    if (!cache) loadIndex().then(setItems);
-    else if (!items.length) setItems(cache);
-    if (!popularCache) loadPopular().then(setPopular);
-    else setPopular(popularCache);
-  };
+  // Both stores fetch lazily once enableSearch() flips the gate; the bindings
+  // give us data + loading without any per-call fetch/cache bookkeeping.
+  const index = useStore($searchIndex);
+  const popularStore = useStore($popular);
+  const items = index.data ?? [];
+  const loading = Boolean(index.loading || popularStore.loading);
+  const popular = useMemo(() => parsePopular(popularStore.data), [popularStore.data]);
 
   // Close when clicking outside.
   useEffect(() => {
@@ -189,7 +148,7 @@ export default function Search({ className }: { className?: string }) {
   // Let other parts of the page focus search via a global event.
   useEffect(() => {
     const onOpen = () => {
-      ensureLoaded();
+      enableSearch();
       setOpen(true);
       inputRef.current?.focus();
     };
@@ -202,17 +161,23 @@ export default function Search({ className }: { className?: string }) {
     [query]
   );
 
-  const results = useMemo<SearchItem[]>(() => {
-    if (!items.length) return [];
+  // For an empty query: show analytics "Popular" when there's any, otherwise
+  // fall back to "Latest" posts + projects. For a real query: ranked matches.
+  const { results, label } = useMemo<{ results: SearchItem[]; label: string }>(() => {
+    if (!items.length) return { results: [], label: "" };
     if (tokens.length === 0) {
-      return buildPopular(items, popular);
+      const pop = popularItems(items, popular);
+      return pop.length
+        ? { results: pop, label: "Popular" }
+        : { results: latestItems(items), label: "Latest" };
     }
-    return items
+    const matches = items
       .map((it) => ({ it, sc: scoreItem(it, tokens) }))
       .filter((x) => x.sc >= 0)
       .sort((a, b) => b.sc - a.sc)
       .slice(0, 8)
       .map((x) => x.it);
+    return { results: matches, label: "" };
   }, [items, tokens, popular]);
 
   useEffect(() => setActive(0), [query, open]);
@@ -241,8 +206,11 @@ export default function Search({ className }: { className?: string }) {
     }
   };
 
-  const showEmpty = open && tokens.length > 0 && items.length > 0 && results.length === 0;
+  const showLoading = open && loading && results.length === 0;
+  const showNoMatch =
+    open && !loading && tokens.length > 0 && items.length > 0 && results.length === 0;
   const showResults = open && results.length > 0;
+  const showPanel = showLoading || showNoMatch || showResults;
 
   return (
     <div ref={rootRef} className={cn("relative", className)}>
@@ -256,7 +224,7 @@ export default function Search({ className }: { className?: string }) {
             setOpen(true);
           }}
           onFocus={() => {
-            ensureLoaded();
+            enableSearch();
             setOpen(true);
           }}
           onKeyDown={onKeyDown}
@@ -269,20 +237,25 @@ export default function Search({ className }: { className?: string }) {
         />
       </div>
 
-      {(showResults || showEmpty) && (
+      {showPanel && (
         <div
           ref={listRef}
           className="absolute left-0 right-0 mt-2 min-w-[16rem] max-w-[calc(100vw-2rem)] max-h-[70vh] overflow-y-auto bg-white border border-neutral-200 shadow-lg z-50 py-1"
         >
-          {showEmpty ? (
+          {showLoading ? (
+            <div className="flex items-center justify-center gap-2 px-3 py-6 text-sm text-neutral-500">
+              <span className="w-4 h-4 border-2 border-neutral-200 border-t-brand-500 rounded-full animate-spin" />
+              Loading…
+            </div>
+          ) : showNoMatch ? (
             <p className="px-3 py-6 text-center text-sm text-neutral-500">
               No results for “{query.trim()}”.
             </p>
           ) : (
             <>
-              {tokens.length === 0 && (
+              {label && (
                 <p className="px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-neutral-400">
-                  Popular
+                  {label}
                 </p>
               )}
               {results.map((item, i) => {
