@@ -31,6 +31,12 @@ interface Props {
   tags?: string[];
   tech?: string[];
   badges?: Badge[];
+  // When false, the default slot is rendered as-is instead of being wrapped in
+  // <Prose>. Lets a custom engine (e.g. pretext) own the whole body render.
+  proseBody?: boolean;
+  // When false, the hero image is not rendered, but heroImage is still used as
+  // the OG/share image. Lets the pretext post skip a redundant cover on-page.
+  showHero?: boolean;
 }
 
 const {
@@ -43,6 +49,8 @@ const {
   tags,
   tech,
   badges,
+  proseBody = true,
+  showHero = true,
 } = Astro.props;
 
 const hasFacets = (tech && tech.length > 0) || (tags && tags.length > 0);
@@ -102,7 +110,7 @@ const hasAppendix = Astro.slots.has("appendix");
             )}
 
             {/* Hero image */}
-            {heroImage && (
+            {heroImage && showHero && (
               <div class="mb-8">
                 <img
                   id="article-hero"
@@ -160,10 +168,14 @@ const hasAppendix = Astro.slots.has("appendix");
             </div>
           )}
 
-          {/* The single content engine */}
-          <Prose>
+          {/* Content engine: Prose by default, or raw for a custom engine */}
+          {proseBody ? (
+            <Prose>
+              <slot />
+            </Prose>
+          ) : (
             <slot />
-          </Prose>
+          )}
 
           {/* Optional compact appendix, kept below the story */}
           {hasAppendix && (

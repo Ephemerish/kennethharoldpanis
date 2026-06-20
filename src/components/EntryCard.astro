@@ -14,6 +14,8 @@
 import { formatDate, calculateReadTime } from "../utils";
 import type { CollectionEntry } from "astro:content";
 import { getTagLabel } from "../data/tags";
+import { getEngine, engineHasBadge } from "../lib/engines";
+import PretextCover from "./PretextCover.tsx";
 import Tags from "./Tags.astro";
 import {
   CalendarBlankIcon as CalendarIcon,
@@ -55,6 +57,10 @@ const statusClass = {
   planned: "bg-neutral-100/95 text-neutral-700 border-neutral-200",
 };
 const date = isBlog ? blog!.pubDate : project!.endDate ?? project!.startDate;
+const showEngineBadge = isBlog && engineHasBadge(blog!.engine);
+const engineMeta = showEngineBadge ? getEngine(blog!.engine) : null;
+// The pretext post shows a live mini-demo instead of a static cover image.
+const usePretextCover = isBlog && blog!.engine === "pretext";
 const ctaLabel = isBlog ? "Read post" : "View project";
 const KindIcon = isBlog ? BookOpenIcon : RocketLaunchIcon;
 const kindLabel = isBlog ? "Latest post" : "Latest project";
@@ -64,12 +70,18 @@ const kindLabel = isBlog ? "Latest post" : "Latest project";
   <article class="relative w-full group cursor-pointer overflow-hidden shadow-elegant border-2 border-transparent hover:border-brand-500">
     <a href={href} class="block">
       <div class="relative">
-        <img
-          src={`/images/${image}`}
-          alt={title}
-          class="w-full h-auto"
-          loading="eager"
-        />
+        {usePretextCover ? (
+          <div class="w-full aspect-video">
+            <PretextCover client:visible />
+          </div>
+        ) : (
+          <img
+            src={`/images/${image}`}
+            alt={title}
+            class="w-full h-auto"
+            loading="eager"
+          />
+        )}
         <div class="absolute inset-0 bg-gradient-to-t from-neutral-900/85 via-neutral-900/35 to-transparent group-hover:from-neutral-900/75 group-hover:via-neutral-900/25"></div>
 
         {/* Featured + status badges */}
@@ -80,6 +92,11 @@ const kindLabel = isBlog ? "Latest post" : "Latest project";
         {project && (
           <div class={`absolute top-4 right-4 sm:top-6 sm:right-6 px-3 py-1.5 sm:px-4 sm:py-2 text-xs sm:text-sm font-semibold border shadow-lg ${statusClass[project.status]}`}>
             {statusText[project.status]}
+          </div>
+        )}
+        {engineMeta && (
+          <div class={`absolute top-4 right-4 sm:top-6 sm:right-6 px-3 py-1.5 sm:px-4 sm:py-2 text-xs sm:text-sm font-semibold shadow-lg ${engineMeta.badgeClass}`}>
+            {engineMeta.label}
           </div>
         )}
 
@@ -143,17 +160,29 @@ const kindLabel = isBlog ? "Latest post" : "Latest project";
     <a href={href} class="block flex-1 flex flex-col">
       <div class="relative overflow-hidden">
         <div class="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-neutral-900/20 z-10"></div>
-        <img
-          src={`/images/${image}`}
-          alt={title}
-          class="w-full h-auto   "
-          loading="lazy"
-        />
+        {usePretextCover ? (
+          <div class="w-full aspect-video">
+            <PretextCover client:visible />
+          </div>
+        ) : (
+          <img
+            src={`/images/${image}`}
+            alt={title}
+            class="w-full h-auto   "
+            loading="lazy"
+          />
+        )}
 
         {readTime && (
           <div class="absolute top-4 right-4 bg-neutral-0/95 backdrop-blur-md px-3 py-1.5 text-xs font-semibold text-neutral-700 border border-neutral-200/50 shadow-sm z-20 flex items-center gap-1.5">
             <ClockIcon className="w-3.5 h-3.5" />
             {readTime}
+          </div>
+        )}
+
+        {engineMeta && (
+          <div class={`absolute top-4 left-4 px-3 py-1.5 text-xs font-semibold shadow-sm z-20 ${engineMeta.badgeClass}`}>
+            {engineMeta.label}
           </div>
         )}
 

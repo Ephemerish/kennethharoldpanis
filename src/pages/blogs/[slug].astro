@@ -1,9 +1,10 @@
 ---
-import ArticleLayout from "../../layouts/ArticleLayout.astro";
 import MainLayout from "../../layouts/MainLayout.astro";
+import ProseArticle from "../../components/articles/ProseArticle.astro";
+import PretextArticle from "../../components/articles/PretextArticle.astro";
 import { getCollection } from "astro:content";
-import { calculateReadTime } from "../../utils";
 import { ArrowLeftIcon } from "@phosphor-icons/react";
+import { DEFAULT_ENGINE, type EngineKey } from "../../lib/engines";
 
 export const prerender = true;
 
@@ -18,22 +19,20 @@ export async function getStaticPaths() {
 const { entry } = Astro.props;
 const rendered = entry ? await entry.render() : null;
 const Content = rendered?.Content;
-const frontmatter = entry?.data;
-const readTime = entry ? calculateReadTime(entry.body) : undefined;
+
+// Engine registry -> component. Each blog entry declares an `engine` in its
+// frontmatter (defaulting to the markdown renderer). Add a new engine by
+// registering it in src/lib/engines and mapping its key here.
+const ENGINE_COMPONENTS: Record<EngineKey, any> = {
+  prose: ProseArticle,
+  pretext: PretextArticle,
+};
+const engineKey = (entry?.data.engine ?? DEFAULT_ENGINE) as EngineKey;
+const ArticleEngine = ENGINE_COMPONENTS[engineKey] ?? ProseArticle;
 ---
 
-{entry && Content && frontmatter ? (
-  <ArticleLayout
-    title={frontmatter.title}
-    description={frontmatter.description}
-    heroImage={frontmatter.image}
-    date={frontmatter.pubDate}
-    readTime={readTime}
-    tags={frontmatter.tags}
-    tech={frontmatter.tech}
-  >
-    <Content />
-  </ArticleLayout>
+{entry && Content ? (
+  <ArticleEngine entry={entry} Content={Content} />
 ) : (
   <MainLayout title="Blog Post">
     <section class="bg-white text-neutral-900 relative overflow-hidden">
