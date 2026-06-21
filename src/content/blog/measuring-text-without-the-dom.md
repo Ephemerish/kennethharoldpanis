@@ -9,7 +9,7 @@ tech: ['TypeScript', 'React', 'Astro', 'pretext.js']
 engine: pretext
 ---
 
-So I tried pretext, and instead of just telling you about it, I figured it would be way cooler to let it build this whole page, so the squares you see are real and the words are flowing around them while they move, and the big letter at the start of each part keeps growing and shrinking while the text shuffles to make room, none of this is a picture, it is all happening right now, so just scroll slow and watch the words move.
+So I tried pretext, and instead of just telling you about it, I figured it would be way cooler to let it build this whole page, so the letter and words are flowing around, and the big letter at the start of each part keeps growing and shrinking while the text shuffles to make room, none of this is a picture, it is all happening right now, so just scroll slow and watch the words move.
 
 ## What is pretext
 
@@ -31,6 +31,6 @@ In plain terms, this means less layout thrashing, fewer forced recalculations, a
 
 ## Why I like it
 
-Since even, we have kind of been fighting css to do simple things with text, lining it up, fitting it, wrapping it, figuring out how big it is, and pretext takes all that little stuff and turns it into easy math instead of guessing and hoping it looks right.
+Since ever, we have kind of been fighting css to do simple things with text, lining it up, fitting it, wrapping it, figuring out how big it is, and pretext takes all that little stuff and turns it into easy math instead of guessing and hoping it looks right.
 
-Once you see it work, going back to the old way just feels silly, and for anything where the text really matters, I think doing it like this is going to keep winning, and after messing with it for a weekend, yeah, I am sold.
+Once you see it work, the old way just feels stupid, and for anything where the text really matters and after messing with it for a weekend, yeah, I am sold.
