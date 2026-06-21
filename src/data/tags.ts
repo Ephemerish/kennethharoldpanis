@@ -46,6 +46,8 @@ export const tags: Tag[] = [
   { slug: "architecture", label: "Architecture", group: "topic" },
   { slug: "module-federation", label: "Module Federation", group: "topic" },
   { slug: "nx", label: "Nx", group: "topic" },
+  { slug: "pretext", label: "pretext.js", group: "topic" },
+  { slug: "performance", label: "Performance", group: "topic" },
 ];
 
 const bySlug = new Map(tags.map((tag) => [tag.slug, tag]));

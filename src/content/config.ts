@@ -1,6 +1,7 @@
 import { defineCollection, z } from "astro:content";
 import { getAllTagSlugs } from "../data/tags";
 import { getAllTechNames } from "../data/technologies";
+import { ENGINE_KEYS, DEFAULT_ENGINE } from "../lib/engines";
 
 // Tags must be registered slugs in src/data/tags.ts — an unknown or
 // misspelled tag fails the build, keeping the vocabulary consistent.
@@ -33,6 +34,9 @@ const blogCollection = defineCollection({
     description: z.string().optional(),
     tags: tagsSchema,
     tech: techSchema,
+    // Which renderer presents this post. Defaults to the markdown engine, so
+    // every existing post is unaffected. See src/lib/engines.
+    engine: z.enum(ENGINE_KEYS).default(DEFAULT_ENGINE),
   }),
 });
 
