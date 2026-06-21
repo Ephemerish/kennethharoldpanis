@@ -1,5 +1,18 @@
 import { useEffect, useRef, useState } from "react";
-import type { PreparedTextWithSegments } from "@chenglou/pretext";
+import {
+  asSquares,
+  clamp,
+  flowText,
+  FONT,
+  rectOf,
+  SQUARE_COLOR,
+  stepSquares,
+  type Prepared,
+  type Run,
+  type Square,
+  type SquareState,
+} from "./pretext/shared";
+import { useElementBox, usePretext } from "./pretext/hooks";
 
 /**
  * PretextEngine, the renderer behind the "pretext" article engine.
@@ -7,8 +20,6 @@ import type { PreparedTextWithSegments } from "@chenglou/pretext";
  * Instead of the usual markdown/Prose pipeline, this lays the article out
  * itself with pretext.js, with visible results:
  *
- *   - Headings size themselves to fill the column (measureNaturalWidth) and
- *     grow into place.
  *   - The first letter of each section is a drop cap that pulses small/big.
  *   - The opening paragraph flows around two glowing squares that bounce around
  *     the box. Text fills every free horizontal gap on a line, so it runs
@@ -16,10 +27,9 @@ import type { PreparedTextWithSegments } from "@chenglou/pretext";
  *
  * It degrades cleanly: on the server (and before pretext loads) it renders
  * plain, readable HTML. Motion pauses offscreen and stops under
- * prefers-reduced-motion.
+ * prefers-reduced-motion. All the layout/physics maths is shared with
+ * <PretextCover /> via ./pretext/shared.
  */
-
-type Pretext = typeof import("@chenglou/pretext");
 
 export type Seg = { text: string; href?: string };
 export type Block =
@@ -28,55 +38,11 @@ export type Block =
   | { kind: "rich"; segments: Seg[] }
   | { kind: "quote"; text: string; source?: { label: string; href: string } };
 
-const FONT = "Outfit, system-ui, sans-serif";
-
-const clamp = (v: number, lo: number, hi: number) =>
-  Math.max(lo, Math.min(hi, v));
-const rand = (a: number, b: number) => a + Math.random() * (b - a);
-
 export default function PretextEngine({ blocks }: { blocks: Block[] }) {
-  const ptRef = useRef<Pretext | null>(null);
-  const [ready, setReady] = useState(false);
-  const [reduce, setReduce] = useState(false);
-  const wrapRef = useRef<HTMLDivElement>(null);
-  const [width, setWidth] = useState(680);
+  const { pt, reduce } = usePretext();
+  const { ref: wrapRef, box } = useElementBox<HTMLDivElement>({ w: 680, h: 0 });
+  const width = box.w;
 
-  useEffect(() => {
-    let alive = true;
-    setReduce(!!window.matchMedia?.("(prefers-reduced-motion: reduce)").matches);
-    (async () => {
-      let mod: Pretext;
-      try {
-        mod = await import("@chenglou/pretext");
-      } catch {
-        return;
-      }
-      if (document.fonts?.ready) {
-        try {
-          await document.fonts.ready;
-        } catch {
-          /* best effort */
-        }
-      }
-      if (!alive) return;
-      ptRef.current = mod;
-      setReady(true);
-    })();
-    return () => {
-      alive = false;
-    };
-  }, []);
-
-  useEffect(() => {
-    const measure = () => {
-      if (wrapRef.current) setWidth(wrapRef.current.clientWidth);
-    };
-    measure();
-    window.addEventListener("resize", measure);
-    return () => window.removeEventListener("resize", measure);
-  }, []);
-
-  const pt = ready ? ptRef.current : null;
   let leadUsed = false;
   let prevHeading = false;
 
@@ -114,7 +80,7 @@ export default function PretextEngine({ blocks }: { blocks: Block[] }) {
   );
 }
 
-/** Plain section heading. (The auto-fit "grow" effect was removed.) */
+/** Plain section heading. */
 function Heading({ text }: { text: string }) {
   return (
     <h2 className="mt-8 mb-4 text-lg sm:text-xl font-semibold tracking-tight text-neutral-900 pb-2 border-b-2 border-brand-500">
@@ -180,17 +146,6 @@ function DropLetter({ ch, reduce }: { ch: string; reduce: boolean }) {
   );
 }
 
-type Rect = { left: number; right: number; top: number; bottom: number };
-type Square = { x: number; y: number; size: number };
-type Run = { text: string; top: number; left: number; w: number };
-
-const rectOf = (s: Square): Rect => ({
-  left: s.x - s.size / 2,
-  right: s.x + s.size / 2,
-  top: s.y - s.size / 2,
-  bottom: s.y + s.size / 2,
-});
-
 /** Opening paragraph, flowed through the gaps around two bouncing squares. */
 function LeadFlow({
   text,
@@ -200,7 +155,7 @@ function LeadFlow({
 }: {
   text: string;
   width: number;
-  pt: Pretext | null;
+  pt: import("./pretext/shared").Pretext | null;
   reduce: boolean;
 }) {
   const FS = 22;
@@ -219,7 +174,7 @@ function LeadFlow({
       setHeight(null);
       return;
     }
-    let prepared: PreparedTextWithSegments;
+    let prepared: Prepared;
     try {
       prepared = pt.prepareWithSegments(text, `${FS}px Outfit`);
     } catch {
@@ -234,80 +189,30 @@ function LeadFlow({
 
     const scale = clamp(width / 560, 0.6, 1);
 
-    // Fill every free horizontal gap on each line, left to right, so text runs
-    // between the squares instead of stopping at the first one.
-    const computeRuns = (rects: Rect[]): Run[] => {
-      const out: Run[] = [];
-      let cursor = { segmentIndex: 0, graphemeIndex: 0 };
-      let top = 0;
-      let guard = 0;
-      while (top + LH <= h && guard < 240) {
-        guard++;
-        const occ: [number, number][] = [];
-        for (const r of rects) {
-          if (top + LH > r.top && top < r.bottom) {
-            occ.push([Math.max(0, r.left - GAP), Math.min(width, r.right + GAP)]);
-          }
-        }
-        occ.sort((a, b) => a[0] - b[0]);
-        const merged: [number, number][] = [];
-        for (const iv of occ) {
-          const m = merged[merged.length - 1];
-          if (m && iv[0] <= m[1]) m[1] = Math.max(m[1], iv[1]);
-          else merged.push([iv[0], iv[1]]);
-        }
-        const free: [number, number][] = [];
-        let x = 0;
-        for (const m of merged) {
-          if (m[0] - x >= 1) free.push([x, m[0]]);
-          x = Math.max(x, m[1]);
-        }
-        if (x < width) free.push([x, width]);
+    const compute = (sq: Square[]): Run[] =>
+      flowText(pt, prepared, {
+        width,
+        startTop: 0,
+        maxBottom: h,
+        lineHeight: LH,
+        rects: sq.map((s) => rectOf(s, GAP)),
+        minSeg: MINSEG,
+        align: "left",
+      });
 
-        let placedAny = false;
-        for (const [x0, x1] of free) {
-          const w = x1 - x0;
-          if (w < MINSEG) continue;
-          const range = pt.layoutNextLineRange(prepared, cursor, w);
-          if (!range) continue;
-          if (
-            range.end.segmentIndex === cursor.segmentIndex &&
-            range.end.graphemeIndex === cursor.graphemeIndex
-          )
-            continue;
-          const line = pt.materializeLineRange(prepared, range);
-          out.push({ text: line.text, top, left: x0, w });
-          cursor = range.end;
-          placedAny = true;
-        }
-
-        top += LH;
-        if (!placedAny) {
-          // Either the band was fully blocked, or the text is finished.
-          if (!pt.layoutNextLineRange(prepared, cursor, width)) break;
-        }
-      }
-      return out;
-    };
-
-    const sizeAt = (base: number, t: number, i: number) =>
-      base + (i ? 8 : 12) * Math.sin(t * (i ? 1.1 : 0.9));
-
-    // Physics: two squares bouncing off the walls with a bit of jitter so the
-    // motion is erratic, not a fixed path.
-    const sq = [
-      { x: width * 0.62, y: h * 0.32, vx: 78, vy: 58, base: 96 * scale, size: 96 * scale },
-      { x: width * 0.8, y: h * 0.66, vx: -104, vy: -72, base: 66 * scale, size: 66 * scale },
+    const seeds: SquareState[] = [
+      { x: width * 0.62, y: h * 0.32, vx: 78, vy: 58, base: 96 * scale, s: 96 * scale },
+      { x: width * 0.8, y: h * 0.66, vx: -104, vy: -72, base: 66 * scale, s: 66 * scale },
     ];
 
     if (reduce) {
-      sq[0].x = width - 70 * scale;
-      sq[0].y = h * 0.38;
-      sq[1].x = width * 0.66;
-      sq[1].y = h * 0.66;
-      const squaresOut = sq.map((s) => ({ x: s.x, y: s.y, size: s.base }));
-      setSquares(squaresOut);
-      setRuns(computeRuns(squaresOut.map(rectOf)));
+      seeds[0].x = width - 70 * scale;
+      seeds[0].y = h * 0.38;
+      seeds[1].x = width * 0.66;
+      seeds[1].y = h * 0.66;
+      const next = seeds.map((s) => ({ x: s.x, y: s.y, s: s.base }));
+      setSquares(next);
+      setRuns(compute(next));
       return;
     }
 
@@ -321,71 +226,15 @@ function LeadFlow({
       if (dt > 0.05) dt = 0.05;
       if (running) {
         t += dt;
-        for (let i = 0; i < sq.length; i++) {
-          const s = sq[i];
-          s.size = sizeAt(s.base, t, i);
-          const hs = s.size / 2;
-          s.x += s.vx * dt;
-          s.y += s.vy * dt;
-          if (s.x < hs) {
-            s.x = hs;
-            s.vx = Math.abs(s.vx);
-            s.vy += rand(-16, 16);
-          } else if (s.x > width - hs) {
-            s.x = width - hs;
-            s.vx = -Math.abs(s.vx);
-            s.vy += rand(-16, 16);
-          }
-          if (s.y < hs) {
-            s.y = hs;
-            s.vy = Math.abs(s.vy);
-            s.vx += rand(-16, 16);
-          } else if (s.y > h - hs) {
-            s.y = h - hs;
-            s.vy = -Math.abs(s.vy);
-            s.vx += rand(-16, 16);
-          }
-          s.vx = clamp(s.vx, -160, 160);
-          s.vy = clamp(s.vy, -160, 160);
-        }
-
-        // Square-to-square collision: bounce off each other, not just the walls.
-        if (sq.length === 2) {
-          const a = sq[0];
-          const b = sq[1];
-          const dx = b.x - a.x;
-          const dy = b.y - a.y;
-          const ox = a.size / 2 + b.size / 2 - Math.abs(dx);
-          const oy = a.size / 2 + b.size / 2 - Math.abs(dy);
-          if (ox > 0 && oy > 0) {
-            if (ox < oy) {
-              const push = (ox / 2) * (dx < 0 ? -1 : 1);
-              a.x -= push;
-              b.x += push;
-              const tmp = a.vx;
-              a.vx = b.vx + rand(-12, 12);
-              b.vx = tmp + rand(-12, 12);
-            } else {
-              const push = (oy / 2) * (dy < 0 ? -1 : 1);
-              a.y -= push;
-              b.y += push;
-              const tmp = a.vy;
-              a.vy = b.vy + rand(-12, 12);
-              b.vy = tmp + rand(-12, 12);
-            }
-            for (const s of sq) {
-              const hs = s.size / 2;
-              s.x = clamp(s.x, hs, width - hs);
-              s.y = clamp(s.y, hs, h - hs);
-              s.vx = clamp(s.vx, -160, 160);
-              s.vy = clamp(s.vy, -160, 160);
-            }
-          }
-        }
-
-        const squaresOut = sq.map((s) => ({ x: s.x, y: s.y, size: s.size }));
-        setSquares(squaresOut);
-        setRuns(computeRuns(squaresOut.map(rectOf)));
+        stepSquares(seeds, { w: width, h }, dt, t, {
+          pulse: true,
+          collide: true,
+          jitter: 16,
+          maxV: 160,
+        });
+        const next = asSquares(seeds);
+        setSquares(next);
+        setRuns(compute(next));
       }
       raf = requestAnimationFrame(loop);
     };
@@ -418,11 +267,11 @@ function LeadFlow({
           key={i}
           className="pointer-events-none absolute"
           style={{
-            left: s.x - s.size / 2,
-            top: s.y - s.size / 2,
-            width: s.size,
-            height: s.size,
-            background: "rgb(101, 163, 13)",
+            left: s.x - s.s / 2,
+            top: s.y - s.s / 2,
+            width: s.s,
+            height: s.s,
+            background: SQUARE_COLOR,
           }}
           aria-hidden
         />

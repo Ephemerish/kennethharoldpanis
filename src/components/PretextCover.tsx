@@ -1,250 +1,294 @@
 import { useEffect, useRef, useState } from "react";
-import type { PreparedTextWithSegments } from "@chenglou/pretext";
+import {
+  clamp,
+  FONT,
+  layoutGlyphs,
+  MATRIX_GLYPHS,
+  measureUnits,
+  randPhrase,
+  rand,
+} from "./pretext/shared";
+import { useElementBox, usePretext } from "./pretext/hooks";
 
 /**
- * PretextCover, a live pretext mini-demo used wherever the post's cover image
- * would normally go (the article cards). Short text flows around a bouncing
- * square, laid out by pretext. Used in place of an <img>, so it fills its
- * container. It is NOT used for the social/OG preview, which must stay a real
- * image file that other sites can fetch.
+ * PretextCover, the live pretext demo shown where a post's cover image would
+ * normally go. Glyphs rain down Matrix-style and form the post title.
  *
- * Server-side (and before pretext loads) it shows a plain "pretext" cover, so
- * the card is never blank.
+ * pretext measures every character individually (canvas measureText under the
+ * hood), so each letter is placed at its exact advance and can never be cut
+ * mid-glyph — the forming text lines up pixel-perfectly. Rendering is on a
+ * canvas so the rain stays cheap.
+ *
+ *   variant="featured" allows bigger text (wide featured card / article hero).
+ *
+ * Before the canvas is live (server render, or if pretext fails) it shows the
+ * title centered, so the slot is never blank.
  */
 
-type Pretext = typeof import("@chenglou/pretext");
-type Run = { text: string; top: number; left: number; w: number };
-type Sq = { x: number; y: number; s: number };
+type Variant = "default" | "featured";
 
-const FONT = "Outfit, system-ui, sans-serif";
-const PAD = 12;
-const TEXT =
-  "pretext lays this text out with quick math, no drawing first, so it can flow around the square as it bounces, see for yourself";
+const PAD = 16;
+const DEFAULT_TITLE = "Soo I tried pretext";
+const BG = "rgb(6, 16, 9)";
+const SCRAMBLE = "rgba(190, 242, 100, 0.92)";
+const LOCKED = "rgb(255, 255, 255)";
+const GLOW = "rgba(163, 230, 53, 0.9)";
 
-const clamp = (v: number, lo: number, hi: number) =>
-  Math.max(lo, Math.min(hi, v));
-const rand = (a: number, b: number) => a + Math.random() * (b - a);
+const easeOut = (p: number) => 1 - (1 - p) * (1 - p);
 
-export default function PretextCover() {
-  const ptRef = useRef<Pretext | null>(null);
-  const [ready, setReady] = useState(false);
-  const [reduce, setReduce] = useState(false);
-  const rootRef = useRef<HTMLDivElement>(null);
-  const [box, setBox] = useState({ w: 480, h: 270 });
-  const [runs, setRuns] = useState<Run[] | null>(null);
-  const [sq, setSq] = useState<Sq | null>(null);
+export default function PretextCover({
+  title = DEFAULT_TITLE,
+  variant = "default",
+}: {
+  title?: string;
+  variant?: Variant;
+}) {
+  const { pt, reduce } = usePretext();
+  const { ref, box } = useElementBox<HTMLDivElement>({ w: 480, h: 270 });
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const [active, setActive] = useState(false);
+
+  const featured = variant === "featured";
 
   useEffect(() => {
-    let alive = true;
-    setReduce(!!window.matchMedia?.("(prefers-reduced-motion: reduce)").matches);
-    (async () => {
-      let m: Pretext;
-      try {
-        m = await import("@chenglou/pretext");
-      } catch {
+    const canvas = canvasRef.current;
+    if (!pt || !canvas || box.w < 80 || box.h < 80) return;
+
+    const W = box.w;
+    const H = box.h;
+    const innerW = W - PAD * 2;
+    const innerH = H - PAD * 2;
+
+    // Measure each character once (1px advances), then auto-fit the biggest font
+    // where the whole title still fits the box.
+    const units = measureUnits(pt, title, FONT);
+    let FS = 16;
+    {
+      let lo = 12;
+      let hi = clamp(innerH, 14, featured ? 96 : 56);
+      for (let i = 0; i < 9; i++) {
+        const mid = (lo + hi) / 2;
+        const L = layoutGlyphs(units, title, {
+          fontSize: mid,
+          maxWidth: innerW,
+          lineHeight: mid * 1.18,
+          align: "center",
+        });
+        if (L.height <= innerH && L.width <= innerW) {
+          FS = mid;
+          lo = mid;
+        } else {
+          hi = mid;
+        }
+      }
+      FS = Math.round(FS);
+    }
+    const LH = FS * 1.18;
+    const layout = layoutGlyphs(units, title, {
+      fontSize: FS,
+      maxWidth: innerW,
+      lineHeight: LH,
+      align: "center",
+    });
+    const dy = PAD + Math.max(0, (innerH - layout.height) / 2);
+
+    // Each title glyph falls from above, scrambles, then locks into place.
+    const drops = layout.glyphs.map((g, i) => {
+      const restY = dy + g.y;
+      return {
+        ch: g.ch,
+        x: PAD + g.x,
+        w: g.w,
+        restY,
+        startY: -rand(FS, FS * 4) - g.y,
+        delay: (g.x / Math.max(1, innerW)) * 0.5 + g.row * 0.14 + rand(0, 0.35),
+        fallDur: rand(0.45, 0.85),
+        seed: i * 7,
+      };
+    });
+
+    // Small, standard-text-sized rain. Each column streams a funny phrase; the
+    // translucent wash (in the loop) fades older glyphs into trails, so we draw
+    // only ONE glyph per column per frame — cheap even on the wide hero.
+    const rainFS = featured ? 12 : 11;
+    const cellW = rainFS * 1.15;
+    const cellH = rainFS * 1.2;
+    const cols = Math.max(1, Math.floor(W / cellW));
+    const rows = Math.max(4, Math.floor(H / cellH));
+    type Stream = { phrase: string; row: number; speed: number; offset: number };
+    const spawn = (): Stream => ({
+      phrase: randPhrase(),
+      row: -rand(0, rows),
+      speed: rand(8, 16),
+      offset: (Math.random() * 97) | 0,
+    });
+    const streams = Array.from({ length: cols }, spawn);
+    // Map a row to a character of this stream's phrase (cyclic).
+    const charAt = (s: Stream, rr: number) => {
+      const len = s.phrase.length;
+      return s.phrase[(((rr - s.offset) % len) + len) % len];
+    };
+
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+    const dpr = Math.min(2, window.devicePixelRatio || 1);
+    canvas.width = Math.round(W * dpr);
+    canvas.height = Math.round(H * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.textBaseline = "top";
+    setActive(true);
+
+    const drawLocked = () => {
+      ctx.font = `800 ${FS}px ${FONT}`;
+      ctx.fillStyle = LOCKED;
+      ctx.shadowColor = GLOW;
+      ctx.shadowBlur = FS * 0.45;
+      for (const d of drops) ctx.fillText(d.ch, d.x, d.restY);
+      ctx.shadowBlur = 0;
+    };
+
+    // Reduced motion: paint a single formed frame, no rain.
+    if (reduce) {
+      ctx.fillStyle = BG;
+      ctx.fillRect(0, 0, W, H);
+      drawLocked();
+      return;
+    }
+
+    // Pre-render the finished title once. The glow (shadowBlur) is the costly
+    // part, so once the title has formed we just blit this bitmap each frame
+    // instead of re-shadowing every letter.
+    const titleCanvas = document.createElement("canvas");
+    titleCanvas.width = canvas.width;
+    titleCanvas.height = canvas.height;
+    const tctx = titleCanvas.getContext("2d");
+    if (tctx) {
+      tctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      tctx.textBaseline = "top";
+      tctx.font = `800 ${FS}px ${FONT}`;
+      tctx.fillStyle = LOCKED;
+      tctx.shadowColor = GLOW;
+      tctx.shadowBlur = FS * 0.45;
+      for (const d of drops) tctx.fillText(d.ch, d.x, d.restY);
+    }
+    const formDone = drops.reduce((m, d) => Math.max(m, d.delay + d.fallDur), 0);
+
+    const MIN_DT = 1 / 30; // throttle to ~30fps — plenty for rain
+    let raf = 0;
+    let last = 0;
+    let t = 0;
+
+    const draw = (dt: number) => {
+      t += dt;
+
+      // Translucent wash fades the previous frame's glyphs into trailing tails.
+      ctx.fillStyle = "rgba(6, 16, 9, 0.16)";
+      ctx.fillRect(0, 0, W, H);
+
+      ctx.textAlign = "center";
+      ctx.font = `600 ${rainFS}px ${FONT}`;
+      ctx.fillStyle = "rgba(180, 245, 110, 0.92)";
+      for (let c = 0; c < cols; c++) {
+        const s = streams[c];
+        const r = Math.floor(s.row);
+        const y = r * cellH;
+        const ch = charAt(s, r);
+        if (y >= 0 && y < H && ch !== " ")
+          ctx.fillText(ch, c * cellW + cellW / 2, y);
+        s.row += s.speed * dt;
+        if (y > H && Math.random() < 0.02) Object.assign(s, spawn());
+      }
+      ctx.textAlign = "left";
+
+      if (t >= formDone && tctx) {
+        // Title finished: cheap bitmap blit, no per-letter glow.
+        ctx.drawImage(titleCanvas, 0, 0, W, H);
         return;
       }
-      if (document.fonts?.ready) {
-        try {
-          await document.fonts.ready;
-        } catch {
-          /* best effort */
-        }
-      }
-      if (!alive) return;
-      ptRef.current = m;
-      setReady(true);
-    })();
-    return () => {
-      alive = false;
-    };
-  }, []);
 
-  useEffect(() => {
-    const el = rootRef.current;
-    if (!el) return;
-    const update = () => setBox({ w: el.clientWidth, h: el.clientHeight });
-    update();
-    const ro = new ResizeObserver(update);
-    ro.observe(el);
-    return () => ro.disconnect();
-  }, []);
-
-  const FS = clamp(Math.round(box.w / 30), 11, 16);
-  const LH = Math.round(FS * 1.4);
-
-  useEffect(() => {
-    const pt = ready ? ptRef.current : null;
-    if (!pt || box.w < 60 || box.h < 60) {
-      setRuns(null);
-      return;
-    }
-    const W = box.w - PAD * 2;
-    const H = box.h - PAD * 2;
-    const GAP = 10;
-    const sqSize = clamp(Math.min(W, H) * 0.34, 28, 96);
-
-    let prepared: PreparedTextWithSegments;
-    try {
-      prepared = pt.prepareWithSegments(TEXT, `${FS}px Outfit`);
-    } catch {
-      setRuns(null);
-      return;
-    }
-
-    const compute = (s: Sq): Run[] => {
-      const r = {
-        left: s.x - s.s / 2,
-        right: s.x + s.s / 2,
-        top: s.y - s.s / 2,
-        bottom: s.y + s.s / 2,
-      };
-      const out: Run[] = [];
-      let cursor = { segmentIndex: 0, graphemeIndex: 0 };
-      let top = 0;
-      let guard = 0;
-      while (top + LH <= H && guard < 80) {
-        guard++;
-        const free: [number, number][] = [];
-        if (top + LH > r.top && top < r.bottom) {
-          const oL = Math.max(0, r.left - GAP);
-          const oR = Math.min(W, r.right + GAP);
-          if (oL >= 1) free.push([0, oL]);
-          if (oR < W) free.push([oR, W]);
+      // Still forming: scramble / lock each letter.
+      ctx.font = `800 ${FS}px ${FONT}`;
+      for (const d of drops) {
+        const local = t - d.delay;
+        if (local < 0) continue;
+        if (local < d.fallDur) {
+          const y = d.startY + (d.restY - d.startY) * easeOut(local / d.fallDur);
+          const g = MATRIX_GLYPHS[(((t * 18) | 0) + d.seed) % MATRIX_GLYPHS.length];
+          ctx.fillStyle = SCRAMBLE;
+          const gw = ctx.measureText(g).width;
+          ctx.fillText(g, d.x + (d.w - gw) / 2, y);
         } else {
-          free.push([0, W]);
-        }
-        let placed = false;
-        for (const [x0, x1] of free) {
-          const w = x1 - x0;
-          if (w < 38) continue;
-          const range = pt.layoutNextLineRange(prepared, cursor, w);
-          if (!range) continue;
-          if (
-            range.end.segmentIndex === cursor.segmentIndex &&
-            range.end.graphemeIndex === cursor.graphemeIndex
-          )
-            continue;
-          const line = pt.materializeLineRange(prepared, range);
-          out.push({ text: line.text, top, left: x0, w });
-          cursor = range.end;
-          placed = true;
-        }
-        top += LH;
-        if (!placed) {
-          if (!pt.layoutNextLineRange(prepared, cursor, W)) break;
+          ctx.fillStyle = LOCKED;
+          ctx.shadowColor = GLOW;
+          ctx.shadowBlur = FS * 0.45;
+          ctx.fillText(d.ch, d.x, d.restY);
+          ctx.shadowBlur = 0;
         }
       }
-      return out;
     };
 
-    if (reduce) {
-      const s = { x: W * 0.68, y: H * 0.5, s: sqSize };
-      setSq(s);
-      setRuns(compute(s));
-      return;
-    }
-
-    let raf = 0;
-    let running = true;
-    let last = performance.now();
-    const st = { x: W * 0.5, y: H * 0.4, vx: 58, vy: 44, s: sqSize };
-    const loop = (now: number) => {
-      let dt = (now - last) / 1000;
+    const tick = (now: number) => {
+      raf = requestAnimationFrame(tick);
+      if (!last) last = now;
+      const dt = (now - last) / 1000;
+      if (dt < MIN_DT) return; // skip frames to hit the target fps
       last = now;
-      if (dt > 0.05) dt = 0.05;
-      if (running) {
-        const hs = st.s / 2;
-        st.x += st.vx * dt;
-        st.y += st.vy * dt;
-        if (st.x < hs) {
-          st.x = hs;
-          st.vx = Math.abs(st.vx);
-          st.vy += rand(-10, 10);
-        } else if (st.x > W - hs) {
-          st.x = W - hs;
-          st.vx = -Math.abs(st.vx);
-          st.vy += rand(-10, 10);
-        }
-        if (st.y < hs) {
-          st.y = hs;
-          st.vy = Math.abs(st.vy);
-          st.vx += rand(-10, 10);
-        } else if (st.y > H - hs) {
-          st.y = H - hs;
-          st.vy = -Math.abs(st.vy);
-          st.vx += rand(-10, 10);
-        }
-        st.vx = clamp(st.vx, -120, 120);
-        st.vy = clamp(st.vy, -120, 120);
-        const s = { x: st.x, y: st.y, s: st.s };
-        setSq(s);
-        setRuns(compute(s));
-      }
-      raf = requestAnimationFrame(loop);
+      draw(Math.min(dt, 0.1));
     };
-    raf = requestAnimationFrame(loop);
+
+    // Only animate while on screen: start/stop the loop entirely (not just a
+    // flag), so an offscreen card costs nothing.
+    const start = () => {
+      if (!raf) {
+        last = 0;
+        raf = requestAnimationFrame(tick);
+      }
+    };
+    const stop = () => {
+      if (raf) {
+        cancelAnimationFrame(raf);
+        raf = 0;
+      }
+    };
+
+    ctx.fillStyle = BG;
+    ctx.fillRect(0, 0, W, H);
+
     const io = new IntersectionObserver(
       ([e]) => {
-        running = e.isIntersecting;
+        if (e.isIntersecting) start();
+        else stop();
       },
       { threshold: 0 }
     );
-    if (rootRef.current) io.observe(rootRef.current);
+    io.observe(canvas);
+
     return () => {
-      cancelAnimationFrame(raf);
+      stop();
       io.disconnect();
     };
-  }, [ready, box.w, box.h, reduce, FS, LH]);
+  }, [pt, box.w, box.h, reduce, title, featured]);
 
   return (
     <div
-      ref={rootRef}
-      className="relative h-full w-full overflow-hidden bg-brand-700 text-neutral-0"
+      ref={ref}
+      className="relative h-full w-full overflow-hidden"
+      style={{ background: BG }}
     >
-      {!ready || runs === null ? (
-        <div className="absolute inset-0 flex flex-col items-center justify-center p-4 text-center">
+      <canvas ref={canvasRef} className="absolute inset-0 h-full w-full" />
+      {!active && (
+        <div className="absolute inset-0 flex items-center justify-center p-5 text-center">
           <span
-            className="font-bold leading-none"
-            style={{ fontFamily: FONT, fontSize: clamp(box.w / 8, 28, 72) }}
+            className="font-extrabold leading-tight"
+            style={{
+              fontFamily: FONT,
+              color: LOCKED,
+              fontSize: clamp(box.w / 9, 24, featured ? 96 : 56),
+              textWrap: "balance",
+            }}
           >
-            pretext
+            {title}
           </span>
-          <span className="mt-2 text-xs opacity-80">measured, not guessed</span>
-        </div>
-      ) : (
-        <div
-          className="absolute"
-          style={{ left: PAD, top: PAD, right: PAD, bottom: PAD }}
-        >
-          {sq && (
-            <div
-              className="absolute bg-neutral-0"
-              style={{
-                left: sq.x - sq.s / 2,
-                top: sq.y - sq.s / 2,
-                width: sq.s,
-                height: sq.s,
-              }}
-            />
-          )}
-          {runs.map((r, i) => (
-            <span
-              key={i}
-              className="absolute overflow-hidden"
-              style={{
-                top: r.top,
-                left: r.left,
-                width: r.w,
-                fontFamily: FONT,
-                fontSize: `${FS}px`,
-                lineHeight: `${LH}px`,
-                whiteSpace: "nowrap",
-              }}
-            >
-              {r.text}
-            </span>
-          ))}
         </div>
       )}
     </div>

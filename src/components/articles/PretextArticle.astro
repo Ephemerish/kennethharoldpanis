@@ -13,9 +13,9 @@
  */
 import ArticleLayout from "../../layouts/ArticleLayout.astro";
 import PretextEngine from "../PretextEngine.tsx";
+import PretextCover from "../PretextCover.tsx";
 import type { Block, Seg } from "../PretextEngine";
 import { calculateReadTime } from "../../utils";
-import { ENGINES } from "../../lib/engines";
 import type { CollectionEntry } from "astro:content";
 
 interface Props {
@@ -26,7 +26,6 @@ interface Props {
 const { entry } = Astro.props;
 const fm = entry.data;
 const readTime = calculateReadTime(entry.body);
-const engine = ENGINES.pretext;
 const blocks = parseBlocks(entry.body);
 
 // Split inline markdown links out of a line so they stay clickable.
@@ -110,9 +109,14 @@ function parseBlocks(md: string): Block[] {
   readTime={readTime}
   tags={fm.tags}
   tech={fm.tech}
-  badges={[{ label: engine.label, class: engine.badgeClass }]}
   proseBody={false}
   showHero={false}
 >
+  <div
+    slot="lead"
+    class="w-full aspect-[2/1] sm:aspect-[21/9] overflow-hidden shadow-lg"
+  >
+    <PretextCover client:load title={fm.title} variant="featured" />
+  </div>
   <PretextEngine client:load blocks={blocks} />
 </ArticleLayout>

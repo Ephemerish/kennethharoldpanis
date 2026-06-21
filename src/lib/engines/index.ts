@@ -24,6 +24,8 @@ export interface EngineMeta {
   description: string;
   /** Tailwind classes for the badge. Empty string means "no badge". */
   badgeClass: string;
+  /** When true, cards/heroes render a live demo cover instead of the image. */
+  liveCover?: boolean;
 }
 
 export const ENGINES: Record<EngineKey, EngineMeta> = {
@@ -39,6 +41,7 @@ export const ENGINES: Record<EngineKey, EngineMeta> = {
     description:
       "The body text is laid out and revealed with pretext.js, which finds the line breaks by pure arithmetic instead of measuring the DOM.",
     badgeClass: "bg-brand-600 text-neutral-0 border border-brand-700",
+    liveCover: true,
   },
 };
 
@@ -56,3 +59,7 @@ export const engineHasBadge = (key?: string | null): boolean => {
   const engine = getEngine(key);
   return engine.key !== DEFAULT_ENGINE && engine.badgeClass.length > 0;
 };
+
+/** Whether this engine renders a live demo cover instead of a static image. */
+export const engineHasLiveCover = (key?: string | null): boolean =>
+  !!getEngine(key).liveCover;
