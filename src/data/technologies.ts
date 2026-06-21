@@ -377,6 +377,12 @@ export const technologies: Technology[] = [
     category: 'tools',
     url: 'https://nx.dev/'
   },
+  {
+    name: 'pretext.js',
+    imagePath: '/images/tech-logos/pretext-js.png',
+    category: 'tools',
+    url: 'https://pretextjs.dev/'
+  },
 ];
 
 // Stable URL slug for a tech name, e.g. "Tailwind CSS" -> "tailwind-css".

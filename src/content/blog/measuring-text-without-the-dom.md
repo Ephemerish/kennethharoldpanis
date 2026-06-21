@@ -4,12 +4,12 @@ author: 'Kenneth Harold Panis'
 pubDate: 2026-06-20
 image: 'I-Put-Pretext-to-the-Test.png'
 description: 'I tried pretext, a little tool that figures out how text fits before the page even draws it, and this whole post is the demo, so see for yourself.'
-tags: ['side-project', 'developer-tools', 'pretext', 'performance']
-tech: ['TypeScript', 'React', 'Astro']
+tags: ['pretext', 'performance', 'developer-tools']
+tech: ['TypeScript', 'React', 'Astro', 'pretext.js']
 engine: pretext
 ---
 
-So I tried pretext this weekend, and instead of just telling you about it, I figured it would be way cooler to let it build this whole page, so the squares you see are real and the words are flowing around them while they move, and the big letter at the start of each part keeps growing and shrinking while the text shuffles to make room, none of this is a picture, it is all happening right now, so just scroll slow and watch the words move.
+So I tried pretext, and instead of just telling you about it, I figured it would be way cooler to let it build this whole page, so the squares you see are real and the words are flowing around them while they move, and the big letter at the start of each part keeps growing and shrinking while the text shuffles to make room, none of this is a picture, it is all happening right now, so just scroll slow and watch the words move.
 
 ## What is pretext
 
@@ -19,12 +19,18 @@ Normally, if you want to know how much room some text takes up, you have to draw
 
 ## What it can do
 
-Because it already knows the shape of the text before anything shows up, you can do stuff that is normally kind of a pain, like wrapping words around a shape, you can see it bending around the squares up top, or growing a word so it fills its spot just right, or knowing how tall a chunk of text will be before you even see it.
+Because it already knows the shape of the text before anything shows up, you can do stuff that is normally kind of a pain, like wrapping words around custom shapes, growing text so it fills a space properly, or knowing how tall a block will be before you render it.
 
-And it is quick, quick enough that it can redo the whole thing over and over, many times a second, which is why the squares can bounce around and the words just keep filling in whatever space is left, and why those big letters can puff up and shrink back down while the text keeps shuffling around them.
+It is also quick enough to recalculate layout many times a second when things move or resize, so animated text effects stay responsive instead of breaking layout.
+
+Performance wise, this matters a lot in text heavy interfaces, without something like pretext, a common approach is, change something, let the browser draw, measure the DOM, update styles, draw again, then repeat that loop every frame, and that gets expensive fast.
+
+With pretext, layout math is computed ahead of paint, so you do not need to redraw everything just to discover where lines should break. Each frame can mostly apply next positions instead of forcing a fresh measure and reflow cycle for the whole block.
+
+In plain terms, this means less layout thrashing, fewer forced recalculations, and smoother motion under load, especially on weaker devices or when many animated elements are on screen at once.
 
 ## Why I like it
 
-Here is the honest reason, for years now we have kind of been fighting the usual tools just to do simple things with text, lining it up, fitting it, wrapping it, figuring out how big it is, and pretext takes all that little stuff and turns it into easy math instead of guessing and hoping it looks right.
+Since even, we have kind of been fighting css to do simple things with text, lining it up, fitting it, wrapping it, figuring out how big it is, and pretext takes all that little stuff and turns it into easy math instead of guessing and hoping it looks right.
 
 Once you see it work, going back to the old way just feels silly, and for anything where the text really matters, I think doing it like this is going to keep winning, and after messing with it for a weekend, yeah, I am sold.
