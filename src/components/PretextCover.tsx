@@ -3,7 +3,6 @@ import {
   clamp,
   FONT,
   layoutGlyphs,
-  MATRIX_GLYPHS,
   measureUnits,
   randPhrase,
   rand,
@@ -12,17 +11,21 @@ import { useElementBox, usePretext } from "./pretext/hooks";
 
 /**
  * PretextCover, the live pretext demo shown where a post's cover image would
- * normally go. Glyphs rain down Matrix-style and form the post title.
+ * normally go. Glyphs rain down Matrix-style with the post title sitting still
+ * in the middle.
  *
  * pretext measures every character individually (canvas measureText under the
  * hood), so each letter is placed at its exact advance and can never be cut
- * mid-glyph — the forming text lines up pixel-perfectly. Rendering is on a
- * canvas so the rain stays cheap.
+ * mid-glyph. Rendering is on a canvas so the rain stays cheap.
  *
  *   variant="featured" allows bigger text (wide featured card / article hero).
  *
- * Before the canvas is live (server render, or if pretext fails) it shows the
- * title centered, so the slot is never blank.
+ *   animate={false} skips the rain entirely and just presents the title sitting
+ *   still on the dark box, used on the article hero where the falling glyphs are
+ *   unwanted.
+ *
+ * Before the canvas is live (server render, static mode, or reduced motion) it
+ * shows the title centered, so the slot is never blank.
  */
 
 type Variant = "default" | "featured";
@@ -30,18 +33,17 @@ type Variant = "default" | "featured";
 const PAD = 16;
 const DEFAULT_TITLE = "Soo I tried pretext";
 const BG = "rgb(6, 16, 9)";
-const SCRAMBLE = "rgba(190, 242, 100, 0.92)";
 const LOCKED = "rgb(255, 255, 255)";
 const GLOW = "rgba(163, 230, 53, 0.9)";
-
-const easeOut = (p: number) => 1 - (1 - p) * (1 - p);
 
 export default function PretextCover({
   title = DEFAULT_TITLE,
   variant = "default",
+  animate = true,
 }: {
   title?: string;
   variant?: Variant;
+  animate?: boolean;
 }) {
   const { pt, reduce } = usePretext();
   const { ref, box } = useElementBox<HTMLDivElement>({ w: 480, h: 270 });
@@ -51,8 +53,15 @@ export default function PretextCover({
   const featured = variant === "featured";
 
   useEffect(() => {
+    // Static mode: no canvas animation. Leaving `active` false lets the
+    // centered title overlay below render the title sitting still.
+    if (!animate) return;
     const canvas = canvasRef.current;
     if (!pt || !canvas || box.w < 80 || box.h < 80) return;
+
+    // Reduced motion: no rain. Leave `active` false so the centered title
+    // overlay below renders the title sitting still, with no motion.
+    if (reduce) return;
 
     const W = box.w;
     const H = box.h;
@@ -92,21 +101,6 @@ export default function PretextCover({
     });
     const dy = PAD + Math.max(0, (innerH - layout.height) / 2);
 
-    // Each title glyph falls from above, scrambles, then locks into place.
-    const drops = layout.glyphs.map((g, i) => {
-      const restY = dy + g.y;
-      return {
-        ch: g.ch,
-        x: PAD + g.x,
-        w: g.w,
-        restY,
-        startY: -rand(FS, FS * 4) - g.y,
-        delay: (g.x / Math.max(1, innerW)) * 0.5 + g.row * 0.14 + rand(0, 0.35),
-        fallDur: rand(0.45, 0.85),
-        seed: i * 7,
-      };
-    });
-
     // Small, standard-text-sized rain. Each column streams a funny phrase; the
     // translucent wash (in the loop) fades older glyphs into trails, so we draw
     // only ONE glyph per column per frame — cheap even on the wide hero.
@@ -138,26 +132,9 @@ export default function PretextCover({
     ctx.textBaseline = "top";
     setActive(true);
 
-    const drawLocked = () => {
-      ctx.font = `800 ${FS}px ${FONT}`;
-      ctx.fillStyle = LOCKED;
-      ctx.shadowColor = GLOW;
-      ctx.shadowBlur = FS * 0.45;
-      for (const d of drops) ctx.fillText(d.ch, d.x, d.restY);
-      ctx.shadowBlur = 0;
-    };
-
-    // Reduced motion: paint a single formed frame, no rain.
-    if (reduce) {
-      ctx.fillStyle = BG;
-      ctx.fillRect(0, 0, W, H);
-      drawLocked();
-      return;
-    }
-
     // Pre-render the finished title once. The glow (shadowBlur) is the costly
-    // part, so once the title has formed we just blit this bitmap each frame
-    // instead of re-shadowing every letter.
+    // part, so we blit this bitmap on top of the rain each frame instead of
+    // re-shadowing every letter.
     const titleCanvas = document.createElement("canvas");
     titleCanvas.width = canvas.width;
     titleCanvas.height = canvas.height;
@@ -169,18 +146,14 @@ export default function PretextCover({
       tctx.fillStyle = LOCKED;
       tctx.shadowColor = GLOW;
       tctx.shadowBlur = FS * 0.45;
-      for (const d of drops) tctx.fillText(d.ch, d.x, d.restY);
+      for (const g of layout.glyphs) tctx.fillText(g.ch, PAD + g.x, dy + g.y);
     }
-    const formDone = drops.reduce((m, d) => Math.max(m, d.delay + d.fallDur), 0);
 
     const MIN_DT = 1 / 30; // throttle to ~30fps — plenty for rain
     let raf = 0;
     let last = 0;
-    let t = 0;
 
     const draw = (dt: number) => {
-      t += dt;
-
       // Translucent wash fades the previous frame's glyphs into trailing tails.
       ctx.fillStyle = "rgba(6, 16, 9, 0.16)";
       ctx.fillRect(0, 0, W, H);
@@ -200,31 +173,8 @@ export default function PretextCover({
       }
       ctx.textAlign = "left";
 
-      if (t >= formDone && tctx) {
-        // Title finished: cheap bitmap blit, no per-letter glow.
-        ctx.drawImage(titleCanvas, 0, 0, W, H);
-        return;
-      }
-
-      // Still forming: scramble / lock each letter.
-      ctx.font = `800 ${FS}px ${FONT}`;
-      for (const d of drops) {
-        const local = t - d.delay;
-        if (local < 0) continue;
-        if (local < d.fallDur) {
-          const y = d.startY + (d.restY - d.startY) * easeOut(local / d.fallDur);
-          const g = MATRIX_GLYPHS[(((t * 18) | 0) + d.seed) % MATRIX_GLYPHS.length];
-          ctx.fillStyle = SCRAMBLE;
-          const gw = ctx.measureText(g).width;
-          ctx.fillText(g, d.x + (d.w - gw) / 2, y);
-        } else {
-          ctx.fillStyle = LOCKED;
-          ctx.shadowColor = GLOW;
-          ctx.shadowBlur = FS * 0.45;
-          ctx.fillText(d.ch, d.x, d.restY);
-          ctx.shadowBlur = 0;
-        }
-      }
+      // Title sits still on top of the rain, no drop-in.
+      if (tctx) ctx.drawImage(titleCanvas, 0, 0, W, H);
     };
 
     const tick = (now: number) => {
@@ -253,6 +203,7 @@ export default function PretextCover({
 
     ctx.fillStyle = BG;
     ctx.fillRect(0, 0, W, H);
+    if (tctx) ctx.drawImage(titleCanvas, 0, 0, W, H);
 
     const io = new IntersectionObserver(
       ([e]) => {
@@ -267,7 +218,7 @@ export default function PretextCover({
       stop();
       io.disconnect();
     };
-  }, [pt, box.w, box.h, reduce, title, featured]);
+  }, [pt, box.w, box.h, reduce, title, featured, animate]);
 
   return (
     <div
