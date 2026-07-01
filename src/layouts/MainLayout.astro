@@ -1,5 +1,6 @@
 ---
 import "../styles/global.css";
+import Bit1Background from "../components/Bit1Background.tsx";
 import Navbar from "../components/navbar.tsx";
 import Footer from "../components/Footer.astro";
 import Analytics from "../components/Analytics.astro";
@@ -54,6 +55,7 @@ const absoluteImageUrl = new URL(
     <ClientRouter />
   </head>
   <body class="w-full min-h-screen bg-neutral-0 antialiased">
+    <Bit1Background client:idle transition:persist />
     <Navbar client:idle transition:persist />
     <main class="flex-1 relative">
       <slot />

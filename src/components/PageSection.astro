@@ -25,7 +25,10 @@ const backdropClass =
 
 <section
   class:list={[
-    "py-8 sm:py-12 bg-white relative overflow-hidden",
+    // No full-width background here: the gutters stay transparent so the
+    // procedural 1-bit backdrop shows through. The centered content column
+    // keeps its own backdrop (below).
+    "py-8 sm:py-12 relative overflow-hidden",
     topBorder && "border-t border-neutral-200",
     extraClass,
   ]}
