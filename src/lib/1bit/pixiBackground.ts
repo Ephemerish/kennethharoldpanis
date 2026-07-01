@@ -105,8 +105,8 @@ const DEFAULTS = {
   stageGapMs: 250,
   tileFadeMs: 260,
 
-  waterAmount: 0.14,
-  riverAmount: 0.55,
+  waterAmount: 0.07,
+  riverAmount: 0.7,
   forestFreq: 5,
   meadowFreq: 5,
   treeLine: 0.6,

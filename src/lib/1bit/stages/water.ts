@@ -11,19 +11,23 @@
  *   2. LAKES & SEAS: every cell below a water level is water. The level is a
  *      quantile of the heights, so `waterAmount` is the exact fraction covered.
  *      Big low regions become seas/lakes, small ones ponds/puddles, for free.
- *   3. RIVERS via FLOW ACCUMULATION: each cell drains to its lowest neighbour;
- *      processing cells high->low, one unit of "rain" per cell flows downhill and
- *      accumulates. Cells whose accumulated flow exceeds a threshold become river,
- *      widening with flow, so streams merge, widen downstream, pool into ponds at
- *      basins, and drain into lakes. Rivers turning into ponds (and back) falls
- *      out of this naturally.
- *   4. Clean up stray single-cell noise.
- *   5. Split water bodies into PONDS vs RIVERS by *connected component*: any
- *      water component that reaches 3+ cells wide anywhere becomes a pond/sea
- *      (solid-coast alt template); components that stay thin end-to-end become
- *      rivers (wavy template). Component-level classification means a thin arm
- *      off a wide body still reads as part of that body — no mixed textures
- *      inside a single visual shape.
+ *      Anything placed by this pass is classified `pondMask`.
+ *   3. RIVERS via FLOW ACCUMULATION on a D8 drainage tree: each cell drains to
+ *      its lowest neighbour; processing cells high->low, one unit of "rain" per
+ *      cell flows downhill and accumulates. Because every cell has exactly one
+ *      downhill target, the set of high-flow cells is naturally a 1-cell-wide
+ *      branching tree — real river geometry — so we mark them directly, with
+ *      no disc widening. A river cell is kept only if its drainage path
+ *      actually terminates in a lake/sea (precomputed via a low->high sweep of
+ *      `terminatesInLake`); rivers that would dead-end on dry land are
+ *      discarded so every river connects to a body of water. Anything placed
+ *      by this pass is classified `riverMask`.
+ *   4. Clean up stray single-cell noise; masks are re-synced to match.
+ *
+ * Ponds render with the solid-coast alt template, rivers with the wavy
+ * template. Classification is by origin (which pass placed the cell), not by
+ * shape, so a 1-wide river merging into a lake keeps its wavy texture right up
+ * to the shoreline without being absorbed by the lake's connected component.
  *
  * Writes `ctx.water` / `ctx.blocked` so later stages avoid water.
  */
@@ -47,6 +51,17 @@ const NEI8 = [
   [-1, 1],
   [0, 1],
   [1, 1],
+] as const;
+
+// 4-neighbourhood (N/E/S/W). Used for river drainage so flow paths are
+// inherently 4-connected — matches how the autotiler joins cells and
+// guarantees rivers stay strictly 1 cell wide (a D8 diagonal step would
+// otherwise need a bridge cell and produce a 2-wide staircase).
+const NEI4 = [
+  [0, -1],
+  [-1, 0],
+  [1, 0],
+  [0, 1],
 ] as const;
 
 function seed(rng: () => number): number {
@@ -90,7 +105,9 @@ function quantile(h: Float32Array, frac: number): number {
   return sorted[Math.min(sorted.length - 1, Math.floor(frac * sorted.length))];
 }
 
-/** Flow accumulation: returns per-cell drainage and the max seen. */
+/** Flow accumulation on a D4 drainage tree. Also returns the tree itself.
+ *  4-connectivity (not D8) so downhill paths are inherently 4-connected —
+ *  rivers rendered from this tree are guaranteed strictly 1 cell wide. */
 function accumulateFlow(h: Float32Array, cols: number, rows: number) {
   const n = cols * rows;
   const downhill = new Int32Array(n).fill(-1);
@@ -99,7 +116,7 @@ function accumulateFlow(h: Float32Array, cols: number, rows: number) {
       const i = cy * cols + cx;
       let lowest = h[i];
       let target = -1;
-      for (const [dx, dy] of NEI8) {
+      for (const [dx, dy] of NEI4) {
         const nx = cx + dx;
         const ny = cy + dy;
         if (nx < 0 || nx >= cols || ny < 0 || ny >= rows) continue;
@@ -123,27 +140,7 @@ function accumulateFlow(h: Float32Array, cols: number, rows: number) {
       if (flow[d] > maxFlow) maxFlow = flow[d];
     }
   }
-  return { flow, maxFlow };
-}
-
-/** Stamp a filled disc into `water`. */
-function stampDisc(
-  water: Uint8Array,
-  cols: number,
-  rows: number,
-  cx: number,
-  cy: number,
-  r: number,
-) {
-  for (let dy = -r; dy <= r; dy++) {
-    for (let dx = -r; dx <= r; dx++) {
-      if (dx * dx + dy * dy > r * r + 1) continue;
-      const nx = cx + dx;
-      const ny = cy + dy;
-      if (nx < 0 || nx >= cols || ny < 0 || ny >= rows) continue;
-      water[ny * cols + nx] = 1;
-    }
-  }
+  return { flow, maxFlow, downhill };
 }
 
 /** Remove connected water components smaller than `minSize` (kills speckle). */
@@ -176,116 +173,132 @@ function removeTinyComponents(water: Uint8Array, cols: number, rows: number, min
   }
 }
 
-function carveWater(ctx: WorldCtx): void {
+function carveWater(ctx: WorldCtx): { pondMask: Uint8Array; riverMask: Uint8Array } {
   const { cols, rows, tuning, water } = ctx;
+  const n = cols * rows;
   const h = buildHeight(ctx);
 
-  // Lakes & seas: everything below the water level.
-  const level = quantile(h, tuning.waterAmount);
-  for (let i = 0; i < h.length; i++) if (h[i] < level) water[i] = 1;
+  const pondMask = new Uint8Array(n);
+  const riverMask = new Uint8Array(n);
 
-  // Rivers: carve where drainage is high, widening with flow.
-  const { flow, maxFlow } = accumulateFlow(h, cols, rows);
-  // More riverAmount -> lower threshold -> more/branchier rivers.
-  const threshold = maxFlow * (0.28 - 0.22 * tuning.riverAmount);
-  for (let cy = 0; cy < rows; cy++) {
-    for (let cx = 0; cx < cols; cx++) {
-      const i = cy * cols + cx;
-      if (flow[i] < threshold) continue;
-      const ratio = flow[i] / maxFlow;
-      const r = ratio > 0.45 ? 2 : ratio > 0.14 ? 1 : 0; // widen downstream
-      stampDisc(water, cols, rows, cx, cy, r);
+  // Lakes & seas: everything below the water level. Marked as pond by origin.
+  const level = quantile(h, tuning.waterAmount);
+  for (let i = 0; i < n; i++) {
+    if (h[i] < level) {
+      water[i] = 1;
+      pondMask[i] = 1;
     }
   }
 
-  removeTinyComponents(water, cols, rows, 2);
-}
+  // D8 flow accumulation + downhill tree.
+  const { flow, maxFlow, downhill } = accumulateFlow(h, cols, rows);
 
-/**
- * Split the water mask into "pond-like" and "river-like" cells by CONNECTED
- * COMPONENT: any connected water body that reaches at least 3 cells wide
- * somewhere (i.e. contains at least one cell whose 8 neighbours are all water)
- * is classified entirely as a pond/sea/lake. Bodies that stay thin end-to-end
- * are classified entirely as rivers. Component-level classification (rather
- * than per-cell) means a thin arm coming off a wide body still reads as part
- * of that body — no mixed textures within a single visual water shape.
- */
-function classifyPondCells(water: Uint8Array, cols: number, rows: number): Uint8Array {
-  const n = cols * rows;
-  const wet = (x: number, y: number): number =>
-    x >= 0 && x < cols && y >= 0 && y < rows ? water[y * cols + x] : 0;
+  // Precompute: does this cell's downhill trace reach a lake/sea cell? Sweep
+  // low->high so each cell sees its already-resolved downstream neighbour.
+  const terminates = new Uint8Array(n);
+  const orderLowFirst = Array.from({ length: n }, (_, i) => i).sort((a, b) => h[a] - h[b]);
+  for (const i of orderLowFirst) {
+    if (pondMask[i]) {
+      terminates[i] = 1;
+      continue;
+    }
+    const d = downhill[i];
+    if (d < 0) terminates[i] = 0;
+    else if (pondMask[d]) terminates[i] = 1;
+    else terminates[i] = terminates[d];
+  }
 
-  // deep[i] = 1 iff cell i and all 8 neighbours are water (center of a 3x3
-  // fully-water block). Used only as a component-level "this body is wide
-  // somewhere" test.
-  const deep = new Uint8Array(n);
-  for (let y = 0; y < rows; y++) {
-    for (let x = 0; x < cols; x++) {
-      const i = y * cols + x;
-      if (!water[i]) continue;
-      if (
-        wet(x - 1, y - 1) &&
-        wet(x, y - 1) &&
-        wet(x + 1, y - 1) &&
-        wet(x - 1, y) &&
-        wet(x + 1, y) &&
-        wet(x - 1, y + 1) &&
-        wet(x, y + 1) &&
-        wet(x + 1, y + 1)
-      ) {
-        deep[i] = 1;
+  // Rivers: mark 1-cell-wide (no disc widening — the D4 tree is already a
+  // strictly 1-wide, 4-connected branching network). Higher `riverAmount` ->
+  // lower threshold -> more/branchier rivers. Only keep cells whose drainage
+  // actually terminates in a lake so every river connects to a body of water.
+  const threshold = maxFlow * (0.12 - 0.1 * tuning.riverAmount);
+  for (let i = 0; i < n; i++) {
+    if (pondMask[i]) continue;
+    if (flow[i] < threshold) continue;
+    if (!terminates[i]) continue;
+    water[i] = 1;
+    riverMask[i] = 1;
+  }
+
+  // Two independent parallel branches running in adjacent columns/rows can
+  // still produce a 2x2 all-river block — a visible "fat spot" in the
+  // channel. Iteratively kill any 2x2 by removing its lowest-flow cell
+  // (weakest tributary), then cascade-prune any river cell that ends up with
+  // no 4-adjacent water (would render as an isolated island). Rivers can
+  // still bend and Y-merge; only true 2x2 fills are removed.
+  let broke = true;
+  while (broke) {
+    broke = false;
+    for (let cy = 0; cy < rows - 1; cy++) {
+      for (let cx = 0; cx < cols - 1; cx++) {
+        const i00 = cy * cols + cx;
+        const i01 = i00 + 1;
+        const i10 = i00 + cols;
+        const i11 = i10 + 1;
+        if (!riverMask[i00] || !riverMask[i01] || !riverMask[i10] || !riverMask[i11])
+          continue;
+        let victim = i00;
+        let vFlow = flow[i00];
+        if (flow[i01] < vFlow) {
+          victim = i01;
+          vFlow = flow[i01];
+        }
+        if (flow[i10] < vFlow) {
+          victim = i10;
+          vFlow = flow[i10];
+        }
+        if (flow[i11] < vFlow) {
+          victim = i11;
+        }
+        riverMask[victim] = 0;
+        water[victim] = 0;
+        broke = true;
       }
     }
   }
-
-  // Flood-fill (8-connectivity) each water component; if it contains any deep
-  // cell, mark every cell in it as pond.
-  const pond = new Uint8Array(n);
-  const seen = new Uint8Array(n);
-  const stack: number[] = [];
-  for (let start = 0; start < n; start++) {
-    if (!water[start] || seen[start]) continue;
-    const comp: number[] = [];
-    let hasDeep = false;
-    stack.push(start);
-    seen[start] = 1;
-    while (stack.length) {
-      const i = stack.pop()!;
-      comp.push(i);
-      if (deep[i]) hasDeep = true;
+  let pruned = true;
+  while (pruned) {
+    pruned = false;
+    for (let i = 0; i < n; i++) {
+      if (!riverMask[i]) continue;
       const cx = i % cols;
       const cy = (i / cols) | 0;
-      for (const [dx, dy] of NEI8) {
+      let hasWater = false;
+      for (const [dx, dy] of NEI4) {
         const nx = cx + dx;
         const ny = cy + dy;
         if (nx < 0 || nx >= cols || ny < 0 || ny >= rows) continue;
-        const j = ny * cols + nx;
-        if (water[j] && !seen[j]) {
-          seen[j] = 1;
-          stack.push(j);
+        if (water[ny * cols + nx]) {
+          hasWater = true;
+          break;
         }
       }
+      if (!hasWater) {
+        riverMask[i] = 0;
+        water[i] = 0;
+        pruned = true;
+      }
     }
-    if (hasDeep) for (const i of comp) pond[i] = 1;
   }
-  return pond;
+
+  // Kill speckle; re-sync masks so they match the cleaned water map.
+  removeTinyComponents(water, cols, rows, 2);
+  for (let i = 0; i < n; i++) {
+    if (!water[i]) {
+      pondMask[i] = 0;
+      riverMask[i] = 0;
+    }
+  }
+
+  return { pondMask, riverMask };
 }
 
 export const waterStage: Stage = {
   name: "water",
   build(ctx: WorldCtx): PlacedTile[] {
-    carveWater(ctx);
+    const { pondMask, riverMask } = carveWater(ctx);
     for (let i = 0; i < ctx.water.length; i++) if (ctx.water[i]) ctx.blocked[i] = 1;
-
-    // Classify per connected component: any water body that reaches 3+ cells
-    // wide anywhere becomes a pond (solid coasts); components that stay thin
-    // end-to-end become rivers (wavy coasts). Whole-body classification means
-    // no mixed pond/river texture inside a single visual water shape.
-    const pondMask = classifyPondCells(ctx.water, ctx.cols, ctx.rows);
-    const riverMask = new Uint8Array(ctx.water.length);
-    for (let i = 0; i < ctx.water.length; i++) {
-      if (ctx.water[i] && !pondMask[i]) riverMask[i] = 1;
-    }
 
     // Ponds/seas/lakes: autotile with the solid-coast alt template so the
     // shoreline has proper rounded corners and edge detail. Rivers keep the
