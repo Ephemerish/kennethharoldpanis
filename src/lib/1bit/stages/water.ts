@@ -212,7 +212,7 @@ function carveWater(ctx: WorldCtx): { pondMask: Uint8Array; riverMask: Uint8Arra
   // strictly 1-wide, 4-connected branching network). Higher `riverAmount` ->
   // lower threshold -> more/branchier rivers. Only keep cells whose drainage
   // actually terminates in a lake so every river connects to a body of water.
-  const threshold = maxFlow * (0.12 - 0.1 * tuning.riverAmount);
+  const threshold = maxFlow * (0.5 - 0.0 * tuning.riverAmount);
   for (let i = 0; i < n; i++) {
     if (pondMask[i]) continue;
     if (flow[i] < threshold) continue;
