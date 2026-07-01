@@ -25,8 +25,14 @@ const EDGE_WEIGHT = 3;
 const CORNER_WEIGHT = 1;
 
 /**
- * @param mask   row-major cell mask (length cols*rows), 1 = filled.
- * @param tiles  classified tile set.
+ * @param mask       row-major cell mask (length cols*rows), 1 = filled. Used
+ *                   for neighbour lookups so tiles pick coasts consistently.
+ * @param tiles      classified tile set.
+ * @param renderMask optional filter (same shape as `mask`): when supplied, a
+ *                   tile is emitted only for cells set in BOTH `mask` and
+ *                   `renderMask`. Lets a caller split one body of water into
+ *                   sub-passes (e.g. pond tiles vs river tiles) without
+ *                   introducing false coasts at the boundary between them.
  * @returns tiles to draw for every filled cell, in row-major order.
  */
 export function autotileMask(
@@ -37,6 +43,7 @@ export function autotileMask(
   tiles: AutotileDesc[],
   layer: LayerName,
   interior?: readonly [number, number],
+  renderMask?: Uint8Array,
 ): PlacedTile[] {
   // Out-of-bounds counts as filled, so a body running off the viewport clips
   // cleanly at the edge instead of drawing a false coastline along the border.
@@ -47,7 +54,9 @@ export function autotileMask(
 
   for (let y = 0; y < rows; y++) {
     for (let x = 0; x < cols; x++) {
-      if (!mask[y * cols + x]) continue;
+      const i = y * cols + x;
+      if (!mask[i]) continue;
+      if (renderMask && !renderMask[i]) continue;
 
       const n = at(x, y - 1);
       const e = at(x + 1, y);

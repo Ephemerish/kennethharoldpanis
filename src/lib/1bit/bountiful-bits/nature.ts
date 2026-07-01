@@ -172,6 +172,10 @@ export interface WaterTileDesc {
   corners: [nw: number, ne: number, se: number, sw: number];
 }
 
+/**
+ * Textured water tiles (from the left `water` template, cols 1-6 / rows 1-7).
+ * These have wavy, notched coasts that read as flowing water — used for RIVERS.
+ */
 export const NATURE_WATER_TILES: WaterTileDesc[] = [
   { tile: [4, 3], edges: [1, 1, 1, 1], corners: [1, 1, 1, 1] }, // interior fill
   { tile: [3, 3], edges: [1, 1, 1, 0], corners: [1, 1, 1, 1] }, // coast W
@@ -189,4 +193,50 @@ export const NATURE_WATER_TILES: WaterTileDesc[] = [
   { tile: [2, 2], edges: [0, 1, 0, 1], corners: [1, 0, 1, 1] }, // horizontal variant
   { tile: [6, 2], edges: [1, 0, 1, 0], corners: [1, 1, 0, 1] }, // vertical variant
   { tile: [5, 1], edges: [1, 0, 1, 0], corners: [0, 1, 1, 1] }, // vertical variant
+];
+
+/**
+ * Solid-coast water tiles (from the right `waterAlt` template, cols 8-13 / rows
+ * 1-7). These have clean, fully-filled coasts with no speckle — used for still
+ * bodies (ponds, lakes, seas) where the edge should read as a solid shoreline,
+ * not a river bank. Every entry's `edges` was verified by pixel-sampling the
+ * atlas: for each tile we counted filled alpha pixels along its N/E/S/W edge
+ * strips and required >=5/10 for a "1" (water reaches that edge).
+ *
+ * For each straight coast we keep only the "clean" variant — the one whose
+ * three non-coast edges are 100% filled with water pixels. Other variants in
+ * the alt region look similar but have extra corner notches on their WATER
+ * edges (not just the shore edge), which create visible gaps against the
+ * adjacent interior tile. Since the autotiler picks the first-matching tile on
+ * ties, listing only the clean variant guarantees it always wins.
+ */
+export const NATURE_WATER_ALT_TILES: WaterTileDesc[] = [
+  // Interior (all four edges are water). Cells with all 4 cardinal neighbours
+  // water short-circuit to SOLID_TILE in the autotiler, so these variants only
+  // serve as near-interior fallbacks.
+  { tile: [11, 5], edges: [1, 1, 1, 1], corners: [1, 1, 1, 1] }, // pure solid (== SOLID_TILE)
+  { tile: [11, 4], edges: [1, 1, 1, 1], corners: [1, 1, 1, 1] }, // interior variant
+  { tile: [10, 5], edges: [1, 1, 1, 1], corners: [1, 1, 1, 1] }, // interior variant
+  { tile: [12, 5], edges: [1, 1, 1, 1], corners: [1, 1, 1, 1] }, // interior variant
+  { tile: [11, 6], edges: [1, 1, 1, 1], corners: [1, 1, 1, 1] }, // interior variant
+
+  // Straight coasts. Each tile below has its three non-coast edges fully
+  // solid (10/10 pixels), so it tiles seamlessly against the adjacent
+  // interior tile. Alt-region variants with extra edge notches are
+  // deliberately excluded.
+  { tile: [12, 4], edges: [0, 1, 1, 1], corners: [0, 0, 1, 1] }, // coast N (bottom edge fully solid)
+  { tile: [12, 6], edges: [1, 0, 1, 1], corners: [1, 0, 0, 1] }, // coast E (left edge fully solid)
+  { tile: [10, 6], edges: [1, 1, 0, 1], corners: [1, 1, 0, 0] }, // coast S (top edge fully solid)
+  { tile: [10, 4], edges: [1, 1, 1, 0], corners: [0, 1, 1, 0] }, // coast W (right edge fully solid)
+
+  // Corners (two adjacent edges are shore). Both variants per direction are
+  // visually equivalent — the atlas doesn't have a strictly-cleaner one.
+  { tile: [9, 5], edges: [0, 1, 1, 0], corners: [0, 0, 1, 0] }, // corner NW (N+W coast)
+  { tile: [10, 3], edges: [0, 1, 1, 0], corners: [0, 0, 1, 0] }, // corner NW variant
+  { tile: [11, 3], edges: [0, 0, 1, 1], corners: [0, 0, 0, 1] }, // corner NE (N+E coast)
+  { tile: [13, 4], edges: [0, 0, 1, 1], corners: [0, 0, 0, 1] }, // corner NE variant
+  { tile: [13, 5], edges: [1, 0, 0, 1], corners: [1, 0, 0, 0] }, // corner SE (S+E coast)
+  { tile: [12, 7], edges: [1, 0, 0, 1], corners: [1, 0, 0, 0] }, // corner SE variant
+  { tile: [9, 6], edges: [1, 1, 0, 0], corners: [0, 1, 0, 0] }, // corner SW (S+W coast)
+  { tile: [11, 7], edges: [1, 1, 0, 0], corners: [0, 1, 0, 0] }, // corner SW variant
 ];
