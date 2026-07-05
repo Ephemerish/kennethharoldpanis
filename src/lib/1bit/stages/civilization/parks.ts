@@ -30,9 +30,9 @@ function parkKind(roll: number): NatureObjectKind | null {
 }
 
 /**
- * Plant one park inside `town`: pick an open centre at mid-distance from the
- * plaza (parks sit between the square and the town edge), then fill a small
- * disc with greenery. Returns false if no open centre was found.
+ * Plant one park inside `town`: pick a claimable centre at mid-distance from
+ * the town centre (parks sit between the core and the town edge), then claim
+ * a small disc of greenery. Returns false if no centre was found.
  */
 export function placePark(ctx: WorldCtx, out: PlacedTile[], town: Town): boolean {
   const { cols, rows, tilePx, rng, blocked, structure } = ctx;
