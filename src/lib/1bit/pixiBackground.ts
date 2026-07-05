@@ -26,9 +26,9 @@ import {
   type TextureSource,
 } from "pixi.js";
 
-import { NATURE_SHEET } from "./bountiful-bits";
+import { CIVILIZED_SHEET, NATURE_SHEET } from "./bountiful-bits";
 import { makeRng } from "./rng";
-import { createWorld, type LayerName, type MapTuning, type PlacedTile } from "./world";
+import { createWorld, type LayerName, type MapTuning, type PlacedTile, type SheetId } from "./world";
 import { PIPELINE } from "./stages";
 
 const TILE = NATURE_SHEET.tileSize;
@@ -73,6 +73,7 @@ export interface BackgroundOptions {
   meadowFreq?: number;
   treeLine?: number;
   lushness?: number;
+  roadDensity?: number;
 }
 
 export interface BackgroundHandle {
@@ -111,6 +112,7 @@ const DEFAULTS = {
   meadowFreq: 5,
   treeLine: 0.6,
   lushness: 1,
+  roadDensity: 0.75,
 };
 
 const RESIZE_DEBOUNCE_MS: number = 150;
@@ -143,6 +145,7 @@ export async function createBackground(
     meadowFreq: opts.meadowFreq,
     treeLine: opts.treeLine,
     lushness: opts.lushness,
+    roadDensity: opts.roadDensity,
   };
 
   let destroyed = false;
@@ -182,25 +185,40 @@ export async function createBackground(
   canvas.addEventListener("webglcontextlost", onContextLost, false);
   canvas.addEventListener("webglcontextrestored", onContextRestored, false);
 
-  // --- Texture atlas --------------------------------------------------------
-  const sheet: Texture = await Assets.load(NATURE_SHEET.url);
+  // --- Texture atlases ------------------------------------------------------
+  // Stages slice tiles from more than one Bountiful Bits sheet (terrain/props
+  // from Nature, buildings from Civilized). Load each once, share its source,
+  // and cache per-frame textures so Pixi can still batch the draws.
+  const SHEET_URLS: Record<SheetId, string> = {
+    nature: NATURE_SHEET.url,
+    civilized: CIVILIZED_SHEET.url,
+  };
+  const sources = {} as Record<SheetId, TextureSource>;
+  const frameCaches = {} as Record<SheetId, Map<number, Texture>>;
+  await Promise.all(
+    (Object.keys(SHEET_URLS) as SheetId[]).map(async (id) => {
+      const tex: Texture = await Assets.load(SHEET_URLS[id]);
+      const src: TextureSource = tex.source;
+      src.scaleMode = "nearest";
+      sources[id] = src;
+      frameCaches[id] = new Map<number, Texture>();
+    }),
+  );
   if (destroyed) {
     app.destroy({ removeView: true }, { children: true });
     throw new Error("bit1: background destroyed during asset load");
   }
-  const source: TextureSource = sheet.source;
-  source.scaleMode = "nearest";
 
-  const frameCache = new Map<number, Texture>();
-  function frameTexture(col: number, row: number): Texture {
+  function frameTexture(sheet: SheetId, col: number, row: number): Texture {
+    const cache = frameCaches[sheet];
     const key = row * 100 + col;
-    let tex = frameCache.get(key);
+    let tex = cache.get(key);
     if (!tex) {
       tex = new Texture({
-        source,
+        source: sources[sheet],
         frame: new Rectangle(col * TILE, row * TILE, TILE, TILE),
       });
-      frameCache.set(key, tex);
+      cache.set(key, tex);
     }
     return tex;
   }
@@ -277,7 +295,7 @@ export async function createBackground(
       const n = Math.max(1, tiles.length);
       for (let i = 0; i < tiles.length; i++) {
         const t = tiles[i];
-        const sprite = new Sprite(frameTexture(t.col, t.row));
+        const sprite = new Sprite(frameTexture(t.sheet ?? "nature", t.col, t.row));
         sprite.x = t.x;
         sprite.y = t.y;
         sprite.scale.set(opts.scale);
@@ -368,8 +386,10 @@ export async function createBackground(
       canvas.removeEventListener("webglcontextlost", onContextLost);
       canvas.removeEventListener("webglcontextrestored", onContextRestored);
       themeObserver.disconnect();
-      for (const tex of frameCache.values()) tex.destroy(false);
-      frameCache.clear();
+      for (const cache of Object.values(frameCaches)) {
+        for (const tex of cache.values()) tex.destroy(false);
+        cache.clear();
+      }
       app.destroy({ removeView: true }, { children: true });
     },
   };

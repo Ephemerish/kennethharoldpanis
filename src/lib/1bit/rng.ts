@@ -36,6 +36,11 @@ export function makeRng(seed: number | string): Rng {
   return mulberry32(typeof seed === "number" ? seed >>> 0 : hashSeed(seed));
 }
 
+/** Draw a fresh 32-bit integer seed (e.g. to seed a noise field). */
+export function randSeed(rng: Rng): number {
+  return (rng() * 0xffffffff) >>> 0;
+}
+
 /** Random float in [min, max). */
 export function randRange(rng: Rng, min: number, max: number): number {
   return min + (max - min) * rng();

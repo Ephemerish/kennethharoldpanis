@@ -44,28 +44,36 @@ export const NATURE_TERRAIN: Record<string, TileRect> = {
 };
 
 /**
- * Single-tile objects, grouped by kind. Interchangeable variants within a group.
- * Coordinates are `[col, row]`.
+ * Single-tile objects, grouped by kind — interchangeable variants within a
+ * group, coordinates `[col, row]`. The object library occupies cols 15-19;
+ * every entry was verified against a labelled 12x blow-up of the sheet
+ * (2026-07). Row guide: 1 trees, 2-3 sprouts/flowers, 4 specks, 5 flowers &
+ * buds, 6 grass, 7 bushes/mushrooms, 9-15 debris & clouds (col 18 = clouds),
+ * 16-19 dead trees, stumps, crops, sparkles.
  */
 export const NATURE_OBJECTS = {
-  /** Trees (pine + bare + small). */
+  /** Living trees: wide pine, small pine with base, big pine. */
   tree: [
-    [18, 1],
     [17, 1],
-    [15, 16],
-    [16, 16],
-    [15, 18],
+    [18, 1],
+    [19, 1],
   ],
-  /** Shrubs / bushes. */
+  /** Leafy shrubs (row 1, berry dots) and chunky bushes (row 7). */
   bush: [
     [15, 1],
     [16, 1],
-    [19, 1],
     [17, 7],
     [18, 7],
     [19, 7],
   ],
-  /** Flowers. */
+  /** Bare / dead trees (branched trunks). */
+  deadTree: [
+    [15, 16],
+    [16, 16],
+  ],
+  /** Young conifer sapling. */
+  sapling: [[17, 16]],
+  /** Flowers: leaf-pair blooms and dotted rosettes. */
   flower: [
     [15, 5],
     [16, 5],
@@ -73,7 +81,7 @@ export const NATURE_OBJECTS = {
     [16, 2],
     [17, 2],
   ],
-  /** Seedlings, sprouts, small plants. */
+  /** Seedlings, sprouts, buds and small plants. */
   plant: [
     [15, 2],
     [15, 3],
@@ -81,7 +89,6 @@ export const NATURE_OBJECTS = {
     [17, 3],
     [18, 3],
     [19, 3],
-    [19, 6],
     [18, 5],
     [19, 5],
   ],
@@ -91,51 +98,66 @@ export const NATURE_OBJECTS = {
     [16, 6],
     [17, 6],
     [18, 6],
+    [19, 6],
   ],
-  /** Mushrooms. */
+  /** Lumpy mushroom clusters. */
   mushroom: [
     [15, 7],
     [16, 7],
-    [17, 16],
   ],
-  /** Rocks / boulders. */
-  rock: [
-    [16, 11],
-    [16, 12],
+  /** A rock with a hollow. */
+  rock: [[16, 10]],
+  /** Round boulder with a checkered shadow. */
+  boulder: [[18, 19]],
+  /** Tree stumps / roots (small L-shaped cluster pairs). */
+  stump: [
+    [15, 17],
+    [15, 18],
   ],
   /** Tiny pebbles / specks, ambient ground detail. */
   pebble: [
     [15, 4],
-    [19, 4],
     [16, 4],
     [17, 4],
     [18, 4],
+    [19, 4],
     [18, 2],
+    [19, 2],
+  ],
+  /** Sparse scattered debris patches (leaf litter / rubble). */
+  debris: [
     [15, 9],
-    [16, 9],
+    [15, 10],
     [15, 11],
     [15, 12],
-    [16, 13],
+    [15, 13],
   ],
-  /** Sparkles / stars. */
+  /** Dense checkered gravel / scree patches. */
+  gravel: [
+    [15, 14],
+    [15, 15],
+  ],
+  /** Sparkles / stars / glints. */
   sparkle: [
-    [17, 19],
-    [18, 12],
     [15, 19],
     [16, 19],
+    [17, 19],
+    [16, 11],
+    [16, 12],
   ],
-  /** Clouds. */
+  /** Clouds (whole column of variants). */
   cloud: [
     [18, 9],
     [18, 10],
     [18, 11],
+    [18, 12],
     [18, 13],
     [18, 14],
     [18, 15],
     [18, 16],
     [18, 17],
   ],
-  /** Crops / pumpkins / fruit. */
+  /** Crops: ridged gourd, jack-o'-lanterns, apple/heart fruit. */
   crop: [
     [16, 17],
     [17, 17],
@@ -240,3 +262,30 @@ export const NATURE_WATER_ALT_TILES: WaterTileDesc[] = [
   { tile: [9, 6], edges: [1, 1, 0, 0], corners: [0, 1, 0, 0] }, // corner SW (S+W coast)
   { tile: [11, 7], edges: [1, 1, 0, 0], corners: [0, 1, 0, 0] }, // corner SW variant
 ];
+
+/**
+ * The dirt/path template is the water template's twin, one macro-cell lower on
+ * the sheet: `NATURE_TERRAIN.water` sits at rows 1-7 and `NATURE_TERRAIN.dirt`
+ * at rows 8-14 (likewise `waterAlt` -> `dirtAlt`), the same 6x7 blob layout in
+ * a different skin. So the water tiles' shape classifications transfer verbatim
+ * to dirt by shifting every tile down 7 rows — no re-authoring, and any future
+ * fix to the water shapes carries over for free.
+ */
+const DIRT_ROW_OFFSET = 7;
+
+function shiftRows(tiles: WaterTileDesc[], dRow: number): WaterTileDesc[] {
+  return tiles.map((t) => ({ ...t, tile: [t.tile[0], t.tile[1] + dRow] as TileCoord }));
+}
+
+/** Textured dirt/path autotiles (twin of {@link NATURE_WATER_TILES}). Used for
+ *  thin trails, where the speckled skin reads as a worn path. */
+export const NATURE_DIRT_TILES: WaterTileDesc[] = shiftRows(NATURE_WATER_TILES, DIRT_ROW_OFFSET);
+
+/** Solid-coast dirt/path autotiles (twin of {@link NATURE_WATER_ALT_TILES}). */
+export const NATURE_DIRT_ALT_TILES: WaterTileDesc[] = shiftRows(
+  NATURE_WATER_ALT_TILES,
+  DIRT_ROW_OFFSET,
+);
+
+/** Fully-solid dirt tile (twin of {@link SOLID_TILE}); fills path interiors. */
+export const DIRT_SOLID_TILE: TileCoord = [SOLID_TILE[0], SOLID_TILE[1] + DIRT_ROW_OFFSET];
