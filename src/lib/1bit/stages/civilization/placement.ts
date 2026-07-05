@@ -1,5 +1,9 @@
 /**
  * Footprint placement helpers shared by the civilization passes.
+ *
+ * Civilization is the top of the overlap hierarchy: a structure may be seated
+ * over WILD NATURE (the settlers cleared it — the renderer replaces the old
+ * tile with the new one), but never over water, a road, or another structure.
  */
 
 import type { TileRect } from "../../bountiful-bits";
@@ -7,24 +11,31 @@ import { NEI4 } from "../../grid";
 import type { Rng } from "../../rng";
 import type { PlacedTile, WorldCtx } from "../../world";
 
-/** Does `rect`, seated with its top-left at (cx,cy), fit over clear ground? */
+/** May civilization claim this cell (clearing any wild nature on it)? */
+export function claimable(ctx: WorldCtx, i: number): boolean {
+  return !ctx.water[i] && !ctx.road[i] && !ctx.structure[i];
+}
+
+/** Does `rect`, seated with its top-left at (cx,cy), fit on claimable land? */
 export function fits(ctx: WorldCtx, cx: number, cy: number, rect: TileRect): boolean {
-  const { cols, rows, blocked } = ctx;
+  const { cols, rows } = ctx;
   if (cx < 0 || cy < 0 || cx + rect.w > cols || cy + rect.h > rows) return false;
   for (let r = 0; r < rect.h; r++) {
     for (let c = 0; c < rect.w; c++) {
-      if (blocked[(cy + r) * cols + (cx + c)]) return false;
+      if (!claimable(ctx, (cy + r) * cols + (cx + c))) return false;
     }
   }
   return true;
 }
 
-/** Seat `rect` at (cx,cy): mark its footprint blocked and emit its tiles. */
+/** Seat `rect` at (cx,cy): claim its footprint and emit its tiles. */
 export function place(ctx: WorldCtx, out: PlacedTile[], cx: number, cy: number, rect: TileRect): void {
-  const { cols, tilePx, blocked } = ctx;
+  const { cols, tilePx, blocked, structure } = ctx;
   for (let r = 0; r < rect.h; r++) {
     for (let c = 0; c < rect.w; c++) {
-      blocked[(cy + r) * cols + (cx + c)] = 1;
+      const i = (cy + r) * cols + (cx + c);
+      blocked[i] = 1;
+      structure[i] = 1;
       out.push({
         col: rect.col + c,
         row: rect.row + r,
@@ -37,14 +48,14 @@ export function place(ctx: WorldCtx, out: PlacedTile[], cx: number, cy: number, 
   }
 }
 
-/** Open cells that are 4-adjacent to a road — the roadside build spots. */
+/** Claimable cells 4-adjacent to a road — the roadside build spots. */
 export function roadsideCells(ctx: WorldCtx): number[] {
-  const { cols, rows, blocked, road } = ctx;
+  const { cols, rows, road } = ctx;
   const cells: number[] = [];
   for (let cy = 0; cy < rows; cy++) {
     for (let cx = 0; cx < cols; cx++) {
       const i = cy * cols + cx;
-      if (blocked[i]) continue; // occupied (water, nature, or a road cell)
+      if (!claimable(ctx, i)) continue;
       for (const [dx, dy] of NEI4) {
         const nx = cx + dx;
         const ny = cy + dy;

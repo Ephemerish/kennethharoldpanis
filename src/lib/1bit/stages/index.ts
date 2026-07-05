@@ -3,7 +3,7 @@
  *
  * One FOLDER per stage — each folder's index.ts exports the Stage and its
  * supporting logic lives in sibling modules (heightfield/rivers for water,
- * towns/network/pathfind/render for roads, ...).
+ * towns/population/highways/streets/render for roads, ...).
  *
  * The renderer builds each stage in turn (each mutates the shared world and
  * returns tiles to draw) and reveals its tiles before moving to the next, so

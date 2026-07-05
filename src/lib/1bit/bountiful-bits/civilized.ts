@@ -13,8 +13,10 @@
  *                         gravestones, urns, boats, tents, flag, bridge, ...
  *   cols 9-14, rows 11-14 SIGNS & STATUES: shaped signposts + two statues
  *   cols 16-18/20-22, rows 1-6  BUILDINGS: four 3x3 facades (halls/gatehouses)
- *   cols 16-21,row 8      PAVING: six single-tile ground fill swatches
- *   cols 15-23,rows 11-16 ROADS: two styles of plaza + capsule segments
+ *   cols 16-21,row 8      PAVING: six single-tile floor swatches (interiors)
+ *   cols 15-23,rows 11-16 STREETS: two road skins — 3x1/1x3 strips that
+ *                         decompose into end caps + seamless middles, a
+ *                         crossing tile, and a 3x3 town-square stamp
  *
  * Tileset: https://v3x3d.itch.io/bountiful-bits (Bountiful Bits 10x10 v3.1)
  */
@@ -72,43 +74,56 @@ export const CIVILIZED_STATUES: Record<string, TileRect> = {
 /* ------------------------------------------------------------------ */
 
 /**
- * Road pieces, two visual styles. Segments are CAPSULES (rounded end caps
- * with a dashed centre line), so they read as discrete stamped strips, not
- * seamlessly tileable roadway — use paving/dirt autotiles for continuous
- * streets and these for decoration. Each style also has a 3x3 plaza square.
+ * STREET tiles — these are the sheet's actual road assets, in two skins.
  *
- *   outline — line-drawn: hollow border, dashed inner frame, four rosettes.
- *             Reads as an ornamental garden square / mosaic court.
- *   solid   — filled slab with dark seams and four inset panels.
- *             Reads as a paved town square; the better default plaza.
+ * Each skin ships as a 3x1 horizontal strip, a 1x3 vertical strip (both with
+ * rounded END CAPS around a SEAMLESS middle tile, dashed centre line down the
+ * road), plus alternate-phase strips, and a 3x3 town-square stamp whose centre
+ * tile is a designed street CROSSING. Decomposed per tile, the kit renders any
+ * 4-connected street network: middles for straights, caps at dead ends and
+ * where pavement gives way to dirt, the crossing tile at corners/T/X.
+ *
+ *   solid   — filled white roadway, dark dashed centre line. Paved city look.
+ *   outline — line-drawn roadway (border + dashed centre). Lighter, older
+ *             pavement; suits towns.
  */
-export const CIVILIZED_ROADS: Record<
-  "outline" | "solid",
-  {
-    plaza: TileRect;
-    vertical: TileRect;
-    verticalAlt: TileRect;
-    horizontal: TileRect;
-    horizontalAlt: TileRect;
-  }
-> = {
+export interface StreetKit {
+  /** 3x3 square (blocks framed by streets). Catalogued for completeness —
+   *  generation stamps no squares; junctions are composed from caps/mids. */
+  plaza: TileRect;
+  /** The square's centre tile, a drawn crossing. Catalogued, not stamped. */
+  junction: TileCoord;
+  /** Horizontal strip: west cap, seamless middle, east cap. */
+  h: { capW: TileCoord; mid: TileCoord; capE: TileCoord };
+  /** Horizontal strip, alternate dash phase. */
+  hAlt: { capW: TileCoord; mid: TileCoord; capE: TileCoord };
+  /** Vertical strip: north cap, seamless middle, south cap. */
+  v: { capN: TileCoord; mid: TileCoord; capS: TileCoord };
+  /** Vertical strip, alternate dash phase. */
+  vAlt: { capN: TileCoord; mid: TileCoord; capS: TileCoord };
+}
+
+export const CIVILIZED_STREETS: Record<"outline" | "solid", StreetKit> = {
   outline: {
     plaza: { col: 15, row: 11, w: 3, h: 3 },
-    vertical: { col: 18, row: 11, w: 1, h: 3 },
-    verticalAlt: { col: 22, row: 11, w: 1, h: 3 },
-    horizontal: { col: 19, row: 11, w: 3, h: 1 },
-    horizontalAlt: { col: 19, row: 13, w: 3, h: 1 },
+    junction: [16, 12],
+    h: { capW: [19, 11], mid: [20, 11], capE: [21, 11] },
+    hAlt: { capW: [19, 13], mid: [20, 13], capE: [21, 13] },
+    v: { capN: [18, 11], mid: [18, 12], capS: [18, 13] },
+    vAlt: { capN: [22, 11], mid: [22, 12], capS: [22, 13] },
   },
   solid: {
     plaza: { col: 15, row: 14, w: 3, h: 3 },
-    vertical: { col: 18, row: 14, w: 1, h: 3 },
-    verticalAlt: { col: 22, row: 14, w: 1, h: 3 },
-    horizontal: { col: 19, row: 14, w: 3, h: 1 },
-    horizontalAlt: { col: 19, row: 16, w: 3, h: 1 },
+    junction: [16, 15],
+    h: { capW: [19, 14], mid: [20, 14], capE: [21, 14] },
+    hAlt: { capW: [19, 16], mid: [20, 16], capE: [21, 16] },
+    v: { capN: [18, 14], mid: [18, 15], capS: [18, 16] },
+    vAlt: { capN: [22, 14], mid: [22, 15], capS: [22, 16] },
   },
 };
 
-/** Single-tile ground fill swatches (row 8), for paved streets/floors. */
+/** Single-tile floor swatches (row 8): interior/courtyard flooring, NOT road
+ *  surfaces — streets use {@link CIVILIZED_STREETS}. */
 export const CIVILIZED_PAVING: Record<string, TileCoord> = {
   /** Fine checkerboard. */
   checker: [16, 8],

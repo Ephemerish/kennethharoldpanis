@@ -1,13 +1,18 @@
 /**
- * Least-cost routing for roads/trails.
+ * Least-cost CONNECTORS: how a settlement or waypoint joins the road network.
  *
- * Routes are 4-connected Dijkstra paths where water is VERY expensive (a road
- * fords it only when the crossing is a cell or two — those cells become
- * bridges — and long detours always beat swimming a lake), nature costs
- * extra (paths prefer clearings but may cut through sparse woods), and
- * existing road is cheap (branches merge onto a shared trunk instead of
- * running parallel). 4-connectivity keeps each road strictly 1 cell wide,
- * matching how rivers stay thin.
+ * Highways are grown organically (see ./highways.ts); this module is the
+ * complement — given a start cell, Dijkstra expands outward until it touches
+ * ANY existing road cell (goal = predicate, not a point), then the path back
+ * is laid down. That is how hamlet lanes, waypoint trails and missed-town
+ * connectors always merge into the network instead of running to a
+ * coordinate.
+ *
+ * Costs: water is VERY expensive (a route fords it only when the crossing is
+ * a cell or two — those cells render as bridges — and long detours always
+ * beat swimming a lake), nature costs extra (paths prefer clearings but may
+ * cut through sparse woods). 4-connectivity keeps each road strictly 1 cell
+ * wide, matching how rivers stay thin.
  *
  * A smooth noise field ("wander") is added to per-cell step cost so the
  * least-cost route prefers some corridors over others — trails wind like worn
@@ -79,11 +84,14 @@ class MinHeap {
   }
 }
 
+/** Precomputed meander field, passed to every routing call. */
+export type WanderField = Float32Array;
+
 /**
  * Smooth per-cell meander field (one octave-pair of fbm), sampled once so
  * Dijkstra doesn't re-evaluate noise on every relaxation.
  */
-export function buildWanderField(ctx: WorldCtx): Float32Array {
+export function buildWanderField(ctx: WorldCtx): WanderField {
   const { cols, rows, rng } = ctx;
   const noise = fbm2D(randSeed(rng), 2, 0.5);
   const wander = new Float32Array(cols * rows);
@@ -96,19 +104,20 @@ export function buildWanderField(ctx: WorldCtx): Float32Array {
 }
 
 /**
- * Least-cost route from `start` to `goal` over open ground. Water costs a
- * bridge premium; nature is costly; the smooth `wander` field nudges the route
- * to curve; and already-laid road is cheap so branches coalesce. Returns the
- * list of cells on the path (inclusive), or null if unreachable.
+ * Least-cost route from `start` to the nearest cell satisfying `isGoal`
+ * (typically "any existing road"). Water costs a bridge premium; nature is
+ * costly; the smooth `wander` field nudges the route to curve; and
+ * already-laid road is cheap so late connectors coalesce onto earlier ones.
+ * Returns the cells of the path (inclusive of both ends), or null if no goal
+ * is reachable.
  */
-export function routePath(
+export function routeToRoad(
   ctx: WorldCtx,
-  road: Uint8Array,
-  wander: Float32Array,
+  wander: WanderField,
   start: number,
-  goal: number,
+  isGoal: (cell: number) => boolean,
 ): number[] | null {
-  const { cols, rows, water, blocked } = ctx;
+  const { cols, rows, water, blocked, road } = ctx;
   const n = cols * rows;
   // Float64 (not Float32): the heap stores full-precision double costs, so `dist`
   // must too. With Float32 the stored value is rounded, and the stale-entry
@@ -121,11 +130,15 @@ export function routePath(
 
   dist[start] = 0;
   heap.push(0, start);
+  let goal = -1;
 
   while (heap.size) {
     const [d, i] = heap.pop();
-    if (i === goal) break;
     if (d > dist[i]) continue; // stale heap entry
+    if (isGoal(i)) {
+      goal = i;
+      break;
+    }
     const cx = i % cols;
     const cy = (i / cols) | 0;
     for (const [dx, dy] of NEI4) {
@@ -150,7 +163,7 @@ export function routePath(
     }
   }
 
-  if (!Number.isFinite(dist[goal])) return null;
+  if (goal < 0) return null;
   const path: number[] = [];
   for (let c = goal; c !== -1; c = prev[c]) path.push(c);
   return path;

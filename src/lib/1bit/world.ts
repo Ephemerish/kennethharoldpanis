@@ -49,6 +49,17 @@ export interface MapTuning {
   roadDensity: number;
 }
 
+/**
+ * Road classes stored in the `road` mask. The hierarchy is a backend concept —
+ * the renderer decides the skin (paved street tiles vs dirt footpath), so a
+ * HIGHWAY far from any settlement can still *render* as a worn dirt road.
+ * Any non-zero value means "there is a route here" (cheap for routing,
+ * buildings settle beside it).
+ */
+export const ROAD_TRAIL = 1; // rural footpath: hamlet lanes, waypoint trails
+export const ROAD_HIGHWAY = 2; // arterial between settlements, grown from the city
+export const ROAD_STREET = 3; // in-settlement street grid + town squares
+
 /** Settlement size class: one city per map, then towns, then hamlets. */
 export type TownTier = "city" | "town" | "hamlet";
 
@@ -93,11 +104,15 @@ export interface WorldCtx {
   tuning: MapTuning;
   /** water mask, 1 = water. */
   water: Uint8Array;
-  /** road/trail mask, 1 = trail. Written by the road stage so civilization can
-   *  settle next to trails. */
+  /** road mask: 0 = none, else a ROAD_* class (trail/highway/street). Written
+   *  by the road stage so civilization can settle next to routes. */
   road: Uint8Array;
   /** cells occupied by any layer, so later stages avoid overlap. */
   blocked: Uint8Array;
+  /** cells claimed by CIVILIZATION (buildings, farms, parks, POIs). Unlike
+   *  wild nature — which later work may clear and build over (the renderer
+   *  replaces the old tile) — structure cells are never built over again. */
+  structure: Uint8Array;
   /** settlements founded by the road stage; civilization builds inside them. */
   towns: Town[];
   /** rural trail waypoints (cell indices) picked by the road stage; the
@@ -121,6 +136,7 @@ export function createWorld(
   const water = new Uint8Array(cols * rows);
   const road = new Uint8Array(cols * rows);
   const blocked = new Uint8Array(cols * rows);
+  const structure = new Uint8Array(cols * rows);
 
   return {
     cols,
@@ -133,6 +149,7 @@ export function createWorld(
     water,
     road,
     blocked,
+    structure,
     towns: [],
     waypoints: [],
     idx: (cx, cy) => cy * cols + cx,

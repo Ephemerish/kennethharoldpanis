@@ -3,15 +3,14 @@
  * laid.
  *
  * Founding runs FIRST (the nature stage calls it before planting anything) so
- * settlements claim their land while it is still bare: nature never grows
- * inside a footprint — the settlers cleared it — which keeps street grids
- * unbroken and building ground open. Candidate sites are random open cells
- * scored like a settler would score them — dry buildable land around
- * (openness) and fresh water nearby — then greedily accepted best-first with
- * footprint-aware spacing so settlements spread across the map. The best site
- * becomes the map's one CITY, the next couple become TOWNS (both get a paved
- * plaza and streets), and the rest are HAMLETS (a trail junction with a couple
- * of buildings).
+ * every later stage agrees on where the settlements are; the wild still grows
+ * over their land, and streets/buildings clear it as they come. Candidate
+ * sites are random open cells scored like a settler would score them — dry
+ * buildable land around (openness) and fresh water nearby — then greedily
+ * accepted best-first with footprint-aware spacing so settlements spread
+ * across the map. The best site becomes the map's one CITY, the next few
+ * become TOWNS (paved lanes, buildings, farmland), and the rest are HAMLETS
+ * (a trail junction with a couple of buildings).
  *
  * The city is the map's centrepiece, so its site is held to a higher bar: the
  * whole footprint must sit on the map and on mostly dry land, never clipped by
@@ -33,20 +32,20 @@ function radiusFor(tier: TownTier, cols: number, rows: number): number {
   return tier === "town" ? 6 : 3;
 }
 
-/** First pick is the city, the next two are towns, the rest hamlets. */
+/** First pick is the city, the next three are towns, the rest hamlets. */
 function tierFor(order: number): TownTier {
   if (order === 0) return "city";
-  return order <= 2 ? "town" : "hamlet";
+  return order <= 3 ? "town" : "hamlet";
 }
 
 /**
  * Score a candidate centre, or -Infinity if unbuildable (needs a clear 3x3
- * for the plaza). Openness dominates; water proximity is a strong bonus.
+ * core to seed from). Openness dominates; water proximity is a strong bonus.
  */
 function siteScore(ctx: WorldCtx, cx: number, cy: number): number {
   const { cols, rows, water, blocked } = ctx;
 
-  // Plaza footprint (3x3 around the centre) must be fully in-bounds and clear.
+  // The core (3x3 around the centre) must be fully in-bounds and clear.
   if (cx < 1 || cy < 1 || cx > cols - 2 || cy > rows - 2) return -Infinity;
   for (let dy = -1; dy <= 1; dy++) {
     for (let dx = -1; dx <= 1; dx++) {
@@ -107,13 +106,13 @@ function cityFits(ctx: WorldCtx, cx: number, cy: number, r: number): boolean {
 }
 
 /**
- * Found up to `2 + roadDensity*3` settlements (2..5) and record them on
+ * Found up to `3 + roadDensity*3` settlements (3..6) and record them on
  * `ctx.towns`. Returns them best-site-first (index 0 is the city).
  */
 export function planTowns(ctx: WorldCtx): Town[] {
   const { cols, rows, rng, tuning } = ctx;
   const density = Math.max(0, Math.min(1, tuning.roadDensity));
-  const count = 2 + Math.round(density * 3);
+  const count = 3 + Math.round(density * 3);
 
   // Score a pool of random candidates...
   const candidates: { cx: number; cy: number; score: number }[] = [];

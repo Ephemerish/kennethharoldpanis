@@ -3,9 +3,13 @@
  *
  * It runs the generation PIPELINE (water -> nature -> ...; see ./stages) against
  * a shared world, then reveals each stage's tiles progressively so a visitor
- * watches the world assemble: the water appears first, then nature grows on top,
- * and so on. The Bountiful Bits pack has no ground tile, so the ground is a flat
- * colour we fill (or transparent). Each layer is tinted independently.
+ * watches the world assemble: water first, then wild nature over everything,
+ * then roads and buildings CARVING INTO it — when a later stage places a tile
+ * on a cell an earlier stage tiled, the old tile crossfades out as the new one
+ * fades in (a street replaces the tree it cut down). Water is the exception:
+ * it always stays, so bridges and boats keep water under them. The Bountiful
+ * Bits pack has no ground tile, so the ground is a flat colour we fill (or
+ * transparent). Each layer is tinted independently.
  *
  * Pixels stay crisp (nearest-neighbour, integer scale) and share one texture
  * source, so Pixi batches them. Once the build animation finishes the ticker
@@ -248,10 +252,13 @@ export async function createBackground(
   }
 
   // Sprites currently on screen, with their layer + scheduled reveal time.
+  // A sprite a later stage builds over also gets a fade-out time: it
+  // crossfades away exactly while its replacement fades in.
   interface Anim {
     sprite: Sprite;
     layer: LayerName;
     revealAt: number;
+    fadeOutAt?: number;
   }
   let anim: Anim[] = [];
   let elapsed = 0;
@@ -285,8 +292,13 @@ export async function createBackground(
     const world = createWorld(w, h, tilePx, makeRng(seed), tuning);
     const doAnimate = withAnimation && opts.animate && !prefersReducedMotion();
 
+    // Per-cell occupancy across stages, so a later stage's tile replaces what
+    // an earlier stage put there (except water, which bridges/boats sit over).
+    const cellOwners = new Map<number, { anim: Anim; stage: number }[]>();
+
     let stageStart = 0;
-    for (const stage of PIPELINE) {
+    for (let stageIdx = 0; stageIdx < PIPELINE.length; stageIdx++) {
+      const stage = PIPELINE[stageIdx];
       const tiles: PlacedTile[] = stage.build(world);
       // Reveal each stage as a diagonal sweep.
       tiles.sort((a, b) => a.x + a.y - (b.x + b.y));
@@ -303,30 +315,71 @@ export async function createBackground(
         sprite.tint = tint;
         sprite.alpha = doAnimate ? 0 : opts.opacity;
         layers[t.layer].addChild(sprite);
-        anim.push({
+        const entry: Anim = {
           sprite,
           layer: t.layer,
           revealAt: stageStart + (i / n) * opts.stageRevealMs,
-        });
+        };
+        anim.push(entry);
+
+        // This stage builds over whatever earlier stages left on the cell —
+        // schedule those tiles to crossfade out as this one fades in.
+        const key = t.y * 100000 + t.x;
+        const owners = cellOwners.get(key);
+        if (owners) {
+          for (const o of owners) {
+            if (o.stage < stageIdx && o.anim.layer !== "water" && o.anim.fadeOutAt === undefined) {
+              o.anim.fadeOutAt = entry.revealAt;
+            }
+          }
+          owners.push({ anim: entry, stage: stageIdx });
+        } else {
+          cellOwners.set(key, [{ anim: entry, stage: stageIdx }]);
+        }
       }
       stageStart += opts.stageRevealMs + opts.stageGapMs;
     }
 
-    if (doAnimate) startTicker();
-    else render();
+    if (doAnimate) {
+      startTicker();
+    } else {
+      // Static build: replaced tiles simply never appear.
+      pruneReplaced();
+      render();
+    }
+  }
+
+  /** Drop (destroy) every sprite that has finished being replaced. */
+  function pruneReplaced() {
+    let kept: Anim[] | null = null;
+    for (const a of anim) {
+      if (a.fadeOutAt === undefined) continue;
+      if (!kept) kept = anim.filter((x) => x.fadeOutAt === undefined);
+      a.sprite.destroy();
+    }
+    if (kept) anim = kept;
   }
 
   function tick() {
     elapsed += app.ticker.deltaMS;
     let done = true;
     for (const a of anim) {
-      const p = (elapsed - a.revealAt) / opts.tileFadeMs;
-      const alpha = p <= 0 ? 0 : p >= 1 ? 1 : p;
+      const pIn = (elapsed - a.revealAt) / opts.tileFadeMs;
+      let alpha = pIn <= 0 ? 0 : pIn >= 1 ? 1 : pIn;
+      if (pIn < 1) done = false;
+      if (a.fadeOutAt !== undefined) {
+        const pOut = (elapsed - a.fadeOutAt) / opts.tileFadeMs;
+        alpha = Math.min(alpha, pOut <= 0 ? 1 : pOut >= 1 ? 0 : 1 - pOut);
+        if (pOut < 1) done = false;
+      }
       a.sprite.alpha = alpha * opts.opacity;
-      if (alpha < 1) done = false;
     }
     render();
-    if (done) stopTicker();
+    if (done) {
+      pruneReplaced();
+      render();
+      stopTicker();
+    }
   }
 
   function startTicker() {

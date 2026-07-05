@@ -5,19 +5,21 @@
  * reads as a lived-in region — a dense city, smaller towns, wayside hamlets —
  * instead of buildings scattered wherever a trail happens to run:
  *
- *   1. BUILDINGS: for each settlement, take the open cells that border a road
- *      inside its footprint and fill them plaza-outward (nearest the centre
- *      first, with jitter so the edge stays ragged) with weighted-random
- *      structures from the tier's catalog (./catalog.ts) — the city can raise
- *      the 3x3 halls and, rarely, the windmill tower; hamlets get little more
- *      than market tents. A structure's whole footprint must fit over clear
- *      ground. Budgets scale with tier and `roadDensity`.
+ *   1. BUILDINGS: for each settlement, take the claimable cells that border a
+ *      road inside its footprint and fill them centre-outward (with jitter so
+ *      the edge stays ragged) with weighted-random structures from the tier's
+ *      catalog (./catalog.ts) — the city can raise the 3x3 halls and, rarely,
+ *      the windmill tower; hamlets get little more than market tents. A
+ *      structure may clear wild nature under its footprint (the renderer
+ *      replaces those tiles) but never overlaps water, roads or other
+ *      structures. Budgets scale with tier and `roadDensity`.
  *   2. PARKS (./parks.ts): cities and towns keep deliberate green pockets —
- *      groves of trees/flowers, sometimes around a statue — on the nature
- *      layer inside the footprint.
- *   3. FARMS & BOATS (./farms.ts): fenced crop fields ring the outskirts
- *      (hamlets get two — they're farmsteads), and waterside settlements get
- *      boats moored on the nearby shore.
+ *      surviving groves claimed against clearing, plus planted flowers,
+ *      sometimes around a statue — on the nature layer inside the footprint.
+ *   3. FARMS & BOATS (./farms.ts): fenced crop fields cut out of the wild on
+ *      the outskirts (hamlets get two — they're farmsteads; towns may grow a
+ *      whole farmland district), and waterside settlements get boats moored
+ *      on the nearby shore.
  *   4. STREET DECOR: notice boards, urns, basins and flags fill leftover
  *      street-side spots in settlements.
  *   5. RURAL DRESSING (./rural.ts): every trail waypoint becomes a point of
@@ -39,10 +41,10 @@ import {
 } from "./catalog";
 import { fits, place, roadsideCells, shuffle } from "./placement";
 import { placePark } from "./parks";
-import { placeBoats, placeFarm } from "./farms";
+import { placeBoats, placeFarm, placeFarmland, rollFarmland } from "./farms";
 import { decorateWaypoints, placeSigns } from "./rural";
 
-/** Softens the plaza-outward fill so buildings don't ring the centre. */
+/** Softens the centre-outward fill so buildings don't ring the centre. */
 const SITE_JITTER = 3;
 
 export const civilizationStage: Stage = {
@@ -57,7 +59,7 @@ export const civilizationStage: Stage = {
     const densityScale = 0.6 + 0.8 * Math.max(0, Math.min(1, tuning.roadDensity));
 
     for (const town of towns) {
-      // This settlement's build spots, packed toward the plaza.
+      // This settlement's build spots, packed toward the centre.
       const r2 = town.radius * town.radius;
       const local = sites
         .filter((i) => {
@@ -94,6 +96,7 @@ export const civilizationStage: Stage = {
 
       for (let p = 0; p < PARK_COUNT[town.tier]; p++) placePark(ctx, out, town);
       for (let f = 0; f < FARM_COUNT[town.tier]; f++) placeFarm(ctx, out, town);
+      if (rollFarmland(ctx, town)) placeFarmland(ctx, out, town);
       placeBoats(ctx, out, town);
 
       // Street decor on the spots buildings and parks left open.

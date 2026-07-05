@@ -7,17 +7,18 @@
  * so the result reads as woods and clearings rather than uniform confetti;
  * the per-cell rules live in ./kinds.ts.
  *
- * Settlements are founded FIRST (planTowns, shared with the road stage) and
- * nothing wild grows inside a footprint: the settlers cleared that land, so
- * street grids run unbroken and buildings have ground to stand on. Greenery
- * inside town walls comes back deliberately, as the civilization stage's parks
- * and gardens.
+ * Settlements are founded FIRST (planTowns, shared with the road stage) but
+ * the wild grows over their land anyway: the later stages CLEAR it as they
+ * build — roads cut lanes through the woods, buildings and farms replace the
+ * trees under their footprints (the renderer swaps the tiles out as each
+ * stage reveals) — so watching the build reads as civilization carving into
+ * wilderness rather than filling pre-cleared lots.
  */
 
 import { NATURE_OBJECTS, type TileCoord } from "../../bountiful-bits";
 import { fbm2D } from "../../noise";
 import { pick, randSeed } from "../../rng";
-import { townAt, type PlacedTile, type Stage, type WorldCtx } from "../../world";
+import type { PlacedTile, Stage, WorldCtx } from "../../world";
 import { planTowns } from "../roads/towns";
 import { decideKind } from "./kinds";
 
@@ -27,9 +28,10 @@ export const natureStage: Stage = {
     const { cols, rows, tilePx, rng, tuning, blocked } = ctx;
     const { forestFreq, meadowFreq } = tuning;
 
-    // Claim settlement land before anything grows (recorded on ctx.towns for
-    // the road and civilization stages).
-    const towns = ctx.towns.length > 0 ? ctx.towns : planTowns(ctx);
+    // Found the settlements now (recorded on ctx.towns for the road and
+    // civilization stages) — but let the wild overgrow their land; building
+    // clears it later.
+    if (ctx.towns.length === 0) planTowns(ctx);
 
     const forest = fbm2D(randSeed(rng), 3, 0.55);
     const meadow = fbm2D(randSeed(rng), 2, 0.5);
@@ -40,7 +42,6 @@ export const natureStage: Stage = {
       for (let cx = 0; cx < cols; cx++) {
         const i = ctx.idx(cx, cy);
         if (blocked[i]) continue;
-        if (townAt(towns, cx, cy)) continue; // settlement land stays clear
 
         const f = forest(cx / forestFreq, cy / forestFreq);
         const m = meadow((cx + 50) / meadowFreq, (cy + 50) / meadowFreq);

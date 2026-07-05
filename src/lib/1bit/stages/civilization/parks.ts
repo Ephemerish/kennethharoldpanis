@@ -1,18 +1,18 @@
 /**
- * Parks: pockets of dense greenery planted inside a settlement footprint.
+ * Parks: pockets of dense greenery preserved inside a settlement footprint.
  *
- * Whatever wild nature survived inside a town already reads as its gardens;
- * a park goes further — a deliberate grove of trees, bushes and flowers
- * clustered in a disc, so the built-up area keeps a clearly green quarter.
- * Park tiles are emitted on the "nature" layer so they take the nature tint,
- * and their cells are marked blocked so no building lands in the green.
+ * With wild nature overgrowing settlement land (it's cleared piecemeal by
+ * streets and buildings), a park is the quarter the settlers chose to KEEP:
+ * existing trees inside the disc are claimed as structure so no building ever
+ * clears them, and open spots are planted denser with bushes and flowers.
+ * Park tiles are emitted on the "nature" layer so they take the nature tint.
  */
 
 import { NATURE_OBJECTS, type NatureObjectKind, type TileCoord } from "../../bountiful-bits";
 import { pick } from "../../rng";
 import type { PlacedTile, Town, WorldCtx } from "../../world";
 import { PARK_STATUE } from "./catalog";
-import { fits, place } from "./placement";
+import { claimable, fits, place } from "./placement";
 
 /** Attempts to find an open park centre before giving up. */
 const PARK_TRIES = 14;
@@ -35,7 +35,7 @@ function parkKind(roll: number): NatureObjectKind | null {
  * disc with greenery. Returns false if no open centre was found.
  */
 export function placePark(ctx: WorldCtx, out: PlacedTile[], town: Town): boolean {
-  const { cols, rows, tilePx, rng, blocked } = ctx;
+  const { cols, rows, tilePx, rng, blocked, structure } = ctx;
   const parkRadius = town.tier === "city" ? 3 : 2;
 
   for (let t = 0; t < PARK_TRIES; t++) {
@@ -44,7 +44,7 @@ export function placePark(ctx: WorldCtx, out: PlacedTile[], town: Town): boolean
     const px = Math.round(town.cx + Math.cos(angle) * dist);
     const py = Math.round(town.cy + Math.sin(angle) * dist);
     if (px < 0 || px >= cols || py < 0 || py >= rows) continue;
-    if (blocked[py * cols + px]) continue;
+    if (!claimable(ctx, py * cols + px)) continue;
 
     // Some parks are memorial gardens: a statue first, greenery around it.
     if (rng() < STATUE_CHANCE && fits(ctx, px, py, PARK_STATUE)) {
@@ -58,13 +58,21 @@ export function placePark(ctx: WorldCtx, out: PlacedTile[], town: Town): boolean
         const ny = py + dy;
         if (nx < 0 || nx >= cols || ny < 0 || ny >= rows) continue;
         const i = ny * cols + nx;
-        if (blocked[i]) continue;
+        if (!claimable(ctx, i)) continue;
+
+        // A wild tree already here becomes part of the park: claim it so no
+        // building clears it, and keep its existing tile.
+        if (blocked[i]) {
+          structure[i] = 1;
+          continue;
+        }
 
         const kind = parkKind(rng());
         if (!kind) continue;
         const [col, row] = pick<TileCoord>(rng, NATURE_OBJECTS[kind]);
         out.push({ col, row, x: nx * tilePx, y: ny * tilePx, layer: "nature" });
         blocked[i] = 1;
+        structure[i] = 1;
       }
     }
     return true;

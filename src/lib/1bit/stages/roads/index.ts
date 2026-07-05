@@ -1,86 +1,88 @@
 /**
  * Stage 3: settlements & roads.
  *
- * Founds the map's settlements and lays the routes that connect them, so the
- * world reads as inhabited — a city with paved streets, outlying towns and
- * hamlets, and dirt footpaths wandering the wilds between them — before the
- * civilization stage erects buildings.
+ * Founds the map's settlements and grows the route hierarchy that connects
+ * them, so the world reads as inhabited before the civilization stage erects
+ * buildings. The road logic follows j9liu/roadgen (after Parish & Müller's
+ * "Procedural Modeling of Cities"), adapted to this 4-connected tile grid:
  *
- *   1. TOWNS (./towns.ts): settlement sites (open buildable land, near water),
- *      spaced across the map; best site = the city, then towns, then hamlets.
- *      Founded during the NATURE stage so their land was kept clear of trees;
- *      read from `ctx.towns` here and by the civilization stage.
- *   2. PLAZAS & STREETS (./render.ts, ./streets.ts): cities and towns get a
- *      3x3 town square at their centre and a block grid of streets clipped to
- *      their footprint — long connected paved lines the buildings will face.
- *   3. NETWORK (./network.ts): anchors = town centres + rural waypoints;
- *      connect them with a spanning-tree backbone plus nearest-neighbour
- *      loops. `roadDensity` scales both settlement and waypoint counts.
- *   4. ROUTES (./pathfind.ts): each edge becomes a least-cost 4-connected
- *      path — forests costly, existing road cheap (branches merge), a noise
- *      field making trails meander. Water carries a steep bridge premium, so
- *      routes ford thin rivers on a cell or two of bridge but detour around
- *      anything wider.
- *   5. RENDER (./render.ts): in-town road cells become paved streets, open
- *      country becomes autotiled dirt trails, and water crossings become
- *      plank bridges.
+ *   1. TOWNS (./towns.ts): settlement sites (open buildable land, near
+ *      water), spaced across the map; best site = the CITY — the root of the
+ *      road network — then towns, then hamlets. Founded during the NATURE
+ *      stage; the wild overgrows their land and the roads clear it.
+ *   2. POPULATION (./population.ts): a density field peaked at every
+ *      settlement — the global goal highway turtles steer by.
+ *   3. HIGHWAYS (./highways.ts): turtles march out of the CITY CENTRE (and
+ *      out of every town), steering toward population so they thread through
+ *      settlements, branching on fertile ground, snapping onto roads they
+ *      meet, bridging thin water. An interconnection pass then guarantees a
+ *      route between every city/town pair — a WEB of highways, not a hub and
+ *      spokes — and hamlets join with dirt lanes.
+ *   4. STREETS (./streets.ts): inside cities and towns, lanes sprout off the
+ *      arterials at irregular intervals and lengths — a European tangle of
+ *      through-lanes and dead-end courts, no square and no uniform grid.
+ *   5. WAYPOINTS (./network.ts): a few wild-country spots get dirt trails
+ *      that wander to the nearest road, so footpaths lead somewhere.
+ *   6. RENDER (./render.ts): paved cells use the sheet's solid street kit,
+ *      with corners/Ts/crossroads composed from strip caps and middles;
+ *      outside settlement aprons the highway wears down to autotiled dirt
+ *      footpath, more the farther out it runs; water crossings become plank
+ *      bridges.
  *
  * Road cells are marked `blocked` so civilization builds beside roads, never
  * on them.
  */
 
-import type { PlacedTile, Stage, WorldCtx } from "../../world";
+import { ROAD_TRAIL, type PlacedTile, type Stage, type WorldCtx } from "../../world";
 import { planTowns } from "./towns";
-import { layStreets } from "./streets";
-import { networkEdges, pickWaypoints } from "./network";
-import { buildWanderField, routePath } from "./pathfind";
-import { renderRoads, stampPlaza } from "./render";
-
-// Beyond the spanning-tree backbone, wire each anchor to this many nearest
-// neighbours so the network gains loops and reads as a web of routes rather
-// than a single branching tree.
-const EXTRA_NEIGHBORS = 2;
+import { growStreets } from "./streets";
+import { pickWaypoints } from "./network";
+import { buildWanderField, routeToRoad } from "./pathfind";
+import { buildPopulationField } from "./population";
+import { connectHamlets, connectSettlements, growHighways, interconnectTowns } from "./highways";
+import { renderRoads } from "./render";
 
 export const roadStage: Stage = {
   name: "road",
   build(ctx: WorldCtx): PlacedTile[] {
-    const { cols, rows, blocked, road, tuning } = ctx;
+    const { blocked, road, tuning } = ctx;
     const out: PlacedTile[] = [];
     const density = Math.max(0, Math.min(1, tuning.roadDensity));
 
-    // Settlements were founded before nature grew (see ../nature) so their
-    // land is clear; plan them here only if the nature stage didn't run.
-    // Cities and towns get their plaza and street grid BEFORE the trails are
-    // routed, so incoming roads treat the streets as existing (cheap) road and
-    // follow the grid in to the plaza.
+    // Settlements were founded before nature grew (see ../nature) so every
+    // stage agrees on them; plan them here only if the nature stage didn't run.
     const towns = ctx.towns.length > 0 ? ctx.towns : planTowns(ctx);
-    const plaza = new Uint8Array(cols * rows);
-    for (const town of towns) {
-      if (town.tier !== "hamlet") stampPlaza(ctx, out, town, plaza);
-      layStreets(ctx, town);
-    }
+    if (towns.length === 0) return out;
 
-    // Anchors: every settlement centre plus a few wild-country waypoints.
-    // Waypoints are recorded on the world so the civilization stage can put a
-    // point of interest at each — trails lead somewhere, not into thin air.
+    // Highways: organic growth from the city and towns toward population,
+    // a safety net for any town left roadless, then the pairwise
+    // interconnection guarantee, and finally the hamlets' dirt lanes.
+    const pop = buildPopulationField(ctx, towns);
+    const wander = buildWanderField(ctx);
+    growHighways(ctx, pop, towns);
+    connectSettlements(ctx, towns, wander);
+    interconnectTowns(ctx, towns, wander);
+    connectHamlets(ctx, towns, wander);
+
+    // Streets branch off the arterials inside each city/town footprint.
+    for (const town of towns) growStreets(ctx, town);
+
+    // Rural waypoints: recorded on the world so the civilization stage can
+    // put a point of interest at each — trails lead somewhere, not into thin
+    // air. Each gets a dirt trail that merges into the network.
     const waypointCount = Math.round(2 + density * 5);
     const waypoints = pickWaypoints(ctx, waypointCount, towns);
     ctx.waypoints.push(...waypoints);
-    const anchors = [...towns.map((t) => t.cy * cols + t.cx), ...waypoints];
-    if (anchors.length < 2) return out;
-
-    const wander = buildWanderField(ctx);
-    for (const [a, b] of networkEdges(anchors, cols, EXTRA_NEIGHBORS)) {
-      const path = routePath(ctx, road, wander, anchors[a], anchors[b]);
-      if (path) {
-        for (const c of path) {
-          road[c] = 1;
-          blocked[c] = 1;
-        }
+    for (const w of waypoints) {
+      const path = routeToRoad(ctx, wander, w, (j) => road[j] > 0);
+      if (!path) continue;
+      for (const c of path) {
+        if (!road[c]) road[c] = ROAD_TRAIL;
+        blocked[c] = 1;
       }
     }
 
-    renderRoads(ctx, out, plaza);
+    renderRoads(ctx, out);
     return out;
   },
 };
