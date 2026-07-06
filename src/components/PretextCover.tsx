@@ -5,24 +5,27 @@ import {
   layoutGlyphs,
   measureUnits,
   randPhrase,
-  rand,
 } from "./pretext/shared";
+import { createCloth } from "./pretext/cloth";
 import { useElementBox, usePretext } from "./pretext/hooks";
 
 /**
  * PretextCover, the live pretext demo shown where a post's cover image would
- * normally go. Glyphs rain down Matrix-style with the post title sitting still
- * in the middle.
+ * normally go. Strips of fabric hang from just above the top edge, each one
+ * printed with a Matrix-style phrase that flows down it; gusts of wind sweep
+ * through and blow the cloth around while the post title sits still in the
+ * middle.
  *
- * pretext measures every character individually (canvas measureText under the
- * hood), so each letter is placed at its exact advance and can never be cut
- * mid-glyph. Rendering is on a canvas so the rain stays cheap.
+ * Each strip is a verlet rope (points plus distance constraints) so the cloth
+ * physics is real, not a shader trick. pretext measures every character
+ * individually (canvas measureText under the hood), so each letter is placed
+ * at its exact advance and can never be cut mid-glyph. Rendering is on a
+ * canvas so the whole thing stays cheap.
  *
  *   variant="featured" allows bigger text (wide featured card / article hero).
  *
- *   animate={false} skips the rain entirely and just presents the title sitting
- *   still on the dark box, used on the article hero where the falling glyphs are
- *   unwanted.
+ *   animate={false} skips the cloth entirely and just presents the title
+ *   sitting still on the dark box, for spots where the motion is unwanted.
  *
  * Before the canvas is live (server render, static mode, or reduced motion) it
  * shows the title centered, so the slot is never blank.
@@ -101,27 +104,24 @@ export default function PretextCover({
     });
     const dy = PAD + Math.max(0, (innerH - layout.height) / 2);
 
-    // Small, standard-text-sized rain. Each column streams a funny phrase; the
-    // translucent wash (in the loop) fades older glyphs into trails, so we draw
-    // only ONE glyph per column per frame — cheap even on the wide hero.
-    const rainFS = featured ? 12 : 11;
-    const cellW = rainFS * 1.15;
-    const cellH = rainFS * 1.2;
-    const cols = Math.max(1, Math.floor(W / cellW));
-    const rows = Math.max(4, Math.floor(H / cellH));
-    type Stream = { phrase: string; row: number; speed: number; offset: number };
-    const spawn = (): Stream => ({
-      phrase: randPhrase(),
-      row: -rand(0, rows),
-      speed: rand(8, 16),
-      offset: (Math.random() * 97) | 0,
+    // Cloth banners: strips of fabric printed with phrases, blown by gusts
+    // and the pointer. All the physics lives in the createCloth util; this
+    // component only sizes it and draws it.
+    const bannerFS = featured ? 13 : 12;
+    const cellH = bannerFS * 1.3; // one letter cell down the strip
+    const stripW = Math.round(bannerFS * 1.8);
+    const PIN_Y = -cellH * 2; // pin just above the frame, so no visible start
+
+    const sim = createCloth({
+      w: W,
+      h: H,
+      stripW,
+      gapX: Math.round(stripW * 0.5),
+      pinY: PIN_Y,
+      // 1.5x the box height: hem stays out of frame, sim stays light.
+      stripLen: H * 1.5,
+      makePhrase: () => randPhrase() + "   ",
     });
-    const streams = Array.from({ length: cols }, spawn);
-    // Map a row to a character of this stream's phrase (cyclic).
-    const charAt = (s: Stream, rr: number) => {
-      const len = s.phrase.length;
-      return s.phrase[(((rr - s.offset) % len) + len) % len];
-    };
 
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
@@ -149,31 +149,112 @@ export default function PretextCover({
       for (const g of layout.glyphs) tctx.fillText(g.ch, PAD + g.x, dy + g.y);
     }
 
-    const MIN_DT = 1 / 30; // throttle to ~30fps — plenty for rain
+    // The pointer is a breeze of its own; the sim owns the physics, this
+    // just feeds it canvas-relative pointer motion.
+    const onPointerMove = (e: PointerEvent) => {
+      const r = canvas.getBoundingClientRect();
+      sim.pointerMove(e.clientX - r.left, e.clientY - r.top, e.timeStamp);
+    };
+    const onPointerLeave = () => sim.pointerEnd();
+    canvas.addEventListener("pointermove", onPointerMove, { passive: true });
+    canvas.addEventListener("pointerleave", onPointerLeave);
+    canvas.addEventListener("pointercancel", onPointerLeave);
+
+    const MIN_DT = 1 / 30; // throttle to ~30fps, plenty for cloth
     let raf = 0;
     let last = 0;
 
     const draw = (dt: number) => {
-      // Translucent wash fades the previous frame's glyphs into trailing tails.
-      ctx.fillStyle = "rgba(6, 16, 9, 0.16)";
+      sim.step(Math.min(dt, 1 / 20)); // keep verlet stable across frame spikes
+
+      ctx.fillStyle = BG;
       ctx.fillRect(0, 0, W, H);
 
+      ctx.font = `600 ${bannerFS}px ${FONT}`;
       ctx.textAlign = "center";
-      ctx.font = `600 ${rainFS}px ${FONT}`;
-      ctx.fillStyle = "rgba(180, 245, 110, 0.92)";
-      for (let c = 0; c < cols; c++) {
-        const s = streams[c];
-        const r = Math.floor(s.row);
-        const y = r * cellH;
-        const ch = charAt(s, r);
-        if (y >= 0 && y < H && ch !== " ")
-          ctx.fillText(ch, c * cellW + cellW / 2, y);
-        s.row += s.speed * dt;
-        if (y > H && Math.random() < 0.02) Object.assign(s, spawn());
-      }
-      ctx.textAlign = "left";
+      ctx.textBaseline = "middle";
+      const hw = stripW / 2;
 
-      // Title sits still on top of the rain, no drop-in.
+      for (const s of sim.strips) {
+        const pts = s.pts;
+        const total = s.cum[s.cum.length - 1];
+
+        // Fabric: one shaded quad per rope segment. Tilted segments catch
+        // more light, which is what sells the ripple as cloth.
+        for (let k = 0; k < pts.length - 1; k++) {
+          const a = pts[k];
+          const b = pts[k + 1];
+          if (a.y > H + stripW && b.y > H + stripW) continue; // below frame
+          if (a.y < -stripW && b.y < -stripW) continue; // above frame
+          const dx = b.x - a.x;
+          const dy = b.y - a.y;
+          const inv = 1 / (Math.hypot(dx, dy) || 1e-6);
+          const nx = -dy * inv * hw;
+          const ny = dx * inv * hw;
+          const tilt = Math.abs(dx * inv);
+          const l = 26 + s.shade * 5 + tilt * 70;
+          ctx.fillStyle = `rgb(${(10 + l * 0.35) | 0}, ${(22 + l) | 0}, ${(14 + l * 0.45) | 0})`;
+          ctx.beginPath();
+          ctx.moveTo(a.x + nx, a.y + ny);
+          ctx.lineTo(b.x + nx, b.y + ny);
+          ctx.lineTo(b.x - nx, b.y - ny);
+          ctx.lineTo(a.x - nx, a.y - ny);
+          ctx.closePath();
+          ctx.fill();
+        }
+
+        // The phrase flows down the fabric; each letter cell rides the curve
+        // and tilts with the local tangent, so the text moves as cloth.
+        const L = s.phrase.length;
+        const off = s.scroll % cellH;
+        const base = Math.floor(s.scroll / cellH);
+        ctx.fillStyle = "rgba(180, 245, 110, 0.9)";
+        for (let k = 0; ; k++) {
+          const arc = k * cellH + off + cellH * 0.5;
+          if (arc > total - 2) break;
+          const idx = (((k - base) % L) + L) % L;
+          const ch = s.phrase[idx];
+          if (ch === " ") continue;
+          const [x, y, ang] = sim.posAt(s, arc);
+          if (y > H + cellH || y < -cellH) continue; // outside the frame
+          ctx.save();
+          ctx.translate(x, y);
+          ctx.rotate(ang - Math.PI / 2);
+          ctx.fillText(ch, 0, 0);
+          ctx.restore();
+        }
+      }
+
+      // Wind-lines: a bright comet flows along each undulating path (some
+      // with a loop-the-loop). setLineDash advances the segment forward so
+      // the gust looks like moving air from any of the 8 compass directions.
+      ctx.save();
+      ctx.lineCap = "round";
+      ctx.lineJoin = "round";
+      for (const l of sim.winds) {
+        const progress = l.age / l.ttl;
+        const alpha = Math.sin(Math.PI * clamp(progress, 0, 1)) * 0.55;
+        if (alpha < 0.02) continue;
+        ctx.strokeStyle = `rgba(200, 255, 160, ${alpha.toFixed(3)})`;
+        ctx.lineWidth = 1.4;
+        // The dash segment is the "comet body"; the gap hides the rest of
+        // the path so only the bright segment is visible at any moment.
+        ctx.setLineDash([l.seg, l.total + l.seg]);
+        ctx.lineDashOffset = l.seg - progress * (l.total + l.seg);
+        ctx.save();
+        ctx.translate(l.x, l.y);
+        ctx.rotate(l.ang);
+        ctx.beginPath();
+        ctx.moveTo(l.pts[0].x, l.pts[0].y);
+        for (let i = 1; i < l.pts.length; i++)
+          ctx.lineTo(l.pts[i].x, l.pts[i].y);
+        ctx.stroke();
+        ctx.restore();
+      }
+      ctx.setLineDash([]);
+      ctx.restore();
+
+      // Title sits still on top of the banners, no drop-in.
       if (tctx) ctx.drawImage(titleCanvas, 0, 0, W, H);
     };
 
@@ -217,6 +298,9 @@ export default function PretextCover({
     return () => {
       stop();
       io.disconnect();
+      canvas.removeEventListener("pointermove", onPointerMove);
+      canvas.removeEventListener("pointerleave", onPointerLeave);
+      canvas.removeEventListener("pointercancel", onPointerLeave);
     };
   }, [pt, box.w, box.h, reduce, title, featured, animate]);
 
