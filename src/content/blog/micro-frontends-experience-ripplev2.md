@@ -3,6 +3,7 @@ title: 'Our Journey Building an App with Micro Frontends'
 author: 'Kenneth Harold Panis'
 pubDate: 2025-08-16
 image: 'Microfrontend.png'
+description: 'We spent 9 months building a complex app with micro frontends as a four person team. What worked, what nearly broke us, and whether we would do it again.'
 tags: ['micro-frontends', 'architecture', 'module-federation', 'nx']
 tech: ['React', 'Nx', 'Module Federation', 'TypeScript']
 ---
@@ -11,27 +12,27 @@ tech: ['React', 'Nx', 'Module Federation', 'TypeScript']
 
 We spent 9 months building a complex application with micro frontends. The result? A working system that taught us more about architectural tradeoffs than we ever wanted to know.
 
-Everyone told us micro frontends would solve our scaling problems. Independent teams, independent deployments, technology flexibility - it all sounded perfect, But from our experience micro frontends come with their own special brand of complexity that can make your life interesting in ways you didn't expect.
+Everyone told us micro frontends would solve our scaling problems. Independent teams, independent deployments, technology flexibility, it all sounded perfect. But from our experience micro frontends come with their own special brand of complexity that can make your life interesting in ways you didn't expect.
 
 ## The Problem We Were Trying to Solve
 
-We had this legacy application that was... well, let's just say it was a proper monolith, it was a massive codebases where changing a single feature could break three other completely unrelated things.
+We had this legacy application that was... well, let's just say it was a proper monolith, a massive codebase where changing a single feature could break three other completely unrelated things.
 
 The old app was a nightmare to work with, build times were absolutely brutal with no hot reload, no incremental builds, nothing. You'd change a single letter and then have to rebuild the entire application just to see if your change worked. And that build? It took forever. The development feedback loop was so slow it was crushing productivity.
 
-The other real killer was the unpredictable side effects, You'd touch one feature and something completely unrelated would break. The interconnected nature of the monolith meant that even the simplest changes could have cascading effects that were nearly impossible to predict or debug. You would spend entire afternoons trying to figure out why changing a button in one form broke a completely different part of the application.
+The other real killer was the unpredictable side effects. You'd touch one feature and something completely unrelated would break, and you would spend entire afternoons trying to figure out why changing a button in one form broke a completely different part of the application.
 
-That's when they started thinking... maybe we don't need to cram everything into one giant codebase?
+That's when we started thinking... maybe we don't need to cram everything into one giant codebase?
 
 ## Why We Thought Micro Frontends Would Save Us
 
 Someone from the company had already explored micro frontends as a solution to our monolith problems. Then they brought in a senior developer to start rebuilding the application using this architecture, splitting it into distinct key features that could be developed and deployed independently. We joined the project to help him build this new system.
 
-The main driver was escaping the nightmare of our legacy monolith. We were so tired of the brutal build times and the constant fear of breaking something completely unrelated when making simple changes. Micro frontends promised independent development and deployment, which sounded like exactly what we needed to break free from that cycle of pain.
+The main driver was escaping the grind of our legacy monolith. We were so tired of the brutal build times and the constant fear of breaking something completely unrelated when making simple changes. Micro frontends promised independent development and deployment, which sounded like exactly what we needed to break free from that cycle of pain.
 
 The idea of having clear boundaries between different parts of the application was really appealing after dealing with the interconnected mess of the old system. We also knew this rebuilt application was going to get much bigger and more complex over time. Micro frontends felt like they would give us the architectural foundation to scale without repeating our past mistakes.
 
-But after working together for a few months, the senior developer left the team, and we were left to take over a partially built micro frontend architecture. Here's the thing though, and this is really important - we were a startup with just one team working on this entire project. After he left, there were only 4 of us. In hindsight, micro frontends probably work way better when you actually have multiple teams with clear ownership boundaries. But hey, we were committed to this architecture by then, and sometimes you just gotta make it work with what you've got.
+But after working together for a few months, the senior developer left the team, and we were left to take over a partially built micro frontend architecture. Here's the thing though: we were a startup with just one team working on this entire project. After he left, there were only 4 of us. In hindsight, micro frontends probably work way better when you actually have multiple teams with clear ownership boundaries. But hey, we were committed to this architecture by then, and sometimes you just gotta make it work with what you've got.
 
 ## How We Actually Built This Thing
 
@@ -39,13 +40,13 @@ But after working together for a few months, the senior developer left the team,
 
 After a lot of back and forth and experimentation, this is the stack we finally settled on, Nx 21.1.2 made monorepo management bearable, Vite 6.2.2 delivered on fast builds and a smooth dev server, Vite Module Federation (@originjs/vite-plugin-federation) was the glue for our micro frontends, the Webpack version is more mature, but this worked perfectly with our Vite setup. React 18.3.1 was the one constant everyone agreed on.
 
-Our final architecture: one host application as the main shell, four remote apps each handling a key feature, and seven shared libraries, because duplicating code across micro frontends is a nightmare we learned to avoid.
+Our final architecture: one host application as the main shell, four remote apps each handling a key feature, and seven shared libraries, because duplicating code across micro frontends is a trap we learned to avoid.
 
 ### The Module Federation Dance
 
-Getting Module Federation working was... well, let's call it an experience. Each micro frontend had to expose its main component in a very specific way. The configuration looked simple enough - you basically tell each app "hey, you can use me!" by exposing certain components. And then the host app dynamically loads these remote apps by saying "I'll take one of everything, please."
+Getting Module Federation working was... well, let's call it an experience. Each micro frontend had to expose its main component in a very specific way. The configuration looked simple enough, you basically tell each app "hey, you can use me!" by exposing certain components. And then the host app dynamically loads these remote apps by saying "I'll take one of everything, please."
 
-It seems straightforward when you write it down like that, but wait until you start debugging why one of your micro frontends won't load because of some weird webpack configuration issue that makes absolutely no sense. Those were fun times.
+It seems straightforward when you write it down like that, but wait until you start debugging why one of your micro frontends won't load because of some weird webpack configuration issue that makes absolutely no sense.
 
 ### Our Shared Library Strategy
 
@@ -57,7 +58,7 @@ This shared foundation saved our butts more times than I can count. There's noth
 
 Now, there's a fair argument that having all these shared libraries goes against the "independence" principle of micro frontends. Some purists would say we're creating coupling and defeating the purpose. But honestly? I'd argue it's not worth the hassle. Without shared libraries, you'd have to hunt down and fix the same bug across multiple apps, and inevitably someone would forget to update one of them. That's a maintenance nightmare I wouldn't wish on anyone.
 
-## What Actually Worked (Surprisingly Well)
+## What Actually Worked
 
 ### Teams Could Finally Work Without Fighting
 
@@ -79,15 +80,15 @@ Developers could work on individual micro frontends with super fast hot reload. 
 
 The shared library system also made dependencies crystal clear. We could see exactly what each micro frontend depended on, which prevented the usual "why is this random utility function breaking our app" mysteries.
 
-## What Nearly Broke Us (The Pain Points)
+## What Nearly Broke Us
 
 ### The Learning Curve From Hell
 
 The combination of Module Federation, Nx, Vite, and micro frontend patterns created a learning curve that was honestly pretty brutal. We're talking about a lot of new concepts for developers to wrap their heads around all at once. When you're already down to just four people and one of them needs weeks to get up to speed, that's a significant hit to your team's velocity.
 
-Configuration became a nightmare of its own. We had Vite configurations for each individual app, Module Federation settings that needed to be just right, and Nx workspace configuration files scattered everywhere. When something broke (and things broke regularly in those early days), figuring out which configuration file was the culprit became this detective game that nobody wanted to play. Was it the host app's config? A remote app's setup? Some weird interaction between Nx and Vite? Good luck figuring that out at 3 PM on a Friday.
+Configuration became a whole problem of its own. We had Vite configurations for each individual app, Module Federation settings that needed to be just right, and Nx workspace configuration files scattered everywhere. When something broke (and things broke regularly in those early days), figuring out which configuration file was the culprit became this detective game that nobody wanted to play. Was it the host app's config? A remote app's setup? Some weird interaction between Nx and Vite? Good luck figuring that out at 3 PM on a Friday.
 
-Debugging became an art form that required way more skill than it should have. When something went wrong, the possibilities were endless. Was it the host app? A remote app? A shared dependency? The Module Federation configuration? Some weird caching issue with Nx? Yes, we eventually got good at debugging this stuff, but man, those first few months were really rough.
+Debugging in general required way more skill than it should have, because when something went wrong the possibilities were endless. Yes, we eventually got good at it, but man, those first few months were really rough.
 
 ### Communication Between Apps Was Tricky
 
@@ -109,17 +110,17 @@ Testing individual micro frontends often meant mocking the shared libraries and 
 
 We quickly realized that micro frontends really shine when you have multiple teams, but with just four of us trying to manage four different apps plus shared libraries, the overhead was pretty significant. We were constantly context-switching between micro frontends, which was mentally exhausting.
 
-Since we were such a small team, we ended up with situations where only one person really understood a particular micro frontend. This isn't great for bus factor - what happens when that person goes on vacation or leaves the company? Knowledge silos became a real problem.
+Since we were such a small team, we ended up with situations where only one person really understood a particular micro frontend. This isn't great for bus factor. What happens when that person goes on vacation or leaves the company? Knowledge silos became a real problem.
 
 Even though the apps were supposed to be "independent," we still needed to coordinate changes constantly, especially in shared libraries. The communication overhead didn't disappear just because we had micro frontends. If anything, it sometimes felt like we had more coordination to do, not less.
 
-## What We Learned (The Hard Way)
+## What We Learned the Hard Way
 
-### Invest in the Foundation Early (Like, Really Early)
+### Invest in the Foundation Early
 
 Building a solid design system first was probably our best decision throughout this entire project. Having a robust shared UI library from the very beginning prevented the "why do we have 12 different button styles" problem that plagues most micro frontend projects. When teams are working independently, it's incredibly easy for design to drift apart, but our shared component library kept everything consistent.
 
-We should have spent way more time getting the build system right from the start. We ended up fighting with Nx and Module Federation configurations for months when we could have invested that time upfront to understand them properly. Once we finally mastered these tools, everything became much smoother. The lesson here is that complex tooling requires serious upfront investment to pay dividends later.
+We should have spent way more time getting the build system right from the start. We ended up fighting with Nx and Module Federation configurations for months when we could have invested that time upfront to understand them properly. Once we finally mastered these tools, everything became much smoother.
 
 Centralizing the boring stuff like API communication, authentication, and error handling turned out to be crucial. Trust me, you don't want to debug why one API retains its data on remount while the others don't. Having these foundational services shared across all apps eliminated a whole category of potential bugs and inconsistencies.
 
@@ -127,7 +128,7 @@ Centralizing the boring stuff like API communication, authentication, and error 
 
 We aligned our micro frontends with key features rather than technical layers like components or services, and this made so much more sense for development and maintenance. When you organize around feature areas, the boundaries feel natural and teams can own entire features end-to-end.
 
-We learned to be really explicit about how micro frontends communicate with each other. Implicit contracts lead to pain when teams make changes, so writing down your communication contracts and keeping them updated is essential. This documentation becomes your lifeline when things go wrong.
+We learned to be really explicit about how micro frontends communicate with each other. Implicit contracts lead to pain when teams make changes, so writing down your communication contracts and keeping them updated is essential.
 
 Figuring out early what needs to be shared versus what should stay local to each micro frontend is critical. User authentication and permissions clearly need to be shared, but feature-specific state should stay local. Getting this wrong leads to either tight coupling between apps or data inconsistency issues that are hard to debug.
 
@@ -135,9 +136,9 @@ Figuring out early what needs to be shared versus what should stay local to each
 
 We built a single command that starts the entire system with one keystroke, and this was essential for integration testing and onboarding new developers. When someone new joins the team, they shouldn't have to read a 20-step setup guide just to see the application running.
 
-But we also made sure developers could work on individual micro frontends without starting the entire system. This kept development cycles fast and let people focus on their specific area without the overhead of running everything. Finding this balance between integration and isolation is key.
+But we also made sure developers could work on individual micro frontends without starting the entire system. This kept development cycles fast and let people focus on their specific area without the overhead of running everything.
 
-Having an automated testing strategy that worked at both the individual micro frontend level and the integrated system level took us longer to figure out than it should have. You need both, and they need to work together seamlessly, but that's easier said than done.
+Having an automated testing strategy that worked at both the individual micro frontend level and the integrated system level took us longer to figure out than it should have.
 
 ### Monitoring and Debugging Are Essential
 
@@ -147,17 +148,17 @@ Error boundaries everywhere became our safety net. We implemented error boundari
 
 We had to keep a constant eye on bundle sizes, load times, and memory usage to make sure the micro frontend architecture wasn't hurting user experience. Some of our early assumptions about performance were completely wrong, so continuous monitoring became essential.
 
-## The Deployment Headaches (Oh Boy)
+## The Deployment Headaches
 
-This deserves its own section because deployment was probably our biggest struggle. With a traditional website, you build it, you deploy it, done. With micro frontends? Welcome to dependency hell on steroids.
+This deserves its own section because deployment was probably our biggest struggle. With a traditional website, you build it, you deploy it, done. With micro frontends, none of it was that simple.
 
 ### The Great Deployment Debate
 
 We spent weeks arguing about how to deploy this thing:
 
-**Option 1: Separate workloads for each app** - Each micro frontend gets its own container/pod. Sounds great in theory - true independence, can scale and deploy each app separately. But man, the operational complexity was scary. We'd need to manage 5 different deployments, 5 different sets of environment variables, 5 different monitoring setups...
+**Option 1: Separate workloads for each app.** Each micro frontend gets its own container/pod. Sounds great in theory, true independence, you can scale and deploy each app separately. But man, the operational complexity was scary. We'd need to manage 5 different deployments, 5 different sets of environment variables, 5 different monitoring setups...
 
-**Option 2: Single workload, multiple ports** - Build everything together and expose different ports for each app. Much simpler to manage, but we lose a lot of the independence benefits that made us choose micro frontends in the first place.
+**Option 2: Single workload, multiple ports.** Build everything together and expose different ports for each app. Much simpler to manage, but we lose a lot of the independence benefits that made us choose micro frontends in the first place.
 
 We ended up going with Option 2 for now. Yeah, it's not the "pure" micro frontend approach, but as a small team, we needed to keep our operational overhead manageable. We recognize that the ability to deploy just the app with changes would be way better (less downtime, less risk), but we had to pick our battles.
 
@@ -165,7 +166,7 @@ We ended up going with Option 2 for now. Yeah, it's not the "pure" micro fronten
 
 And then there's routing. Oh god, the routing.
 
-Making subroutes work correctly across three different scenarios nearly broke our brains:
+Making subroutes work correctly across three different scenarios took weeks to get right:
 
 1. **Development mode (single app)**: When you're working on just the dashboard app locally, the routes need to work
 2. **Local integration mode**: When you're running the full micro frontend system locally to see how everything interacts
@@ -173,7 +174,7 @@ Making subroutes work correctly across three different scenarios nearly broke ou
 
 Each scenario had different base paths, different ways the apps got loaded, and different URL structures. We ended up with this complex routing configuration that had to account for all three modes. It worked, but it was not pretty.
 
-The amount of time we spent debugging "why does this route work locally but not in production" was... substantial. Let's just say that.
+We spent a lot of time debugging "why does this route work locally but not in production".
 
 ## Should You Use Micro Frontends?
 
@@ -209,7 +210,7 @@ Based on our experience, here's when micro frontends actually make sense and whe
 
 The monolith approach definitely has its merits. Deployment is straightforward, testing is easier, and you'll probably get better performance out of the box. There's something to be said for the simplicity of building one application, deploying one thing, and not having to worry about complex orchestration.
 
-But the downsides that drove us away from this approach were significant. Team coordination becomes a nightmare as the application grows, deployments are all-or-nothing affairs, and one team's bug can block everyone else's release. We'd lived through this pain with our legacy application, and we really didn't want to go back.
+But the downsides that drove us away from this approach were significant. Team coordination gets ugly as the application grows, deployments are all-or-nothing affairs, and one team's bug can block everyone else's release. We'd lived through this pain with our legacy application, and we really didn't want to go back.
 
 ### Monorepo with Shared Components (But No Micro Frontends)
 
@@ -221,31 +222,15 @@ The problem is that you still need to coordinate deployments, and the shared run
 
 At the other extreme, we could have built completely separate applications that just shared a design system. This would have given us total independence with no technical coupling, and teams could use whatever technology they wanted.
 
-But this approach brings its own problems. Navigation between apps feels janky and broken since you lose the seamless single-page application experience. And the operational overhead is enormous - you're essentially running multiple products instead of one cohesive application.
+But this approach brings its own problems. Navigation between apps feels janky and broken since you lose the seamless single-page application experience. And the operational overhead is enormous, you're essentially running multiple products instead of one cohesive application.
 
 ## Would We Do It Again?
 
-### The Honest Answer: It Depends
-
-For our specific situation - a small team building a complex app - micro frontends solved some problems but created others. We definitely learned a lot, and the architecture is pretty solid now. But if I'm being completely honest, a well-structured monolith might have been faster to build and deploy for a team our size.
-
-### What We'd Consider Next Time
+The honest answer: it depends. For our specific situation, a small team building a complex app, micro frontends solved some problems but created others. We definitely learned a lot, and the architecture is pretty solid now. But if I'm being completely honest, a well-structured monolith might have been faster to build and deploy for a team our size.
 
 **Team size matters more than we thought.** We're a startup with just 4 people. The micro frontend overhead is real when you're constantly context-switching between different apps. If we were still this size, we'd probably go with a monolith and extract micro frontends later when we actually have multiple teams.
 
-**Plan deployment from day one.** The deployment complexity was definitely harder than we expected. A regular website? Build, deploy, done. This thing? We had to figure out routing across multiple environments, coordinate builds, and make sure everything worked together. Not impossible, but definitely more work.
-
 **Future-proofing has value.** We're a startup that will probably grow. Other teams will likely need to work on this product eventually. In that sense, the micro frontend architecture is setting us up for future scaling, even if the overhead is high right now.
-
-### What Actually Worked Well
-
-The shared component library kept our UI consistent. The domain boundaries made sense and helped us organize the code. And when we did need to make changes to just one area (like fixing a critical bug), the isolation was nice.
-
-### The Bottom Line
-
-For teams thinking about micro frontends: seriously consider your team size and operational complexity tolerance. The technology is mature, but it's not free. You're trading development complexity for architectural benefits, and that trade-off needs to make sense for your situation.
-
-Also, plan your deployment strategy early. Like, really early. Don't do what we did and figure it out halfway through the project.
 
 ## The Technical Stack (For the Curious)
 
@@ -263,7 +248,7 @@ This stack worked well for us, but your mileage may vary. The important thing is
 
 ## Final Thoughts
 
-Micro frontends aren't magic. They're a tool that solves specific problems while creating others. Whether they're right for your project depends on your team size, organizational structure, and tolerance for complexity.
+Micro frontends are a tool that solves specific problems while creating others. Whether they're right for your project depends on your team size, organizational structure, and tolerance for complexity.
 
 Our advice? Start with a monolith. When you have actual multiple teams stepping on each other's toes, then consider breaking things apart. Don't build micro frontends because they sound cool or because you read about them in a blog post (including this one). Build them because you have a real organizational problem that they can solve.
 
