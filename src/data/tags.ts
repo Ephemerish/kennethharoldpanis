@@ -41,12 +41,8 @@ export const tags: Tag[] = [
   { slug: "workflow", label: "Workflow", group: "topic" },
   { slug: "integration", label: "Integration", group: "topic" },
   { slug: "developer-tools", label: "Developer Tools", group: "topic" },
-  { slug: "n8n", label: "n8n", group: "topic" },
   { slug: "micro-frontends", label: "Micro Frontends", group: "topic" },
   { slug: "architecture", label: "Architecture", group: "topic" },
-  { slug: "module-federation", label: "Module Federation", group: "topic" },
-  { slug: "nx", label: "Nx", group: "topic" },
-  { slug: "pretext", label: "pretext.js", group: "topic" },
   { slug: "performance", label: "Performance", group: "topic" },
 ];
 

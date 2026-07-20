@@ -1,13 +1,11 @@
 ---
 interface Props {
-  current: "about" | "certifications" | "experience" | "resume";
+  current: "about" | "resume";
 }
 const { current } = Astro.props as Props;
 
 const links = [
   { key: "about", label: "About", href: "/bio" },
-  { key: "certifications", label: "Certifications", href: "/bio/certifications" },
-  { key: "experience", label: "Experience", href: "/bio/experience" },
   { key: "resume", label: "Resume", href: "/bio/resume" },
 ] as const;
 ---

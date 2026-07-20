@@ -111,12 +111,18 @@ const hasAppendix = Astro.slots.has("appendix");
 
             {/* Hero image */}
             {heroImage && showHero && (
-              <div class="mb-8">
+              <div class="relative w-full aspect-video overflow-hidden shadow-lg mb-8 bg-neutral-950">
+                <img
+                  src={`/images/${heroImage}`}
+                  alt=""
+                  aria-hidden="true"
+                  class="absolute inset-0 w-full h-full object-cover scale-110 blur-2xl opacity-70"
+                />
                 <img
                   id="article-hero"
                   src={`/images/${heroImage}`}
                   alt={title}
-                  class="w-full h-auto shadow-lg"
+                  class="relative w-full h-full object-contain"
                   loading="eager"
                 />
               </div>

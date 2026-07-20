@@ -24,7 +24,9 @@ export default defineConfig({
     defaultStrategy: 'hover',
   },
   redirects: {
-    '/certifications': '/bio/certifications',
+    '/certifications': '/bio',
+    '/bio/certifications': '/bio',
+    '/bio/experience': '/bio',
   },
   server: {
     port: 3000, // Ensure it matches the Docker exposed port

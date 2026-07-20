@@ -30,5 +30,19 @@ const live = engineHasLiveCover(engine);
     <PretextCover client:visible title={title} variant={variant} />
   </div>
 ) : (
-  <img src={`/images/${image}`} alt={title} class="w-full h-auto" loading={loading} />
+  <div class="relative w-full aspect-video overflow-hidden bg-neutral-950">
+    <img
+      src={`/images/${image}`}
+      alt=""
+      aria-hidden="true"
+      class="absolute inset-0 w-full h-full object-cover scale-110 blur-2xl opacity-70"
+      loading={loading}
+    />
+    <img
+      src={`/images/${image}`}
+      alt={title}
+      class="relative w-full h-full object-contain"
+      loading={loading}
+    />
+  </div>
 )}

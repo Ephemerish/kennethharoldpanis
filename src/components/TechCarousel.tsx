@@ -1,7 +1,7 @@
 import React from 'react';
 import useEmblaCarousel from 'embla-carousel-react';
 import AutoScroll from 'embla-carousel-auto-scroll';
-import { technologies } from '../data/technologies';
+import { technologies, techSlug } from '../data/technologies';
 
 interface TechCarouselProps {
   categoryFilter?: string;
@@ -70,14 +70,12 @@ export const TechCarousel: React.FC<TechCarouselProps> = ({ categoryFilter }) =>
       style={{ flexBasis: 'clamp(80px, 15vw, 140px)' }}
     >
       <a
-        href={tech.url}
-        target="_blank"
-        rel="noopener noreferrer"
+        href={`/tech/${techSlug(tech.name)}`}
         className="relative w-20 h-20 sm:w-22 sm:h-22 md:w-24 md:h-24 lg:w-28 lg:h-28 flex items-center justify-center
                  bg-white shadow-md hover:shadow-xl transition-all duration-300
                  border border-neutral-200 hover:border-neutral-300
                  group-hover:scale-110 group-hover:-translate-y-1"
-        title={tech.name}
+        title={`See where I've used ${tech.name}`}
       >
         <img
           src={tech.imagePath}
