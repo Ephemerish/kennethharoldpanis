@@ -2,6 +2,8 @@ import type { APIRoute } from "astro";
 import { getCollection } from "astro:content";
 import { getTagBySlug } from "../data/tags";
 import { getTechBySlug, techSlug } from "../data/technologies";
+import { timeline } from "../data/experience";
+import { certifications } from "../data/certifications";
 
 export const prerender = true;
 
@@ -21,7 +23,7 @@ export const GET: APIRoute = async () => {
   const bump = (m: Map<string, number>, k: string) => m.set(k, (m.get(k) ?? 0) + 1);
 
   type Item = {
-    type: "project" | "blog" | "tag" | "tech";
+    type: "project" | "blog" | "tag" | "tech" | "experience" | "certification";
     title: string;
     url: string;
     description?: string;
@@ -58,6 +60,29 @@ export const GET: APIRoute = async () => {
       description: b.data.description,
       keywords: [...b.data.tags, ...b.data.tech],
       date: b.data.pubDate.toISOString(),
+    });
+  }
+
+  // Experience & certifications don't feed tag/tech usage counts (those track
+  // /tech and /tags listing pages, which only cover projects + blog posts) —
+  // they're indexed as their own searchable items with tech as keywords.
+  for (const entry of timeline) {
+    items.push({
+      type: "experience",
+      title: entry.title,
+      url: entry.href ?? "/bio",
+      description: entry.org,
+      keywords: entry.tech ?? [],
+    });
+  }
+
+  for (const cert of certifications) {
+    items.push({
+      type: "certification",
+      title: cert.title,
+      url: cert.credentialUrl ?? "/bio",
+      description: cert.issuer,
+      keywords: [...cert.focusAreas, ...(cert.tech ?? [])],
     });
   }
 

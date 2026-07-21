@@ -12,9 +12,6 @@ import TechChips from "../../components/TechChips.astro";
 import {
   ArrowRightIcon,
   ArrowSquareOutIcon as ArrowTopRightOnSquareIcon,
-  CertificateIcon,
-  BriefcaseIcon,
-  GraduationCapIcon,
   FileTextIcon,
   CloudIcon,
   ChartLineUpIcon,
@@ -23,98 +20,8 @@ import {
   CheckCircleIcon,
   BookOpenIcon,
 } from "@phosphor-icons/react";
-import type { Icon } from "@phosphor-icons/react";
-
-type TimelineEntry = {
-  title: string;
-  org: string;
-  start: string;
-  end: string;
-  body: string;
-  tech?: string[];
-  Icon: Icon;
-};
-
-const timeline: TimelineEntry[] = [
-  {
-    title: "Software Engineer",
-    org: "Alphaus Inc",
-    start: "2024",
-    end: "current",
-    body: "Focused on the Ripple product, leading the shift to a micro-frontend architecture to modernize its capabilities. Handled full-stack development across UI updates, backend services, and CI/CD pipelines. Managed the testing and delivery workflows to ensure stable, low-risk production releases.",
-    tech: ["React", "TypeScript", "Module Federation", "Nx", "Zustand"],
-    Icon: BriefcaseIcon,
-  },
-  {
-    title: "BS Computer Engineering",
-    org: "Bohol Island State University",
-    start: "2020",
-    end: "2024",
-    body: "Undergraduate degree in Computer Engineering. Thesis work built a marine communication network for monitoring small fishing boats.",
-    tech: ["Arduino", "LoRa", "IoT", "Flutter", "Firebase", "Raspberry Pi"],
-    Icon: GraduationCapIcon,
-  },
-  {
-    title: "CSS-ICT",
-    org: "Sandingan National High School, Loon, Bohol",
-    start: "2018",
-    end: "2020",
-    body: "Senior high school under the ICT track, Computer Systems Servicing (CSS) strand.",
-    Icon: GraduationCapIcon,
-  },
-];
-
-type Certification = {
-  title: string;
-  issuer: string;
-  issuedDate?: string;
-  credentialUrl?: string;
-  badge?: string;
-  summary: string;
-  focusAreas: string[];
-  tech?: string[];
-  Icon: Icon;
-  accent: "brand" | "dark";
-  chipVariant: "brand" | "neutral";
-  highlighted?: boolean;
-};
-
-const certifications: Certification[] = [
-  {
-    title: "FinOps Certified Practitioner",
-    issuer: "FinOps Foundation",
-    summary:
-      "Practitioner-level certification covering the principles, personas, and lifecycle of FinOps, bringing engineering, finance, and product together to drive accountable cloud spend and business value.",
-    focusAreas: [
-      "FinOps Framework & Principles",
-      "Cloud Cost Allocation & Showback",
-      "Rate & Usage Optimization",
-      "Forecasting & Budgeting",
-      "Unit Economics",
-    ],
-    Icon: ChartLineUpIcon,
-    accent: "brand",
-    chipVariant: "brand",
-    highlighted: true,
-  },
-  {
-    title: "Google Associate Cloud Engineer",
-    issuer: "Google Cloud",
-    summary:
-      "Associate-level certification validating the ability to deploy applications, monitor operations, and manage enterprise solutions on Google Cloud Platform.",
-    focusAreas: [
-      "Compute Engine & GKE",
-      "Cloud Storage & Databases",
-      "IAM & Networking",
-      "Monitoring & Logging",
-      "Deployment & Operations",
-    ],
-    tech: ["Cloud Run"],
-    Icon: CloudIcon,
-    accent: "dark",
-    chipVariant: "neutral",
-  },
-];
+import { timeline } from "../../data/experience";
+import { certifications } from "../../data/certifications";
 
 const cloudJourney = [
   {
@@ -158,7 +65,7 @@ const cloudJourney = [
         subtitle="Roles, education, and project work, a timeline of how I got here."
       />
 
-      <div class="max-w-5xl mx-auto relative">
+      <div class="relative">
         <div
           class="absolute top-2 bottom-2 left-[5rem] sm:left-[9rem] w-px bg-neutral-200"
           aria-hidden="true"
@@ -177,18 +84,24 @@ const cloudJourney = [
                   class="absolute left-[-0.5rem] sm:left-[-1rem] top-3 -translate-x-1/2 w-3.5 h-3.5 rounded-full bg-brand-600 ring-4 ring-white z-10"
                   aria-hidden="true"
                 />
-                <Card padding="lg">
+                <Card padding="lg" hoverable={!!entry.href} href={entry.href}>
                   <div class="flex flex-col sm:flex-row gap-4 sm:gap-6">
                     <IconBadge Icon={entry.Icon} variant="brand" size="md" class="shrink-0" />
                     <div class="flex-1">
-                      <h3 class="text-lg sm:text-xl font-bold text-neutral-900 mb-1">{entry.title}</h3>
+                      <h3 class="text-lg sm:text-xl font-bold text-neutral-900 mb-1 group-hover:text-brand-700">{entry.title}</h3>
                       <p class="text-sm sm:text-base text-neutral-600 font-medium mb-3">{entry.org}</p>
                       <p class="text-sm sm:text-base text-neutral-700 leading-relaxed">
                         {entry.body}
                       </p>
                       {entry.tech && (
                         <div class="mt-4">
-                          <TechChips tech={entry.tech} size="sm" />
+                          <TechChips tech={entry.tech} size="sm" linked={!entry.href} />
+                        </div>
+                      )}
+                      {entry.href && (
+                        <div class="flex items-center text-sm font-semibold text-brand-700 group-hover:text-brand-800 mt-4 pt-4 border-t border-neutral-100">
+                          <span>{entry.ctaLabel}</span>
+                          <ArrowRightIcon className="w-4 h-4 ml-1.5" />
                         </div>
                       )}
                     </div>
@@ -230,7 +143,14 @@ const cloudJourney = [
 
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-10 mb-16 sm:mb-20">
         {certifications.map((cert) => (
-          <Card padding="none" class="relative flex flex-col overflow-hidden">
+          <Card
+            padding="none"
+            class="relative flex flex-col overflow-hidden"
+            hoverable={!!cert.credentialUrl}
+            href={cert.credentialUrl}
+            target={cert.credentialUrl ? "_blank" : undefined}
+            rel={cert.credentialUrl ? "noopener noreferrer" : undefined}
+          >
             {cert.highlighted && (
               <div class="absolute top-4 right-4 z-10">
                 <StatusPill variant="brand" Icon={StarIcon}>Featured</StatusPill>
@@ -256,7 +176,7 @@ const cloudJourney = [
 
             <div class="px-6 sm:px-8 pb-6 sm:pb-8 flex-1 flex flex-col">
               <div class="text-center mb-5">
-                <h3 class="text-xl sm:text-2xl font-bold text-neutral-900 mb-2 leading-tight">
+                <h3 class="text-xl sm:text-2xl font-bold text-neutral-900 mb-2 leading-tight group-hover:text-brand-700">
                   {cert.title}
                 </h3>
                 <p class="text-sm sm:text-base text-neutral-600 font-medium">
@@ -287,23 +207,17 @@ const cloudJourney = [
                   <p class="text-xs font-semibold uppercase tracking-wider text-neutral-500 mb-3">
                     Tech I've used it with
                   </p>
-                  <TechChips tech={cert.tech} size="sm" />
+                  <TechChips tech={cert.tech} size="sm" linked={!cert.credentialUrl} />
                 </div>
               )}
 
               <div class="flex-1" />
 
               {cert.credentialUrl && (
-                <a
-                  href={cert.credentialUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="inline-flex items-center justify-center gap-1.5 mt-4 pt-4 border-t border-neutral-100 text-sm font-semibold text-brand-700 hover:text-brand-800"
-                >
-                  <CertificateIcon className="w-4 h-4" />
-                  Verify credential
+                <div class="flex items-center justify-center gap-1.5 mt-4 pt-4 border-t border-neutral-100 text-sm font-semibold text-brand-700 group-hover:text-brand-800">
+                  <span>Verify credential</span>
                   <ArrowTopRightOnSquareIcon className="w-4 h-4" />
-                </a>
+                </div>
               )}
             </div>
           </Card>

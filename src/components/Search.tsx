@@ -6,6 +6,8 @@ import {
   BookOpenIcon,
   TagIcon,
   CpuIcon,
+  BriefcaseIcon,
+  CertificateIcon,
 } from "@phosphor-icons/react";
 import type { Icon } from "@phosphor-icons/react";
 import { cn } from "../lib/utils";
@@ -23,6 +25,8 @@ const TYPE_META: Record<ItemType, { label: string; Icon: Icon }> = {
   blog: { label: "Blog", Icon: BookOpenIcon },
   tag: { label: "Tag", Icon: TagIcon },
   tech: { label: "Tech", Icon: CpuIcon },
+  experience: { label: "Experience", Icon: BriefcaseIcon },
+  certification: { label: "Certification", Icon: CertificateIcon },
 };
 
 // Analytics-driven popularity from /api/popular, flattened across every

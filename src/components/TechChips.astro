@@ -5,6 +5,10 @@
  * Renders a list of tech names (validated against src/data/technologies.ts)
  * as logo chips that link to their /tech/{slug} page. Missing logos fall back
  * to a small dot, so an unregistered-logo tech still looks intentional.
+ *
+ * Set `linked={false}` when this renders inside another clickable card/anchor
+ * — nested `<a>` tags are invalid HTML and browsers silently fragment the
+ * outer anchor around each one, breaking its layout.
  */
 import { getTechByName, techSlug } from "../data/technologies";
 
@@ -12,9 +16,10 @@ interface Props {
   tech: string[];
   /** "sm" for compact card rows, "md" (default) for detail pages. */
   size?: "sm" | "md";
+  linked?: boolean;
 }
 
-const { tech, size = "md" } = Astro.props;
+const { tech, size = "md", linked = true } = Astro.props;
 
 const items = tech.map((name) => {
   const match = getTechByName(name);
@@ -28,20 +33,24 @@ const pad = size === "sm" ? "py-1 pl-1.5 pr-2.5 gap-1.5" : "py-1.5 pl-2 pr-3 gap
 ---
 
 <div class="flex flex-wrap gap-2">
-  {items.map((item) => (
-    <a
-      href={`/tech/${item.slug}`}
-      class:list={[
-        "inline-flex items-center bg-neutral-50 border border-neutral-200 hover:border-brand-300 hover:bg-brand-50",
-        pad,
-      ]}
-    >
-      {item.imagePath ? (
-        <img src={item.imagePath} alt={item.label} class:list={[logo, "object-contain"]} loading="lazy" />
-      ) : (
-        <span class="w-1.5 h-1.5 bg-brand-400"></span>
-      )}
-      <span class:list={[text, "text-neutral-700"]}>{item.label}</span>
-    </a>
-  ))}
+  {items.map((item) => {
+    const Tag = linked ? "a" : "span";
+    return (
+      <Tag
+        href={linked ? `/tech/${item.slug}` : undefined}
+        class:list={[
+          "inline-flex items-center bg-neutral-50 border border-neutral-200",
+          linked && "hover:border-brand-300 hover:bg-brand-50",
+          pad,
+        ]}
+      >
+        {item.imagePath ? (
+          <img src={item.imagePath} alt={item.label} class:list={[logo, "object-contain"]} loading="lazy" />
+        ) : (
+          <span class="w-1.5 h-1.5 bg-brand-400"></span>
+        )}
+        <span class:list={[text, "text-neutral-700"]}>{item.label}</span>
+      </Tag>
+    );
+  })}
 </div>

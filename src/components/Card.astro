@@ -18,6 +18,8 @@ interface Props {
   padding?: "none" | "sm" | "md" | "lg";
   as?: "div" | "article" | "section" | "a";
   href?: string;
+  target?: string;
+  rel?: string;
   class?: string;
 }
 
@@ -27,6 +29,8 @@ const {
   padding = "md",
   as = "div",
   href,
+  target,
+  rel,
   class: extraClass = "",
 } = Astro.props as Props;
 
@@ -53,6 +57,8 @@ const paddingClass = {
 
 <Tag
   href={href}
+  target={target}
+  rel={rel}
   class:list={[variantClass, hoverClass, paddingClass, extraClass]}
 >
   <slot />
