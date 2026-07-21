@@ -4,7 +4,7 @@
  * `credentialUrl` is the public verification link (Skilljar/Credly); each
  * card links out to it, so it's required for a cert to be clickable/indexed.
  */
-import { ChartLineUpIcon, CloudIcon } from "@phosphor-icons/react";
+import { ChartLineUpIcon, CloudIcon, BookOpenIcon, HourglassIcon } from "@phosphor-icons/react";
 import type { Icon } from "@phosphor-icons/react";
 
 export type Certification = {
@@ -20,6 +20,8 @@ export type Certification = {
   accent: "brand" | "dark";
   chipVariant: "brand" | "neutral";
   highlighted?: boolean;
+  /** Set for certs that aren't earned yet, e.g. { label: "In progress", variant: "warning", Icon: HourglassIcon }. */
+  status?: { label: string; variant: "warning" | "success"; Icon: Icon };
 };
 
 export const certifications: Certification[] = [
@@ -58,5 +60,16 @@ export const certifications: Certification[] = [
     Icon: CloudIcon,
     accent: "dark",
     chipVariant: "neutral",
+  },
+  {
+    title: "AWS Solutions Architect",
+    issuer: "Amazon Web Services",
+    summary:
+      "Actively learning AWS and integrating it into my workflow, working toward the Solutions Architect certification to extend my cloud range beyond GCP.",
+    focusAreas: ["EC2", "S3", "VPC", "Lambda", "RDS", "Well-Architected"],
+    Icon: BookOpenIcon,
+    accent: "dark",
+    chipVariant: "neutral",
+    status: { label: "In progress", variant: "warning", Icon: HourglassIcon },
   },
 ];

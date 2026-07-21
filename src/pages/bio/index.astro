@@ -12,43 +12,10 @@ import TechChips from "../../components/TechChips.astro";
 import {
   ArrowRightIcon,
   ArrowSquareOutIcon as ArrowTopRightOnSquareIcon,
-  FileTextIcon,
-  CloudIcon,
-  ChartLineUpIcon,
   StarIcon,
-  HourglassIcon,
-  CheckCircleIcon,
-  BookOpenIcon,
 } from "@phosphor-icons/react";
 import { timeline } from "../../data/experience";
 import { certifications } from "../../data/certifications";
-
-const cloudJourney = [
-  {
-    title: "Google Cloud Platform",
-    role: "My primary cloud",
-    body: "Day-to-day I deploy, monitor, and operate projects on GCP, backed by my Associate Cloud Engineer certification.",
-    chips: ["Compute Engine", "Cloud Run", "Cloud Storage", "IAM", "Cloud SQL"],
-    Icon: CloudIcon,
-    iconVariant: "brand" as const,
-    chipVariant: "brand" as const,
-    statusVariant: "success" as const,
-    statusIcon: CheckCircleIcon,
-    statusLabel: "Active",
-  },
-  {
-    title: "AWS Solutions Architect",
-    role: "Learning & certifying, ongoing",
-    body: "Actively learning AWS and integrating it into my workflow, working toward the Solutions Architect certification to extend my cloud range beyond GCP.",
-    chips: ["EC2", "S3", "VPC", "Lambda", "RDS", "Well-Architected"],
-    Icon: BookOpenIcon,
-    iconVariant: "dark" as const,
-    chipVariant: "neutral" as const,
-    statusVariant: "warning" as const,
-    statusIcon: HourglassIcon,
-    statusLabel: "In progress",
-  },
-];
 ---
 
 <Layout
@@ -58,59 +25,105 @@ const cloudJourney = [
   type="profile"
 >
   <PageSection variant="hero">
+    <div class="grid grid-cols-1 sm:grid-cols-[auto_1fr] gap-6 sm:gap-10 items-center mb-16 sm:mb-20">
+      <div class="mx-auto sm:mx-0">
+        <div class="relative w-32 h-32 sm:w-40 sm:h-40 overflow-hidden border-4 border-brand-600">
+          <img
+            src="/images/me/me.jpg"
+            alt="Kenneth Harold Panis"
+            class="w-full h-full object-cover"
+            loading="eager"
+            width="160"
+            height="160"
+            decoding="async"
+            fetchpriority="high"
+          />
+        </div>
+      </div>
+      <div class="text-center sm:text-left">
+        <h1 class="text-4xl sm:text-5xl md:text-6xl font-bold mb-3 leading-tight">
+          <span class="text-neutral-900">About </span><span class="text-brand-gradient">Kenneth</span>
+        </h1>
+        <p class="text-base sm:text-lg text-neutral-700 leading-relaxed max-w-xl mx-auto sm:mx-0">
+          Software developer building full-stack web apps and the occasional
+          IoT side project, growing his cloud engineering skills along the way.
+        </p>
+      </div>
+    </div>
+
     <section class="mb-16 sm:mb-20">
       <SectionHeader
         prefix="My"
         accent="Experience"
-        subtitle="Roles, education, and project work, a timeline of how I got here."
+        subtitle="Roles, education, and project work, most recent first."
       />
 
-      <div class="relative">
-        <div
-          class="absolute top-2 bottom-2 left-[5rem] sm:left-[9rem] w-px bg-neutral-200"
-          aria-hidden="true"
-        />
-        <div class="flex flex-col gap-10 sm:gap-12">
-          {timeline.map((entry) => (
-            <div class="relative grid grid-cols-[4.5rem_1fr] sm:grid-cols-[8rem_1fr] gap-x-4 sm:gap-x-8">
-              <div class="text-right pt-1">
-                <p class="text-xl sm:text-3xl font-bold text-neutral-900 leading-none">{entry.start}</p>
-                <p class="mt-1.5 text-[11px] sm:text-xs font-semibold uppercase tracking-wider text-neutral-400">
-                  {entry.end}
-                </p>
-              </div>
-              <div class="relative">
+      <div class="flex flex-col">
+        {timeline.map((entry, i) => {
+          const isCurrent = entry.end.toLowerCase() === "current";
+          const isLast = i === timeline.length - 1;
+          const dateLabel = isCurrent ? `${entry.start} – Current` : `${entry.start} – ${entry.end}`;
+          return (
+            <div class="flex gap-4 sm:gap-6">
+              <div class="flex flex-col items-center w-3.5 shrink-0">
                 <span
-                  class="absolute left-[-0.5rem] sm:left-[-1rem] top-3 -translate-x-1/2 w-3.5 h-3.5 rounded-full bg-brand-600 ring-4 ring-white z-10"
+                  class:list={[
+                    "w-3.5 h-3.5 shrink-0 ring-[5px] ring-white",
+                    isCurrent ? "bg-brand-600" : "bg-neutral-400",
+                  ]}
                   aria-hidden="true"
                 />
-                <Card padding="lg" hoverable={!!entry.href} href={entry.href}>
-                  <div class="flex flex-col sm:flex-row gap-4 sm:gap-6">
-                    <IconBadge Icon={entry.Icon} variant="brand" size="md" class="shrink-0" />
-                    <div class="flex-1">
-                      <h3 class="text-lg sm:text-xl font-bold text-neutral-900 mb-1 group-hover:text-brand-700">{entry.title}</h3>
-                      <p class="text-sm sm:text-base text-neutral-600 font-medium mb-3">{entry.org}</p>
-                      <p class="text-sm sm:text-base text-neutral-700 leading-relaxed">
-                        {entry.body}
-                      </p>
-                      {entry.tech && (
-                        <div class="mt-4">
-                          <TechChips tech={entry.tech} size="sm" linked={!entry.href} />
-                        </div>
-                      )}
-                      {entry.href && (
-                        <div class="flex items-center text-sm font-semibold text-brand-700 group-hover:text-brand-800 mt-4 pt-4 border-t border-neutral-100">
+                {!isLast && <div class="w-0.5 flex-1 bg-neutral-200" aria-hidden="true" />}
+              </div>
+              <div class:list={["flex-1 min-w-0", !isLast && "pb-6 sm:pb-8"]}>
+                <Card padding="none" class="overflow-hidden">
+                  <div
+                    class:list={[
+                      "flex flex-wrap items-center justify-between gap-x-3 gap-y-2 px-6 sm:px-8 py-4 sm:py-5",
+                      isCurrent ? "bg-brand-gradient" : "bg-neutral-900",
+                    ]}
+                  >
+                    <div class="flex items-center gap-3 text-neutral-0 min-w-0">
+                      <span class="flex items-center justify-center w-8 h-8 sm:w-9 sm:h-9 bg-white/10 border border-white/20 shrink-0">
+                        <entry.Icon className="w-4 h-4 sm:w-4.5 sm:h-4.5" weight="bold" />
+                      </span>
+                      <span class="font-mono text-sm sm:text-base tracking-tight">{dateLabel}</span>
+                    </div>
+                    {isCurrent && (
+                      <span class="inline-flex items-center gap-1.5 text-[11px] sm:text-xs font-semibold uppercase tracking-wider text-neutral-0 bg-white/15 border border-white/25 px-2.5 py-1.5 shrink-0">
+                        <span class="w-1.5 h-1.5 bg-neutral-0" aria-hidden="true" />
+                        Current
+                      </span>
+                    )}
+                  </div>
+                  <div class="px-6 sm:px-8 py-6 sm:py-8">
+                    <h3 class="text-xl sm:text-2xl font-bold text-neutral-900 mb-1 tracking-tight">{entry.title}</h3>
+                    <p class="text-sm sm:text-base text-neutral-600 font-medium mb-4">{entry.org}</p>
+                    <p class="text-sm sm:text-base text-neutral-700 leading-relaxed">
+                      {entry.body}
+                    </p>
+                    {entry.tech && (
+                      <div class="mt-5">
+                        <TechChips tech={entry.tech} size="sm" />
+                      </div>
+                    )}
+                    {entry.href && (
+                      <div class="mt-5 pt-5 border-t border-neutral-100">
+                        <a
+                          href={entry.href}
+                          class="inline-flex items-center text-sm font-semibold text-brand-700 hover:text-brand-800"
+                        >
                           <span>{entry.ctaLabel}</span>
                           <ArrowRightIcon className="w-4 h-4 ml-1.5" />
-                        </div>
-                      )}
-                    </div>
+                        </a>
+                      </div>
+                    )}
                   </div>
                 </Card>
               </div>
             </div>
-          ))}
-        </div>
+          );
+        })}
       </div>
     </section>
 
@@ -121,28 +134,8 @@ const cloudJourney = [
         subtitle="Markers of where I've been learning, across software development and cloud. Currently shipping projects on Google Cloud, learning AWS, and using my FinOps cert as a financial lens on how I architect."
       />
 
-      <Card padding="lg" class="mb-12 sm:mb-16">
-        <div class="flex flex-col md:flex-row items-start md:items-center gap-6">
-          <IconBadge Icon={ChartLineUpIcon} variant="brand" size="lg" />
-          <div class="flex-1">
-            <StatusPill variant="brand" Icon={StarIcon} class="mb-3">
-              Currently focused on
-            </StatusPill>
-            <h3 class="text-2xl sm:text-3xl font-bold text-neutral-900 mb-3">
-              Growing my <span class="text-brand-gradient">cloud &amp; software dev</span> skills
-            </h3>
-            <p class="text-base sm:text-lg text-neutral-700 leading-relaxed">
-              I'm actively working on my cloud and software development skills,
-              building projects on Google Cloud, learning AWS in parallel, and
-              using the FinOps cert to think about cost and architecture together.
-              These certifications mark where I am on that journey, not a finish line.
-            </p>
-          </div>
-        </div>
-      </Card>
-
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-10 mb-16 sm:mb-20">
-        {certifications.map((cert) => (
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-10">
+        {certifications.filter((cert) => !cert.status).map((cert) => (
           <Card
             padding="none"
             class="relative flex flex-col overflow-hidden"
@@ -224,69 +217,28 @@ const cloudJourney = [
         ))}
       </div>
 
-      <div>
-        <SectionHeader
-          prefix="My"
-          accent="Cloud Journey"
-          subtitle="Currently shipping on Google Cloud while actively learning AWS, building toward multi-cloud fluency."
-        />
-
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
-          {cloudJourney.map((entry) => (
-            <Card padding="none" class="relative flex flex-col overflow-hidden">
-              <div class="absolute top-4 right-4 z-10">
-                <StatusPill variant={entry.statusVariant} Icon={entry.statusIcon}>
-                  {entry.statusLabel}
-                </StatusPill>
+      {certifications.filter((cert) => cert.status).map((cert) => (
+        <Card padding="lg" class="mt-8 sm:mt-10">
+          <div class="flex flex-col sm:flex-row items-start sm:items-center gap-6">
+            <IconBadge Icon={cert.Icon} variant={cert.accent} size="lg" class="shrink-0" />
+            <div class="flex-1">
+              <StatusPill variant={cert.status!.variant} Icon={cert.status!.Icon} class="mb-3">
+                {cert.status!.label}
+              </StatusPill>
+              <h3 class="text-xl sm:text-2xl font-bold text-neutral-900 mb-2">{cert.title}</h3>
+              <p class="text-sm sm:text-base text-neutral-700 leading-relaxed mb-4">
+                {cert.summary}
+              </p>
+              <div class="flex flex-wrap gap-2">
+                {cert.focusAreas.map((area) => (
+                  <Chip variant={cert.chipVariant}>{area}</Chip>
+                ))}
               </div>
-
-              <div class="relative px-6 sm:px-8 pt-8 sm:pt-10 pb-4 flex items-center justify-center">
-                <div class:list={[
-                  "absolute inset-0 blur-2xl",
-                  entry.iconVariant === "brand" ? "bg-brand-100/40" : "bg-warning-100/40",
-                ]} />
-                <IconBadge Icon={entry.Icon} variant={entry.iconVariant} size="xl" class="relative shadow-lg" />
-              </div>
-
-              <div class="px-6 sm:px-8 pb-6 sm:pb-8 flex-1 flex flex-col text-center">
-                <h3 class="text-xl sm:text-2xl font-bold text-neutral-900 mb-2">{entry.title}</h3>
-                <p class="text-sm sm:text-base text-neutral-600 font-medium mb-4">{entry.role}</p>
-                <p class="text-sm sm:text-base text-neutral-700 leading-relaxed mb-5">{entry.body}</p>
-                <div class="flex flex-wrap justify-center gap-2 mt-auto">
-                  {entry.chips.map((chip) => (
-                    <Chip variant={entry.chipVariant}>{chip}</Chip>
-                  ))}
-                </div>
-              </div>
-            </Card>
-          ))}
-        </div>
-      </div>
-    </section>
-
-    <div class="mb-16 sm:mb-20">
-      <div class="text-center mb-8 sm:mb-10">
-        <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-neutral-900 mb-3">
-          More in this section
-        </h2>
-        <div class="w-24 h-1 bg-brand-gradient mx-auto"></div>
-      </div>
-      <div class="max-w-md mx-auto">
-        <Card hoverable href="/bio/resume" class="flex flex-col">
-          <IconBadge Icon={FileTextIcon} variant="brand" size="md" class="mb-4" />
-          <h3 class="text-lg sm:text-xl font-bold text-neutral-900 mb-2 group-hover:text-brand-700">
-            Resume / CV
-          </h3>
-          <p class="text-sm sm:text-base text-neutral-600 mb-4 flex-1 leading-relaxed">
-            Quick on-page summary and a downloadable PDF.
-          </p>
-          <div class="flex items-center text-sm font-semibold text-brand-700 group-hover:text-brand-800">
-            <span>Visit</span>
-            <ArrowRightIcon className="w-4 h-4 ml-1.5" />
+            </div>
           </div>
         </Card>
-      </div>
-    </div>
+      ))}
+    </section>
 
     <BioSubnav current="about" />
   </PageSection>
