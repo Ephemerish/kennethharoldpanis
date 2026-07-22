@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ImageViewer } from "./ImageViewer";
+import { ImageViewer } from "../../../components";
 
 interface GalleryProps {
   images: string[];

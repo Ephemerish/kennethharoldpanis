@@ -10,7 +10,7 @@ import {
   CertificateIcon,
 } from "@phosphor-icons/react";
 import type { Icon } from "@phosphor-icons/react";
-import { cn } from "../lib/utils";
+import { cn } from "../../lib/utils";
 import {
   $searchIndex,
   $popular,
@@ -18,7 +18,7 @@ import {
   type ItemType,
   type SearchItem,
   type PopularResponse,
-} from "../lib/stores/api";
+} from "../../lib/stores/api";
 
 const TYPE_META: Record<ItemType, { label: string; Icon: Icon }> = {
   project: { label: "Project", Icon: RocketLaunchIcon },

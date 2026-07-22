@@ -11,9 +11,9 @@
  * styling. Kind-specific bits (status vs read-time, description, links) are
  * the only differences. Change the look here once and everything follows.
  */
-import { formatDate, calculateReadTime } from "../utils";
+import { formatDate, calculateReadTime } from "../../utils";
 import type { CollectionEntry } from "astro:content";
-import { getTagLabel } from "../data/tags";
+import { getTagLabel } from "../../data/tags";
 import Cover from "./Cover.astro";
 import Tags from "./Tags.astro";
 import {

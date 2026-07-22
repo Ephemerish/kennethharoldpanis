@@ -1,8 +1,7 @@
 ---
 export const prerender = true;
 import Layout from "../../layouts/MainLayout.astro";
-import PageSection from "../../components/PageSection.astro";
-import PageHeader from "../../components/PageHeader.astro";
+import { PageSection, PageHeader } from "../../components";
 import FeaturedProjects from "./_components/FeaturedProjects.astro";
 import ProjectsGrid from "./_components/ProjectsGrid.astro";
 import { getCollection } from "astro:content";

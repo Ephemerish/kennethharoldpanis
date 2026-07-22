@@ -6,7 +6,7 @@ import {
   CaretDownIcon,
 } from "@phosphor-icons/react";
 import Search from "./Search";
-import { apps } from "../data/apps";
+import { apps } from "../../data/apps";
 
 const links = [
   { label: "Home", href: "/" },
