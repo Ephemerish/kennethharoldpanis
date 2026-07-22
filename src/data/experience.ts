@@ -1,7 +1,7 @@
 /**
  * Experience & education timeline, shown on /bio and indexed by search.json.
  *
- * `href`/`ctaLabel` link an entry to the project or blog post it produced;
+ * `href` points search.json at the project or blog post an entry produced;
  * entries with no such artifact (e.g. high school) are left unlinked.
  */
 import { BriefcaseIcon, GraduationCapIcon } from "@phosphor-icons/react";
@@ -16,7 +16,6 @@ export type TimelineEntry = {
   tech?: string[];
   Icon: Icon;
   href?: string;
-  ctaLabel?: string;
 };
 
 export const timeline: TimelineEntry[] = [
@@ -29,7 +28,6 @@ export const timeline: TimelineEntry[] = [
     tech: ["React", "TypeScript", "Module Federation", "Nx", "Zustand"],
     Icon: BriefcaseIcon,
     href: "/blogs/micro-frontends-experience-ripplev2",
-    ctaLabel: "Read post",
   },
   {
     title: "BS Computer Engineering",
@@ -40,7 +38,6 @@ export const timeline: TimelineEntry[] = [
     tech: ["Arduino", "LoRa", "IoT", "Flutter", "Firebase", "Raspberry Pi"],
     Icon: GraduationCapIcon,
     href: "/projects/marine-communication-network",
-    ctaLabel: "View project",
   },
   {
     title: "CSS-ICT",

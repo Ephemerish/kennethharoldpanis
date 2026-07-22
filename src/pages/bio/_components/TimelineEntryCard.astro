@@ -1,6 +1,5 @@
 ---
 import { Card, TechChips } from "@/components";
-import { ArrowRightIcon } from "@phosphor-icons/react";
 import type { TimelineEntry } from "@/data/experience";
 
 interface Props {
@@ -41,17 +40,6 @@ const dateLabel = isCurrent ? `${entry.start} – Current` : `${entry.start} –
     {entry.tech && (
       <div class="mt-5">
         <TechChips tech={entry.tech} size="sm" />
-      </div>
-    )}
-    {entry.href && (
-      <div class="mt-5 pt-5 border-t border-neutral-100">
-        <a
-          href={entry.href}
-          class="inline-flex items-center text-sm font-semibold text-brand-700 hover:text-brand-800"
-        >
-          <span>{entry.ctaLabel}</span>
-          <ArrowRightIcon className="w-4 h-4 ml-1.5" />
-        </a>
       </div>
     )}
   </div>

@@ -41,7 +41,6 @@ export const certifications: Certification[] = [
     Icon: ChartLineUpIcon,
     accent: "brand",
     chipVariant: "brand",
-    highlighted: true,
   },
   {
     title: "Google Associate Cloud Engineer",
@@ -60,6 +59,7 @@ export const certifications: Certification[] = [
     Icon: CloudIcon,
     accent: "dark",
     chipVariant: "neutral",
+    highlighted: true,
   },
   {
     title: "AWS Solutions Architect",
@@ -70,6 +70,7 @@ export const certifications: Certification[] = [
     Icon: BookOpenIcon,
     accent: "dark",
     chipVariant: "neutral",
+    highlighted: true,
     status: { label: "In progress", variant: "warning", Icon: HourglassIcon },
   },
 ];
