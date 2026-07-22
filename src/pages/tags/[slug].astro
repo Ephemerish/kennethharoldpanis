@@ -1,7 +1,7 @@
 ---
 export const prerender = true;
 import MainLayout from "../../layouts/MainLayout.astro";
-import EntryCard from "../../components/EntryCard.astro";
+import EntryCollectionGrid from "../../components/EntryCollectionGrid.astro";
 import PageSection from "../../components/PageSection.astro";
 import PageHeader from "../../components/PageHeader.astro";
 import { getCollection } from "astro:content";
@@ -57,20 +57,6 @@ const count = `${sorted.length} ${sorted.length === 1 ? "entry" : "entries"}`;
       size="md"
     />
 
-    <div class="grid grid-cols-1 gap-8 sm:gap-10 sm:grid-cols-2 lg:grid-cols-3">
-      {sorted.map(({ entry, kind }) => (
-        <EntryCard entry={entry} kind={kind} />
-      ))}
-    </div>
-
-    <div class="mt-12 sm:mt-16 text-center">
-      <button
-        type="button"
-        onclick="window.dispatchEvent(new CustomEvent('open-search'))"
-        class="text-brand-700 hover:text-brand-800 font-medium"
-      >
-        Search for something else
-      </button>
-    </div>
+    <EntryCollectionGrid entries={sorted} />
   </PageSection>
 </MainLayout>

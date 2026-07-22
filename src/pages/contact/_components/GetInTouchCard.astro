@@ -1,0 +1,53 @@
+---
+import Card from "../../../components/Card.astro";
+import EmailLink from "../../../components/EmailLink.astro";
+import { EnvelopeIcon, MapPinIcon, ClockIcon } from "@phosphor-icons/react";
+
+const contactInfo = [
+  {
+    Icon: EnvelopeIcon,
+    title: "Email",
+    email: "kennethpanis24@gmail.com",
+  },
+  {
+    Icon: MapPinIcon,
+    title: "Location",
+    body: "Philippines",
+  },
+  {
+    Icon: ClockIcon,
+    title: "Response Time",
+    body: "Usually within 24 hours",
+    subtext: "Monday to Friday, 9 AM - 6 PM PHT",
+  },
+];
+---
+
+<Card variant="floating">
+  <h2 class="text-xl sm:text-2xl font-bold text-neutral-900 mb-4 sm:mb-6">Get in touch</h2>
+
+  <div class="space-y-4 sm:space-y-6">
+    {contactInfo.map((info) => (
+      <div class="flex items-start gap-3 sm:gap-4">
+        <div class="w-10 h-10 sm:w-12 sm:h-12 bg-brand-100 flex items-center justify-center shrink-0">
+          <info.Icon className="w-5 h-5 sm:w-6 sm:h-6 text-brand-700" />
+        </div>
+        <div>
+          <h3 class="font-semibold text-neutral-900 text-sm sm:text-base">{info.title}</h3>
+          {info.email ? (
+            <EmailLink
+              address={info.email}
+              class="text-brand-600 hover:text-brand-700 text-sm sm:text-base break-all"
+              showAddress
+            />
+          ) : (
+            <p class="text-neutral-600 text-sm sm:text-base">{info.body}</p>
+          )}
+          {info.subtext && (
+            <p class="text-xs sm:text-sm text-neutral-500">{info.subtext}</p>
+          )}
+        </div>
+      </div>
+    ))}
+  </div>
+</Card>

@@ -1,0 +1,29 @@
+---
+import Card from "../../../components/Card.astro";
+import IconBadge from "../../../components/IconBadge.astro";
+import ButtonLink from "../../../components/ButtonLink.astro";
+import { ArrowRightIcon, HourglassIcon } from "@phosphor-icons/react";
+---
+
+<Card padding="lg" class="text-center">
+  <div class="flex justify-center mb-6">
+    <IconBadge Icon={HourglassIcon} variant="warning" size="lg" />
+  </div>
+  <h2 class="text-2xl sm:text-3xl font-bold text-neutral-900 mb-4">
+    Resume coming soon
+  </h2>
+  <p class="text-base sm:text-lg text-neutral-700 leading-relaxed mb-6">
+    I'm putting the latest version together. Once it's ready, drop the
+    PDF at <code class="text-sm bg-neutral-100 px-2 py-0.5">public/resume/kenneth-harold-panis-resume.pdf</code>
+    and flip <code class="text-sm bg-neutral-100 px-2 py-0.5">resumeAvailable</code> to <code class="text-sm bg-neutral-100 px-2 py-0.5">true</code> in this file.
+  </p>
+  <div class="flex flex-col sm:flex-row gap-3 justify-center">
+    <ButtonLink href="/contact" variant="gradient" size="lg" class="text-base sm:text-lg font-semibold">
+      Get In Touch
+      <ArrowRightIcon className="ml-3 w-5 h-5" />
+    </ButtonLink>
+    <ButtonLink href="/bio" variant="outlineBrand" size="lg" class="text-base sm:text-lg font-semibold">
+      Back to Bio
+    </ButtonLink>
+  </div>
+</Card>

@@ -1,0 +1,19 @@
+---
+import Gallery from "../../../components/Gallery.tsx";
+import ProjectDetails from "../../../components/ProjectDetails.astro";
+import type { CollectionEntry } from "astro:content";
+
+interface Props {
+  data: CollectionEntry<"projects">["data"];
+  galleryImages: string[];
+}
+
+const { data, galleryImages } = Astro.props;
+---
+
+<div class="space-y-8">
+  {galleryImages.length > 0 && (
+    <Gallery client:visible images={galleryImages} alt={data.title} />
+  )}
+  <ProjectDetails data={data} />
+</div>

@@ -1,0 +1,38 @@
+---
+export const prerender = true;
+import Layout from "../../layouts/MainLayout.astro";
+import { Toaster } from "../../components/ui/sonner";
+import PageSection from "../../components/PageSection.astro";
+import PageHeader from "../../components/PageHeader.astro";
+import ContactForm from "./_components/ContactForm.astro";
+import ContactSidebar from "./_components/ContactSidebar.astro";
+---
+
+<Layout
+  title="Contact - Kenneth Harold Panis"
+  description="Get in touch with Kenneth Harold Panis for collaboration, job opportunities, or project inquiries. Let's build something amazing together."
+  image="/images/me/me.jpg"
+  type="website"
+>
+  <PageSection variant="hero">
+    <PageHeader
+      prefix="Let's"
+      accent="Connect"
+      subtitle="I'm always interested in discussing new opportunities, collaborations, or just having a conversation about technology and development."
+    />
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 sm:gap-16 lg:gap-20">
+      <ContactForm />
+      <ContactSidebar />
+    </div>
+  </PageSection>
+
+  <Toaster
+    client:idle
+    position="top-right"
+    richColors
+    closeButton
+    expand={false}
+    visibleToasts={3}
+  />
+</Layout>

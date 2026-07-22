@@ -1,0 +1,27 @@
+---
+import MainLayout from "../../../layouts/MainLayout.astro";
+import { ArrowLeftIcon } from "@phosphor-icons/react";
+---
+
+<MainLayout title="Blog Post">
+  <section class="bg-white text-neutral-900 relative overflow-hidden">
+    <div class="absolute inset-0">
+      <div class="max-w-7xl mx-auto h-full px-4 sm:px-6 lg:px-8">
+        <div class="bg-neutral-0 border-l border-r border-neutral-200 h-full"></div>
+      </div>
+    </div>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 relative">
+      <div class="px-4 sm:px-6 lg:px-8 text-center">
+        <h2 class="text-2xl font-bold text-gray-900 mb-4">Article not found</h2>
+        <p class="text-gray-600 mb-8">The blog post you are looking for does not exist.</p>
+        <a
+          href="/blogs"
+          class="inline-flex items-center gap-2 px-6 py-3 bg-black text-white hover:bg-gray-800 "
+        >
+          <ArrowLeftIcon className="w-4 h-4" />
+          Back to all posts
+        </a>
+      </div>
+    </div>
+  </section>
+</MainLayout>

@@ -1,11 +1,11 @@
 ---
 export const prerender = true;
 import MainLayout from "../../layouts/MainLayout.astro";
-import EntryCard from "../../components/EntryCard.astro";
 import Pagination from "../../components/Pagination.astro";
 import PageSection from "../../components/PageSection.astro";
 import PageHeader from "../../components/PageHeader.astro";
-import { FileTextIcon as DocumentTextIcon } from "@phosphor-icons/react";
+import BlogsGrid from "./_components/BlogsGrid.astro";
+import EmptyBlogsState from "./_components/EmptyBlogsState.astro";
 import { getCollection } from "astro:content";
 import type { CollectionEntry } from "astro:content";
 import { BLOGS_PER_PAGE } from "../../constants";
@@ -40,20 +40,10 @@ const blogsForPage: CollectionEntry<"blog">[] = allBlogs.slice(
       subtitle="Thoughts, tutorials, and insights from my journey in technology and development."
     />
 
-    <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-8 sm:gap-10">
-      {blogsForPage.map((blog) => (
-        <EntryCard entry={blog} kind="blog" />
-      ))}
-    </div>
-
-    {allBlogs.length === 0 && (
-      <div class="text-center py-12 sm:py-16 px-4">
-        <div class="text-neutral-600 mb-4">
-          <DocumentTextIcon className="w-12 h-12 sm:w-16 sm:h-16 mx-auto" />
-        </div>
-        <h3 class="text-lg sm:text-xl font-medium text-neutral-900 mb-2">No blog posts yet</h3>
-        <p class="text-neutral-600 text-sm sm:text-base">Check back soon for new content!</p>
-      </div>
+    {allBlogs.length === 0 ? (
+      <EmptyBlogsState />
+    ) : (
+      <BlogsGrid blogs={blogsForPage} />
     )}
 
     {totalPages > 1 && (

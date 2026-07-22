@@ -1,0 +1,33 @@
+---
+import Card from "../../../components/Card.astro";
+import IconBadge from "../../../components/IconBadge.astro";
+import StatusPill from "../../../components/StatusPill.astro";
+import Chip from "../../../components/Chip.astro";
+import type { Certification } from "../../../data/certifications";
+
+interface Props {
+  cert: Certification & { status: NonNullable<Certification["status"]> };
+}
+
+const { cert } = Astro.props;
+---
+
+<Card padding="lg" class="mt-8 sm:mt-10">
+  <div class="flex flex-col sm:flex-row items-start sm:items-center gap-6">
+    <IconBadge Icon={cert.Icon} variant={cert.accent} size="lg" class="shrink-0" />
+    <div class="flex-1">
+      <StatusPill variant={cert.status.variant} Icon={cert.status.Icon} class="mb-3">
+        {cert.status.label}
+      </StatusPill>
+      <h3 class="text-xl sm:text-2xl font-bold text-neutral-900 mb-2">{cert.title}</h3>
+      <p class="text-sm sm:text-base text-neutral-700 leading-relaxed mb-4">
+        {cert.summary}
+      </p>
+      <div class="flex flex-wrap gap-2">
+        {cert.focusAreas.map((area) => (
+          <Chip variant={cert.chipVariant}>{area}</Chip>
+        ))}
+      </div>
+    </div>
+  </div>
+</Card>

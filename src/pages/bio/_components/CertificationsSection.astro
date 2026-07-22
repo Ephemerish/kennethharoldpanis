@@ -1,0 +1,24 @@
+---
+import SectionHeader from "../../../components/SectionHeader.astro";
+import CertificationCard from "./CertificationCard.astro";
+import InProgressCertificationCard from "./InProgressCertificationCard.astro";
+import { certifications } from "../../../data/certifications";
+---
+
+<section class="mb-16 sm:mb-20">
+  <SectionHeader
+    prefix="My"
+    accent="Certifications"
+    subtitle="Markers of where I've been learning, across software development and cloud. Currently shipping projects on Google Cloud, learning AWS, and using my FinOps cert as a financial lens on how I architect."
+  />
+
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-10">
+    {certifications.filter((cert) => !cert.status).map((cert) => (
+      <CertificationCard cert={cert} />
+    ))}
+  </div>
+
+  {certifications.filter((cert) => cert.status).map((cert) => (
+    <InProgressCertificationCard cert={cert as typeof cert & { status: NonNullable<typeof cert.status> }} />
+  ))}
+</section>
