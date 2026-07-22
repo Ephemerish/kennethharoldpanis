@@ -1,7 +1,6 @@
 ---
 export const prerender = true;
 import Layout from "../../layouts/MainLayout.astro";
-import BioSubnav from "../../components/BioSubnav.astro";
 import PageSection from "../../components/PageSection.astro";
 import ExperienceSection from "./_components/ExperienceSection.astro";
 import CertificationsSection from "./_components/CertificationsSection.astro";
@@ -16,6 +15,5 @@ import CertificationsSection from "./_components/CertificationsSection.astro";
   <PageSection variant="hero">
     <ExperienceSection />
     <CertificationsSection />
-    <BioSubnav current="about" />
   </PageSection>
 </Layout>

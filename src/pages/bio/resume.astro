@@ -1,15 +1,11 @@
 ---
 export const prerender = true;
 import Layout from "../../layouts/MainLayout.astro";
-import BioSubnav from "../../components/BioSubnav.astro";
 import PageSection from "../../components/PageSection.astro";
 import PageHeader from "../../components/PageHeader.astro";
 import ResumeAvailable from "./_components/ResumeAvailable.astro";
 import ResumeComingSoon from "./_components/ResumeComingSoon.astro";
-
-// Drop the PDF at public/resume/kenneth-harold-panis-resume.pdf when ready.
-const resumePdfPath = "/resume/kenneth-harold-panis-resume.pdf";
-const resumeAvailable = false;
+import { resumeAvailable, resumePdfPath } from "../../data/resume";
 ---
 
 <Layout
@@ -28,7 +24,5 @@ const resumeAvailable = false;
         <ResumeComingSoon />
       )}
     </div>
-
-    <BioSubnav current="resume" />
   </PageSection>
 </Layout>
