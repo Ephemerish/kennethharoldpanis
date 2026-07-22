@@ -1,9 +1,9 @@
 import type { APIRoute } from "astro";
 import { getCollection } from "astro:content";
-import { getTagBySlug } from "../data/tags";
-import { getTechBySlug, techSlug } from "../data/technologies";
-import { timeline } from "../data/experience";
-import { certifications } from "../data/certifications";
+import { getTagBySlug } from "@/data/tags";
+import { getTechBySlug, techSlug } from "@/data/technologies";
+import { timeline } from "@/data/experience";
+import { certifications } from "@/data/certifications";
 
 export const prerender = true;
 

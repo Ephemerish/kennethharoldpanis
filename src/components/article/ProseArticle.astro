@@ -6,8 +6,8 @@
  * Prose pipeline. This is the behaviour every blog post had before engines
  * existed, extracted so the slug page can dispatch by engine.
  */
-import ArticleLayout from "../../layouts/ArticleLayout.astro";
-import { calculateReadTime } from "../../utils";
+import ArticleLayout from "@/layouts/ArticleLayout.astro";
+import { calculateReadTime } from "@/lib/utils";
 import type { CollectionEntry } from "astro:content";
 
 interface Props {

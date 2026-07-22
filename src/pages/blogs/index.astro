@@ -1,13 +1,13 @@
 ---
 export const prerender = true;
-import MainLayout from "../../layouts/MainLayout.astro";
-import { PageSection, PageHeader } from "../../components";
+import MainLayout from "@/layouts/MainLayout.astro";
+import { PageSection, PageHeader } from "@/components";
 import Pagination from "./_components/Pagination.astro";
 import BlogsGrid from "./_components/BlogsGrid.astro";
 import EmptyBlogsState from "./_components/EmptyBlogsState.astro";
 import { getCollection } from "astro:content";
 import type { CollectionEntry } from "astro:content";
-import { BLOGS_PER_PAGE } from "../../constants";
+import { BLOGS_PER_PAGE } from "@/constants";
 
 const currentPage: number = +Astro.url.searchParams.get("page")! || 1;
 

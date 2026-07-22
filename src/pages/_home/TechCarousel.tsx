@@ -1,7 +1,7 @@
 import React from 'react';
 import useEmblaCarousel from 'embla-carousel-react';
 import AutoScroll from 'embla-carousel-auto-scroll';
-import { technologies, techSlug } from '../../data/technologies';
+import { technologies, techSlug } from '@/data/technologies';
 
 interface TechCarouselProps {
   categoryFilter?: string;

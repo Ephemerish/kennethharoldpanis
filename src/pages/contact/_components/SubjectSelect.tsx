@@ -5,7 +5,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '../../../components';
+} from '@/components';
 
 interface SubjectSelectProps {
   name?: string;
