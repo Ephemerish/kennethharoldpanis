@@ -14,6 +14,12 @@ export interface App {
 
 export const apps: App[] = [
   {
+    name: "Pidada",
+    tagline: "Shared focus and planning app",
+    logoPath: "/images/pidada/logo.svg",
+    url: "https://pidada.kennethharoldpanis.com/",
+  },
+  {
     name: "Pundo",
     tagline: "Personal budgeting app",
     logoPath: "/images/pundo/logo.svg",

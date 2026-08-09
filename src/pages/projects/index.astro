@@ -12,10 +12,9 @@ const allProjects: CollectionEntry<"projects">[] = (
 ).sort((a, b) => {
   if (a.data.featured && !b.data.featured) return -1;
   if (!a.data.featured && b.data.featured) return 1;
-  const statusPriority = { completed: 0, "in-progress": 1, planned: 2 };
-  const statusDiff = statusPriority[a.data.status] - statusPriority[b.data.status];
-  if (statusDiff !== 0) return statusDiff;
-  return b.data.startDate.valueOf() - a.data.startDate.valueOf();
+  const aDate = a.data.endDate ?? a.data.startDate;
+  const bDate = b.data.endDate ?? b.data.startDate;
+  return bDate.valueOf() - aDate.valueOf();
 });
 
 const featuredProjects = allProjects.filter((project) => project.data.featured);

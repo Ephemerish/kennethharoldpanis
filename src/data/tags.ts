@@ -22,6 +22,7 @@ export const tags: Tag[] = [
   // Domain — subject area / industry
   { slug: "maritime-safety", label: "Maritime Safety", group: "domain" },
   { slug: "fintech", label: "Fintech", group: "domain" },
+  { slug: "productivity", label: "Productivity", group: "domain" },
 
   // Type — what kind of thing it is
   { slug: "web-app", label: "Web App", group: "type" },
@@ -44,6 +45,8 @@ export const tags: Tag[] = [
   { slug: "micro-frontends", label: "Micro Frontends", group: "topic" },
   { slug: "architecture", label: "Architecture", group: "topic" },
   { slug: "performance", label: "Performance", group: "topic" },
+  { slug: "focus", label: "Focus", group: "topic" },
+  { slug: "collaboration", label: "Collaboration", group: "topic" },
 ];
 
 const bySlug = new Map(tags.map((tag) => [tag.slug, tag]));
