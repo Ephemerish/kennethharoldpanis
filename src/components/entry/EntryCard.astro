@@ -20,7 +20,6 @@ import {
   CalendarBlankIcon as CalendarIcon,
   ClockIcon,
   ArrowRightIcon,
-  ArrowSquareOutIcon as ArrowTopRightOnSquareIcon,
   GithubLogoIcon as GithubIcon,
   StarIcon,
   RocketLaunchIcon,
@@ -179,23 +178,12 @@ const kindLabel = isBlog ? "Latest post" : "Latest project";
           </p>
         )}
 
-        {project && (project.links?.live || project.links?.code) && (
+        {project?.links?.code && (
           <div class="flex gap-3 mb-4 text-sm">
-            {project.links?.live && (
-              <a href={project.links.live} target="_blank" rel="noopener noreferrer" class="text-brand-700 hover:text-brand-800 font-semibold flex items-center gap-1.5" onclick="event.stopPropagation()">
-                <span class="relative flex h-2 w-2" aria-hidden="true">
-                  <span class="absolute inline-flex h-full w-full bg-brand-500 opacity-75 "></span>
-                  <span class="relative inline-flex h-2 w-2 bg-brand-600"></span>
-                </span>
-                Live Site
-              </a>
-            )}
-            {project.links?.code && (
-              <a href={project.links.code} target="_blank" rel="noopener noreferrer" class="text-neutral-600 hover:text-neutral-800 font-medium flex items-center gap-1" onclick="event.stopPropagation()">
-                <GithubIcon className="w-3.5 h-3.5" />
-                Code
-              </a>
-            )}
+            <a href={project.links.code} target="_blank" rel="noopener noreferrer" class="text-neutral-600 hover:text-neutral-800 font-medium flex items-center gap-1" onclick="event.stopPropagation()">
+              <GithubIcon className="w-3.5 h-3.5" />
+              Code
+            </a>
           </div>
         )}
 
