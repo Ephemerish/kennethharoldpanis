@@ -8,7 +8,7 @@ import { nanoquery } from "@nanostores/query";
  * cache logic per call site.
  */
 
-export type ItemType = "project" | "blog" | "tag" | "tech";
+export type ItemType = "project" | "blog" | "tag" | "tech" | "experience" | "certification";
 
 export interface SearchItem {
   type: ItemType;

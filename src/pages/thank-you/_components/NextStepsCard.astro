@@ -1,0 +1,33 @@
+---
+const steps = [
+  {
+    title: "Message Review",
+    body: "I'll carefully review your message and any project details you've shared.",
+  },
+  {
+    title: "Personal Response",
+    body: "You'll receive a personalized response addressing your specific needs and questions.",
+  },
+  {
+    title: "Next Steps",
+    body: "If it's a good fit, we'll schedule a call to discuss your project in detail.",
+  },
+];
+---
+
+<div class="bg-neutral-0 shadow-lg p-6 sm:p-8 mb-6 sm:mb-8 border border-neutral-300">
+  <h2 class="text-xl sm:text-2xl font-semibold text-neutral-900 mb-3 sm:mb-4">What happens next?</h2>
+  <div class="space-y-3 sm:space-y-4 text-left">
+    {steps.map((step, i) => (
+      <div class="flex items-start gap-3 sm:gap-4">
+        <div class="w-7 h-7 sm:w-8 sm:h-8 bg-neutral-100 flex items-center justify-center shrink-0 mt-1">
+          <span class="text-xs sm:text-sm font-bold text-neutral-900">{i + 1}</span>
+        </div>
+        <div>
+          <h3 class="font-medium text-neutral-900 text-sm sm:text-base">{step.title}</h3>
+          <p class="text-neutral-600 text-xs sm:text-sm">{step.body}</p>
+        </div>
+      </div>
+    ))}
+  </div>
+</div>

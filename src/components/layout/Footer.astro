@@ -1,0 +1,66 @@
+---
+import { EmailLink, GitHubIcon, LinkedInIcon } from "../common";
+---
+
+<footer class="bg-white text-neutral-900 relative overflow-hidden border-t border-neutral-200">
+  <div class="absolute inset-0">
+    <div class="max-w-7xl mx-auto h-full px-4 sm:px-6 lg:px-8">
+      <div class="bg-neutral-0 border-l border-r border-neutral-200 h-full"></div>
+    </div>
+  </div>
+  
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 relative">
+    <div class="px-4 sm:px-6 lg:px-8">
+      <!-- Compact Footer Layout -->
+      <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+        <!-- Left: Name -->
+        <div>
+          <h3 class="text-lg font-bold text-brand-gradient whitespace-nowrap">Kenneth Harold Panis</h3>
+        </div>
+
+        <!-- Right: Social Icons and Contact Button -->
+        <div class="flex items-center gap-4">
+          <div class="flex items-center gap-3">
+            <a
+              href="https://github.com/Ephemerish"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="text-neutral-400 hover:text-brand-600 "
+              aria-label="GitHub"
+            >
+              <GitHubIcon class="w-5 h-5" />
+            </a>
+            <a
+              href="https://linkedin.com/in/kenneth-harold-panis"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="text-neutral-400 hover:text-brand-600 "
+              aria-label="LinkedIn"
+            >
+              <LinkedInIcon class="w-5 h-5" />
+            </a>
+            <EmailLink
+              address="kennethpanis24@gmail.com"
+              class="text-neutral-400 hover:text-brand-600 "
+              ariaLabel="Email"
+            >
+              <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+              </svg>
+            </EmailLink>
+          </div>
+          
+          <a
+            href="/contact"
+            class="inline-flex items-center gap-2 bg-brand-600 hover:bg-brand-700 text-white font-medium py-2 px-4  text-sm"
+          >
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+            </svg>
+            Get in Touch
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>

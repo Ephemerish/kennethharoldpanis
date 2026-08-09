@@ -1,0 +1,57 @@
+---
+import { PageSection, SectionHeader, EntryCard, ButtonLink } from "@/components";
+import { ArrowRightIcon } from "@phosphor-icons/react";
+import { HOMEPAGE_PROJECTS_LIMIT } from "@/constants";
+import { getCollection } from "astro:content";
+import type { CollectionEntry } from "astro:content";
+
+const allProjects: CollectionEntry<"projects">[] = (
+  await getCollection("projects")
+).sort((a, b) => {
+  if (a.data.featured && !b.data.featured) return -1;
+  if (!a.data.featured && b.data.featured) return 1;
+  const aDate = a.data.endDate || a.data.startDate;
+  const bDate = b.data.endDate || b.data.startDate;
+  return bDate.getTime() - aDate.getTime();
+});
+
+const featuredProject = allProjects[0];
+const otherProjects = allProjects.slice(1);
+---
+
+<PageSection variant="hero">
+  <SectionHeader
+    prefix="Featured"
+    accent="Projects"
+    subtitle="Take a look at my recent work and creative solutions that solve real-world problems"
+  />
+
+  {featuredProject && (
+    <div class="mb-12 sm:mb-16">
+      <EntryCard entry={featuredProject} kind="project" variant="featured" />
+    </div>
+  )}
+
+  {otherProjects.length > 0 && (
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 sm:gap-10 mb-8 sm:mb-12">
+      {otherProjects
+        .slice(0, HOMEPAGE_PROJECTS_LIMIT - 1)
+        .map((project: CollectionEntry<"projects">) => (
+          <EntryCard entry={project} kind="project" />
+        ))
+      }
+    </div>
+  )}
+
+  <div class="text-center">
+    <ButtonLink
+      href="/projects"
+      variant="gradient"
+      size="lg"
+      class="text-base sm:text-lg font-semibold"
+    >
+      View All Projects
+      <ArrowRightIcon className="ml-3 w-5 h-5" />
+    </ButtonLink>
+  </div>
+</PageSection>

@@ -1,0 +1,24 @@
+---
+import { Card, Chip } from "@/components";
+
+const stackChips = [
+  "Frontend Development",
+  "React & Next.js",
+  "TypeScript",
+  "Computer Engineering",
+];
+---
+
+<Card variant="brand">
+  <h2 class="text-xl sm:text-2xl font-bold mb-3 sm:mb-4">Ready to work together?</h2>
+  <p class="text-brand-50 mb-4 sm:mb-6 text-sm sm:text-base">
+    Software Engineer with Computer Engineering background. Currently
+    specializing in frontend development while maintaining knowledge
+    across the full technology stack.
+  </p>
+  <div class="flex flex-wrap gap-2">
+    {stackChips.map((chip) => (
+      <Chip variant="white">{chip}</Chip>
+    ))}
+  </div>
+</Card>

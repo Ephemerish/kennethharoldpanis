@@ -1,0 +1,25 @@
+---
+import { getTagLabel } from "@/data/tags";
+
+const { tags } = Astro.props;
+
+interface Props {
+  tags: string[];
+}
+
+// Plain (non-link) chips: this renders inside the card's anchor, so it can't
+// nest links. Clickable tags live on the detail pages and /tags.
+---
+
+<div class="flex flex-wrap">
+  {
+    tags.map((tag: string) => (
+      <span 
+        class="inline-flex items-center px-3 py-1.5 bg-neutral-100 text-neutral-900 text-xs font-medium border border-neutral-200 mr-1 mb-1"
+      >
+        <span class="w-1.5 h-1.5 bg-brand-500 mr-1.5"></span>
+        {getTagLabel(tag)}
+      </span>
+    ))
+  }
+</div>

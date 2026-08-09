@@ -1,0 +1,46 @@
+---
+import { Card, TechChips } from "@/components";
+import type { TimelineEntry } from "@/data/experience";
+
+interface Props {
+  entry: TimelineEntry;
+}
+
+const { entry } = Astro.props;
+const isCurrent = entry.end.toLowerCase() === "current";
+const dateLabel = isCurrent ? `${entry.start} – Current` : `${entry.start} – ${entry.end}`;
+---
+
+<Card padding="none" class="overflow-hidden">
+  <div
+    class:list={[
+      "flex flex-wrap items-center justify-between gap-x-3 gap-y-2 px-6 sm:px-8 py-4 sm:py-5",
+      isCurrent ? "bg-brand-gradient" : "bg-neutral-900",
+    ]}
+  >
+    <div class="flex items-center gap-3 text-neutral-0 min-w-0">
+      <span class="flex items-center justify-center w-8 h-8 sm:w-9 sm:h-9 bg-white/10 border border-white/20 shrink-0">
+        <entry.Icon className="w-4 h-4 sm:w-4.5 sm:h-4.5" weight="bold" />
+      </span>
+      <span class="font-mono text-sm sm:text-base tracking-tight">{dateLabel}</span>
+    </div>
+    {isCurrent && (
+      <span class="inline-flex items-center gap-1.5 text-[11px] sm:text-xs font-semibold uppercase tracking-wider text-neutral-0 bg-white/15 border border-white/25 px-2.5 py-1.5 shrink-0">
+        <span class="w-1.5 h-1.5 bg-neutral-0" aria-hidden="true" />
+        Current
+      </span>
+    )}
+  </div>
+  <div class="px-6 sm:px-8 py-6 sm:py-8">
+    <h3 class="text-xl sm:text-2xl font-bold text-neutral-900 mb-1 tracking-tight">{entry.title}</h3>
+    <p class="text-sm sm:text-base text-neutral-600 font-medium mb-4">{entry.org}</p>
+    <p class="text-sm sm:text-base text-neutral-700 leading-relaxed">
+      {entry.body}
+    </p>
+    {entry.tech && (
+      <div class="mt-5">
+        <TechChips tech={entry.tech} size="sm" />
+      </div>
+    )}
+  </div>
+</Card>

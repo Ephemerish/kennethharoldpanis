@@ -1,0 +1,16 @@
+---
+import { EntryCard } from "@/components";
+import type { CollectionEntry } from "astro:content";
+
+interface Props {
+  blogs: CollectionEntry<"blog">[];
+}
+
+const { blogs } = Astro.props;
+---
+
+<div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-8 sm:gap-10">
+  {blogs.map((blog) => (
+    <EntryCard entry={blog} kind="blog" />
+  ))}
+</div>

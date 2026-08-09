@@ -24,7 +24,9 @@ export default defineConfig({
     defaultStrategy: 'hover',
   },
   redirects: {
-    '/certifications': '/bio/certifications',
+    '/certifications': '/bio',
+    '/bio/certifications': '/bio',
+    '/bio/experience': '/bio',
   },
   server: {
     port: 3000, // Ensure it matches the Docker exposed port
@@ -41,6 +43,11 @@ export default defineConfig({
   },
 
   vite: {
+    // Keep a production build from invalidating modules served by a running
+    // dev server. Both otherwise share node_modules/.vite by default.
+    cacheDir: process.env.NODE_ENV === 'development'
+      ? 'node_modules/.vite-dev'
+      : 'node_modules/.vite-build',
     plugins: [tailwindcss()],
   },
 

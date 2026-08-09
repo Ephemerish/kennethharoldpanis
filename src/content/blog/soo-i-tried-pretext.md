@@ -4,7 +4,7 @@ author: 'Kenneth Harold Panis'
 pubDate: 2026-06-20
 image: 'I-Put-Pretext-to-the-Test.png'
 description: 'I tried pretext, a little tool that figures out how text fits before the page even draws it, and this whole post is the demo, so see for yourself.'
-tags: ['pretext', 'performance', 'developer-tools']
+tags: ['performance', 'developer-tools']
 tech: ['TypeScript', 'React', 'Astro', 'pretext.js']
 engine: pretext
 ---

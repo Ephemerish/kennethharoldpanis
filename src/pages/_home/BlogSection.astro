@@ -1,0 +1,52 @@
+---
+import { PageSection, SectionHeader, EntryCard, ButtonLink } from "@/components";
+import { ArrowRightIcon } from "@phosphor-icons/react";
+import { HOMEPAGE_BLOG_LIMIT } from "@/constants";
+import { getCollection } from "astro:content";
+import type { CollectionEntry } from "astro:content";
+
+const allBlogs: CollectionEntry<"blog">[] = (
+  await getCollection("blog")
+).sort(
+  (a: CollectionEntry<"blog">, b: CollectionEntry<"blog">) =>
+    b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+);
+
+const mostRecentBlog: CollectionEntry<"blog"> = allBlogs[0];
+const otherBlogs: CollectionEntry<"blog">[] = allBlogs.slice(1);
+---
+
+<PageSection variant="plain">
+  <SectionHeader
+    prefix="Latest from the"
+    accent="Blog"
+    subtitle="Thoughts on development, technology, and lessons learned along the way"
+  />
+
+  {mostRecentBlog && (
+    <div class="mb-12 sm:mb-16">
+      <EntryCard entry={mostRecentBlog} kind="blog" variant="featured" />
+    </div>
+  )}
+
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 sm:gap-10 mb-8 sm:mb-12">
+    {otherBlogs
+      .slice(0, HOMEPAGE_BLOG_LIMIT)
+      .map((blog) => (
+        <EntryCard entry={blog} kind="blog" />
+      ))
+    }
+  </div>
+
+  <div class="text-center">
+    <ButtonLink
+      href="/blogs"
+      variant="outlineBrand"
+      size="lg"
+      class="text-base sm:text-lg font-semibold"
+    >
+      Read All Blogs
+      <ArrowRightIcon className="ml-3 w-5 h-5" />
+    </ButtonLink>
+  </div>
+</PageSection>

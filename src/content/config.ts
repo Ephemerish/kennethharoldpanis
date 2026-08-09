@@ -1,7 +1,7 @@
 import { defineCollection, z } from "astro:content";
-import { getAllTagSlugs } from "../data/tags";
-import { getAllTechNames } from "../data/technologies";
-import { ENGINE_KEYS, DEFAULT_ENGINE } from "../lib/engines";
+import { getAllTagSlugs } from "@/data/tags";
+import { getAllTechNames } from "@/data/technologies";
+import { ENGINE_KEYS, DEFAULT_ENGINE } from "@/lib/engines";
 
 // Tags must be registered slugs in src/data/tags.ts — an unknown or
 // misspelled tag fails the build, keeping the vocabulary consistent.

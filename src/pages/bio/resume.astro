@@ -1,22 +1,10 @@
 ---
 export const prerender = true;
-import Layout from "../../layouts/MainLayout.astro";
-import BioSubnav from "../../components/BioSubnav.astro";
-import ButtonLink from "../../components/ButtonLink.astro";
-import PageSection from "../../components/PageSection.astro";
-import PageHeader from "../../components/PageHeader.astro";
-import Card from "../../components/Card.astro";
-import IconBadge from "../../components/IconBadge.astro";
-import {
-  ArrowRightIcon,
-  FileTextIcon,
-  DownloadSimpleIcon,
-  HourglassIcon,
-} from "@phosphor-icons/react";
-
-// Drop the PDF at public/resume/kenneth-harold-panis-resume.pdf when ready.
-const resumePdfPath = "/resume/kenneth-harold-panis-resume.pdf";
-const resumeAvailable = false;
+import Layout from "@/layouts/MainLayout.astro";
+import { PageSection, PageHeader } from "@/components";
+import ResumeAvailable from "./_components/ResumeAvailable.astro";
+import ResumeComingSoon from "./_components/ResumeComingSoon.astro";
+import { resumeAvailable, resumePdfPath } from "@/data/resume";
 ---
 
 <Layout
@@ -29,50 +17,11 @@ const resumeAvailable = false;
     <PageHeader prefix="My" accent="CV" />
 
     <div class="max-w-3xl mx-auto mb-16 sm:mb-20">
-      <Card padding="lg" class="text-center">
-        {resumeAvailable ? (
-          <>
-            <div class="flex justify-center mb-6">
-              <IconBadge Icon={FileTextIcon} variant="brand" size="lg" />
-            </div>
-            <h2 class="text-2xl sm:text-3xl font-bold text-neutral-900 mb-4">
-              Download my resume
-            </h2>
-            <p class="text-base sm:text-lg text-neutral-700 leading-relaxed mb-6">
-              Latest version of my CV, printable PDF.
-            </p>
-            <ButtonLink href={resumePdfPath} variant="gradient" size="lg" class="text-base sm:text-lg font-semibold">
-              <DownloadSimpleIcon className="mr-2 w-5 h-5" />
-              Download PDF
-            </ButtonLink>
-          </>
-        ) : (
-          <>
-            <div class="flex justify-center mb-6">
-              <IconBadge Icon={HourglassIcon} variant="warning" size="lg" />
-            </div>
-            <h2 class="text-2xl sm:text-3xl font-bold text-neutral-900 mb-4">
-              Resume coming soon
-            </h2>
-            <p class="text-base sm:text-lg text-neutral-700 leading-relaxed mb-6">
-              I'm putting the latest version together. Once it's ready, drop the
-              PDF at <code class="text-sm bg-neutral-100 px-2 py-0.5">public/resume/kenneth-harold-panis-resume.pdf</code>
-              and flip <code class="text-sm bg-neutral-100 px-2 py-0.5">resumeAvailable</code> to <code class="text-sm bg-neutral-100 px-2 py-0.5">true</code> in this file.
-            </p>
-            <div class="flex flex-col sm:flex-row gap-3 justify-center">
-              <ButtonLink href="/contact" variant="gradient" size="lg" class="text-base sm:text-lg font-semibold">
-                Get In Touch
-                <ArrowRightIcon className="ml-3 w-5 h-5" />
-              </ButtonLink>
-              <ButtonLink href="/bio" variant="outlineBrand" size="lg" class="text-base sm:text-lg font-semibold">
-                Back to Bio
-              </ButtonLink>
-            </div>
-          </>
-        )}
-      </Card>
+      {resumeAvailable ? (
+        <ResumeAvailable resumePdfPath={resumePdfPath} />
+      ) : (
+        <ResumeComingSoon />
+      )}
     </div>
-
-    <BioSubnav current="resume" />
   </PageSection>
 </Layout>

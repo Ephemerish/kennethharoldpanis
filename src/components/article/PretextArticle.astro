@@ -1,0 +1,122 @@
+---
+/**
+ * Pretext engine.
+ *
+ * This engine does not use the markdown/Prose pipeline. It parses the post
+ * body into simple blocks and hands them to <PretextEngine />, which lays the
+ * article out with pretext.js (auto-sizing headings + the lead paragraph
+ * flowing around a moving orb). ArticleLayout keeps the page chrome but skips
+ * Prose for the body via proseBody={false}.
+ *
+ * The engine renders plain, readable HTML on the server, so the article is
+ * fully accessible and indexable even before pretext runs.
+ */
+import ArticleLayout from "@/layouts/ArticleLayout.astro";
+import PretextEngine from "./PretextEngine.tsx";
+import PretextCover from "./PretextCover.tsx";
+import type { Block, Seg } from "./PretextEngine";
+import { calculateReadTime } from "@/lib/utils";
+import type { CollectionEntry } from "astro:content";
+
+interface Props {
+  entry: CollectionEntry<"blog">;
+  Content?: any;
+}
+
+const { entry } = Astro.props;
+const fm = entry.data;
+const readTime = calculateReadTime(entry.body);
+const blocks = parseBlocks(entry.body);
+
+// Split inline markdown links out of a line so they stay clickable.
+function parseInline(text: string): Seg[] {
+  const segs: Seg[] = [];
+  const re = /\[([^\]]+)\]\(([^)]+)\)/g;
+  let last = 0;
+  let m: RegExpExecArray | null;
+  while ((m = re.exec(text))) {
+    if (m.index > last) segs.push({ text: text.slice(last, m.index) });
+    segs.push({ text: m[1], href: m[2] });
+    last = re.lastIndex;
+  }
+  if (last < text.length) segs.push({ text: text.slice(last) });
+  return segs.length ? segs : [{ text }];
+}
+
+// A small, tolerant markdown reader: headings (##), paragraphs, blockquotes
+// (> ) and an optional "Source: [label](url)" line attached to a quote.
+function parseBlocks(md: string): Block[] {
+  const lines = md.replace(/\r\n/g, "\n").split("\n");
+  const blocks: Block[] = [];
+  let para: string[] = [];
+  let quote: string[] = [];
+
+  const flushPara = () => {
+    const text = para.join(" ").trim();
+    para = [];
+    if (!text) return;
+    const segs = parseInline(text);
+    if (segs.some((s) => s.href)) blocks.push({ kind: "rich", segments: segs });
+    else blocks.push({ kind: "p", text });
+  };
+  const flushQuote = () => {
+    const text = quote.join(" ").trim();
+    quote = [];
+    if (text) blocks.push({ kind: "quote", text });
+  };
+
+  for (const raw of lines) {
+    const line = raw.trim();
+    if (!line) {
+      flushPara();
+      flushQuote();
+      continue;
+    }
+    if (line.startsWith("## ") || line.startsWith("# ")) {
+      flushPara();
+      flushQuote();
+      blocks.push({ kind: "h2", text: line.replace(/^#+\s+/, "").trim() });
+      continue;
+    }
+    if (line.startsWith("> ")) {
+      flushPara();
+      quote.push(line.slice(2).trim());
+      continue;
+    }
+    if (line.startsWith("Source:")) {
+      flushQuote();
+      const m = line.match(/\[([^\]]+)\]\(([^)]+)\)/);
+      const last = blocks[blocks.length - 1];
+      if (m && last && last.kind === "quote") {
+        last.source = { label: m[1], href: m[2] };
+      }
+      continue;
+    }
+    flushQuote();
+    para.push(line);
+  }
+  flushPara();
+  flushQuote();
+  return blocks;
+}
+---
+
+<ArticleLayout
+  title={fm.title}
+  description={fm.description}
+  heroImage={fm.image}
+  date={fm.pubDate}
+  readTime={readTime}
+  tags={fm.tags}
+  tech={fm.tech}
+  proseBody={false}
+  showHero={false}
+>
+  <div
+    slot="lead"
+    class="w-full aspect-[2/1] sm:aspect-[21/9] overflow-hidden shadow-lg"
+  >
+    <PretextCover client:load title={fm.title} variant="featured"/>
+  </div>
+  <PretextEngine client:load blocks={blocks} />
+</ArticleLayout>

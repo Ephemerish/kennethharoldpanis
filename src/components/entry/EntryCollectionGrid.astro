@@ -1,0 +1,30 @@
+---
+import EntryCard from "./EntryCard.astro";
+import type { CollectionEntry } from "astro:content";
+
+type Tagged =
+  | { entry: CollectionEntry<"projects">; kind: "project" }
+  | { entry: CollectionEntry<"blog">; kind: "blog" };
+
+interface Props {
+  entries: Tagged[];
+}
+
+const { entries } = Astro.props;
+---
+
+<div class="grid grid-cols-1 gap-8 sm:gap-10 sm:grid-cols-2 lg:grid-cols-3">
+  {entries.map(({ entry, kind }) => (
+    <EntryCard entry={entry} kind={kind} />
+  ))}
+</div>
+
+<div class="mt-12 sm:mt-16 text-center">
+  <button
+    type="button"
+    onclick="window.dispatchEvent(new CustomEvent('open-search'))"
+    class="text-brand-700 hover:text-brand-800 font-medium"
+  >
+    Search for something else
+  </button>
+</div>

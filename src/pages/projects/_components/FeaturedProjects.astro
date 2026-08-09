@@ -1,0 +1,20 @@
+---
+import { EntryCard } from "@/components";
+import type { CollectionEntry } from "astro:content";
+
+interface Props {
+  projects: CollectionEntry<"projects">[];
+}
+
+const { projects } = Astro.props;
+---
+
+{projects.length > 0 && (
+  <section class="mb-16 sm:mb-20">
+    <div class="space-y-12 sm:space-y-16">
+      {projects.map((project) => (
+        <EntryCard entry={project} kind="project" variant="featured" />
+      ))}
+    </div>
+  </section>
+)}

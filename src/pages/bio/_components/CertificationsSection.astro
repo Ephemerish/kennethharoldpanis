@@ -1,0 +1,34 @@
+---
+import { SectionHeader } from "@/components";
+import CertificationCard from "./CertificationCard.astro";
+import InProgressCertificationCard from "./InProgressCertificationCard.astro";
+import { certifications } from "@/data/certifications";
+
+// Featured certs lead within each group, same ordering rule as the featured
+// projects/blog posts elsewhere on the site.
+const sorted = [...certifications].sort((a, b) => {
+  if (a.highlighted && !b.highlighted) return -1;
+  if (!a.highlighted && b.highlighted) return 1;
+  return 0;
+});
+const earned = sorted.filter((cert) => !cert.status);
+const inProgress = sorted.filter((cert) => cert.status);
+---
+
+<section class="mb-16 sm:mb-20">
+  <SectionHeader
+    prefix="My"
+    accent="Certifications"
+    subtitle="Markers of where I've been learning."
+  />
+
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-10">
+    {earned.map((cert) => (
+      <CertificationCard cert={cert} />
+    ))}
+  </div>
+
+  {inProgress.map((cert) => (
+    <InProgressCertificationCard cert={cert as typeof cert & { status: NonNullable<typeof cert.status> }} />
+  ))}
+</section>

@@ -1,0 +1,36 @@
+---
+import { SectionHeader } from "@/components";
+import TimelineEntryCard from "./TimelineEntryCard.astro";
+import { timeline } from "@/data/experience";
+---
+
+<section class="mb-16 sm:mb-20">
+  <SectionHeader
+    prefix="My"
+    accent="Experience"
+    subtitle="My Experience timeline."
+  />
+
+  <div class="flex flex-col">
+    {timeline.map((entry, i) => {
+      const isLast = i === timeline.length - 1;
+      return (
+        <div class="flex gap-4 sm:gap-6">
+          <div class="flex flex-col items-center w-3.5 shrink-0">
+            <span
+              class:list={[
+                "w-3.5 h-3.5 shrink-0 ring-[5px] ring-white",
+                entry.end.toLowerCase() === "current" ? "bg-brand-600" : "bg-neutral-400",
+              ]}
+              aria-hidden="true"
+            />
+            {!isLast && <div class="w-0.5 flex-1 bg-neutral-200" aria-hidden="true" />}
+          </div>
+          <div class:list={["flex-1 min-w-0", !isLast && "pb-6 sm:pb-8"]}>
+            <TimelineEntryCard entry={entry} />
+          </div>
+        </div>
+      );
+    })}
+  </div>
+</section>

@@ -4,9 +4,10 @@
   "version": "0.0.1",
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build",
+    "build": "node scripts/check-tech-traceability.mjs && astro build",
     "preview": "astro preview",
     "astro": "astro",
+    "check-tech": "node scripts/check-tech-traceability.mjs",
     "optimize-images": "node scripts/optimize-images.mjs",
     "download-logos": "bash scripts/download-tech-logos.sh"
   },

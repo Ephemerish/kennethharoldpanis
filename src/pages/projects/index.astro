@@ -1,0 +1,41 @@
+---
+export const prerender = true;
+import Layout from "@/layouts/MainLayout.astro";
+import { PageSection, PageHeader } from "@/components";
+import FeaturedProjects from "./_components/FeaturedProjects.astro";
+import ProjectsGrid from "./_components/ProjectsGrid.astro";
+import { getCollection } from "astro:content";
+import type { CollectionEntry } from "astro:content";
+
+const allProjects: CollectionEntry<"projects">[] = (
+  await getCollection("projects")
+).sort((a, b) => {
+  if (a.data.featured && !b.data.featured) return -1;
+  if (!a.data.featured && b.data.featured) return 1;
+  const aDate = a.data.endDate ?? a.data.startDate;
+  const bDate = b.data.endDate ?? b.data.startDate;
+  return bDate.valueOf() - aDate.valueOf();
+});
+
+const featuredProjects = allProjects.filter((project) => project.data.featured);
+const regularProjects = allProjects.filter((project) => !project.data.featured);
+---
+
+<Layout
+  title="Projects - Kenneth Harold Panis"
+  description="Explore my portfolio of projects including IoT systems, web applications, mobile apps, and hardware prototypes. From LoRa communication networks to modern web development."
+  image="/images/me/me.jpg"
+  type="website"
+>
+  <PageSection variant="hero">
+    <PageHeader
+      prefix="My"
+      accent="Projects"
+      subtitle="A collection of things I've built, experiments I've tried, and problems I've solved."
+      glow
+    />
+
+    <FeaturedProjects projects={featuredProjects} />
+    <ProjectsGrid projects={regularProjects} />
+  </PageSection>
+</Layout>

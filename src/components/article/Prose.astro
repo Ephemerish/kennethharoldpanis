@@ -1,0 +1,55 @@
+---
+/**
+ * Prose, the single rendering engine for long-form markdown content.
+ *
+ * Both blog posts and projects render their `<Content />` through this
+ * component, so the article typography, figure/caption styling, table
+ * enhancement and collapsible-section behaviour are defined exactly once.
+ * Change it here and every blog and project updates together.
+ *
+ * Usage:
+ *   <Prose><Content /></Prose>
+ */
+---
+
+<article
+  id="article-content"
+  class="
+    text-neutral-700 text-sm sm:text-base lg:text-lg leading-6 sm:leading-7 lg:leading-8 font-light
+    [&>h1]:text-xl [&>h1]:sm:text-2xl [&>h1]:font-medium [&>h1]:text-neutral-900 [&>h1]:mt-6 [&>h1]:sm:mt-8 [&>h1]:mb-3 [&>h1]:sm:mb-4 [&>h1]:tracking-tight [&>h1]:pb-2 [&>h1]:border-b [&>h1]:border-neutral-100
+    [&>h2]:text-lg [&>h2]:sm:text-xl [&>h2]:font-semibold [&>h2]:text-neutral-900 [&>h2]:mt-6 [&>h2]:sm:mt-8 [&>h2]:mb-3 [&>h2]:sm:mb-4 [&>h2]:tracking-tight [&>h2]:pb-2 [&>h2]:border-b-2 [&>h2]:border-brand-500
+    [&>h3]:text-base [&>h3]:sm:text-lg [&>h3]:font-medium [&>h3]:text-neutral-900 [&>h3]:mt-5 [&>h3]:sm:mt-6 [&>h3]:mb-2 [&>h3]:sm:mb-3 [&>h3]:tracking-tight [&>h3]:pb-1.5 [&>h3]:border-b [&>h3]:border-brand-300
+    [&>h4]:text-sm [&>h4]:sm:text-base [&>h4]:font-medium [&>h4]:text-neutral-900 [&>h4]:mt-4 [&>h4]:sm:mt-5 [&>h4]:mb-2 [&>h4]:bg-neutral-50 [&>h4]:border-l-3 [&>h4]:border-brand-300 [&>h4]:px-3 [&>h4]:py-1.5
+    [&>p]:mb-3 [&>p]:sm:mb-4 [&>p]:leading-6 [&>p]:sm:leading-7 [&>p]:lg:leading-8
+    [&>ul]:mb-3 [&>ul]:sm:mb-4 [&>ul]:space-y-1 [&>ul]:sm:space-y-2 [&>ul>li]:relative [&>ul>li]:pl-6 [&>ul>li]:sm:pl-8 [&>ul>li]:before:content-['■'] [&>ul>li]:before:absolute [&>ul>li]:before:left-0 [&>ul>li]:before:text-brand-600 [&>ul>li]:before:font-bold [&>ul>li]:before:text-sm [&>ul>li]:sm:before:text-lg [&>ul>li]:before:top-0
+    [&>ol]:mb-3 [&>ol]:sm:mb-4 [&>ol]:space-y-1 [&>ol]:sm:space-y-2 [&>ol]:ml-6 [&>ol]:sm:ml-8 [&>ol]:list-decimal [&>ol]:marker:text-brand-600 [&>ol]:marker:font-semibold [&>ol]:marker:text-sm [&>ol]:sm:marker:text-lg [&>ol>li]:mb-1 [&>ol>li]:pl-1 [&>ol>li]:sm:pl-2
+    [&>blockquote]:border-l-2 [&>blockquote]:border-brand-200 [&>blockquote]:pl-3 [&>blockquote]:sm:pl-4 [&>blockquote]:text-neutral-600 [&>blockquote]:italic [&>blockquote]:my-4 [&>blockquote]:sm:my-6 [&>blockquote]:text-base [&>blockquote]:sm:text-lg
+    [&>pre]:bg-neutral-50 [&>pre]:border [&>pre]:border-neutral-100 [&>pre]:p-3 [&>pre]:sm:p-4 [&>pre]:overflow-x-auto [&>pre]:my-4 [&>pre]:sm:my-6 [&>pre]:text-xs [&>pre]:sm:text-sm [&>pre]:leading-5 [&>pre]:sm:leading-6
+    [&>:not(pre)>code]:bg-brand-100 [&>:not(pre)>code]:px-1.5 [&>:not(pre)>code]:sm:px-2 [&>:not(pre)>code]:py-0.5 [&>:not(pre)>code]:text-xs [&>:not(pre)>code]:sm:text-sm [&>:not(pre)>code]:font-mono [&>:not(pre)>code]:text-brand-800
+    [&_a]:text-brand-700 [&_a]:font-medium [&_a]:underline [&_a]:decoration-2 [&_a]:decoration-brand-400 [&_a]:underline-offset-2 [&_a]: [&_a:hover]:text-brand-800 [&_a:hover]:decoration-brand-700
+    [&>img]:my-4 [&>img]:sm:my-6 [&>img]:border [&>img]:border-neutral-100
+    [&>figure]:my-6 [&>figure]:sm:my-8
+    [&>figure>img]:w-full [&>figure>img]:border [&>figure>img]:border-neutral-200 [&>figure>img]:shadow-sm
+    [&>figure>figcaption]:mt-2 [&>figure>figcaption]:sm:mt-3 [&>figure>figcaption]:text-xs [&>figure>figcaption]:sm:text-sm [&>figure>figcaption]:text-neutral-500 [&>figure>figcaption]:text-center [&>figure>figcaption]:not-italic [&>figure>figcaption]:leading-5
+    [&>hr]:border-0 [&>hr]:h-px [&>hr]:bg-neutral-200 [&>hr]:my-6 [&>hr]:sm:my-8
+    first:*:mt-0
+  "
+>
+  <slot />
+</article>
+
+<script>
+  import { enhanceTables } from "./prose/enhanceTables";
+  import { initCollapsibleSections } from "./prose/collapsibleSections";
+
+  // Use astro:page-load instead of DOMContentLoaded so the script also runs
+  // after a same-app navigation through ClientRouter (view transitions).
+  // astro:page-load fires on both initial load and every in-app navigation.
+  document.addEventListener('astro:page-load', function() {
+    const article = document.getElementById('article-content');
+    if (!article) return;
+
+    enhanceTables(article);
+    initCollapsibleSections(article);
+  });
+</script>
