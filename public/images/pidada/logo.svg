@@ -1,14 +1,14 @@
 <svg width="500" height="500" viewBox="0 0 500 500" fill="none" xmlns="http://www.w3.org/2000/svg">
 <rect width="500" height="500" fill="white"/>
-<rect width="500" height="500" fill="#FEE9E7"/>
-<path d="M260 20.0002L470 20L259.999 230L260 20.0002Z" fill="#FF595E"/>
-<path d="M20.0001 260L230 260L20 470L20.0001 260Z" fill="#FFCA3A"/>
-<path d="M19.9999 240L19.9998 30L230 240L19.9999 240Z" fill="#1982C4"/>
-<path d="M480 260L480 470L270 260L480 260Z" fill="#6A4C93"/>
-<path d="M240 20.0001L240 230L30 20L240 20.0001Z" fill="#1982C4"/>
-<path d="M260 480L260 270L470 480L260 480Z" fill="#6A4C93"/>
-<path d="M480 240L270 240L480 30L480 240Z" fill="#FF595E"/>
-<path d="M240 480L30 480L240 270L240 480Z" fill="#FFCA3A"/>
-<path d="M125 125H375V375H125V125Z" fill="#FEE9E7"/>
-<rect x="187" y="187" width="125" height="125" fill="#8AC926"/>
+<rect width="500" height="500" fill="#F5D1C1"/>
+<path d="M260 20.0002L470 20L259.999 230L260 20.0002Z" fill="#D83A1E"/>
+<path d="M20.0001 260L230 260L20 470L20.0001 260Z" fill="#936000"/>
+<path d="M19.9999 240L19.9998 30L230 240L19.9999 240Z" fill="#176EA8"/>
+<path d="M480 260L480 470L270 260L480 260Z" fill="#5E4383"/>
+<path d="M240 20.0001L240 230L30 20L240 20.0001Z" fill="#176EA8"/>
+<path d="M260 480L260 270L470 480L260 480Z" fill="#5E4383"/>
+<path d="M480 240L270 240L480 30L480 240Z" fill="#D83A1E"/>
+<path d="M240 480L30 480L240 270L240 480Z" fill="#936000"/>
+<path d="M125 125H375V375H125V125Z" fill="#F5D1C1"/>
+<rect x="187" y="187" width="125" height="125" fill="#719B43"/>
 </svg>
