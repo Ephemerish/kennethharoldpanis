@@ -4,7 +4,7 @@
  * Used for focus areas, tech stacks, category tags, etc.
  */
 interface Props {
-  variant?: "brand" | "neutral" | "success" | "warning" | "white";
+  variant?: "brand" | "neutral" | "success" | "warning" | "error" | "white";
   size?: "xs" | "sm";
   class?: string;
 }
@@ -16,6 +16,7 @@ const variantClass = {
   neutral: "bg-neutral-100 text-neutral-700 border border-neutral-200",
   success: "bg-success-50 text-success-800 border border-success-200",
   warning: "bg-warning-50 text-warning-800 border border-warning-200",
+  error: "bg-error-50 text-error-800 border border-error-200",
   white: "bg-white/20 backdrop-blur-sm text-neutral-0",
 }[variant];
 
