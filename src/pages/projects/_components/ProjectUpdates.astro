@@ -1,0 +1,71 @@
+---
+/**
+ * ProjectUpdates, the "What's New" card on a project page.
+ *
+ * Puts the project's latest release right on the page so it always reads as
+ * current, with earlier releases folded away and the whole history one click
+ * out on /updates. Renders nothing for a project whose app keeps no release
+ * notes (src/data/patch-notes).
+ */
+import { ButtonLink, ReleaseEntry } from "@/components";
+import { ArrowRightIcon, CaretDownIcon, SparkleIcon } from "@phosphor-icons/react";
+import {
+  appAnchor,
+  formatReleaseDate,
+  getUpdatesByProject,
+} from "@/data/patch-notes";
+
+interface Props {
+  slug: string;
+}
+
+const { slug } = Astro.props;
+const updates = getUpdatesByProject(slug);
+// A handful of earlier releases on the page; the rest live on /updates.
+const older = updates ? updates.releases.slice(1, 6) : [];
+---
+
+{updates && (
+  <section class="border border-neutral-200 bg-white shadow-sm">
+    {/* Header strip, matching the Overview card */}
+    <div class="flex items-center gap-2 px-6 sm:px-8 py-3.5 bg-neutral-50 border-b border-neutral-200">
+      <SparkleIcon className="w-4 h-4 text-brand-500" />
+      <span class="text-sm font-semibold text-neutral-700 tracking-tight">What's New</span>
+      <span class="ml-auto text-xs text-neutral-400">
+        Updated {formatReleaseDate(updates.latest)}
+      </span>
+    </div>
+
+    <div class="px-6 sm:px-8 py-6">
+      <ReleaseEntry app={updates.app.name} release={updates.latest} />
+
+      {older.length > 0 && (
+        <details class="mt-8 group">
+          <summary class="inline-flex items-center gap-2 cursor-pointer list-none text-sm font-semibold text-brand-600 hover:text-brand-700 [&::-webkit-details-marker]:hidden">
+            <CaretDownIcon
+              className="w-4 h-4 transition-transform group-open:rotate-180"
+              weight="bold"
+            />
+            Show {older.length} earlier {older.length === 1 ? "release" : "releases"}
+          </summary>
+          <div class="mt-8 space-y-8">
+            {older.map((release) => (
+              <ReleaseEntry app={updates.app.name} release={release} />
+            ))}
+          </div>
+        </details>
+      )}
+
+      <div class="mt-8 pt-6 border-t border-neutral-200">
+        <ButtonLink
+          href={`/updates#${appAnchor(updates.app.name)}`}
+          variant="outlineBrand"
+          size="sm"
+        >
+          Full update history
+          <ArrowRightIcon className="ml-2 w-4 h-4" />
+        </ButtonLink>
+      </div>
+    </div>
+  </section>
+)}

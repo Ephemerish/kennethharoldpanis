@@ -1,0 +1,64 @@
+---
+/**
+ * ReleaseEntry, one release's notes on the page.
+ *
+ * Version chip + date + optional title, then the notes grouped under their
+ * change category. Used on /updates and on the project pages, so a release
+ * reads the same way wherever it shows up.
+ */
+import { Chip } from "../common";
+import { displayVersion, formatReleaseDate, releaseAnchor } from "@/data/patch-notes";
+import type { ChangeCategory, Release } from "@/data/patch-notes";
+
+interface Props {
+  release: Release;
+  /** App name, used for the deep-link anchor. */
+  app: string;
+  class?: string;
+}
+
+const { release, app, class: extraClass = "" } = Astro.props;
+
+const categoryVariant: Record<
+  ChangeCategory,
+  "brand" | "neutral" | "success" | "warning" | "error"
+> = {
+  Added: "success",
+  Changed: "brand",
+  Deprecated: "neutral",
+  Removed: "error",
+  Fixed: "warning",
+  Security: "error",
+  Highlights: "neutral",
+};
+---
+
+<article id={releaseAnchor(app, release.version)} class:list={["scroll-mt-24", extraClass]}>
+  <header>
+    <div class="flex flex-wrap items-center gap-x-3 gap-y-1.5">
+      <Chip variant="brand" size="xs">{displayVersion(release.version)}</Chip>
+      <time datetime={release.date} class="text-sm text-neutral-500">
+        {formatReleaseDate(release)}
+      </time>
+    </div>
+    {release.title && (
+      <h3 class="mt-2 text-xl font-semibold text-neutral-900">{release.title}</h3>
+    )}
+  </header>
+
+  <div class="mt-4 space-y-5">
+    {release.changes.map((group) => (
+      <div>
+        <Chip variant={categoryVariant[group.category]} size="xs">{group.category}</Chip>
+        <ul class="mt-2.5 space-y-2.5">
+          {group.items.map((item) => (
+            <li class="flex gap-2.5 text-sm text-neutral-700 leading-relaxed">
+              <span class="mt-2 w-1.5 h-1.5 bg-brand-500 shrink-0" />
+              <span>{item}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    ))}
+  </div>
+</article>

@@ -1,0 +1,114 @@
+---
+export const prerender = true;
+import Layout from "@/layouts/MainLayout.astro";
+import {
+  PageSection,
+  PageHeader,
+  AppUpdateCard,
+  ReleaseEntry,
+  ButtonLink,
+} from "@/components";
+import { ArrowSquareOutIcon, CaretDownIcon } from "@phosphor-icons/react";
+import { appAnchor, getAppsWithUpdates } from "@/data/patch-notes";
+
+const appsWithUpdates = getAppsWithUpdates();
+
+// How many releases each app shows before the rest fold away.
+const RECENT_PER_APP = 6;
+
+const sections = appsWithUpdates.map((updates) => ({
+  updates,
+  recent: updates.releases.slice(0, RECENT_PER_APP),
+  older: updates.releases.slice(RECENT_PER_APP),
+}));
+---
+
+<Layout
+  title="App Updates - Kenneth Harold Panis"
+  description="Everything I have shipped in my apps, newest first, straight from the apps' own release notes."
+  image="/images/me/me.jpg"
+  type="website"
+>
+  {/* The at-a-glance strip: one card per app, its newest release. */}
+  <PageSection variant="hero">
+    <PageHeader
+      prefix="App"
+      accent="Updates"
+      subtitle="Everything I have shipped in my apps, newest first. These are the apps' own release notes, so what you see here is what goes out to the people using them."
+      glow
+    />
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-8 sm:gap-10">
+      {appsWithUpdates.map((updates) => <AppUpdateCard updates={updates} />)}
+    </div>
+  </PageSection>
+
+  {/* Full history, one section per app. */}
+  {sections.map(({ updates, recent, older }) => (
+      <PageSection variant="plain">
+        <div class="max-w-4xl">
+          <div class="flex flex-wrap items-center gap-4 pb-6 border-b border-neutral-200">
+            <img
+              src={updates.app.logoPath}
+              alt=""
+              class="w-12 h-12 shrink-0"
+              width="48"
+              height="48"
+            />
+            <div class="min-w-0">
+              <h2
+                id={appAnchor(updates.app.name)}
+                class="scroll-mt-24 text-2xl sm:text-3xl font-bold text-neutral-900"
+              >
+                {updates.app.name}
+              </h2>
+              <p class="text-sm text-neutral-500">{updates.app.tagline}</p>
+            </div>
+            <div class="ml-auto flex flex-wrap gap-3">
+              {updates.projectSlug && (
+                <ButtonLink
+                  href={`/projects/${updates.projectSlug}`}
+                  variant="outlineBrand"
+                  size="sm"
+                >
+                  Project page
+                </ButtonLink>
+              )}
+              <ButtonLink
+                href={updates.app.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                variant="default"
+                size="sm"
+              >
+                Open {updates.app.name}
+                <ArrowSquareOutIcon className="ml-1.5 w-4 h-4" />
+              </ButtonLink>
+            </div>
+          </div>
+
+          <div class="mt-8 space-y-10">
+            {recent.map((release) => (
+              <ReleaseEntry app={updates.app.name} release={release} />
+            ))}
+          </div>
+
+          {older.length > 0 && (
+            <details class="mt-10 group">
+              <summary class="inline-flex items-center gap-2 cursor-pointer list-none text-sm font-semibold text-brand-600 hover:text-brand-700 [&::-webkit-details-marker]:hidden">
+                <CaretDownIcon
+                  className="w-4 h-4 transition-transform group-open:rotate-180"
+                  weight="bold"
+                />
+                Show {older.length} earlier {older.length === 1 ? "release" : "releases"}
+              </summary>
+              <div class="mt-8 space-y-10">
+                {older.map((release) => (
+                  <ReleaseEntry app={updates.app.name} release={release} />
+                ))}
+              </div>
+            </details>
+          )}
+        </div>
+      </PageSection>
+  ))}
+</Layout>

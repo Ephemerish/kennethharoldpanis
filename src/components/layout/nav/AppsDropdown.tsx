@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { ArrowSquareOutIcon, CaretDownIcon } from "@phosphor-icons/react";
+import { ArrowRightIcon, ArrowSquareOutIcon, CaretDownIcon } from "@phosphor-icons/react";
 import type { apps as AppsList } from "@/data/apps";
 
 export function AppsDropdown({ apps }: { apps: typeof AppsList }) {
@@ -65,6 +65,16 @@ export function AppsDropdown({ apps }: { apps: typeof AppsList }) {
               </li>
             ))}
           </ul>
+          <div className="border-t border-neutral-200">
+            <a
+              href="/updates"
+              onClick={() => setIsOpen(false)}
+              className="flex items-center justify-between gap-2 p-2.5 text-sm font-semibold text-brand-600 hover:bg-brand-50"
+            >
+              What's new in the apps
+              <ArrowRightIcon className="w-4 h-4" />
+            </a>
+          </div>
         </div>
       )}
     </div>

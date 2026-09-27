@@ -8,6 +8,7 @@
     "preview": "astro preview",
     "astro": "astro",
     "check-tech": "node scripts/check-tech-traceability.mjs",
+    "sync-notes": "node scripts/sync-patch-notes.mjs",
     "optimize-images": "node scripts/optimize-images.mjs",
     "download-logos": "bash scripts/download-tech-logos.sh"
   },

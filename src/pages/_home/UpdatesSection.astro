@@ -1,0 +1,41 @@
+---
+/**
+ * UpdatesSection, the newest release from each app.
+ *
+ * A short, always-current reminder that the apps keep shipping. Each card
+ * teases the latest release and links to the full history on /updates.
+ */
+import { PageSection, SectionHeader, AppUpdateCard, ButtonLink } from "@/components";
+import { ArrowRightIcon } from "@phosphor-icons/react";
+import { getAppsWithUpdates } from "@/data/patch-notes";
+
+const appsWithUpdates = getAppsWithUpdates();
+---
+
+{appsWithUpdates.length > 0 && (
+  <PageSection variant="hero">
+    <SectionHeader
+      prefix="Still"
+      accent="Shipping"
+      subtitle="The newest release from each of my apps, kept current straight from their release notes"
+    />
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-8 sm:gap-10 mb-8 sm:mb-12">
+      {appsWithUpdates.map((updates) => (
+        <AppUpdateCard updates={updates} />
+      ))}
+    </div>
+
+    <div class="text-center">
+      <ButtonLink
+        href="/updates"
+        variant="outlineBrand"
+        size="lg"
+        class="text-base sm:text-lg font-semibold"
+      >
+        View All Updates
+        <ArrowRightIcon className="ml-3 w-5 h-5" />
+      </ButtonLink>
+    </div>
+  </PageSection>
+)}

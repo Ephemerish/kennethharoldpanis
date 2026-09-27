@@ -4,6 +4,7 @@ import ArticleLayout from "@/layouts/ArticleLayout.astro";
 import type { CollectionEntry } from "astro:content";
 import ProjectActions from "./_components/ProjectActions.astro";
 import ProjectLead from "./_components/ProjectLead.astro";
+import ProjectUpdates from "./_components/ProjectUpdates.astro";
 
 export const prerender = true;
 
@@ -48,5 +49,6 @@ const galleryImages = (d.gallery ?? []).map((img) => `/images/${img}`);
 >
   <ProjectActions slot="actions" links={d.links} />
   <ProjectLead slot="lead" data={d} galleryImages={galleryImages} />
+  <ProjectUpdates slot="lead" slug={project.slug} />
   <Content />
 </ArticleLayout>

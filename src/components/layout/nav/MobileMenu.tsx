@@ -1,4 +1,4 @@
-import { ArrowSquareOutIcon } from "@phosphor-icons/react";
+import { ArrowRightIcon, ArrowSquareOutIcon } from "@phosphor-icons/react";
 import Search from "../Search";
 import type { apps as AppsList } from "@/data/apps";
 
@@ -53,6 +53,14 @@ export function MobileMenu({ links, apps, onLinkClick }: Props) {
                 </span>
               </a>
             ))}
+            <a
+              href="/updates"
+              onClick={onLinkClick}
+              className="flex items-center gap-2 px-3 py-2 text-base font-medium text-brand-600 hover:bg-brand-50"
+            >
+              What's new in the apps
+              <ArrowRightIcon className="w-4 h-4" />
+            </a>
           </div>
         )}
       </div>
