@@ -1,0 +1,38 @@
+---
+/**
+ * What a tag or technology is attached to: projects and posts as cards, then
+ * the roles and certifications on the bio that carry it.
+ */
+import EntryCollectionGrid from "@app/features/entries/EntryCollectionGrid.astro";
+import BioRecordCard from "./BioRecordCard.astro";
+import type { AnyEntry } from "@app/features/entries/model";
+import type { BioRecord } from "./collect";
+
+interface Props {
+  entries: AnyEntry[];
+  bio: BioRecord[];
+}
+
+const { entries, bio } = Astro.props;
+---
+
+{entries.length > 0 && <EntryCollectionGrid entries={entries} />}
+
+{bio.length > 0 && (
+  <section class:list={[entries.length > 0 && "mt-16 sm:mt-20"]} aria-labelledby="from-bio">
+    <h2 id="from-bio" class="mb-6 text-xs font-semibold uppercase tracking-wider text-neutral-500">From my bio</h2>
+    <ul class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      {bio.map((item) => <li><BioRecordCard item={item} /></li>)}
+    </ul>
+  </section>
+)}
+
+<div class="mt-12 sm:mt-16 text-center">
+  <button
+    type="button"
+    onclick="window.dispatchEvent(new CustomEvent('open-search'))"
+    class="text-brand-700 hover:text-brand-800 font-medium"
+  >
+    Search for something else
+  </button>
+</div>

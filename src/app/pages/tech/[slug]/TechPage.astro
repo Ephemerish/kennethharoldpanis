@@ -1,0 +1,50 @@
+---
+/** /tech/[slug]: every project and post built with one technology. */
+import MainLayout from "@app/layout/MainLayout.astro";
+import { PageSection, PageHeader } from "@ui";
+import TaxonomyResults from "@app/features/taxonomy/TaxonomyResults.astro";
+import { getTechBySlug } from "@app/data/technologies";
+import type { AnyEntry } from "@app/features/entries/model";
+import type { BioRecord } from "@app/features/taxonomy/collect";
+
+interface Props {
+  slug: string;
+  entries: AnyEntry[];
+  bio: BioRecord[];
+}
+
+const { slug, entries, bio } = Astro.props;
+const total = entries.length + bio.length;
+const tech = getTechBySlug(slug);
+const label = tech?.name ?? slug;
+const count = `${total} ${total === 1 ? "entry" : "entries"}`;
+---
+
+<MainLayout
+  title={`Built with ${label} - Kenneth Harold Panis`}
+  description={`Projects, posts, roles and certifications where I used ${label}.`}
+>
+  <PageSection variant="hero">
+    <PageHeader
+      prefix="Built with"
+      accent={label}
+      subtitle={`${count} where I used ${label}.`}
+      size="md"
+    />
+
+    {tech?.url && (
+      <div class="-mt-6 mb-12 text-center">
+        <a
+          href={tech.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-brand-700 border border-brand-200 bg-brand-50 hover:bg-brand-100"
+        >
+          Visit website
+        </a>
+      </div>
+    )}
+
+    <TaxonomyResults entries={entries} bio={bio} />
+  </PageSection>
+</MainLayout>

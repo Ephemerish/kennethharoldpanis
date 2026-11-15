@@ -1,0 +1,27 @@
+---
+import Layout from "@app/layout/MainLayout.astro";
+import { PageSection, PageHeader } from "@ui";
+import ResumeAvailable from "./ResumeAvailable.astro";
+import ResumeComingSoon from "./ResumeComingSoon.astro";
+import { resumeAvailable, resumePdfPath } from "@app/data/resume";
+---
+
+<Layout
+  noindex={!resumeAvailable}
+  title="Resume - Kenneth Harold Panis"
+  description="Resume and CV, quick on-page summary plus a downloadable PDF."
+  image="/images/me/me.jpg"
+  type="website"
+>
+  <PageSection variant="hero">
+    <PageHeader prefix="My" accent="CV" />
+
+    <div class="max-w-3xl mx-auto mb-16 sm:mb-20">
+      {resumeAvailable ? (
+        <ResumeAvailable resumePdfPath={resumePdfPath} />
+      ) : (
+        <ResumeComingSoon />
+      )}
+    </div>
+  </PageSection>
+</Layout>

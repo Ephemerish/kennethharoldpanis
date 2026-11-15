@@ -1,0 +1,18 @@
+---
+/**
+ * /blogs/[slug]: one post, drawn by its engine (docs/systems/article-engines.md).
+ * Each post names an engine in its frontmatter; prose is the default.
+ */
+import type { CollectionEntry } from "astro:content";
+import ProseArticle from "@app/features/article/ProseArticle.astro";
+import PretextArticle from "@app/features/article/PretextArticle.astro";
+
+interface Props {
+  entry: CollectionEntry<"blog">;
+}
+
+const { entry } = Astro.props;
+const { Content } = await entry.render();
+---
+
+{entry.data.engine === "pretext" ? <PretextArticle entry={entry} /> : <ProseArticle entry={entry} Content={Content} />}

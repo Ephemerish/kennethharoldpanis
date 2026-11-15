@@ -1,0 +1,99 @@
+---
+/**
+ * Cover, the cover slot for an entry card (docs/systems/article-engines.md).
+ *
+ * Keyed off the entry's `engine`: an engine with a live cover (pretext) draws
+ * a still of its strips at once, and the live canvas hydrates over it when
+ * the card scrolls into view (KHP §5.8). Its title is
+ * left to the card, which already shows it. Every other entry shows its image
+ * over a blurred backdrop of itself. Cards never branch on the engine.
+ */
+import PretextCover from "@app/features/article/PretextCover";
+import { engineHasLiveCover } from "@app/features/article/engines";
+import { coverBackdrop } from "./cover-image.mjs";
+
+interface Props {
+  /** Engine / type that decides how the cover renders. */
+  engine?: string | null;
+  /** Image filename under /public/images (used when there's no live cover). */
+  image?: string;
+  title: string;
+  loading?: "eager" | "lazy";
+}
+
+const { engine, image, title, loading = "lazy" } = Astro.props;
+const live = engineHasLiveCover(engine);
+const stillPhrases = [
+  "WORDS FIND THEIR WAY", "MEASURE WRAP FLOW", "TYPE IN MOTION",
+  "EVERY LETTER COUNTS", "LINES BECOME SHAPES", "MAKE ROOM FOR WORDS",
+  "MEASURE WRAP FLOW", "WORDS FIND THEIR WAY", "TYPE IN MOTION",
+  "LINES BECOME SHAPES", "EVERY LETTER COUNTS", "MAKE ROOM FOR WORDS",
+  "TYPE IN MOTION", "WORDS FIND THEIR WAY", "MEASURE WRAP FLOW",
+  "EVERY LETTER COUNTS", "LINES BECOME SHAPES", "TYPE IN MOTION",
+];
+---
+
+{live ? (
+  <div class="pretext-still relative aspect-video w-full overflow-hidden" data-pretext-still aria-hidden="true">
+    {stillPhrases.map((phrase, index) => (
+      <span
+        class="pretext-strip"
+        style={`--column:${index};--offset:${(index * 37) % 110 - 65}px;--tilt:${[4, -5, 2, -3, 6, -2][index % 6]}deg;--ink:${[0.55, 0.85, 0.4, 0.7][index % 4]}`}
+      >
+        {`${phrase} · ${phrase} · ${phrase}`}
+      </span>
+    ))}
+    <svg class="absolute inset-0 h-full w-full" viewBox="0 0 1200 675" fill="none" aria-hidden="true">
+      <path d="M-80 160C130 80 255 330 455 210S740 65 860 210s210 100 410-20" stroke="var(--art-glow)" stroke-opacity=".28" stroke-width="2" />
+      <path d="M-70 190C145 110 260 360 465 240S750 95 870 240s210 100 410-20" stroke="var(--art-glow)" stroke-opacity=".1" />
+    </svg>
+    <div class="absolute inset-0">
+      <PretextCover client:visible title={title} showTitle={false} />
+    </div>
+  </div>
+) : (
+  <div class="relative w-full aspect-video overflow-hidden bg-black">
+    <img
+      src={coverBackdrop(image ?? "")}
+      alt=""
+      aria-hidden="true"
+      class="absolute inset-0 w-full h-full object-cover opacity-70 motion-zoom"
+      loading={loading}
+      decoding="async"
+    />
+    <img
+      src={`/images/${image}`}
+      alt={title}
+      class="relative w-full h-full object-contain motion-zoom"
+      loading={loading}
+      decoding="async"
+    />
+  </div>
+)}
+
+<style>
+  .pretext-still {
+    background: radial-gradient(ellipse at 65% 25%, var(--art-forest), var(--art-night) 75%);
+  }
+
+  .pretext-strip {
+    position: absolute;
+    top: var(--offset);
+    left: calc(var(--column) * 5.7% - 1%);
+    width: 2.1%;
+    min-width: 12px;
+    height: 130%;
+    overflow: hidden;
+    padding: 14px 3px;
+    border-inline: 1px solid color-mix(in srgb, var(--art-glow) 14%, transparent);
+    background: linear-gradient(90deg, var(--art-strip-1), var(--art-strip-2) 45%, var(--art-strip-3));
+    color: var(--art-glow);
+    font: 600 clamp(8px, 1vw, 13px)/1.7 monospace;
+    letter-spacing: 0.22em;
+    writing-mode: vertical-rl;
+    text-orientation: upright;
+    opacity: var(--ink);
+    transform: rotate(var(--tilt));
+    transform-origin: top center;
+  }
+</style>

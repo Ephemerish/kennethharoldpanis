@@ -5,8 +5,8 @@
  * The apps own their patch notes: each app repo keeps a file that the app
  * itself reads (its "what's new" modal, its version marker). Those files come
  * in two different shapes, so this script reads them, normalizes both into
- * the shared model in src/data/patch-notes/types.ts, checks the result, and
- * writes the mirror in src/data/patch-notes/releases.ts that the site renders.
+ * the shared model in src/app/data/patch-notes/types.ts, checks the result, and
+ * writes the mirror in src/app/data/patch-notes/releases.ts that the site renders.
  *
  * Usage:
  *   pnpm sync-notes
@@ -31,10 +31,10 @@ const ts = require("typescript");
 
 const SCRIPTS_DIR = dirname(fileURLToPath(import.meta.url));
 const SITE_ROOT = resolve(SCRIPTS_DIR, "..");
-const OUTPUT_FILE = resolve(SITE_ROOT, "src/data/patch-notes/releases.ts");
+const OUTPUT_FILE = resolve(SITE_ROOT, "src/app/data/patch-notes/releases.ts");
 
 /**
- * Keep in step with CHANGE_CATEGORIES in src/data/patch-notes/types.ts, the
+ * Keep in step with CHANGE_CATEGORIES in src/app/data/patch-notes/types.ts, the
  * shared model the mirror is written against.
  */
 const CHANGE_CATEGORIES = [

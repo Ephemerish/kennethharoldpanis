@@ -1,0 +1,21 @@
+---
+/**
+ * Applies the theme before first paint (KHP §5.2). The site is light unless
+ * the reader switched to dark with ThemeToggle; the choice is remembered and
+ * applied again after every view-transition swap.
+ */
+---
+
+<script is:inline>
+  (function () {
+    function apply() {
+      var dark = false;
+      try { dark = localStorage.getItem("theme") === "dark"; } catch (e) {}
+      document.documentElement.classList.toggle("dark", dark);
+    }
+    apply();
+    if (window.__khpTheme) return;
+    window.__khpTheme = true;
+    document.addEventListener("astro:after-swap", apply);
+  })();
+</script>

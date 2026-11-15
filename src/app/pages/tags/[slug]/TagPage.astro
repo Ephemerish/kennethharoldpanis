@@ -1,0 +1,36 @@
+---
+/** /tags/[slug]: every project and post with one tag. */
+import MainLayout from "@app/layout/MainLayout.astro";
+import { PageSection, PageHeader } from "@ui";
+import TaxonomyResults from "@app/features/taxonomy/TaxonomyResults.astro";
+import { getTagBySlug } from "@app/data/tags";
+import type { AnyEntry } from "@app/features/entries/model";
+import type { BioRecord } from "@app/features/taxonomy/collect";
+
+interface Props {
+  slug: string;
+  entries: AnyEntry[];
+  bio: BioRecord[];
+}
+
+const { slug, entries, bio } = Astro.props;
+const total = entries.length + bio.length;
+const label = getTagBySlug(slug)?.label ?? slug;
+const count = `${total} ${total === 1 ? "entry" : "entries"}`;
+---
+
+<MainLayout
+  title={`Tagged “${label}” - Kenneth Harold Panis`}
+  description={`Projects, posts, roles and certifications tagged ${label}.`}
+>
+  <PageSection variant="hero">
+    <PageHeader
+      prefix="Tagged"
+      accent={label}
+      subtitle={`${count} tagged ${label}.`}
+      size="md"
+    />
+
+    <TaxonomyResults entries={entries} bio={bio} />
+  </PageSection>
+</MainLayout>

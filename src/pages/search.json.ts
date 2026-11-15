@@ -1,115 +1,64 @@
 import type { APIRoute } from "astro";
-import { getCollection } from "astro:content";
-import { getTagBySlug } from "@/data/tags";
-import { getTechBySlug, techSlug } from "@/data/technologies";
-import { timeline } from "@/data/experience";
-import { certifications } from "@/data/certifications";
+import { getTagBySlug, getTagLabel } from "@app/data/tags";
+import { getTechBySlug, techSlug } from "@app/data/technologies";
+import { hrefOf, loadTaxonomy, tagsOf, techOf, type TaxonomyItem } from "@app/features/taxonomy/collect";
+import type { SearchItem } from "@app/api/stores";
 
 export const prerender = true;
 
 /**
- * One flat index for the global command palette: projects, blog posts, and
- * every tag / tech actually in use (with usage counts). Built once at build
- * time and fetched lazily by the search island on first open.
+ * One flat index for search (docs/systems/search.md): projects, posts, roles,
+ * certifications, and every tag and technology with how many things use it.
+ * Built from the taxonomy, so it lists exactly what the tag and tech pages do.
+ * Fetched lazily by the search island on first open.
  */
 export const GET: APIRoute = async () => {
-  const [projects, blogs] = await Promise.all([
-    getCollection("projects"),
-    getCollection("blog"),
-  ]);
+  const taxonomy = await loadTaxonomy();
+  const all: TaxonomyItem[] = [...taxonomy.entries, ...taxonomy.bio];
 
   const tagCounts = new Map<string, number>();
   const techCounts = new Map<string, number>();
   const bump = (m: Map<string, number>, k: string) => m.set(k, (m.get(k) ?? 0) + 1);
 
-  type Item = {
-    type: "project" | "blog" | "tag" | "tech" | "experience" | "certification";
-    title: string;
-    url: string;
-    description?: string;
-    keywords?: string[];
-    group?: string;
-    count?: number;
-    imagePath?: string;
-    // ISO date for blog/project items, so the search island can show "Latest".
-    date?: string;
-  };
+  const items: SearchItem[] = [];
 
-  const items: Item[] = [];
+  for (const item of all) {
+    tagsOf(item).forEach((tag) => bump(tagCounts, tag));
+    techOf(item).forEach((name) => bump(techCounts, techSlug(name)));
+    const keywords = [...tagsOf(item).map(getTagLabel), ...techOf(item)];
 
-  for (const p of projects) {
-    p.data.tags.forEach((t) => bump(tagCounts, t));
-    p.data.tech.forEach((t) => bump(techCounts, techSlug(t)));
-    items.push({
-      type: "project",
-      title: p.data.title,
-      url: `/projects/${p.slug}`,
-      description: p.data.description,
-      keywords: [...p.data.tags, ...p.data.tech],
-      date: (p.data.endDate ?? p.data.startDate).toISOString(),
-    });
-  }
-
-  for (const b of blogs) {
-    b.data.tags.forEach((t) => bump(tagCounts, t));
-    b.data.tech.forEach((t) => bump(techCounts, techSlug(t)));
-    items.push({
-      type: "blog",
-      title: b.data.title,
-      url: `/blogs/${b.slug}`,
-      description: b.data.description,
-      keywords: [...b.data.tags, ...b.data.tech],
-      date: b.data.pubDate.toISOString(),
-    });
-  }
-
-  // Experience & certifications don't feed tag/tech usage counts (those track
-  // /tech and /tags listing pages, which only cover projects + blog posts) —
-  // they're indexed as their own searchable items with tech as keywords.
-  for (const entry of timeline) {
-    items.push({
-      type: "experience",
-      title: entry.title,
-      url: entry.href ?? "/bio",
-      description: entry.org,
-      keywords: entry.tech ?? [],
-    });
-  }
-
-  for (const cert of certifications) {
-    items.push({
-      type: "certification",
-      title: cert.title,
-      url: cert.credentialUrl ?? "/bio",
-      description: cert.issuer,
-      keywords: [...cert.focusAreas, ...(cert.tech ?? [])],
-    });
+    if ("entry" in item) {
+      const data = item.entry.data;
+      const date = item.kind === "blog" ? item.entry.data.pubDate : item.entry.data.endDate ?? item.entry.data.startDate;
+      items.push({
+        type: item.kind,
+        title: data.title,
+        url: hrefOf(item),
+        description: data.description,
+        keywords,
+        date: date.toISOString(),
+      });
+    } else if (item.kind === "experience") {
+      items.push({ type: "experience", title: item.record.title, url: hrefOf(item), description: item.record.org, keywords });
+    } else {
+      items.push({
+        type: "certification",
+        title: item.record.title,
+        url: hrefOf(item),
+        description: item.record.issuer,
+        keywords: [...keywords, ...item.record.focusAreas],
+      });
+    }
   }
 
   for (const [slug, count] of tagCounts) {
-    const tag = getTagBySlug(slug);
-    items.push({
-      type: "tag",
-      title: tag?.label ?? slug,
-      url: `/tags/${slug}`,
-      group: tag?.group,
-      count,
-    });
+    items.push({ type: "tag", title: getTagBySlug(slug)?.label ?? slug, url: `/tags/${slug}`, count });
   }
 
   for (const [slug, count] of techCounts) {
     const tech = getTechBySlug(slug);
-    items.push({
-      type: "tech",
-      title: tech?.name ?? slug,
-      url: `/tech/${slug}`,
-      group: tech?.category,
-      count,
-      imagePath: tech?.imagePath,
-    });
+    items.push({ type: "tech", title: tech?.name ?? slug, url: `/tech/${slug}`, count, imagePath: tech?.imagePath });
   }
 
-  return new Response(JSON.stringify(items), {
-    headers: { "Content-Type": "application/json" },
-  });
+  return new Response(JSON.stringify(items), { headers: { "Content-Type": "application/json" } });
 };

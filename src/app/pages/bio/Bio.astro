@@ -1,0 +1,18 @@
+---
+import Layout from "@app/layout/MainLayout.astro";
+import { PageSection } from "@ui";
+import ExperienceSection from "./ExperienceSection.astro";
+import CertificationsSection from "./CertificationsSection.astro";
+---
+
+<Layout
+  title="Bio - Kenneth Harold Panis"
+  description="About Kenneth Harold Panis, software developer with certifications across AWS, Google Cloud, and FinOps."
+  image="/images/me/me.jpg"
+  type="profile"
+>
+  <PageSection variant="hero">
+    <ExperienceSection />
+    <CertificationsSection />
+  </PageSection>
+</Layout>

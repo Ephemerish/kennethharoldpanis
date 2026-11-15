@@ -1,0 +1,60 @@
+---
+import { Card } from "@ui";
+import TechChips from "@app/features/entries/TechChips.astro";
+import TagLinks from "@app/features/taxonomy/TagLinks.astro";
+import { isCurrent as isCurrentRole, yearsLabel, type TimelineEntry } from "@app/data/experience";
+import { ArrowRightIcon } from "@phosphor-icons/react";
+
+interface Props {
+  entry: TimelineEntry;
+}
+
+const { entry } = Astro.props;
+const isCurrent = isCurrentRole(entry);
+const dateLabel = yearsLabel(entry);
+// The work a role produced, so the claim links to its proof (KHP §10.3).
+const workLabel = entry.href?.startsWith("/blogs/") ? "Read the write-up" : "See the project";
+---
+
+<Card id={entry.slug} padding="none" class="overflow-hidden scroll-mt-24">
+  <div
+    class:list={[
+      "flex flex-wrap items-center justify-between gap-x-3 gap-y-2 px-6 sm:px-8 py-4 sm:py-5",
+      isCurrent ? "bg-brand-gradient text-neutral-0" : "bg-ink text-white",
+    ]}
+  >
+    <div class="flex items-center gap-3 min-w-0">
+      <span class="flex items-center justify-center w-8 h-8 sm:w-9 sm:h-9 bg-white/10 border border-white/20 shrink-0">
+        <entry.Icon className="w-4 h-4 sm:w-4.5 sm:h-4.5" weight="bold" />
+      </span>
+      <span class="font-mono text-sm sm:text-base tracking-tight">{dateLabel}</span>
+    </div>
+    {isCurrent && (
+      <span class="inline-flex items-center gap-1.5 text-[11px] sm:text-xs font-semibold uppercase tracking-wider bg-white/15 border border-white/25 px-2.5 py-1.5 shrink-0">
+        <span class="w-1.5 h-1.5 bg-current" aria-hidden="true" />
+        Current
+      </span>
+    )}
+  </div>
+  <div class="px-6 sm:px-8 py-6 sm:py-8">
+    <h3 class="text-xl sm:text-2xl font-bold text-neutral-900 mb-1 tracking-tight">{entry.title}</h3>
+    <p class="text-sm sm:text-base text-neutral-600 font-medium mb-4">{entry.org}</p>
+    <p class="text-sm sm:text-base text-neutral-700 leading-relaxed">
+      {entry.body}
+    </p>
+    {entry.href && (
+      <a href={entry.href} class="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-brand-700 hover:text-brand-800">
+        {workLabel}
+        <ArrowRightIcon className="w-4 h-4" aria-hidden="true" />
+      </a>
+    )}
+    {entry.tech && (
+      <div class="mt-5">
+        <TechChips tech={entry.tech} size="sm" />
+      </div>
+    )}
+    <div class="mt-4">
+      <TagLinks tags={entry.tags} size="sm" />
+    </div>
+  </div>
+</Card>

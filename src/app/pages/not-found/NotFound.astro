@@ -1,0 +1,42 @@
+---
+/** The 404 page. */
+import Layout from "@app/layout/MainLayout.astro";
+import { ButtonLink } from "@ui";
+---
+
+<Layout title="404 - Page Not Found" noindex>
+  <section class="py-8 sm:py-12 bg-neutral-0 relative overflow-hidden border-t border-neutral-200">
+    <div class="absolute inset-0">
+      <div class="max-w-7xl mx-auto h-full px-4 sm:px-6 lg:px-8">
+        <div class="bg-neutral-0 border-l border-r border-neutral-200 h-full"></div>
+      </div>
+    </div>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+      <div class="px-4 sm:px-6 lg:px-8">
+        <div class="flex flex-col items-center justify-center min-h-[70vh] text-center">
+          <div class="max-w-lg mx-auto">
+            <h1 class="text-2xl sm:text-3xl md:text-4xl font-bold text-neutral-900 mb-3 sm:mb-4">
+              Page Not Found
+            </h1>
+            <p class="text-base sm:text-lg text-neutral-600 mb-6 sm:mb-8 leading-relaxed">
+              This page doesn't exist, or it has moved. One of these should get you back on track.
+            </p>
+
+            <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
+              <ButtonLink href="/" variant="default" class="w-full sm:w-auto">Go back to Home</ButtonLink>
+              <ButtonLink href="/projects" variant="outline" class="w-full sm:w-auto">View Projects</ButtonLink>
+            </div>
+
+            <div class="mt-8 sm:mt-12 text-sm text-neutral-600">
+              <p>Still lost? You can also:</p>
+              <div class="flex flex-wrap justify-center gap-4 sm:gap-6 mt-2">
+                <a href="/blogs" class="hover:text-neutral-900">Read the Blog</a>
+                <a href="/contact" class="hover:text-neutral-900">Contact Me</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</Layout>

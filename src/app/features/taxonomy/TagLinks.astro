@@ -1,0 +1,22 @@
+---
+/** Tags as links to their /tags page: on articles and on /bio. */
+import { getTagLabel } from "@app/data/tags";
+
+interface Props {
+  tags: readonly string[];
+  size?: "sm" | "md";
+}
+
+const { tags, size = "md" } = Astro.props;
+const pad = size === "sm" ? "px-2.5 py-1 text-xs" : "px-3 py-1.5 text-sm";
+---
+
+<ul class="flex flex-wrap gap-2">
+  {tags.map((tag) => (
+    <li>
+      <a href={`/tags/${tag}`} class={`inline-flex font-medium text-brand-700 bg-brand-50 border border-brand-200 hover:bg-brand-100 ${pad}`}>
+        {getTagLabel(tag)}
+      </a>
+    </li>
+  ))}
+</ul>

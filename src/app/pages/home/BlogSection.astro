@@ -1,0 +1,45 @@
+---
+import { PageSection, SectionHeader, ButtonLink } from "@ui";
+import EntryCard from "@app/features/entries/EntryCard.astro";
+import { ArrowRightIcon } from "@phosphor-icons/react";
+import { HOME_POSTS as HOMEPAGE_BLOG_LIMIT } from "./limits";
+import { getCollection } from "astro:content";
+import { sortPosts } from "@app/features/entries/model";
+
+const [mostRecentBlog, ...otherBlogs] = sortPosts(await getCollection("blog"));
+---
+
+<PageSection variant="plain">
+  <SectionHeader
+    prefix="Latest from the"
+    accent="Blog"
+    subtitle="Notes from building things: what worked, what broke, and what I would do again."
+  />
+
+  {mostRecentBlog && (
+    <div class="mb-12 sm:mb-16">
+      <EntryCard entry={mostRecentBlog} kind="blog" variant="featured" />
+    </div>
+  )}
+
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 sm:gap-10 mb-8 sm:mb-12">
+    {otherBlogs
+      .slice(0, HOMEPAGE_BLOG_LIMIT)
+      .map((blog) => (
+        <EntryCard entry={blog} kind="blog" />
+      ))
+    }
+  </div>
+
+  <div class="text-center">
+    <ButtonLink
+      href="/blogs"
+      variant="outlineBrand"
+      size="lg"
+      class="text-base sm:text-lg font-semibold"
+    >
+      Read All Blogs
+      <ArrowRightIcon className="ml-3 w-5 h-5" />
+    </ButtonLink>
+  </div>
+</PageSection>

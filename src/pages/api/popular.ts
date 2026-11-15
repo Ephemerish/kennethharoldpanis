@@ -11,7 +11,7 @@ export const prerender = false;
  * island falls back to static usage counts.
  */
 
-// Match lib/supabase.ts: non-PUBLIC import.meta.env vars are inlined at build
+// Match src/app/api/supabase.ts: non-PUBLIC import.meta.env vars are inlined at build
 // time (often undefined in CI/Docker), so fall back to runtime process.env,
 // which is where the deployed server actually gets its Supabase config.
 const supabaseUrl = import.meta.env.SUPABASE_URL || process.env.SUPABASE_URL;

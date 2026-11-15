@@ -1,0 +1,54 @@
+---
+/** /blogs and /blogs/page/n: every post, newest first. */
+import MainLayout from "@app/layout/MainLayout.astro";
+import { PageSection, PageHeader } from "@ui";
+import Pagination from "./Pagination.astro";
+import BlogsGrid from "./BlogsGrid.astro";
+import EmptyBlogsState from "./EmptyBlogsState.astro";
+import { getCollection } from "astro:content";
+import type { CollectionEntry } from "astro:content";
+import { POSTS_PER_PAGE, pageCount } from "./model";
+import { sortPosts } from "@app/features/entries/model";
+
+interface Props {
+  page: number;
+}
+
+const currentPage = Astro.props.page;
+
+const allBlogs = sortPosts(await getCollection("blog"));
+
+const totalPages: number = pageCount(allBlogs.length);
+
+const blogsForPage: CollectionEntry<"blog">[] = allBlogs.slice(
+  (currentPage - 1) * POSTS_PER_PAGE,
+  currentPage * POSTS_PER_PAGE
+);
+---
+
+<MainLayout
+  title="Blog - Kenneth Harold Panis"
+  description="Write-ups by Kenneth Harold Panis on what he builds and the tools he tries."
+  image="/images/me/me.jpg"
+  type="website"
+>
+  <PageSection variant="hero">
+    <PageHeader
+      prefix="My"
+      accent="Blogs"
+      subtitle="Write-ups from my own projects and work: what I tried, what broke, and what I learned."
+    />
+
+    {allBlogs.length === 0 ? (
+      <EmptyBlogsState />
+    ) : (
+      <BlogsGrid blogs={blogsForPage} />
+    )}
+
+    {totalPages > 1 && (
+      <div class="mt-12 sm:mt-16">
+        <Pagination currentPage={currentPage} totalPages={totalPages} />
+      </div>
+    )}
+  </PageSection>
+</MainLayout>

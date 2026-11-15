@@ -9,7 +9,7 @@ import react from "@astrojs/react";
 
 import node from "@astrojs/node";
 
-import rehypeFigure from "./src/lib/rehype-figure.mjs";
+import rehypeFigure from "./src/app/features/article/rehype-figure.mjs";
 
 // https://astro.build/config
 export default defineConfig({

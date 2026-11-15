@@ -1,0 +1,39 @@
+---
+/** /projects/[slug]: one project's write-up. */
+import type { CollectionEntry } from "astro:content";
+import ArticleLayout from "@app/layout/ArticleLayout.astro";
+import { getUpdatesByProject } from "@app/data/patch-notes";
+import { PROJECT_STATUS } from "@app/features/entries/model";
+import ProjectActions from "./ProjectActions.astro";
+import ProjectLead from "./ProjectLead.astro";
+import ProjectUpdates from "./ProjectUpdates.astro";
+
+interface Props {
+  project: CollectionEntry<"projects">;
+}
+
+const { project } = Astro.props;
+const { Content } = await project.render();
+const d = project.data;
+
+// Header carries only the status pill; the date comes from ArticleLayout.
+const status = PROJECT_STATUS[d.status];
+const badges = [{ label: status.label, class: `border ${status.class}` }];
+
+const galleryImages = (d.gallery ?? []).map((img) => `/images/${img}`);
+---
+
+<ArticleLayout
+  title={d.title}
+  description={d.description}
+  heroImage={d.image}
+  date={d.startDate}
+  badges={badges}
+  tags={d.tags}
+  tech={d.tech}
+>
+  <ProjectActions slot="actions" links={d.links} />
+  <ProjectLead slot="lead" data={d} galleryImages={galleryImages} />
+  <Content />
+  {getUpdatesByProject(project.slug) && <ProjectUpdates slot="overlay" slug={project.slug} />}
+</ArticleLayout>

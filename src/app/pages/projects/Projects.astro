@@ -1,0 +1,32 @@
+---
+/** /projects: featured projects first, then the rest. */
+import Layout from "@app/layout/MainLayout.astro";
+import { PageSection, PageHeader } from "@ui";
+import FeaturedProjects from "./FeaturedProjects.astro";
+import ProjectsGrid from "./ProjectsGrid.astro";
+import { getCollection } from "astro:content";
+import { sortProjects } from "@app/features/entries/model";
+
+const allProjects = sortProjects(await getCollection("projects"));
+const featuredProjects = allProjects.filter((project) => project.data.featured);
+const regularProjects = allProjects.filter((project) => !project.data.featured);
+---
+
+<Layout
+  title="Projects - Kenneth Harold Panis"
+  description="Projects by Kenneth Harold Panis: a LoRa network for small fishing boats, and the web apps he builds and runs."
+  image="/images/me/me.jpg"
+  type="website"
+>
+  <PageSection variant="hero">
+    <PageHeader
+      prefix="My"
+      accent="Projects"
+      subtitle="A collection of things I've built, experiments I've tried, and problems I've solved."
+      glow
+    />
+
+    <FeaturedProjects projects={featuredProjects} />
+    <ProjectsGrid projects={regularProjects} />
+  </PageSection>
+</Layout>

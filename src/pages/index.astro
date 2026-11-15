@@ -1,22 +1,7 @@
 ---
+import Home from "@app/pages/home/Home.astro";
+
 export const prerender = true;
-import Layout from "@/layouts/MainLayout.astro";
-import HomeHeader from "./_home/HomeHeader.astro";
-import TechnologiesSection from "./_home/TechnologiesSection.astro";
-import ProjectsSection from "./_home/ProjectsSection.astro";
-import UpdatesSection from "./_home/UpdatesSection.astro";
-import BlogSection from "./_home/BlogSection.astro";
 ---
 
-<Layout
-  title="Kenneth Harold Panis - Full-Stack Developer & Designer"
-  description="Full-stack developer and designer specializing in modern web technologies, IoT systems, and mobile applications. Creating beautiful and functional digital experiences."
-  image="/images/me/me.jpg"
-  type="website"
->
-  <HomeHeader />
-  <TechnologiesSection />
-  <ProjectsSection />
-  <UpdatesSection />
-  <BlogSection />
-</Layout>
+<Home />
