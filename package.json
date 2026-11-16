@@ -17,10 +17,11 @@
     "test": "node --experimental-strip-types --test \"tests/unit/*.test.mjs\"",
     "test:e2e": "playwright test --project=desktop --project=mobile",
     "test:perf": "playwright test --project=performance --workers=1",
-    "verify": "pnpm check && pnpm check:tokens && pnpm check:composition && pnpm check:assets && pnpm test && pnpm build && pnpm check:output && pnpm test:e2e && pnpm test:perf",
+    "verify": "pnpm check && pnpm check:tokens && pnpm check:composition && pnpm check:copy && pnpm check:assets && pnpm test && pnpm build && pnpm check:output && pnpm test:e2e && pnpm test:perf",
     "sync-notes": "node scripts/sync-patch-notes.mjs",
     "optimize-images": "node scripts/optimize-images.mjs",
-    "check:assets": "node --experimental-strip-types --no-warnings scripts/check-assets.mjs"
+    "check:assets": "node --experimental-strip-types --no-warnings scripts/check-assets.mjs",
+    "check:copy": "node scripts/check-copy.mjs"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.4",

@@ -62,7 +62,7 @@ const lead = isBlog
 ---
 
 {variant === "featured" ? (
-  <Box as="article" class="relative w-full group cursor-pointer overflow-hidden shadow-elegant border-2 border-transparent hover:border-brand-500 hover:shadow-floating motion-lift">
+  <Box as="article" class="relative w-full group cursor-pointer overflow-hidden shadow-elegant border-2 border-transparent hover:border-brand-500 hover:shadow-floating">
     <Link href={href} class="block">
       <Box class="relative">
         <Cover engine={coverEngine} image={image} title={title} loading="eager" />
@@ -113,7 +113,7 @@ const lead = isBlog
     </Link>
   </Box>
 ) : (
-  <Stack as="article" gap="none" class="relative group bg-card-gradient overflow-hidden shadow-elegant border border-neutral-200/50 hover:bg-neutral-0 hover:border-brand-300/60 hover:shadow-floating motion-lift cursor-pointer h-full">
+  <Stack as="article" gap="none" class="relative group bg-card-gradient overflow-hidden shadow-elegant border border-neutral-200/50 hover:bg-neutral-0 hover:border-brand-300/60 hover:shadow-floating cursor-pointer h-full">
     <Box class="relative overflow-hidden">
       <Box class="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/20 z-raised pointer-events-none" />
       <Cover engine={coverEngine} image={image} title={title} loading={priority ? "eager" : "lazy"} />

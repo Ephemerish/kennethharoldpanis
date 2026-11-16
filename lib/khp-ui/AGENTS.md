@@ -27,7 +27,8 @@ Props are typed. Most extend Astro's `HTMLAttributes<...>`, so plain attributes 
 | `Grid` | Equal columns by named preset. `as`, `cols` (`cards` 1-2-3, `cards-wide` 1-2-3 at `xl`, `halves`, `halves-md`, `facts` 2-3), `gap` (default `2xl`), `space` |
 | `Frame` | The bordered column with its rails (KHP §3.1). `as`, `backdrop` (`plain`, `hero`, `none`), `topBorder`, `pad` (`none`, `sm`, `md`, `lg`), `grow`, `innerClass`. The footer, home hero, article layout, 404 page and `MainLayout`'s filler use it directly |
 | `PageSection` | One band of a page: a `Frame` with `pad="md"`. `variant` (`hero`, the default, or `plain`), `topBorder` (default true), `id` |
-| `Marquee` | A row that drifts sideways forever (KHP §5.8). `seconds` (one loop, default 60), `reverse`, `gap`, `label`. Renders its slot twice, the copy `inert`; pauses on hover, focus and off screen |
+| `Marquee` | A row that drifts sideways forever (KHP §5.8). `seconds` (one loop, default 60), `reverse`, `gap`, `label`. Renders its slot once and its script clones it for the seamless loop (half the HTML), the copy `inert`; pauses on hover, focus, drag and off screen. Drag it with a mouse or finger (it moves the same CSS animation's clock); a drag never follows a link; vertical page scroll still works on touch |
+| `NoScript` | Content only for a reader without script (a plain control in place of a scripted one). With script on, the browser never builds it (KHP §7.8) |
 | `space.ts` | The shared scales: `GAP` (`none`, `2xs` to `3xl`), `ALIGN`, `JUSTIFY` and `SPACE_TOP` (`none`, `xs` to `2xl`, the margin above a block). One table, so a step means the same in every primitive (KHP §3.3) |
 
 ### Type (`components/type/`)
@@ -71,6 +72,7 @@ Props are typed. Most extend Astro's `HTMLAttributes<...>`, so plain attributes 
 | Component | Use for, and its props |
 | --------- | ---------------------- |
 | `buttonVariants` (`button.ts`) | Button classes: `variant` (`default`: `brand-700`; `gradient`, `outlineBrand`, `outline`, `secondary`, `ghost`, `link`, `destructive`), `size` (`default`, `sm`, `lg`, `icon`). Also exports the `ButtonVariants` type |
+| `NativeSelect` | The browser's own `<select>` in the field style: the no-script fallback for `Select`. `options` (`{ value, label }[]`), `placeholder`, and any select attribute |
 | `Button` | A real `<button>` in those styles. `type` (default `button`), `variant`, `size` |
 | `ButtonLink` | Navigation styled as a button. `href`, `target`, `rel`, `variant`, `size` |
 | `Form` | A `<form>` laid out as a column. `id`, `method`, `action`, `gap` (default `xl`) |
@@ -96,6 +98,8 @@ Props are typed. Most extend Astro's `HTMLAttributes<...>`, so plain attributes 
 | `cn` (`utils/cn.ts`) | Joins classes with `clsx` and `tailwind-merge` |
 
 ## Rules
+
+- A control that needs script carries `js-only` (hidden while `<html>` has `no-js`); its plain fallback is `no-js-only` or inside `NoScript` (KHP §7.8).
 
 - Colours only from the theme's scales and `white`, `black`, `ink`; no rounded corners; layers by name. `pnpm check:tokens` enforces it (KHP §5.1, §5.6, §5.7).
 - Motion from the tokens and utilities in `theme.css`, on colour, background, border, shadow, opacity and transform only (KHP §5.8). No CSS blur filter; a halo is `soft-glow` (KHP §7.7).

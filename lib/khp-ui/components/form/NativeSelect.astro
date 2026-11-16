@@ -1,0 +1,22 @@
+---
+/**
+ * NativeSelect, the browser's own <select> in the field style. The fallback
+ * for the Radix Select where script can't run (KHP §7.8); works everywhere.
+ */
+import type { HTMLAttributes } from "astro/types";
+import { cn } from "../../utils/cn";
+import { FIELD_CLASS } from "./field";
+
+type Props = HTMLAttributes<"select"> & {
+  options: readonly { value: string; label: string }[];
+  placeholder?: string;
+  class?: string;
+};
+
+const { options, placeholder, class: className, ...rest } = Astro.props;
+---
+
+<select class={cn(FIELD_CLASS, className)} {...rest}>
+  {placeholder && <option value="" disabled selected>{placeholder}</option>}
+  {options.map((option) => <option value={option.value}>{option.label}</option>)}
+</select>

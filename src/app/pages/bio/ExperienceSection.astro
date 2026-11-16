@@ -10,7 +10,7 @@ const entries = [...(await getCollection("projects")), ...(await getCollection("
 ---
 
 <Box as="section" aria-labelledby="experience">
-  <SectionHeader prefix="My" accent="Experience" subtitle="Where I've worked and studied. Open one to see the tech I used there." id="experience" />
+  <SectionHeader level={1} prefix="My" accent="Experience" id="experience" />
   <List gap="md">
     {timeline.map((role) => (
       <ListItem><RoleItem role={role} tech={techUsed(role, entries)} /></ListItem>

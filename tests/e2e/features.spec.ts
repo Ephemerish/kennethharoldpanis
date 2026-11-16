@@ -128,6 +128,26 @@ test("the technologies marquee moves, and pauses under the pointer", async ({ pa
   await expect(track).toHaveCSS("animation-play-state", "paused");
 });
 
+test("the technologies marquee can be dragged, and a drag doesn't open a tile", async ({ page }, info) => {
+  test.skip(isMobile(info.project.name), "Touch dragging is the same code; the mouse path is enough.");
+  await page.goto("/");
+  const marquee = page.locator("[data-marquee]").first();
+  const track = marquee.locator(".marquee-track");
+  await marquee.scrollIntoViewIfNeeded();
+  const box = (await marquee.boundingBox())!;
+  const y = box.y + box.height / 2;
+  const clock = () => track.evaluate((el) => Number(el.getAnimations()[0]?.currentTime ?? 0));
+  await page.mouse.move(box.x + box.width / 2, y);
+  await page.mouse.down();
+  const before = await clock();
+  await page.mouse.move(box.x + box.width / 2 - 300, y, { steps: 10 });
+  const after = await clock();
+  await page.mouse.up();
+  // Dragging left moves the row forward: well past what a moment's drift would.
+  expect(Math.abs(after - before)).toBeGreaterThan(1000);
+  await expect(page).toHaveURL(/\/$/);
+});
+
 test("the pretext cover comes alive when scrolled into view", async ({ page }) => {
   await page.goto("/");
   const still = page.locator("[data-pretext-still]").first();
@@ -145,12 +165,13 @@ test("the current role is open, and opening another shows the tech used there", 
   const current = page.locator("details#alphaus");
   await expect(current).toHaveAttribute("open", "");
   await expect(current.getByRole("link", { name: /Module Federation/ })).toBeVisible();
+  await expect(current.getByRole("link", { name: /Spanner/ })).toBeVisible();
   const college = page.locator("details#bohol-island-state-university");
   await expect(college).not.toHaveAttribute("open", "");
   await college.locator("summary").click();
   await expect(college).toHaveAttribute("open", "");
-  await expect(college.getByText("Tech I used")).toBeVisible();
   await expect(college.getByRole("link", { name: /LoRa/ })).toBeVisible();
+  await expect(college.getByRole("link", { name: /HTML/ })).toBeVisible();
 });
 
 test("an anchor to a closed role opens it", async ({ page }) => {
@@ -200,9 +221,21 @@ test.describe("the contact form", () => {
 
 test("titles keep the space around their accent word", async ({ page }) => {
   await page.goto("/bio");
-  await expect(page.getByRole("heading", { level: 1 })).toHaveText("My Bio");
-  await expect(page.getByRole("heading", { level: 2, name: "My Experience" })).toBeVisible();
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("My Experience");
+  await expect(page.getByRole("heading", { level: 2, name: "My Certifications" })).toBeVisible();
   await page.goto("/");
   await expect(page.getByRole("heading", { name: "Technologies I Work With" })).toBeVisible();
   await expect(page.getByRole("heading", { name: "Latest from the Blog" })).toBeVisible();
+});
+
+test("a tech page says built with only when real work used it", async ({ page }) => {
+  await page.goto("/tech/amazon-ec2");
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Certified in Amazon EC2");
+  await page.goto("/tech/spanner");
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Built with Spanner");
+  // The home rows show only tech used in real work.
+  await page.goto("/");
+  const rows = page.locator("[data-marquee]");
+  await expect(rows.getByRole("link", { name: /Spanner/ }).first()).toBeAttached();
+  await expect(rows.getByRole("link", { name: /Amazon EC2/ })).toHaveCount(0);
 });

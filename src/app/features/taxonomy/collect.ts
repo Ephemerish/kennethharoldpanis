@@ -67,3 +67,40 @@ export async function loadTaxonomy(): Promise<Taxonomy> {
     withTech: (slug) => ({ entries: entries.filter(hasTech(slug)), bio: bio.filter(hasTech(slug)) }),
   };
 }
+
+/**
+ * Whether tech was used in real work: a project, a post or a role carries it.
+ * Tech only a certification covers was studied, not used. The home page's
+ * rows show only used tech, and a tech page says "Built with" only for it
+ * (KHP §1.1, §7.1).
+ */
+export const usedInWork = (items: readonly TaxonomyItem[]) => items.some((item) => item.kind !== "certification");
+
+/** What an item is, in a word a reader uses. A timeline entry tagged education is a school. */
+export const nounOf = (item: TaxonomyItem): [string, string] => {
+  if (item.kind === "project") return ["project", "projects"];
+  if (item.kind === "blog") return ["post", "posts"];
+  if (item.kind === "certification") return ["certification", "certifications"];
+  return item.record.tags.includes("education") ? ["school", "schools"] : ["role", "roles"];
+};
+
+/**
+ * What a list holds, counted by kind: "2 projects, 1 role and 1 certification".
+ * A tech page says this instead of "used in", because a certification covers
+ * a service without the site claiming it was used (KHP §1.1).
+ */
+export function countLabel(items: readonly TaxonomyItem[]): string {
+  const order = ["project", "post", "role", "school", "certification"];
+  const counts = new Map<string, { n: number; plural: string }>();
+  for (const item of items) {
+    const [one, many] = nounOf(item);
+    counts.set(one, { n: (counts.get(one)?.n ?? 0) + 1, plural: many });
+  }
+  const parts = order
+    .filter((one) => counts.has(one))
+    .map((one) => {
+      const { n, plural } = counts.get(one)!;
+      return `${n} ${n === 1 ? one : plural}`;
+    });
+  return parts.length < 2 ? (parts[0] ?? "Nothing yet") : `${parts.slice(0, -1).join(", ")} and ${parts.at(-1)}`;
+}

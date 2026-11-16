@@ -1,11 +1,11 @@
 ---
-/** /tags/[slug]: every project and post with one tag. */
+/** /tags/[slug]: every project, post, role and certification with one tag. */
 import MainLayout from "@app/layout/MainLayout.astro";
 import { PageSection, PageHeader } from "@ui";
 import TaxonomyResults from "@app/features/taxonomy/TaxonomyResults.astro";
 import { getTagBySlug } from "@data/taxonomy/tags";
 import type { AnyEntry } from "@app/features/entries/model";
-import type { BioRecord } from "@app/features/taxonomy/collect";
+import { countLabel, type BioRecord } from "@app/features/taxonomy/collect";
 
 interface Props {
   slug: string;
@@ -14,10 +14,9 @@ interface Props {
 }
 
 const { slug, entries, bio } = Astro.props;
-const total = entries.length + bio.length;
 const tag = getTagBySlug(slug);
 const label = tag?.label ?? slug;
-const count = `${total} ${total === 1 ? "entry" : "entries"}`;
+const count = countLabel([...entries, ...bio]);
 ---
 
 <MainLayout
@@ -28,7 +27,7 @@ const count = `${total} ${total === 1 ? "entry" : "entries"}`;
     <PageHeader
       prefix="Tagged"
       accent={label}
-      subtitle={tag ? `${tag.description} ${count}.` : `${count} tagged ${label}.`}
+      subtitle={tag ? `${tag.description} ${count}.` : `${count}.`}
       size="md"
     />
 

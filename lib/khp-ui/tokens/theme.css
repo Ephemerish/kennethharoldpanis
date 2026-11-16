@@ -384,13 +384,12 @@
   }
 }
 
-/* Motion (KHP §5.8): quick, cheap and optional. Only colour, shadow, opacity
-   and transform change, so the browser composites them without layout; the
-   marquee and the pretext cover pause when unseen; reduced motion stops all. */
+/* Motion (KHP §5.8): only motion with a job. Controls change colour and shadow
+   at --duration-fast to answer the pointer; a tooltip fades; the image viewer's
+   zoom follows the hand; the marquee and the pretext cover are the owner's.
+   Nothing lifts, zooms or fades in for decoration; reduced motion stops all. */
 :root {
   --duration-fast: 150ms;
-  --duration-base: 250ms;
-  --duration-slow: 600ms;
   --ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
@@ -403,25 +402,13 @@
   [role="button"],
   [role="option"],
   .motion-surface {
-    transition-property: color, background-color, border-color, text-decoration-color, box-shadow, opacity, transform;
+    transition-property: color, background-color, border-color, text-decoration-color, box-shadow;
     transition-duration: var(--duration-fast);
     transition-timing-function: var(--ease-out);
   }
 }
 
-/* A surface that lifts on hover: cards that are links. */
-@utility motion-lift {
-  transition-property: box-shadow, border-color, background-color, transform;
-  transition-duration: var(--duration-base);
-  transition-timing-function: var(--ease-out);
-  &:hover { transform: translateY(-2px); }
-}
 
-/* A cover image that eases in a little on its card's hover. */
-@utility motion-zoom {
-  transition: transform var(--duration-slow) var(--ease-out);
-  :where(.group):hover & { transform: scale(1.03); }
-}
 
 /* An endless row that scrolls sideways (the technologies marquee). The list
    is rendered twice; moving by half its width loops without a seam. */
@@ -434,11 +421,15 @@
   width: max-content;
   animation: marquee var(--marquee-duration, 60s) linear infinite;
   will-change: transform;
-  :where(.marquee:hover, .marquee:focus-within) & { animation-play-state: paused; }
+  :where(.marquee:hover, .marquee:focus-within, .marquee[data-dragging]) & { animation-play-state: paused; }
 }
 @utility marquee-reverse { animation-direction: reverse; }
 @utility marquee {
   overflow: hidden;
+  cursor: grab;
+  touch-action: pan-y;
+  user-select: none;
+  &[data-dragging] { cursor: grabbing; }
   mask-image: linear-gradient(to right, transparent, black 6%, black 94%, transparent);
 }
 
@@ -456,6 +447,13 @@
   .marquee .marquee-track { animation: none; width: auto; flex-wrap: wrap; justify-content: center; }
   .marquee [data-marquee-copy] { display: none; }
 }
+
+/* Resilience (KHP §7.8). <html class="no-js"> until the first script runs:
+   a control that needs script is `js-only`, its plain fallback `no-js-only`.
+   A picture that fails to load keeps its space and hides its broken icon. */
+.no-js .js-only { display: none !important; }
+:root:not(.no-js) .no-js-only { display: none !important; }
+img[data-broken] { visibility: hidden; }
 
 *:focus-visible {
   outline: 2px solid var(--brand-500);

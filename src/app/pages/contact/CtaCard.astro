@@ -1,10 +1,13 @@
 ---
-import { Card, Chip, Heading, List, ListItem, Text } from "@ui";
+/**
+ * What he does, in one paragraph, from the bio's current role. The tech he
+ * used is on /bio, one click away; a wall of thirty chips here would repeat
+ * it (KHP §1.3, §1.7).
+ */
+import { ButtonLink, Card, Heading, Text } from "@ui";
 import { currentRole } from "@data/bio/experience";
 
-// The stack of the current role, from the bio: never a list typed here.
 const current = currentRole;
-const stackChips = current?.tech ?? [];
 ---
 
 <Card variant="brand">
@@ -14,7 +17,5 @@ const stackChips = current?.tech ?? [];
     Computer Engineering background. I work mostly on the frontend, and across
     the full stack when the work needs it.
   </Text>
-  <List direction="row" gap="sm">
-    {stackChips.map((chip) => <ListItem><Chip variant="onBrand">{chip}</Chip></ListItem>)}
-  </List>
+  <ButtonLink href="/bio" variant="secondary" size="sm">See My Experience</ButtonLink>
 </Card>

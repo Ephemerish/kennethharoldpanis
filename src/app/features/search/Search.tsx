@@ -104,11 +104,14 @@ export default function Search({ className, autoFocus = false }: { className?: s
     }
   };
 
-  const showLoading = open && loading && results.length === 0;
+  // The index failed to load (offline, a blocked request): say so, never an
+  // empty box (KHP §7.8).
+  const failed = open && !index.loading && Boolean(index.error) && items.length === 0;
+  const showLoading = open && loading && results.length === 0 && !failed;
   const showNoMatch =
     open && !loading && tokens.length > 0 && items.length > 0 && results.length === 0;
   const showResults = open && results.length > 0;
-  const showPanel = showLoading || showNoMatch || showResults;
+  const showPanel = failed || showLoading || showNoMatch || showResults;
 
   return (
     <div ref={rootRef} className={cn("relative", className)}>
@@ -148,7 +151,11 @@ export default function Search({ className, autoFocus = false }: { className?: s
           aria-label="Search results"
           className="absolute left-0 right-0 mt-2 min-w-[16rem] max-w-[calc(100vw-2rem)] max-h-[70vh] overflow-y-auto bg-neutral-0 border border-neutral-200 shadow-lg z-popover py-1"
         >
-          {showLoading ? (
+          {failed ? (
+            <p className="px-3 py-6 text-center text-sm text-neutral-500">
+              Search isn't available right now.
+            </p>
+          ) : showLoading ? (
             <div className="flex items-center justify-center gap-2 px-3 py-6 text-sm text-neutral-500">
                             Loading…
             </div>

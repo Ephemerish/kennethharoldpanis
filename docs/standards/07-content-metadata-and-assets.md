@@ -79,8 +79,33 @@ The page-load numbers are Google's "good" Core Web Vitals. `pnpm test:perf` (`te
 
 *Why:* the site served every file uncompressed. The home page's HTML was 89 KB on the wire; Brotli brings it to 11 KB. The PageHeader glow and the certification card halo were CSS blurs, which made scrolling heavy. A budget with a test makes "fast" a number a change can break, not a feeling.
 
+## 7.8 Works in any condition
+
+A reader may have script off or broken, images blocked, storage refused (private mode), an old browser, a slow or failing network. The site is built so each of these costs a feature, never the page:
+
+| Condition | What still works | How |
+| --------- | ---------------- | --- |
+| No script | Every page renders its content; every link works; on a phone the top bar shows the links as a row; the contact form sends (the endpoint answers `/thank-you` or `/contact/not-sent`); the subject is a native select | Pages are server-rendered; `<html class="no-js">` until the first script removes it; a control that needs script is `js-only`, its plain fallback `no-js-only` or inside `NoScript` |
+| An image fails | The layout holds; no broken-image icon | Every image has a width and height; `ThemeScript` marks a failed `img` `data-broken` and `theme.css` hides it; a tech chip or tile still shows the name |
+| Storage refused | The theme toggle works for the page; analytics falls back to a session id | Every `localStorage` and `sessionStorage` call is in `try` |
+| An old browser | The marquee drifts without the drag or the off-screen pause; everything else reads | Feature checks before `IntersectionObserver` and `getAnimations` |
+| A request fails | Search says "Search isn't available right now"; the contact form says it failed and keeps the message; analytics fails silently | Each fetch has an error state |
+| Fonts fail | Text shows in the system font | `--font-sans` falls back to `ui-sans-serif, system-ui` |
+| A slow network | The first screen paints first; images below it wait | §7.5, §7.7 |
+
+Rules:
+
+1. **Enhance, don't depend.** Build the plain version first (a link, a form that posts, a native control), then add script on top. A feature that only works with script has a fallback or hides itself with `js-only`.
+2. **Every fetch has three states**: loading, failed (in words), done.
+3. **Every browser API that may be missing or refused is checked** (`"IntersectionObserver" in window`, `typeof el.getAnimations === "function"`, `try` around storage).
+4. **No asset is load-bearing.** A missing image, font or logo never breaks the layout or hides a name.
+5. **Tested, not assumed.** `tests/e2e/resilience.spec.ts` loads pages with script off, with every image failing, with storage throwing, and with the search index failing, and posts the contact form without script.
+
+*Why:* on November 16, 2026 the owner asked that the site be built to keep working whatever goes wrong on the reader's end, with fallback assets. Before this, the contact form had no `action` and its subject needed script, the mobile menu could not open without script, an icon-only email link had no `href`, and a failed search index showed an empty box.
+
 ## Checklist
 
+- [ ] The change still works with script off, images failing and storage refused; a new fetch has loading, failed and done; `tests/e2e/resilience.spec.ts` passes (§7.8).
 - [ ] New tags and technologies are in their registries and attached to real work; a tag groups 2 or more and repeats no tech; roles and certifications have a `slug` and a tag or tech; a new logo is visible in both themes; `pnpm check:taxonomy` and `pnpm check:assets` pass (§7.1).
 - [ ] The page passes its full title and description; articles pass their cover (§7.2).
 - [ ] The sitemap includes the new route (§7.3).

@@ -10,6 +10,7 @@ Read always. When two rules disagree, the lower number wins, except that the own
 - A maintained library before our own code (§1.4).
 - Dead code, options and pages go in the change that finds them (§1.5).
 - Everyone can use it: keyboard, screen reader, phone (§1.6).
+- It makes sense for every item it is shown on, or it isn't shown; the same kind of thing looks the same everywhere (§1.7).
 
 ## 1.1 Right, or it says so
 
@@ -58,6 +59,21 @@ Whoever finds a dead link, an unused component, an option nobody passes, a page 
 - Text meets WCAG AA contrast in both themes: white text sits on `brand-700`, not `brand-600` (§5.3). A gap that remains is recorded in [theme tokens](../systems/theme-tokens.md). *Why:* the site is itself a work sample (§10.6); this rule used to accept the palette's shortfall.
 - Motion stops under reduced motion (§5.8).
 
+## 1.7 Makes sense, or isn't shown
+
+Before something goes on screen, ask of it:
+
+1. **Does it hold for every item it's shown on?** A label over a group must be true of everything in it. A "Data" row on an AWS certification held three chips that were all cloud, like everything else on that card. A grouping that holds for some items and not others is not shown.
+2. **Does it need a new word?** Things on this site are tech and tags (and the kinds in the [glossary](../GLOSSARY.md)). A third way of sorting them ("categories", "services", "focus areas") is a third thing a reader has to learn. If tech and tags can say it, they say it; if they can't, ask whether it needs saying.
+3. **Is it the same everywhere?** The same kind of thing looks and behaves the same on every page: tech is one flat row of chips on a project, a role and a certification; certifications are in one order on the home page and on `/bio`. A rule or a sort that applies on one page only is wrong on the others.
+4. **Is it used?** A field nothing shows, a fallback nothing reaches, a flag that only reorders one list: removed (§1.5).
+
+When an idea fails one of these, show the **least common denominator**: the simplest form that is true for every item (a flat list of tech, the data's own order, the item's own name) and nothing more.
+
+One rule decides one thing, everywhere. "Used in real work" (a project, a post or a role carries the tech; `usedInWork`) decides both which tech the home page's rows show and whether a tech page says "Built with" or "Certified in".
+
+*Why:* on November 16, 2026 the owner found AWS services split into "Data", "Delivery" and "Cloud" on the AWS certification ("besides all of this are cloud"), on top of tech, tags, "services" and "focus areas", and asked that anything that doesn't make sense not be shown that way. The categories, `partOf`, "Services", "Part of AWS", focus areas, the `highlighted` sort and the unused certification fields were removed in that change.
+
 ## Checklist
 
 - [ ] Every claim on screen is true, or the gap is said in words (§1.1).
@@ -65,3 +81,4 @@ Whoever finds a dead link, an unused component, an option nobody passes, a page 
 - [ ] No fact was written twice (§1.3).
 - [ ] Loose ends found were removed or reported (§1.5).
 - [ ] Keyboard, focus, labels, contrast and reduced motion checked (§1.6).
+- [ ] Everything shown holds for every item it's on, needs no new word, looks the same on every page, and is used; else the least common denominator (§1.7).

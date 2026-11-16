@@ -1,14 +1,27 @@
 ---
 /**
- * Applies the theme before first paint (KHP §5.2). The site is light unless
- * the reader switched to dark with ThemeToggle; the choice is remembered and
- * applied again after every view-transition swap.
+ * Runs first in <head>. Applies the theme before first paint (KHP §5.2): the
+ * site is light unless the reader switched to dark with ThemeToggle; the choice
+ * is remembered and applied again after every view-transition swap. Also
+ * removes the `no-js` class, so fallbacks show only when script can't run, and
+ * hides any picture that fails to load (KHP §7.8).
  */
 ---
 
 <script is:inline>
   (function () {
+    // Script runs: drop the no-JS fallbacks (KHP §7.8).
+    document.documentElement.classList.remove("no-js");
+    // A picture that fails to load is hidden, never a broken-image icon (KHP §7.8).
+    if (!window.__khpImages) {
+      window.__khpImages = true;
+      document.addEventListener("error", function (event) {
+        var target = event.target;
+        if (target && target.tagName === "IMG") target.setAttribute("data-broken", "");
+      }, true);
+    }
     function apply() {
+      document.documentElement.classList.remove("no-js");
       var dark = false;
       try { dark = localStorage.getItem("theme") === "dark"; } catch (e) {}
       document.documentElement.classList.toggle("dark", dark);

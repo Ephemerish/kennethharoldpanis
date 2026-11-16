@@ -4,11 +4,11 @@
 | ------ | ---------------------------------------------------- |
 | Owner  | Kenneth Harold Panis                                 |
 | Prefix | `KHP`                                                |
-| Status | v3, November 15, 2026                                |
+| Status | v4, November 16, 2026                                |
 
 People and agents read [AGENTS.md](AGENTS.md), then this index and the topic files for their task, before changing the site. Check each file's checklist before reporting a change as done. A known violation is fixed, or recorded as a gap in the system's document. Explicit instructions from the owner come first.
 
-The site keeps the owner's visual style and his words. These standards describe that style so new work matches it, and hold the engineering rules (structure, systems, verification, correctness, accessibility) that keep it working. v2 removed the visual rules taken from Ebb and Pundo, which the owner rejected; see [ebb-port.md](docs/standards/ebb-port.md). v3 allows motion under a performance budget (§5.8, §7.6), extends the taxonomy to roles and certifications (§7.1), replaces filler with facts (§6.6), adds the portfolio standard (§10), builds pages only from components (§4.9), and sets a performance budget for every page (§7.7).
+The site keeps the owner's visual style and his words. These standards describe that style so new work matches it, and hold the engineering rules (structure, systems, verification, correctness, accessibility) that keep it working. v2 removed the visual rules taken from Ebb and Pundo, which the owner rejected; see [ebb-port.md](docs/standards/ebb-port.md). v3 allows motion under a performance budget (§5.8, §7.6), extends the taxonomy to roles and certifications (§7.1), replaces filler with facts (§6.6), adds the portfolio standard (§10), builds pages only from components (§4.9), and sets a performance budget for every page (§7.7). v4 ports Ebb's and Pundo's writing rules and their list of AI tells, adapted to his look and enforced by `pnpm check:copy` and `pnpm check:tokens` (§5.9, §6.7), and makes the internal [glossary](docs/GLOSSARY.md) mandatory.
 
 ## Files
 
@@ -19,8 +19,8 @@ The site keeps the owner's visual style and his words. These standards describe 
 | 3 | [Layout and spacing](docs/standards/03-layout-and-spacing.md) | The rails column, headers, spacing, widths, floating tools, screen sizes |
 | 4 | [Components and controls](docs/standards/04-components-and-controls.md) | Labels, buttons, links, cards, chips and pills, fields, paging, icons, pages built from components |
 | 5 | [Colour, type and tokens](docs/standards/05-colour-type-and-tokens.md) | The theme scales, dark mode, what colour means, type, shape, layers, motion, no AI tells |
-| 6 | [States, feedback and writing](docs/standards/06-states-feedback-and-writing.md) | Loading, errors, empty states, toasts, dates, the owner's words, no filler |
-| 7 | [Content, metadata and assets](docs/standards/07-content-metadata-and-assets.md) | The taxonomy, head tags, sitemap, images, the home page's checks, the performance budget, compression and caching |
+| 6 | [States, feedback and writing](docs/standards/06-states-feedback-and-writing.md) | Loading, errors, empty states, toasts, dates, the owner's words, no filler, word budgets, what never how, the glossary |
+| 7 | [Content, metadata and assets](docs/standards/07-content-metadata-and-assets.md) | The taxonomy, head tags, sitemap, images, the home page's checks, the performance budget, compression and caching, working in any condition |
 | 8 | [Code and structure](docs/standards/08-code-and-structure.md) | Folders, file size, imports, islands, endpoints, comments |
 | 9 | [Workflow and done](docs/standards/09-workflow-and-done.md) | Before a change, verification and the browser tests, visual review, changing a rule |
 | 10 | [Portfolio](docs/standards/10-portfolio.md) | Who he is on the first screen, proof for every claim, real work behind every tag and technology, the site as a work sample |
@@ -29,12 +29,15 @@ The site keeps the owner's visual style and his words. These standards describe 
 
 Read **1** and **10** always. Then:
 
+Every task: the [glossary](docs/GLOSSARY.md) for what to call things (mandatory).
+
 | Task | Sections |
 | ---- | -------- |
 | Change a page or a component | 2, 3, 4 (4.9 above all), 5, 6, 9; the system in [docs/systems.md](docs/systems.md); [lib/khp-ui/AGENTS.md](lib/khp-ui/AGENTS.md) |
 | Change colours, type or the theme | 5, 9; [theme tokens](docs/systems/theme-tokens.md) |
 | Add a project or a post | 6.5, 6.6, 7.1, 7.5; [content registries](docs/systems/content-registries.md) |
-| Add a role, certification, tag or technology | 6.6, 7.1; [content registries](docs/systems/content-registries.md) |
+| Add a role, certification, tag or technology | 6.6, 6.7, 7.1; the glossary; [content registries](docs/systems/content-registries.md) |
+| Write or change any words on screen | 6.6, 6.7, 5.9; the glossary |
 | Add or change motion | 5.8, 7.6, 7.7; [theme tokens](docs/systems/theme-tokens.md) |
 | Change what a page loads, the server or a budget | 7.5, 7.6, 7.7, 9.2; [testing](docs/systems/testing.md), [head and SEO](docs/systems/head-and-seo.md) |
 | Change a list size, a limit or the site's identity | 1.3; `src/data/settings.ts`, `src/data/site.ts` |

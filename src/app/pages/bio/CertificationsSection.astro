@@ -1,15 +1,13 @@
 ---
-/** Certifications, featured first, each with its official badge. */
+/** Certifications in the data's order, the same order as the home hero. */
 import { Box, List, ListItem, SectionHeader } from "@ui";
 import { certifications } from "@data/bio/certifications";
 import CertificationCard from "./CertificationCard.astro";
-
-const sorted = [...certifications].sort((a, b) => Number(!!b.highlighted) - Number(!!a.highlighted));
 ---
 
 <Box as="section" aria-labelledby="certifications">
   <SectionHeader prefix="My" accent="Certifications" subtitle="Markers of where I've been learning." id="certifications" />
   <List gap="lg">
-    {sorted.map((cert) => <ListItem><CertificationCard cert={cert} /></ListItem>)}
+    {certifications.map((cert) => <ListItem><CertificationCard cert={cert} /></ListItem>)}
   </List>
 </Box>

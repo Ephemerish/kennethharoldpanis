@@ -11,6 +11,8 @@ export const lists = {
   homePosts: 6,
   /** Posts per page on /blogs. */
   postsPerPage: 6,
+  /** Rows of drifting tech tiles on the home page. */
+  homeTechRows: 3,
 } as const;
 
 /** What the contact endpoint accepts. */

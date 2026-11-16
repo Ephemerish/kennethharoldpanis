@@ -1,11 +1,15 @@
 ---
-/** /tech/[slug]: every project and post built with one technology. */
+/**
+ * /tech/[slug]: every project, post, role and certification that names one
+ * tech. "Built with" when real work used it, "Certified in" when only a
+ * certification covers it (`usedInWork`, KHP §1.1).
+ */
 import MainLayout from "@app/layout/MainLayout.astro";
 import { Chip, PageSection, PageHeader, Row, VisuallyHidden } from "@ui";
 import TaxonomyResults from "@app/features/taxonomy/TaxonomyResults.astro";
 import { getTechBySlug } from "@data/taxonomy/technologies";
 import type { AnyEntry } from "@app/features/entries/model";
-import type { BioRecord } from "@app/features/taxonomy/collect";
+import { countLabel, usedInWork, type BioRecord } from "@app/features/taxonomy/collect";
 
 interface Props {
   slug: string;
@@ -14,21 +18,20 @@ interface Props {
 }
 
 const { slug, entries, bio } = Astro.props;
-const total = entries.length + bio.length;
 const tech = getTechBySlug(slug);
 const label = tech?.name ?? slug;
-const count = `${total} ${total === 1 ? "entry" : "entries"}`;
+const prefix = usedInWork([...entries, ...bio]) ? "Built with" : "Certified in";
 ---
 
 <MainLayout
-  title={`Built with ${label} - Kenneth Harold Panis`}
-  description={`Projects, posts, roles and certifications where I used ${label}.`}
+  title={`${prefix} ${label} - Kenneth Harold Panis`}
+  description={`Projects, posts, roles and certifications that name ${label}.`}
 >
   <PageSection variant="hero">
     <PageHeader
-      prefix="Built with"
+      prefix={prefix}
       accent={label}
-      subtitle={`${count} where I used ${label}.`}
+      subtitle={countLabel([...entries, ...bio])}
       size="md"
     />
 

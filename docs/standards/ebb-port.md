@@ -52,3 +52,17 @@ The site keeps its own visual language, described in §3 to §5. From Ebb and Pu
 ## Left out
 
 FinOps, FOCUS data, allocation, charts, tables, the record sidebar, dev mode, organisation ownership, writes tables, money formatting, database backups, mobile sync and i18n. They describe Ebb's and Pundo's products, not a personal site.
+
+## November 16, 2026: the writing rules and the AI tells
+
+At the owner's request ("copy and enforce the standard like Ebb and Pundo"), these were ported, adapted to his look, and enforced by script where a script can:
+
+| From | Rule | Here |
+| ---- | ---- | ---- |
+| Ebb §8.1, Pundo §13.1 | Word budgets: labels 1 to 3 words, a hint one sentence of at most 15 | §6.7, `check:copy` |
+| Ebb §8.2, Pundo §13.2 | What, never how | §6.7, `check:copy` |
+| Pundo §13.3, §13.4 | No em dashes; a middle dot only between two facts in a secondary row | §6.7, `check:copy` (em dash) |
+| Ebb §1.16.3 | The giveaways of a generated screen, each with the site's line | §5.9, `check:tokens` (side stripe), `check:copy` |
+| Ebb §8.3.10 | The Glossary's word for each thing, mandatory | [GLOSSARY.md](../GLOSSARY.md), `check:copy` |
+
+Not ported, because the owner's look answers them differently: Ebb's bans on uppercase labels, gradients, subtitles as such, and centred headers. §5.9 says where each row lands.

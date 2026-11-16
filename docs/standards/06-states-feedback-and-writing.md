@@ -8,6 +8,7 @@
 - A toast confirms an action the reader took (§6.4).
 - Dates go through one formatter (§6.5).
 - The owner's words stay; generic filler is replaced by facts from the data (§6.6).
+- A line says what, never how; a subtitle is one sentence of at most 15 words, a label 1 to 3 words; `pnpm check:copy` enforces it (§6.7).
 
 ## 6.1 Loading
 
@@ -35,13 +36,28 @@ The owner's own words stay as he wrote them, including their case and punctuatio
 
 Generic filler is not his voice. A line that could sit on any portfolio ("Passionate about building great things") is replaced by a fact from the site's data: a role, a project, a certification, what a page lists. The home page's projects subtitle names the LoRa network for small fishing boats; the technologies subtitle says each tile opens the work that used it. Every claim on screen traces to the data or the content (§1.1, §10.3).
 
-A label never claims what the data doesn't say. "Featured" appears only on a project marked `featured` or a certification marked `highlighted`. A featured card's lead pill says "Featured" for such a project, "Latest post" for the newest post, and nothing for any other project.
+A label never claims what the data doesn't say. "Featured" appears only on a project marked `featured`. A featured card's lead pill says "Featured" for such a project, "Latest post" for the newest post, and nothing for any other project.
 
 *Why:* on November 15, 2026 the owner rejected a redesign that restyled the site and rewrote its words ("don't make shit up"). Filler is made up too. A line drawn from the data can't be, and it tells a reader something about him.
 
-## 6.7 Word budgets
+## 6.7 Word budgets, and what, never how
 
-Removed: the owner's copy keeps its own length; new words follow §6.6.
+Ported from Ebb §8.1 and §8.2 and Pundo §13. The owner's own copy keeps its length (§6.6); every line added after him follows this.
+
+| Text | Budget |
+| ---- | ------ |
+| Page title, section title, label, button, tab | 1 to 3 words beside the title's own prefix ("My Experience", "Built with", "Verify credential") |
+| Subtitle, hint, empty-state line, toast | One sentence, at most 15 words |
+
+**What, never how.** A line says what something is or holds, never how to work the page: no "click", "open one", "hover", "scroll", "check out", "take a look", "feel free". If a reader needs to be told how, the page is wrong; fix the page. A cue that is part of the control (a caret on an accordion, an arrow on a link) does that job without words.
+
+**A title can stand alone.** A subtitle is there only when it says something the title and the content can't (a scope, a fact). "My Experience" needs nothing under it; "Markers of where I've been learning" is his and stays.
+
+**Words.** No em dashes, and no hyphen standing in for one. No full stop after a title, label or button; sentences keep theirs. Sentence case in card text, Title Case where the owner uses it (§6.8). A middle dot may join two short facts in a secondary row ("Bohol Island State University · 2020 – 2024"), never in a title, label or button (Pundo §13.4). No filler ("seamless", "passionate", "elevate", "unlock", "cutting-edge", "robust", "powerful", "my journey").
+
+`pnpm check:copy` (`scripts/check-copy.mjs`) fails on a how-to line, a subtitle over 15 words or two sentences, a label over 3 words, a title with a full stop, filler, an em dash or an emoji, anywhere in the templates, the UI library or `src/data/` except his articles and the apps' release notes.
+
+*Why:* on November 16, 2026 the owner called "Open one to see the tech I used there" stupid and asked for a standard that stops lines like it, copied from Ebb and Pundo. Ebb and Pundo enforce their budgets by review; this site enforces them with a script, because the same kind of line ("Each one opens the projects, posts and roles where I used it") had already slipped into two subtitles.
 
 ## 6.8 Words added with the owner's say
 
@@ -49,7 +65,7 @@ Match the words around them: the same case as their neighbours (Title Case butto
 
 ## 6.9 Designed, not generated
 
-Removed: the owner's visual style keeps uppercase labels, subtitles under titles, gradient text, gradient bars under headings, "Featured" and status pills, card shadows and centred headers. §3 to §5 describe that style.
+The giveaways of a generated page, ported from Ebb §1.16.3, and this site's line on each, are in §5.9. The words in it follow §6.7.
 
 ## Checklist
 
@@ -57,3 +73,4 @@ Removed: the owner's visual style keeps uppercase labels, subtitles under titles
 - [ ] Dates go through `format.ts` (§6.5).
 - [ ] No owner copy was changed, and any new visible thing has his say (§6.6).
 - [ ] New lines are facts from the data, and labels claim only what the data says (§6.6).
+- [ ] No line tells the reader how to use the page; budgets met; `pnpm check:copy` passes (§6.7).

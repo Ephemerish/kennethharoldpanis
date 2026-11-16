@@ -27,13 +27,15 @@ come from `src/data/site.ts` ([Frame and navigation](frame-and-navigation.md)).
 3. Answers are short and plain: "All fields are required", "Invalid email address", "Message is too long", "Email service not configured" (503), "Failed to send email" (502). Never a stack trace or a provider message (KHP §8.5).
 4. Every user field is HTML-escaped before it goes into the email body.
 5. The subject must be one of `SUBJECTS`. The form and the endpoint read the same list (KHP §1.3).
-6. The subject submits with the form through Radix's own `name` and `required`; no hidden input is added (KHP §4.6).
+6. The subject submits with the form through Radix's own `name` and `required` when script runs; the Radix picker is `client:only`, so no hidden required field is server-rendered, and without script a `NativeSelect` inside `NoScript` takes its place (KHP §4.6, §7.8).
 7. The honeypot stays hidden from people and assistive tech (a `hidden`, `aria-hidden` wrapper, and `tabindex="-1"` on the field).
 8. A missing `RESEND_API_KEY` answers 503 and logs on the server.
 9. The real email address is never in the server-rendered HTML.
 10. Each field has a visible label above it (KHP §4.1).
-11. Only a real send shows the success toast. No URL or query string can show it.
-12. The call-to-action card's role and chips come from the current timeline entry, never a list typed in the card (KHP §1.3, §6.6).
+11. Only a real send shows the success toast or the `/thank-you` page. No URL or query string can show it: `/thank-you` is reached only by the endpoint's redirect after a send (or the honeypot), and is `noindex`.
+13. The form works without script: it has `action="/api/contact"`; the endpoint answers a request that doesn't ask for JSON with a 303 to `/thank-you` or `/contact/not-sent`, and `/contact/not-sent` gives the address to email instead (KHP §1.1, §7.8). The page's script sends `Accept: application/json` and gets JSON as before.
+14. `security.allowedDomains` in `astro.config.mjs` lists every host the site answers on. Without it Astro treats requests as coming from "localhost" and its same-origin check refuses every form post with 403. A new domain is added there before it goes live.
+12. The call-to-action card's role comes from the current timeline entry, never typed in the card (KHP §1.3, §6.6). It links to `/bio` for the tech instead of repeating thirty chips (KHP §1.7).
 
 ## Before changing
 
@@ -48,6 +50,8 @@ come from `src/data/site.ts` ([Frame and navigation](frame-and-navigation.md)).
 - None for the endpoint itself: its validation, escaping, honeypot and the Resend call.
 
 ## Known limits
+
+- Before November 16, 2026 `security.allowedDomains` was not set, so with Astro 5.18 every form post to `/api/contact` from the live site was refused with 403 ("Cross-site POST form submissions are forbidden"). The JavaScript form tests stub the endpoint, so they couldn't see it; `tests/e2e/resilience.spec.ts` now posts to the real endpoint.
 
 - The error toast always says "Please try again or email me directly."; the server's reason is not shown.
 - No rate limiting on `/api/contact`; the honeypot is the only bot defence.

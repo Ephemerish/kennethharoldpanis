@@ -19,14 +19,15 @@ Read [AGENTS.md](../../AGENTS.md), this standard's files for the task, the syste
 1. `check`: `astro check` (types, 0 errors and 0 warnings).
 2. `check:tokens`: theme colours, corners, layers, and no text below AA contrast (§5.1, §5.3).
 3. `check:composition`: templates built from components (§4.9).
-4. `check:assets`: every technology logo visible in light and dark; badges and organisation logos present (§7.1).
-5. `test`: the unit tests in `tests/unit/`.
-6. `build`: the taxonomy check, the cover backdrops, `astro build`, then the compressed copies (§7.7).
-7. `check:output`: the home page keeps its budget, the pretext article keeps its live cover, release controls keep their shape (§7.6).
-8. `test:e2e`: every page in the sitemap at 1440px and 375px, every interactive feature, and an axe accessibility scan of every page in light and dark, in a real browser.
-9. `test:perf`: the performance budget (§7.7).
+4. `check:copy`: what never how, word budgets, no filler or em dashes, the glossary's words (§6.7).
+5. `check:assets`: every technology logo visible in light and dark; badges and organisation logos present (§7.1).
+6. `test`: the unit tests in `tests/unit/`.
+7. `build`: the taxonomy check, the cover backdrops, `astro build`, then the compressed copies (§7.7).
+8. `check:output`: the home page keeps its budget, the pretext article keeps its live cover, release controls keep their shape (§7.6).
+9. `test:e2e`: every page in the sitemap at 1440px and 375px, every interactive feature, and an axe accessibility scan of every page in light and dark, in a real browser.
+10. `test:perf`: the performance budget (§7.7).
 
-The browser tests run against the built site served by `server.mjs`, so they need step 6 first. CI installs Chromium and runs the same `pnpm verify`. A failure is fixed, never skipped. See [testing](../systems/testing.md).
+The browser tests run against the built site served by `server.mjs`, so they need the build step first. CI installs Chromium and runs the same `pnpm verify`. A failure is fixed, never skipped. See [testing](../systems/testing.md).
 
 ## 9.3 Look at it
 

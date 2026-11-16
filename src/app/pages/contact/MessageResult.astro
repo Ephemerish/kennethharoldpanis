@@ -1,0 +1,41 @@
+---
+/**
+ * Where a contact form posted without script lands (KHP §7.8): /thank-you
+ * when the message was sent, /contact/not-sent when it wasn't. A form sent
+ * with script says the same in a toast and stays on /contact. Never says
+ * "sent" when it wasn't (KHP §1.1).
+ */
+import Layout from "@app/layout/MainLayout.astro";
+import EmailLink from "@app/shared/EmailLink.astro";
+import { Box, ButtonLink, Frame, Heading, Row, Stack, Text } from "@ui";
+
+interface Props {
+  sent: boolean;
+}
+
+const { sent } = Astro.props;
+---
+
+<Layout title={sent ? "Thank You - Kenneth Harold Panis" : "Message Not Sent - Kenneth Harold Panis"} noindex>
+  <Frame as="section" topBorder pad="md">
+    <Stack gap="none" align="center" class="justify-center min-h-[70vh] text-center">
+      <Box class="max-w-lg mx-auto">
+        <Heading level={1} size="title" class="md:text-4xl mb-3 sm:mb-4">{sent ? "Thank You" : "Message Not Sent"}</Heading>
+        <Text size="large" tone="muted" leading="relaxed" class="mb-6 sm:mb-8">
+          {sent
+            ? "Your message has been successfully sent. I appreciate you reaching out and will get back to you as soon as possible, usually within 24 hours."
+            : "Your message didn't go through. Please email me directly instead."}
+        </Text>
+        {!sent && (
+          <Text size="large" weight="medium" class="mb-6 sm:mb-8 break-all">
+            <EmailLink showAddress class="text-brand-700 hover:text-brand-800" />
+          </Text>
+        )}
+        <Row stackBelow="sm" justify="center" gap="md">
+          <ButtonLink href={sent ? "/" : "/contact"} variant="default" class="w-full sm:w-auto">{sent ? "Go back to Home" : "Try Again"}</ButtonLink>
+          <ButtonLink href="/projects" variant="outline" class="w-full sm:w-auto">View Projects</ButtonLink>
+        </Row>
+      </Box>
+    </Stack>
+  </Frame>
+</Layout>

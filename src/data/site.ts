@@ -8,7 +8,7 @@ export const site = {
   name: "Kenneth Harold Panis",
   url: "https://kennethharoldpanis.com",
   description:
-    "Kenneth Harold Panis, software engineer. Projects, write-ups and certifications across web, cloud and embedded systems.",
+    "Kenneth Harold Panis, software engineer. Projects, posts and certifications across web, cloud and embedded systems.",
   email: "kennethpanis24@gmail.com",
   location: "Philippines",
   image: "/images/me/me.jpg",

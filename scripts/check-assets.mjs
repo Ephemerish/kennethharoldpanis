@@ -64,7 +64,13 @@ for (const tech of technologies) {
   const dark = tech.imagePathDark ?? tech.imagePath;
   if (!(await exists(light, tech.name)) || !(await exists(dark, `${tech.name} (dark)`))) continue;
   for (const [theme, file] of [["light", light], ["dark", dark]]) {
-    const share = await visibleShare(join(root, "public", file), TILES[theme]);
+    let share;
+    try {
+      share = await visibleShare(join(root, "public", file), TILES[theme]);
+    } catch (error) {
+      problems.push(`${tech.name}: public${file} can't be read as an image (${error.message}). Is it empty?`);
+      break;
+    }
     if (share < MIN_VISIBLE)
       problems.push(`${tech.name} logo is ${(share * 100).toFixed(0)}% visible on the ${theme} tile (${file}). Give it ${theme === "dark" ? "an imagePathDark" : "a darker main logo"}.`);
   }

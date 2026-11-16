@@ -1,13 +1,23 @@
 ---
-/** Every technology, as two rows that drift in opposite directions (KHP §5.8). */
+/**
+ * The tech he has used in real work, as two rows that drift in opposite
+ * directions (KHP §5.8). Tech only a certification covers is on the
+ * certification and its own page, not here (`usedInWork`).
+ */
 import { Marquee, PageSection, SectionHeader, Stack } from "@ui";
-import { technologies, type Technology } from "@data/taxonomy/technologies";
+import { technologies, techSlug, type Technology } from "@data/taxonomy/technologies";
+import { loadTaxonomy, usedInWork } from "@app/features/taxonomy/collect";
+import { lists } from "@data/settings";
 import TechTile from "./TechTile.astro";
 
-const all: readonly Technology[] = technologies;
-const split = Math.ceil(all.length / 2);
-const rows = [all.slice(0, split), all.slice(split)];
-// About 2.6s per tile keeps both rows at the same, unhurried speed.
+const { withTech } = await loadTaxonomy();
+const all = (technologies as readonly Technology[]).filter((tech) => {
+  const { entries, bio } = withTech(techSlug(tech.name));
+  return usedInWork([...entries, ...bio]);
+});
+// Dealt round-robin, so every row mixes the kinds of tech in the file's order.
+const rows = Array.from({ length: lists.homeTechRows }, (_, r) => all.filter((_, i) => i % lists.homeTechRows === r));
+// About 2.6s per tile keeps every row at the same, unhurried speed.
 const seconds = (count: number) => Math.round(count * 2.6);
 ---
 
@@ -15,7 +25,6 @@ const seconds = (count: number) => Math.round(count * 2.6);
   <SectionHeader
     accent="Technologies"
     suffix="I Work With"
-    subtitle="Each one opens the projects, posts and roles where I used it."
   />
   <Stack gap="md" aria-label="Technologies">
     {rows.map((row, i) => (

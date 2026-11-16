@@ -1,11 +1,11 @@
 ---
 /**
- * A role or certification on a tag or tech page: what it is, where, when, and
- * a link to its card on /bio.
+ * A role, school or certification on a tag or tech page: its logo or badge
+ * (the same image as on /bio), what it is, where, when, and a link to its card.
  */
 import { ArrowRightIcon } from "@phosphor-icons/react";
-import { Card, Heading, IconBadge, Label, Stack, Text } from "@ui";
-import { hrefOf, type BioRecord } from "./collect";
+import { Box, Card, Heading, Image, Label, Stack, Text } from "@ui";
+import { hrefOf, nounOf, type BioRecord } from "./collect";
 import { yearsLabel } from "@data/bio/experience";
 
 interface Props {
@@ -19,11 +19,16 @@ const where = isRole ? item.record.org : item.record.issuer;
 const when = isRole
   ? yearsLabel(item.record)
   : item.record.issuedDate;
-const label = isRole ? "Experience" : "Certification";
+const noun = nounOf(item)[0];
+const label = noun[0].toUpperCase() + noun.slice(1);
+const image = isRole ? item.record.logo : `/images/${item.record.badge}`;
+const RoleIcon = isRole ? item.record.Icon : undefined;
 ---
 
-<Card href={hrefOf(item)} hoverable padding="sm" class="motion-lift flex h-full items-start gap-4">
-  <IconBadge Icon={item.record.Icon} variant="subtle" size="sm" weight="regular" />
+<Card href={hrefOf(item)} hoverable padding="sm" class="flex h-full items-start gap-4">
+  <Box class="flex h-10 w-10 shrink-0 items-center justify-center border border-neutral-200 bg-white p-1">
+    {image ? <Image src={image} alt="" width="32" height="32" fit="contain" class="h-full w-full" /> : RoleIcon && <RoleIcon className="h-5 w-5 text-ink" aria-hidden="true" />}
+  </Box>
   <Stack gap="none" class="min-w-0 flex-1">
     <Label tone="brand">{label}</Label>
     <Heading level={3} size="small" class="mt-1 group-hover:text-brand-700">{title}</Heading>

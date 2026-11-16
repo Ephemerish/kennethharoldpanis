@@ -65,7 +65,7 @@ export const $popular = createFetcherStore<PopularResponse>([
 export async function sendContact(form: FormData): Promise<void> {
   let result: { success?: boolean; error?: string } | null = null;
   try {
-    const res = await fetch("/api/contact", { method: "POST", body: form });
+    const res = await fetch("/api/contact", { method: "POST", body: form, headers: { Accept: "application/json" } });
     result = await res.json();
   } catch {
     throw new Error("Failed to send message");

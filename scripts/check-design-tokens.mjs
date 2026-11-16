@@ -6,7 +6,7 @@
  * neutral-400 (under AA contrast in both themes; KHP §5.3). Those two steps
  * are for borders and aria-hidden icons only. No coloured or thick stripe down
  * one side of a box, the best-known AI tell (KHP §5.9); a quote's rule is the
- * one exception. Exits non-zero with every hit.
+ * one exception. No decorative motion (KHP §5.8). Exits non-zero with every hit.
  */
 import { readFile, readdir } from "node:fs/promises";
 import { join, relative, resolve } from "node:path";
@@ -33,6 +33,10 @@ const RULES = [
   { id: "raw z-index", re: /(?<![\w-])(?:[a-z-]+:)*z-(?:\d+|\[\d+\])(?![\w-])/g },
   // A side stripe: a left or right border thicker than 1px, or in brand or status colour.
   { id: "side stripe", re: /(?<![\w-])(?:[a-z-]+:)*border-[lrse]-(?:[2-9]|\[[^\]]+\]|(?:brand|success|warning|error)-\d{2,3})(?![\w-])/g, unlessQuote: true },
+  // Motion without a job (KHP §5.8): animate-* classes, transition-all, raw
+  // durations, and anything that scales or moves on hover or focus. Placement
+  // (a translate to centre something) is not motion and is not flagged.
+  { id: "decorative motion", re: /(?<![\w-])(?:(?:[a-z-]+:)*(?:animate-[a-z-]+|transition-all|duration-\d+|motion-(?:lift|zoom))|(?:[a-z-]+:)*(?:hover|group-hover|focus|focus-visible|active):(?:[a-z-]+:)*-?(?:scale|translate)-[\w./[\]-]+)(?![\w-])/g },
   // Too faint to read: allowed only on a line that marks its element aria-hidden.
   { id: "faint text", re: /(?<![\w-])(?:[a-z-]+:)*(?:text|placeholder:text)-neutral-(?:300|400)(?![\w-])/g, unlessDecorative: true },
 ];

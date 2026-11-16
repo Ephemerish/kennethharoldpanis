@@ -9,8 +9,8 @@ The theme lives in [lib/khp-ui/tokens/theme.css](../../lib/khp-ui/tokens/theme.c
 - Lime is the brand; neutral carries text and surfaces; status scales carry state with words (§5.3).
 - Outfit, Tailwind's default type sizes (§5.4).
 - Square corners; brand gradients and soft shadows are the look (§5.6).
-- Motion is quick, cheap and optional: it pauses when unseen and stops under reduced motion (§5.8).
-- No AI tells: no side stripes, sparkle icons, echo badges, purple glows or filler; the owner's own look is not slop (§5.9).
+- Motion only with a job: answering the pointer, showing what appeared, following the hand, or the owner's marquee and live cover (§5.8).
+- No AI tells, Ebb's list with this site's line on each: no side stripes, sparkle icons, echo badges, how-to lines, purple glows or filler; the owner's own look is not slop (§5.9).
 
 ## 5.1 Theme colours only
 
@@ -55,40 +55,53 @@ Corners are square: the theme clears `--radius-*`, and `pnpm check:tokens` fails
 
 Never a raw `z-<number>`. In order: `z-raised`, `z-nav`, `z-dropdown`, `z-float`, `z-drawer`, `z-modal`, `z-popover`, `z-tooltip`, `z-toast`. In CSS, `var(--z-*)`.
 
-## 5.8 Motion
+## 5.8 Motion, only with a job
 
-Motion is welcome when it costs little. The site should feel quick and snappy, like Ebb, so motion keeps to a budget:
+Every animation and transition on the site has one of these jobs, or it doesn't exist:
 
-- **Cheap properties only.** Transitions change colour, background, border, shadow, opacity and transform, never a property that moves layout. Anything that travels (the card lift, the cover zoom, the marquee) moves by `transform`, which the browser composites.
-- **One set of timings.** `theme.css` holds `--duration-fast` (150ms), `--duration-base` (250ms), `--duration-slow` (600ms) and `--ease-out`. Links, buttons, `summary`, fields, `[role="button"]`, `[role="option"]` and `.motion-surface` ease at `--duration-fast`.
-- **A few utilities.** `motion-lift` lifts a card that is a link 2px on hover. `motion-zoom` scales a cover image to 1.03 when its card is hovered. `marquee`, `marquee-track` and `marquee-reverse` make the home page's endless technology rows.
-- **Paused when unseen.** The marquee pauses on hover and focus, and an `IntersectionObserver` pauses it off screen. The pretext cover's frame loop runs at 24 frames a second only while it is on screen and the tab is visible.
-- **Nothing eager.** A card's live cover paints a still first and hydrates when it scrolls into view. The home page's budget is §7.6.
-- **Reduced motion stops it.** Under `prefers-reduced-motion` every transition and animation ends at once, the marquee becomes a still, wrapped list showing each technology once, and the pretext cover draws one still frame.
+| Job | What moves | How |
+| --- | ---------- | --- |
+| Answer the pointer | A link, button, field or card changes colour, border or shadow on hover and focus | `--duration-fast` (150ms), set once in `theme.css` for `a`, `button`, `summary`, fields, `[role="button"]`, `[role="option"]` and `.motion-surface` |
+| Show what appeared | A tooltip fades in | `--duration-fast` opacity |
+| Follow the hand | The marquee follows a drag; the image viewer follows a zoom or pan | Moved directly by the pointer |
+| The owner's motion | The technology marquee drifts; the pretext post's cover draws live | `marquee` utilities; the pretext engine |
 
-New motion uses these tokens and utilities. The image viewer's zoom and pan are driven by its own script.
+Not allowed, because it has no job: cards lifting on hover, images zooming on hover, page cross-fades on navigation, things fading or sliding in as they scroll into view, bouncing, pulsing, parallax, entrance animations, a transition on `all`, any duration other than the token. `pnpm check:tokens` fails on `animate-*`, `transition-all`, a raw `duration-*`, and a scale or translate on hover or focus ("decorative motion").
 
-*Why:* v2 turned all animations and transitions off for performance. The owner wants the site to move and still be as fast as Ebb, so motion is allowed where it is cheap and stops when no one sees it.
+Rules for the motion that stays:
+
+- **Cheap properties only.** Colour, background, border, shadow, opacity and transform; never a property that moves layout. The marquee moves by `transform`.
+- **Paused when unseen.** The marquee pauses on hover, focus and drag, and an `IntersectionObserver` pauses it off screen. The pretext cover runs at 24 frames a second only while it is on screen and the tab is visible.
+- **Nothing eager.** A card's live cover paints a still first and hydrates when it scrolls into view (§7.6).
+- **Reduced motion stops it.** Under `prefers-reduced-motion` every transition and animation ends at once, the marquee becomes a still, wrapped list, and the pretext cover draws one still frame.
+
+*Why:* on November 16, 2026 the owner asked to cut animation and transitions to the ones needed. Removed: `motion-lift` (cards rising 2px on hover), `motion-zoom` (covers scaling on hover), the view-transition cross-fade between pages (`transition:animate="none"` on `<html>`), the `--duration-base` and `--duration-slow` tokens, and `opacity` and `transform` from the base transition. v2 had turned all motion off; v3 allowed it on a budget; this keeps only motion with a job.
 
 ## 5.9 No AI tells
 
-"AI slop" is UI that looks generated: the defaults a code model reaches for when no one made a choice. Readers have learned to spot them, and a portfolio that shows them says the work wasn't looked at (§10). The tells below are the ones design critics and slop-detection tools cite most ([sources](#sources-for-59)). The site doesn't use them:
+"AI slop" is UI that looks generated: the defaults a code model reaches for when no one made a choice. Readers have learned to spot them, and a portfolio that shows them says the work wasn't looked at (§10). This table ports Ebb's list of giveaways (Ebb §1.16.3, itself from the common slop checklists, [sources](#sources-for-59)) and gives this site's line on each. Where the owner's look already answers a row, his look wins ([ebb-port.md](ebb-port.md)).
 
-| Tell | Rule here | Check |
-| ---- | --------- | ----- |
-| A coloured or thick stripe down one side of a card or callout, the most-cited tell | No side stripe. A card is marked by its content (an open state, a date that says "Current"), not an edge. A quote's thin rule is the one exception: it is a print convention, not decoration | `pnpm check:tokens` ("side stripe") |
-| Sparkle, magic-wand and rocket icons; emoji as decoration | An icon says what the thing is (a checklist for features, a bolt for challenges), or there is none | Review |
-| A pill or badge that repeats what the text beside it says ("Current" beside "2024 – Current") | A label adds a fact or it goes | Review |
-| Purple, indigo or blue-to-purple gradients; neon glows on dark | The palette is lime and neutral only (§5.1). The one glow is the page title's `soft-glow` (§5.6) | `pnpm check:tokens` (palette) |
-| Faint grey text on dark, glassmorphism, CSS blur | Text is `neutral-500` or darker (§5.3); no blur (§7.7) | `pnpm check:tokens`, the axe test, `check:output` |
-| Filler copy: "passionate", "seamless", "elevate", "unlock", "cutting-edge"; invented stats | Lines come from the data (§6.6, §10.7) | Review |
-| A layout no one chose: a centred hero, then three icon-topped feature cards, then a stat banner | A section exists because it shows his work (§10) | Review |
+| Giveaway | This site's line | Check |
+| -------- | ---------------- | ----- |
+| A coloured or thick stripe down one side of a card or callout, the most-cited tell | None. An item that matters now says so in its content ("2024 – Current", open by default). A quote's thin rule is the one exception, a print convention | `pnpm check:tokens` ("side stripe") |
+| Pills everywhere; a badge that repeats the text beside it | A chip is a tag, a technology, a status or a fact (a focus area, a version); never decoration, never a repeat ("Current" beside "2024 – Current") | Review |
+| A subtitle under every title; a line telling the reader how to use the page | §6.7: a title can stand alone; a line says what, never how | `pnpm check:copy` |
+| Verbose, redundant text; filler words | The budgets and words of §6.7 | `pnpm check:copy` |
+| Sparkle, magic-wand and rocket icons; emoji | Phosphor icons that say what a thing is (a checklist for features, a bolt for challenges); no emoji | `pnpm check:copy` (emoji), review |
+| Purple, indigo or blue-to-purple gradients; neon glows | Lime and neutral only (§5.1); the one glow is the page title's `soft-glow` (§5.6) | `pnpm check:tokens` |
+| Faint grey text, glassmorphism, blur | Text `neutral-500` or darker (§5.3); no blur (§7.7) | `pnpm check:tokens`, axe, `check:output` |
+| Many shades and opacities of one colour | The theme's steps only; opacity for overlays on photos and "off" states | `pnpm check:tokens` |
+| Monospace for names people read | Monospace for code and the timeline's years (his choice), never a name | Review |
+| Labels strung with bullets ("a · b · c") | At most one middle dot, joining two short facts in a secondary row (§6.7) | Review |
+| Full stops in titles; ALL CAPS sentences | No full stop after a title, label or button (§6.7). Uppercase only on the small `Label` style, his choice | `pnpm check:copy` |
+| A layout no one chose: centred hero, three icon-topped feature cards, a stat banner | A section exists because it shows his work (§10) | Review |
+| Sub-groups and labels that don't hold for every item ("Data" over three AWS services on a card where everything is cloud) | Tech and tags only; a flat row of chips; the least common denominator (§1.7) | Review |
 
-**What is not slop here.** Some of the owner's look also appears on the slop lists: the gradient accent word, gradient cards with a soft shadow, small uppercase labels, the short bar under a heading. They stay. They are his choices from before AI tools, used in fixed places (one accent word per heading, labels only to name a group), and the site that dropped them was rejected as "ugly and generic" ([ebb-port.md](ebb-port.md)). The rule is not "avoid anything a model might make"; it is "nothing on screen is there by default". Each element has a reason someone can state.
+**His look is not slop.** Some of it is on the slop lists: the gradient accent word, gradient cards with a soft shadow, small uppercase labels, centred headers with a short bar. They stay. They are his choices, used in fixed places (one accent word per heading, labels only to name a group), and the site that dropped them was rejected as "ugly and generic". The rule is not "avoid anything a model might make"; it is "nothing on screen is there by default".
 
-When unsure, ask the four questions in AGENTS.md. A new element that is on the list above needs the owner's say (§6.6).
+A new element on this list needs the owner's say (§6.6).
 
-*Why:* on November 16, 2026 the owner pointed at the lime stripe down the current role's card ("too AI, it's AI slop") and asked for a standard. The stripe and the article `h4` callout bar were removed, the `AccordionItem` `accent` prop was deleted so it can't come back, the "Key features" sparkle became a checklist, the redundant "Current" pill went, and the token check now fails on a side stripe.
+*Why:* on November 16, 2026 the owner pointed at the lime stripe down the current role's card ("too AI, it's AI slop"), then at "Open one to see the tech I used there", and asked for a standard copied from Ebb and Pundo and enforced. The stripe and the article `h4` callout bar were removed, `AccordionItem`'s `accent` prop was deleted, the "Key features" sparkle became a checklist, the redundant "Current" pill went, the how-to subtitles went, the tech categories on cards went (§1.7), and `check:tokens` and `check:copy` now fail on what they could catch.
 
 ### Sources for §5.9
 
@@ -104,5 +117,5 @@ When unsure, ask the four questions in AGENTS.md. A new element that is on the l
 - [ ] New scale steps have dark values; checked in both themes (§5.2).
 - [ ] Colour used as in §5.3; status has words; no text in `neutral-300` or `neutral-400` (`pnpm check:tokens`), and every page passes axe in light and dark (`tests/e2e/accessibility.spec.ts`).
 - [ ] New UI uses the lib components and brand utilities, not new one-off styles (§5.6).
-- [ ] New motion uses the tokens, changes only the properties in §5.8, pauses when unseen and stops under reduced motion.
+- [ ] New motion has one of the jobs in §5.8, uses the token, pauses when unseen and stops under reduced motion; `pnpm check:tokens` passes.
 - [ ] Nothing from the §5.9 list: no side stripe, no sparkle or emoji decoration, no badge that repeats its text.

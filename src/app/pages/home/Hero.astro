@@ -1,6 +1,5 @@
 ---
 import {
-  CertificateIcon,
   EnvelopeIcon,
   FileTextIcon as DocumentTextIcon,
 } from "@phosphor-icons/react";
@@ -10,7 +9,6 @@ import { certifications } from "@data/bio/certifications";
 
 // Who he is now and what he is certified in, straight from the bio's data.
 const current = currentRole;
-const earned = certifications.filter((cert) => !cert.status);
 ---
 
 <Frame backdrop="hero" pad="lg" class="w-full">
@@ -38,12 +36,18 @@ const earned = certifications.filter((cert) => !cert.status);
         </Text>
       </Stack>
 
-      {earned.length > 0 && (
+      {certifications.length > 0 && (
         <List direction="row" gap="sm" class="justify-center md:justify-start" aria-label="Certifications">
-          {earned.map((cert) => (
+          {certifications.map((cert) => (
             <ListItem>
-              <Chip variant="brand" size="sm" href={`/bio#${cert.slug}`} title={cert.title} class="gap-1.5 py-1.5 hover:bg-brand-100 hover:border-brand-300">
-                <CertificateIcon className="h-4 w-4" weight="fill" aria-hidden="true" />
+              <Chip
+                variant="brand"
+                size="sm"
+                href={`/bio#${cert.slug}`}
+                title={cert.title}
+                logo={`/images/${cert.badge}`}
+                class="gap-2 py-1.5 hover:bg-brand-100 hover:border-brand-300"
+              >
                 {cert.shortTitle}
               </Chip>
             </ListItem>

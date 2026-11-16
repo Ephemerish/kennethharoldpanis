@@ -76,18 +76,21 @@ export default function Navbar({ path: initialPath }: { path: string }) {
             </a>
             <div className="hidden lg:flex items-center gap-1">
               {links.slice(0, 4).map(renderLink)}
-              <AppsMenu apps={apps} />
+              <div className="js-only">
+                <AppsMenu apps={apps} />
+              </div>
               {links.slice(4).map(renderLink)}
             </div>
           </div>
 
           {/* Right: search, theme, mobile toggle */}
           <div className="flex items-center gap-2">
-            <Search className="hidden lg:block w-64" />
-            <ThemeToggle className="hidden lg:inline-flex" />
+            {/* Search, the theme and the menu need script; without it they are hidden (KHP §7.8) */}
+            <Search className="js-only hidden lg:block w-64" />
+            <ThemeToggle className="js-only hidden lg:inline-flex" />
             <button
               type="button"
-              className="lg:hidden inline-flex items-center justify-center p-2 text-neutral-600 hover:text-brand-700"
+              className="js-only lg:hidden inline-flex items-center justify-center p-2 text-neutral-600 hover:text-brand-700"
               aria-controls="mobile-menu"
               aria-expanded={isMenuOpen}
               aria-label="Toggle menu"
@@ -103,6 +106,22 @@ export default function Navbar({ path: initialPath }: { path: string }) {
               )}
             </button>
           </div>
+        </div>
+      </div>
+
+      {/* Without script the menu can't open, so a narrow screen gets the links as a row */}
+      <div className="no-js-only lg:hidden relative max-w-7xl mx-auto px-4 sm:px-6">
+        <div className="flex flex-wrap gap-x-4 gap-y-1 border-x border-t border-neutral-200 px-4 py-2 text-sm">
+          {links.map((link) => (
+            <a
+              key={link.href}
+              href={link.href}
+              className={isCurrent(link.href, path) ? "py-1 text-brand-700" : "py-1 text-neutral-700 hover:text-brand-700"}
+              aria-current={isCurrent(link.href, path) ? "page" : undefined}
+            >
+              {link.label}
+            </a>
+          ))}
         </div>
       </div>
 

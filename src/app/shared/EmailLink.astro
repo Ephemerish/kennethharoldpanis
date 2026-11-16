@@ -5,7 +5,9 @@
  * into data attributes and joined on the client on `astro:page-load`, so it
  * also works across view transitions.
  *
- * Pass a slot (an icon) for an icon-only link, or set `showAddress`.
+ * Pass a slot (an icon) for an icon-only link, or set `showAddress`. Without
+ * script the link goes to /contact and the address reads "name [at] domain",
+ * so it still works (KHP §7.8).
  */
 import { site } from "@data/site";
 
@@ -21,6 +23,7 @@ const [user, domain] = address.split("@");
 ---
 
 <a
+  href="/contact"
   data-email-user={user}
   data-email-domain={domain}
   data-email-text={showAddress ? "" : undefined}

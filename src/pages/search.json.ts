@@ -46,7 +46,7 @@ export const GET: APIRoute = async () => {
         title: item.record.title,
         url: hrefOf(item),
         description: item.record.issuer,
-        keywords: [...keywords, ...item.record.focusAreas],
+        keywords,
       });
     }
   }

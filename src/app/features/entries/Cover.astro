@@ -55,8 +55,8 @@ const stillPhrases = [
   </Box>
 ) : (
   <Box class="relative w-full aspect-video overflow-hidden bg-black">
-    <Image src={coverBackdrop(image ?? "")} alt="" aria-hidden="true" fit="cover" priority={loading === "eager"} class="absolute inset-0 w-full h-full opacity-70 motion-zoom" />
-    <Image src={`/images/${image}`} alt={title} fit="contain" priority={loading === "eager"} class="relative w-full h-full motion-zoom" />
+    <Image src={coverBackdrop(image ?? "")} alt="" aria-hidden="true" fit="cover" priority={loading === "eager"} class="absolute inset-0 w-full h-full opacity-70" />
+    <Image src={`/images/${image}`} alt={title} fit="contain" priority={loading === "eager"} class="relative w-full h-full" />
   </Box>
 )}
 

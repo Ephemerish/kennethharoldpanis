@@ -32,3 +32,16 @@ Sandingan National High School has no published logo; its role shows an icon.
 | `lora-dark.png` | `lora.png` | Dark pixels lightened |
 | `finops.png` | The FinOps Foundation logo (finops.org) | Cropped to the cube mark |
 | `paraglide.png`, `zustand.png` | The earlier JPEGs of the same logos | White background made transparent |
+
+## Technology logos added November 16, 2026 (`tech-logos/`)
+
+| Files | Source | Changes |
+| ----- | ------ | ------- |
+| `amazon-*.svg`, `aws-iam.svg`, `aws-kms.svg`, `aws-lambda.svg`, `aws-cloudformation.svg`, `elastic-load-balancing.svg`, `amazon-dynamodb.svg`, `playwright.svg`, `grpc.svg`, `nginx.svg`, `vue.svg`, `tanstack-query.svg`, `c.svg`, `cpp.svg`, `linux.svg`, `windows.svg` | The svgporn logos set, via `@iconify-json/logos` 1.2.4 | Wrapped as standalone SVG files |
+| `aws-well-architected.svg` | AWS Architecture Icons, via the `aws-icons` 3.3.0 package | None |
+| `compute-engine.svg`, `google-kubernetes-engine.svg`, `app-engine.svg`, `cloud-*.svg`, `spanner.svg`, `bigtable.svg`, `bigquery.svg`, `pub-sub.svg`, `google-cloud-iam.svg`, `google-cloud-vpc.svg` | Google Cloud's official product icons (cloud.google.com/icons) | Renamed |
+| `i18next.svg`, `radix-ui.svg`, `radix-ui-dark.svg`, `cisco-packet-tracer.svg` | Simple Icons 13.21.0 | Filled with the brand colour; Radix's dark variant white; Packet Tracer uses Cisco's mark |
+| `single-spa.svg` | single-spa.js.org | None |
+| `focus.svg` | focus.finops.org | Cropped to the mark, wordmark removed |
+
+`dynamodb.svg`, `playwright.svg` and `zustand.svg` were empty files; the first two were replaced and `zustand.svg` removed (Zustand uses `zustand.png`).

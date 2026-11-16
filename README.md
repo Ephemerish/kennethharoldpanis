@@ -34,9 +34,10 @@ The browser tests start `server.mjs` on port 4400 and drive the installed Google
 | `pnpm dev` | Development server |
 | `pnpm build` | Checks the taxonomy, makes cover backdrops, builds to `dist/`, then writes Brotli and gzip copies of every text file |
 | `pnpm preview`, `pnpm start` | Serves the build with `server.mjs` |
-| `pnpm verify` | The gate: type check, design tokens, composition, logo visibility, unit tests, build, output checks, browser tests, performance budget. CI runs it |
+| `pnpm verify` | The gate: type check, design tokens, composition, copy, logo visibility, unit tests, build, output checks, browser tests, performance budget. CI runs it |
 | `pnpm check` | `astro check` |
 | `pnpm check:tokens` | Fails on raw colour, Tailwind default palette classes, rounded corners, raw z-index, or text in `neutral-300`/`neutral-400`, outside the theme |
+| `pnpm check:copy` | Fails on a line that tells the reader how to use the page, a subtitle over 15 words, a label over 3 words, filler, an em dash, an emoji, or a word `docs/GLOSSARY.md` replaces |
 | `pnpm check:composition` | Fails when a page, feature or layout template writes a raw HTML element instead of a `@ui` component |
 | `pnpm check:taxonomy` | Fails when a registered tag or technology is attached to nothing, when a tag groups fewer than 2 items or repeats a tech's name, when an item has more than 3 tags, when anything names an unregistered one or carries no tag (or, on the bio, no tag or tech), when a technology's logo is missing, or when two bio records share a slug |
 | `pnpm check:assets` | Fails when a technology logo is under 50% visible on the light or the dark tile, or a badge or organisation logo is missing |

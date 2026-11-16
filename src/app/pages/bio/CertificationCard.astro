@@ -1,10 +1,10 @@
 ---
 /**
  * One certification: its official badge, what it covers, the tech it relates
- * to, and the public credential. In progress ones say so, in words.
+ * to, and the public credential.
  */
 import { ArrowSquareOutIcon } from "@phosphor-icons/react";
-import { Box, ButtonLink, Card, Chip, Heading, IconBadge, Image, Label, List, ListItem, Row, Stack, StatusPill, Text, VisuallyHidden } from "@ui";
+import { Box, ButtonLink, Card, Heading, Image, Row, Stack, Text, VisuallyHidden } from "@ui";
 import TechChips from "@app/features/entries/TechChips.astro";
 import TagLinks from "@app/features/taxonomy/TagLinks.astro";
 import type { Certification } from "@data/bio/certifications";
@@ -19,17 +19,12 @@ const { cert } = Astro.props;
 <Card id={cert.slug} padding="none" class="scroll-mt-24 overflow-hidden">
   <Row stackBelow="sm" align="start" gap="lg" class="p-6 sm:gap-6 sm:p-7">
     {/* A badge keeps its own white plate, sized to the badge, in either theme */}
-    {cert.badge ? (
-      <Row justify="center" class="h-24 w-24 shrink-0 border border-neutral-200 bg-white p-2 sm:h-28 sm:w-28">
-        <Image src={`/images/${cert.badge}`} alt={`${cert.title} badge`} width="112" height="112" fit="contain" class="h-full w-full" />
-      </Row>
-    ) : (
-      <IconBadge Icon={cert.Icon} variant="subtle" size="xl" />
-    )}
+    <Row justify="center" class="h-24 w-24 shrink-0 border border-neutral-200 bg-white p-2 sm:h-28 sm:w-28">
+      <Image src={`/images/${cert.badge}`} alt={`${cert.title} badge`} width="112" height="112" fit="contain" class="h-full w-full" />
+    </Row>
 
     <Stack gap="lg" class="min-w-0 flex-1">
       <Box>
-        {cert.status && <StatusPill variant={cert.status.variant} Icon={cert.status.Icon} class="mb-3">{cert.status.label}</StatusPill>}
         <Heading level={3} size="item">{cert.title}</Heading>
         <Text size="body" tone="muted" weight="medium" class="mt-1">
           {cert.issuer}
@@ -39,30 +34,17 @@ const { cert } = Astro.props;
 
       <Text size="body" leading="relaxed">{cert.summary}</Text>
 
-      <Box>
-        <Label class="mb-3">Focus areas</Label>
-        <List direction="row" gap="sm">
-          {cert.focusAreas.map((area) => <ListItem><Chip variant="neutral" size="xs">{area}</Chip></ListItem>)}
-        </List>
-      </Box>
+      <TechChips tech={cert.tech} size="sm" />
 
-      {cert.tech && (
-        <Box>
-          <Label class="mb-3">Related tech</Label>
-          <TechChips tech={cert.tech} size="sm" />
-        </Box>
-      )}
       {cert.tags && cert.tags.length > 0 && <TagLinks tags={cert.tags} size="sm" />}
 
-      {cert.credentialUrl && (
-        <Row>
-          <ButtonLink href={cert.credentialUrl} target="_blank" rel="noopener noreferrer" variant="outlineBrand" size="sm" class="gap-1.5">
-            Verify credential
-            <ArrowSquareOutIcon className="h-4 w-4" aria-hidden="true" />
-            <VisuallyHidden>for {cert.title} (opens in a new tab)</VisuallyHidden>
-          </ButtonLink>
-        </Row>
-      )}
+      <Row>
+        <ButtonLink href={cert.credentialUrl} target="_blank" rel="noopener noreferrer" variant="outlineBrand" size="sm" class="gap-1.5">
+          Verify credential
+          <ArrowSquareOutIcon className="h-4 w-4" aria-hidden="true" />
+          <VisuallyHidden>for {cert.title} (opens in a new tab)</VisuallyHidden>
+        </ButtonLink>
+      </Row>
     </Stack>
   </Row>
 </Card>

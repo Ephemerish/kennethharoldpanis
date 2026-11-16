@@ -1,7 +1,7 @@
 ---
 /** /bio: his experience, with the tech he used in each role, then his certifications. */
 import Layout from "@app/layout/MainLayout.astro";
-import { PageHeader, PageSection, Stack } from "@ui";
+import { PageSection, Stack } from "@ui";
 import ExperienceSection from "./ExperienceSection.astro";
 import CertificationsSection from "./CertificationsSection.astro";
 ---
@@ -12,7 +12,6 @@ import CertificationsSection from "./CertificationsSection.astro";
   type="profile"
 >
   <PageSection variant="hero">
-    <PageHeader prefix="My" accent="Bio" size="md" />
     <Stack gap="3xl" class="mx-auto w-full max-w-4xl">
       <ExperienceSection />
       <CertificationsSection />

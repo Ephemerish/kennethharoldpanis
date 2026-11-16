@@ -1,17 +1,20 @@
 ---
 import { SubjectSelect } from "./SubjectSelect";
-import { Box, Button, Card, Divider, Field, Form, Heading, Input, Text, Textarea } from "@ui";
+import { Box, Button, Card, Divider, Field, Form, Heading, Input, NativeSelect, NoScript, Textarea } from "@ui";
 import { contactLimits } from "@data/settings";
+import { SUBJECTS } from "@data/contact/subjects";
 ---
 
-<Card variant="floating" padding="lg" class="order-2 lg:order-1">
+<Card variant="floating" padding="lg" class="self-start">
   <Box class="text-center mb-8">
     <Heading level={2} size="title" class="mb-3">Send me a message</Heading>
-    <Text tone="muted">I'll get back to you within 24 hours</Text>
     <Divider width="sm" thickness="thin" class="mt-4" />
   </Box>
 
-  <Form id="contact-form" method="post" gap="xl">
+  {/* With script, the form sends in place and says how it went. Without it,
+      the browser posts to the endpoint, which answers with /thank-you or
+      /contact/not-sent (KHP §7.8). */}
+  <Form id="contact-form" method="post" action="/api/contact" gap="xl">
     <Field label="Full Name" for="name" required>
       <Input id="name" required autocomplete="name" maxlength={contactLimits.name} placeholder="Your full name" />
     </Field>
@@ -21,7 +24,12 @@ import { contactLimits } from "@data/settings";
     </Field>
 
     <Field label="Subject" for="subject" required>
-      <SubjectSelect client:load name="subject" />
+      {/* Rendered in the browser only: a server-rendered Radix select leaves a
+          hidden required field that blocks a form sent without script. */}
+      <SubjectSelect client:only="react" name="subject">
+        <Box slot="fallback" class="js-only"><Input id="subject-loading" disabled placeholder="Select a subject" aria-hidden="true" tabindex="-1" /></Box>
+      </SubjectSelect>
+      <NoScript><NativeSelect id="subject" name="subject" required options={SUBJECTS} placeholder="Select a subject" /></NoScript>
     </Field>
 
     <Field label="Message" for="message" required>

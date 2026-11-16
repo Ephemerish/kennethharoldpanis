@@ -28,6 +28,19 @@ export default defineConfig({
     '/bio/certifications': '/bio',
     '/bio/experience': '/bio',
   },
+  // The hosts the site answers on. Without this list Astro treats every
+  // request as coming from "localhost", so its same-origin check refuses
+  // every form post from the real site with 403 (KHP §7.8). Tests and local
+  // runs use 127.0.0.1 and localhost.
+  security: {
+    allowedDomains: [
+      { protocol: "https", hostname: "kennethharoldpanis.com" },
+      { protocol: "https", hostname: "www.kennethharoldpanis.com" },
+      { protocol: "https", hostname: "kennethharoldpanis-230158669164.asia-east1.run.app" },
+      { protocol: "http", hostname: "127.0.0.1" },
+      { protocol: "http", hostname: "localhost" },
+    ],
+  },
   server: {
     port: 3000, // Ensure it matches the Docker exposed port
     host: "0.0.0.0",
