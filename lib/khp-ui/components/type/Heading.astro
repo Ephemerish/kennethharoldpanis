@@ -1,0 +1,54 @@
+---
+/**
+ * Heading, every title on the site (KHP §5.4). `level` is the outline
+ * (h1 to h6); `size` is the look, a named step so titles of one kind match
+ * everywhere. Put an <Accent> inside for the gradient word.
+ */
+import type { HTMLAttributes } from "astro/types";
+import { cn } from "../../utils/cn";
+
+const SIZE = {
+  /** The home page greeting. */
+  hero: "text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl/none tracking-tighter",
+  /** A page's title. */
+  page: "text-4xl sm:text-5xl md:text-6xl lg:text-7xl",
+  /** A smaller page title (tag and tech pages), and section titles. */
+  section: "text-3xl sm:text-4xl md:text-5xl",
+  /** An article's title. */
+  article: "text-4xl md:text-5xl leading-tight",
+  /** A title inside a large card. */
+  title: "text-2xl sm:text-3xl",
+  /** A card's title. */
+  card: "text-xl sm:text-2xl leading-tight",
+  /** A small block's title. */
+  item: "text-lg sm:text-xl",
+  /** A compact title. */
+  small: "text-base leading-snug",
+} as const;
+
+const TONE = {
+  strong: "text-neutral-900",
+  inherit: "",
+  brand: "text-brand-700",
+} as const;
+
+type Props = HTMLAttributes<"h2"> & {
+  level?: 1 | 2 | 3 | 4 | 5 | 6;
+  size?: keyof typeof SIZE;
+  tone?: keyof typeof TONE;
+  weight?: "bold" | "semibold" | "medium";
+  align?: "start" | "center";
+  class?: string;
+};
+
+const { level = 2, size = "card", tone = "strong", weight = "bold", align, class: className, ...rest } = Astro.props;
+const Tag = `h${level}` as "h1";
+const weightClass = { bold: "font-bold", semibold: "font-semibold", medium: "font-medium" }[weight];
+---
+
+<Tag
+  class={cn(SIZE[size], TONE[tone], weightClass, align === "center" && "text-center", className)}
+  {...rest}
+>
+  <slot />
+</Tag>

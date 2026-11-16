@@ -1,0 +1,20 @@
+---
+/** Textarea, a multi-line text field in the shared field style. */
+import type { HTMLAttributes } from "astro/types";
+import { cn } from "../../utils/cn";
+import { FIELD_CLASS } from "./field";
+
+type Props = HTMLAttributes<"textarea"> & {
+  id: string;
+  name?: string;
+  rows?: number;
+  class?: string;
+};
+
+const { id, name = id, rows = 5, class: className, ...rest } = Astro.props;
+---
+
+<textarea
+  id={id} name={name} rows={rows} class={cn(FIELD_CLASS, "resize-y", className)}
+  {...rest}
+></textarea>

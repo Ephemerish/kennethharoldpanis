@@ -1,0 +1,35 @@
+---
+/**
+ * A role, school or certification on a tag or tech page: its logo or badge
+ * (the same image as on /bio), what it is, where, when, and a link to its card.
+ */
+import { Card, Heading, Label, Logo, Stack, Text } from "@ui";
+import { hrefOf, nounOf, type BioRecord } from "./collect";
+import { yearsLabel } from "@data/bio/experience";
+
+interface Props {
+  item: BioRecord;
+}
+
+const { item } = Astro.props;
+const isRole = item.kind === "experience";
+const title = item.record.title;
+const where = isRole ? item.record.org : item.record.issuer;
+const when = isRole
+  ? yearsLabel(item.record)
+  : item.record.issuedDate;
+const noun = nounOf(item)[0];
+const label = noun[0].toUpperCase() + noun.slice(1);
+const mark = isRole ? item.record.org : item.record.issuer;
+---
+
+<Card href={hrefOf(item)} hoverable padding="sm" class="flex h-full items-start gap-4">
+  <Logo name={mark} src={item.record.image} size="sm" />
+  <Stack gap="none" class="min-w-0 flex-1">
+    <Label tone="brand">{label}</Label>
+    <Heading level={3} size="small" class="mt-1 group-hover:text-brand-700">{title}</Heading>
+    <Text size="sm" tone="muted" class="mt-0.5">
+      {where}{when && <Text as="span" tone="subtle"> · {when}</Text>}
+    </Text>
+  </Stack>
+</Card>

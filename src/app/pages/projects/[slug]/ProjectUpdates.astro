@@ -1,0 +1,49 @@
+---
+import ReleaseEntry from "./ReleaseEntry.astro";
+import { ClockCounterClockwiseIcon } from "@phosphor-icons/react";
+import { Disclosure, Drawer, FloatingButton, Stack } from "@ui";
+import {
+  displayVersion,
+  formatReleaseDate,
+  getUpdatesByProject,
+} from "@data/apps/patch-notes";
+
+interface Props {
+  slug: string;
+}
+
+const { slug } = Astro.props;
+const updates = getUpdatesByProject(slug);
+---
+
+{updates && (
+  <>
+    <FloatingButton
+      label="Release notes"
+      data-release-trigger
+      data-drawer-open="project-release-notes"
+      aria-haspopup="dialog"
+      aria-controls="project-release-notes"
+      aria-label={`Open ${updates.app.name} release notes`}
+    >
+      <ClockCounterClockwiseIcon className="w-5 h-5" aria-hidden="true" />
+    </FloatingButton>
+
+    <Drawer
+      id="project-release-notes"
+      eyebrow={updates.app.name}
+      title="Release notes"
+      subtitle={`Latest: ${displayVersion(updates.latest.version)} · ${formatReleaseDate(updates.latest)}`}
+      data-release-dialog
+    >
+      <ReleaseEntry app={updates.app.name} release={updates.latest} />
+      {updates.releases.length > 1 && (
+        <Disclosure summary={`Earlier releases (${updates.releases.length - 1})`} class="mt-9">
+          <Stack gap="none" class="space-y-10">
+            {updates.releases.slice(1).map((release) => <ReleaseEntry app={updates.app.name} release={release} />)}
+          </Stack>
+        </Disclosure>
+      )}
+    </Drawer>
+  </>
+)}

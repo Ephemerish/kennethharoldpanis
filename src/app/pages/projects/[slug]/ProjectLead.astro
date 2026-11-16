@@ -1,0 +1,20 @@
+---
+import { Box, Stack } from "@ui";
+import Gallery from "./Gallery";
+import ProjectDetails from "./ProjectDetails.astro";
+import type { CollectionEntry } from "astro:content";
+
+interface Props {
+  data: CollectionEntry<"projects">["data"];
+  galleryImages: string[];
+}
+
+const { data, galleryImages } = Astro.props;
+---
+
+<Stack gap="xl">
+  {galleryImages.length > 0 && (
+    <Box><Gallery client:visible images={galleryImages} alt={data.title} /></Box>
+  )}
+  <ProjectDetails data={data} />
+</Stack>

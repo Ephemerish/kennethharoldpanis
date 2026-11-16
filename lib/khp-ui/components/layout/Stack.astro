@@ -1,0 +1,26 @@
+---
+/** Stack, children one above another with an even gap (KHP §4.9). */
+import type { HTMLAttributes } from "astro/types";
+import { cn } from "../../utils/cn";
+import { ALIGN, GAP, SPACE_TOP, type Gap, type SpaceTop } from "./space";
+
+type Props = HTMLAttributes<"div"> & {
+  as?: string;
+  gap?: Gap;
+  align?: keyof typeof ALIGN;
+  space?: SpaceTop;
+  /** Fill the remaining height of a column parent (pushes a footer down). */
+  grow?: boolean;
+  class?: string;
+};
+
+const { as = "div", gap = "md", align, space = "none", grow = false, class: className, ...rest } = Astro.props;
+const Tag = as as "div";
+---
+
+<Tag
+  class={cn("flex flex-col", GAP[gap], align && ALIGN[align], SPACE_TOP[space], grow && "flex-1", className)}
+  {...rest}
+>
+  <slot />
+</Tag>

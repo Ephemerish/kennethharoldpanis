@@ -1,0 +1,19 @@
+---
+/** Work and school, newest first. The current role starts open. */
+import { getCollection } from "astro:content";
+import { Box, ListItem, List, SectionHeader } from "@ui";
+import { timeline } from "@data/bio/experience";
+import RoleItem from "./RoleItem.astro";
+import { techUsed } from "./model";
+
+const entries = [...(await getCollection("projects")), ...(await getCollection("blog"))];
+---
+
+<Box as="section" aria-labelledby="experience">
+  <SectionHeader level={1} prefix="My" accent="Experience" id="experience" />
+  <List gap="md">
+    {timeline.map((role) => (
+      <ListItem><RoleItem role={role} tech={techUsed(role, entries)} /></ListItem>
+    ))}
+  </List>
+</Box>

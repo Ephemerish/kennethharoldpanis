@@ -1,0 +1,119 @@
+---
+/**
+ * Marquee, a row that drifts sideways forever (KHP §5.8). The slot is
+ * rendered once; the script clones it so the loop has no seam, which keeps the
+ * page's HTML half the size. The copy is inert, so it is neither tabbed to nor
+ * read out. It pauses on hover, on focus and when off
+ * screen, and is a still, wrapped list under reduced motion. It can be dragged
+ * with a mouse or a finger, as the owner's first carousel could: the drag
+ * moves the same CSS animation, so it costs no frame loop, and a drag never
+ * follows a tile's link.
+ */
+import { cn } from "../../utils/cn";
+import { GAP, type Gap } from "./space";
+
+interface Props {
+  /** Seconds for one full loop; longer is slower. */
+  seconds?: number;
+  reverse?: boolean;
+  gap?: Gap;
+  label?: string;
+  class?: string;
+}
+
+const { seconds = 60, reverse = false, gap = "md", label, class: className } = Astro.props;
+const items = await Astro.slots.render("default");
+const copyClass = cn("flex shrink-0", GAP[gap], gap === "md" ? "pr-3 sm:pr-4" : "pr-4");
+---
+
+<div class={cn("marquee py-2", className)} aria-label={label} data-marquee data-reverse={reverse ? "" : undefined}>
+  <div class:list={["marquee-track", reverse && "marquee-reverse"]} style={`--marquee-duration:${seconds}s`}>
+    <ul class={copyClass} set:html={items} />
+  </div>
+</div>
+
+<script>
+  const still = matchMedia("(prefers-reduced-motion: reduce)");
+
+  /** Drag a marquee: move its animation's clock by the distance dragged. */
+  function draggable(marquee: HTMLElement) {
+    const track = marquee.querySelector<HTMLElement>(".marquee-track");
+    if (!track) return;
+    const sign = marquee.hasAttribute("data-reverse") ? 1 : -1;
+    let startX = 0;
+    let startTime = 0;
+    let moved = false;
+    let pointer: number | null = null;
+
+    if (typeof track.getAnimations !== "function") return; // an old browser: no drag, still drifts
+    marquee.addEventListener("pointerdown", (event) => {
+      const animation = track.getAnimations()[0];
+      if (still.matches || !animation || event.button !== 0) return;
+      pointer = event.pointerId;
+      startX = event.clientX;
+      startTime = Number(animation.currentTime ?? 0);
+      moved = false;
+      marquee.dataset.dragging = "";
+    });
+    marquee.addEventListener("pointermove", (event) => {
+      if (event.pointerId !== pointer) return;
+      const animation = track.getAnimations()[0];
+      const duration = Number(animation?.effect?.getTiming().duration ?? 0);
+      const loop = track.scrollWidth / 2;
+      const dx = event.clientX - startX;
+      if (!animation || !duration || !loop) return;
+      if (!moved && Math.abs(dx) > 4) {
+        moved = true;
+        marquee.setPointerCapture(event.pointerId);
+      }
+      if (!moved) return;
+      const time = startTime + sign * (dx / loop) * duration;
+      animation.currentTime = ((time % duration) + duration) % duration;
+    });
+    const end = (event: PointerEvent) => {
+      if (event.pointerId !== pointer) return;
+      pointer = null;
+      delete marquee.dataset.dragging;
+    };
+    marquee.addEventListener("pointerup", end);
+    marquee.addEventListener("pointercancel", end);
+    // A drag that ends on a tile is not a click on it.
+    marquee.addEventListener("click", (event) => {
+      if (moved) {
+        event.preventDefault();
+        event.stopPropagation();
+        moved = false;
+      }
+    }, true);
+    marquee.addEventListener("dragstart", (event) => event.preventDefault());
+  }
+
+  // Pause every marquee while it is off screen, so it costs nothing there.
+  document.addEventListener("astro:page-load", () => {
+    // Without IntersectionObserver (an old browser) the rows simply keep drifting.
+    const observer =
+      "IntersectionObserver" in window
+        ? new IntersectionObserver((entries) =>
+            entries.forEach((entry) => {
+              const track = entry.target.querySelector<HTMLElement>(".marquee-track");
+              if (track) track.style.animationPlayState = entry.isIntersecting ? "" : "paused";
+            })
+          )
+        : null;
+    document.querySelectorAll<HTMLElement>("[data-marquee]:not([data-wired])").forEach((marquee) => {
+      marquee.dataset.wired = "true";
+      // The seamless loop's second copy: inert, hidden from screen readers.
+      const track = marquee.querySelector(".marquee-track");
+      const list = track?.firstElementChild;
+      if (track && list && !track.querySelector("[data-marquee-copy]")) {
+        const copy = list.cloneNode(true) as HTMLElement;
+        copy.dataset.marqueeCopy = "";
+        copy.setAttribute("aria-hidden", "true");
+        copy.inert = true;
+        track.append(copy);
+      }
+      observer?.observe(marquee);
+      draggable(marquee);
+    });
+  });
+</script>

@@ -1,83 +1,74 @@
-# Kenneth Harold Panis - Portfolio Website
+# kennethharoldpanis.com
 
-![Portfolio Preview](./public/images/me/me.jpg)
+The personal site of Kenneth Harold Panis: projects, writing, experience and contact. Built with Astro 5, React islands, Tailwind CSS v4 and TypeScript. In production `server.mjs` serves it on Cloud Run: static files precompressed and cached, everything else through Astro's Node adapter.
 
-## ✨ About
+Contributors and agents start with [AGENTS.md](AGENTS.md), then [STANDARDS.md](STANDARDS.md). [docs/structure.md](docs/structure.md) says where code goes, [docs/systems.md](docs/systems.md) lists what the site already has, and [lib/khp-ui/AGENTS.md](lib/khp-ui/AGENTS.md) is the component catalogue.
 
-This portfolio showcases my journey as a developer
+## Run it
 
-## 🛠️ Built With
-
-- **[Astro](https://astro.build/)** - Static site generator for optimal performance
-- **[React](https://reactjs.org/)** - Interactive components and animations
-- **[TypeScript](https://www.typescriptlang.org/)** - Type-safe development
-- **[Tailwind CSS](https://tailwindcss.com/)** - Utility-first styling
-- **[Framer Motion](https://www.framer.com/motion/)** - Smooth animations
-- **[Heroicons](https://heroicons.com/)** - Beautiful iconography
-
-## 🚀 Project Structure
-
-```text
-/
-├── public/
-│   ├── images/           # Project screenshots and galleries
-│   │   └── me/          # Profile photos
-│   │       ├── me.jpg   # Main profile photo
-│   │       └── me2.jpg  # Additional profile photo
-│   └── favicon.ico      # Site favicon
-├── src/
-│   ├── components/      # Reusable React/Astro components
-│   │   ├── ui/         # UI primitives (buttons, tooltips, etc.)
-│   ├── content/        # Content collections
-│   │   ├── blog/       # Blog posts (MD)
-│   │   └── projects/   # Project documentation (MD)
-│   ├── layouts/        # Page layouts
-│   ├── pages/          # Site pages and API routes
-│   ├── styles/         # Global styles
-│   └── utils/          # Utility functions
-└── package.json
+```sh
+pnpm install
+pnpm dev                    # development server, http://localhost:3000
+pnpm build && pnpm preview  # the production build through server.mjs, http://localhost:3000
 ```
 
-## 🧞 Development Commands
+The dev port is set in `astro.config.mjs`; `server.mjs` reads `PORT` and `HOST` (defaults 3000 and `0.0.0.0`).
 
-All commands are run from the root of the project:
+Set these in `.env` for the optional services: `RESEND_API_KEY` (contact form), `SUPABASE_URL` and `SUPABASE_ANON_KEY` (analytics and popular search). Without them the site still runs: the contact form answers that email is not configured, analytics records nothing, and search shows the latest entries instead of popular ones.
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `pnpm install`           | Install dependencies                             |
-| `pnpm dev`               | Start development server at `localhost:4321`    |
-| `pnpm build`             | Build production site to `./dist/`              |
-| `pnpm preview`           | Preview production build locally                 |
-| `pnpm astro check`       | Check for TypeScript and accessibility issues   |
-| `pnpm astro sync`        | Generate TypeScript definitions for content     |
+## Test it
 
-## 📦 App Updates (release notes)
+```sh
+pnpm test                   # unit tests
+pnpm build                  # the browser tests need a build
+pnpm test:e2e               # every page at 1440px and 375px, and every feature
+pnpm test:perf              # the performance budget
+```
 
-The website shows what is shipping in the apps (Pundo, Pidada): a card per app
-on the home page, a "What's New" card on each project page, and the full
-history on `/updates`.
+The browser tests start `server.mjs` on port 4400 and drive the installed Google Chrome; CI installs Playwright's Chromium instead (`pnpm exec playwright install chromium`). See [testing](docs/systems/testing.md).
 
-The apps own their release notes. Each app keeps a patch notes file in its own
-repo, and `pnpm sync-notes` mirrors those files into the website:
+## Scripts
 
-| File | Role |
-| :--- | :--- |
-| `src/data/patch-notes/types.ts` | The shared release model every app is normalized into |
-| `src/data/patch-notes/releases.ts` | Generated mirror of the apps' notes (do not edit) |
-| `src/data/patch-notes/index.ts` | The query API pages import |
-| `scripts/sync-patch-notes.mjs` | Reads the app repos, normalizes, checks, writes the mirror |
+| Command | Does |
+| ------- | ---- |
+| `pnpm dev` | Development server |
+| `pnpm build` | Checks the taxonomy, makes cover backdrops, builds to `dist/`, then writes Brotli and gzip copies of every text file |
+| `pnpm preview`, `pnpm start` | Serves the build with `server.mjs` |
+| `pnpm verify` | The gate: type check, design tokens, composition, copy, logo visibility, unit tests, build, output checks, browser tests, performance budget. CI runs it |
+| `pnpm check` | `astro check` |
+| `pnpm check:tokens` | Fails on raw colour, Tailwind default palette classes, rounded corners, raw z-index, or text in `neutral-300`/`neutral-400`, outside the theme |
+| `pnpm check:copy` | Fails on a line that tells the reader how to use the page, a subtitle over 15 words, a label over 3 words, filler, an em dash, an emoji, or a word `docs/GLOSSARY.md` replaces |
+| `pnpm check:composition` | Fails when a page, feature or layout template writes a raw HTML element instead of a `@ui` component |
+| `pnpm check:taxonomy` | Fails when a registered tag or technology is attached to nothing, when a tag groups fewer than 2 items or repeats a tech's name, when an item has more than 3 tags, when anything names an unregistered one or carries no tag (or, on the bio, no tag or tech), when a technology's logo is missing, or when two bio records share a slug |
+| `pnpm check:assets` | Fails when a technology logo is under 50% visible on the light or the dark tile, or a badge or organisation logo is missing |
+| `pnpm check:output` | Checks the built pages: the home page keeps its budget, the pretext article keeps its live cover, release-note controls keep their shape |
+| `pnpm test` | Unit tests in `tests/unit/` |
+| `pnpm test:e2e` | Playwright: every page and feature, desktop and mobile, and an axe accessibility scan of every page in light and dark |
+| `pnpm test:perf` | Playwright: load, scroll and interaction times against the budget in `src/data/settings.ts` |
+| `pnpm sync-notes` | Mirrors the apps' release notes into `src/data/apps/patch-notes/releases.ts` |
+| `pnpm optimize-images` | Compresses images in `public/images` |
 
-To publish an update on the website:
+## Layout
 
-1. Add the release to the app's own patch notes (the file the app reads).
-2. Run `pnpm sync-notes` (fix anything it reports; it refuses to write a bad mirror).
-3. Deploy the site.
+```
+src/pages/        routes (thin) and API endpoints
+src/app/          pages, features, shared, layout, calc, api
+src/data/         content and data: site.ts, settings.ts, content/, bio/, taxonomy/, apps/, contact/
+lib/khp-ui/       theme and generic components (layout, type, media, surface, form, overlay)
+tests/            unit, e2e and perf tests
+scripts/          checks and generators
+server.mjs        the production server
+docs/             standards, structure, system contracts
+```
 
-The app repos are expected next to this one (`../budget`, `../pidada`); if they
-live elsewhere, point the `PUNDO_PATCH_NOTES` / `PIDADA_CHANGELOG` environment
-variables at the files. Adding another app means adding one entry to `SOURCES`
-in the script and one to `src/data/apps.ts`.
+## Adding content
 
-## 📝 License
+A post is a markdown file in `src/data/content/blog/`, a project one in `src/data/content/projects/`. Roles and certifications live in `src/data/bio/experience.ts` and `certifications.ts`, each with a `slug` and tags. Tags and technologies must exist in `src/data/taxonomy/tags.ts` and `technologies.ts`, and each registered one must be attached to something; the build says what is wrong. The cover image must exist in `public/images/`, or the build fails, unless the post's engine draws a live cover. How many entries the home page and `/blogs` show is in `src/data/settings.ts`. See [content registries](docs/systems/content-registries.md).
 
-This project is open source and available under the [MIT License](LICENSE).
+## App release notes
+
+Pundo and Pidada keep their release notes in their own repositories. `pnpm sync-notes` reads them (from `../budget` and `../pidada`, or the paths in `PUNDO_PATCH_NOTES` and `PIDADA_CHANGELOG`), checks them, and writes the mirror the project pages show. See [release notes](docs/systems/release-notes.md).
+
+## License
+
+MIT.

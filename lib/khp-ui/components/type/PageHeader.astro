@@ -1,0 +1,28 @@
+---
+/**
+ * PageHeader, a page's centred h1: `prefix`, the `accent` word in the brand
+ * gradient, then `suffix`. Under it, at most a fact from the data (`subtitle`,
+ * KHP §6.7). No bar, no glow (KHP §5.9). `size` "lg" for top-level pages, "md"
+ * for tag, tech and sub-pages.
+ */
+import Accent from "./Accent.astro";
+
+interface Props {
+  prefix?: string;
+  accent: string;
+  suffix?: string;
+  subtitle?: string;
+  size?: "md" | "lg";
+  class?: string;
+}
+
+const { prefix, accent, suffix, subtitle, size = "lg", class: extraClass = "" } = Astro.props as Props;
+const headingClass = size === "lg" ? "text-4xl sm:text-5xl md:text-6xl lg:text-7xl" : "text-3xl sm:text-4xl md:text-5xl";
+---
+
+<div class:list={["text-center mb-12 sm:mb-16", extraClass]}>
+  <h1 class:list={["font-bold", headingClass]}>
+    {prefix && <span class="text-neutral-900">{`${prefix} `}</span>}<Accent>{accent}</Accent>{suffix && <span class="text-neutral-900">{` ${suffix}`}</span>}
+  </h1>
+  {subtitle && <p class="mt-4 text-base sm:text-lg text-neutral-600">{subtitle}</p>}
+</div>

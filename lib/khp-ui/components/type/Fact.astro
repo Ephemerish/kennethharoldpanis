@@ -1,0 +1,16 @@
+---
+/** Fact, one labelled value inside Facts. The value is the slot. */
+import { cn } from "../../utils/cn";
+
+interface Props {
+  label: string;
+  class?: string;
+}
+
+const { label, class: className } = Astro.props;
+---
+
+<div class={className}>
+  <dt class="text-[11px] font-semibold uppercase tracking-wider text-neutral-500">{label}</dt>
+  <dd class={cn("mt-1 text-sm text-neutral-800")}><slot /></dd>
+</div>

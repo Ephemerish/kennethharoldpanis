@@ -1,0 +1,17 @@
+---
+import { ButtonLink, Card, Heading, Row, Text } from "@ui";
+
+interface Props {
+  resumePdfPath: string;
+}
+
+const { resumePdfPath } = Astro.props;
+---
+
+<Card padding="lg" class="text-center">
+  <Heading level={2} size="title" class="mb-4">Download my resume</Heading>
+  <Text size="large" leading="relaxed" class="mb-6">Latest version of my CV, printable PDF.</Text>
+  <ButtonLink href={resumePdfPath} variant="gradient" size="lg" class="text-base sm:text-lg font-semibold">
+    Download PDF
+  </ButtonLink>
+</Card>

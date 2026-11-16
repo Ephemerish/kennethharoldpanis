@@ -1,5 +1,5 @@
 import type { APIRoute } from 'astro';
-import { supabase } from '@/lib/supabase';
+import { supabase } from '@app/api/supabase';
 
 export const POST: APIRoute = async ({ request }) => {
   try {
@@ -55,7 +55,7 @@ export const POST: APIRoute = async ({ request }) => {
 
     if (error) {
       console.error('Supabase error:', error);
-      return new Response(JSON.stringify({ error: error.message }), { status: 500 });
+      return new Response(JSON.stringify({ error: 'Not recorded' }), { status: 500 });
     }
 
     return new Response(JSON.stringify({ success: true }), { status: 200 });

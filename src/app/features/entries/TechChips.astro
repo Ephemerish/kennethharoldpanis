@@ -1,0 +1,48 @@
+---
+/**
+ * TechChips — the one way tech is shown across the site.
+ *
+ * Renders a list of tech names (validated against src/data/taxonomy/technologies.ts)
+ * as logo chips that link to their /tech/{slug} page. Missing logos fall back
+ * to a small dot, so an unregistered-logo tech still looks intentional.
+ *
+ * Set `linked={false}` when this renders inside another clickable card/anchor
+ * — nested `<a>` tags are invalid HTML and browsers silently fragment the
+ * outer anchor around each one, breaking its layout.
+ */
+import { Chip, List, ListItem } from "@ui";
+import { getTechByName, techSlug } from "@data/taxonomy/technologies";
+
+interface Props {
+  tech: string[];
+  /** "sm" for compact card rows, "md" (default) for detail pages. */
+  size?: "sm" | "md";
+  linked?: boolean;
+}
+
+const { tech, size = "md", linked = true } = Astro.props;
+
+const items = tech.map((name) => {
+  const match = getTechByName(name);
+  const label = match?.name ?? name;
+  return { label, slug: techSlug(label), imagePath: match?.imagePath, imagePathDark: match?.imagePathDark };
+});
+
+---
+
+<List direction="row" gap="sm">
+  {items.map((item) => (
+    <ListItem>
+      <Chip
+        variant="outline"
+        size={size === "sm" ? "logo-sm" : "logo-md"}
+        href={linked ? `/tech/${item.slug}` : undefined}
+        logo={item.imagePath}
+        logoDark={item.imagePathDark}
+        dot={!item.imagePath}
+      >
+        {item.label}
+      </Chip>
+    </ListItem>
+  ))}
+</List>

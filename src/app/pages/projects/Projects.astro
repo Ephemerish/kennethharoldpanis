@@ -1,0 +1,26 @@
+---
+/** /projects: every project, featured ones first, in the same cards as everywhere. */
+import Layout from "@app/layout/MainLayout.astro";
+import { PageSection, PageHeader } from "@ui";
+import EntryGrid from "@app/features/entries/EntryGrid.astro";
+import { getCollection } from "astro:content";
+import { asProjects, sortProjects } from "@app/features/entries/model";
+
+const projects = asProjects(sortProjects(await getCollection("projects")));
+---
+
+<Layout
+  title="Projects - Kenneth Harold Panis"
+  description="Projects by Kenneth Harold Panis: a LoRa network for small fishing boats, and the web apps he builds and runs."
+  image="/images/me/me.jpg"
+  type="website"
+>
+  <PageSection variant="hero">
+    <PageHeader
+      prefix="My"
+      accent="Projects"
+    />
+
+    <EntryGrid entries={projects} />
+  </PageSection>
+</Layout>

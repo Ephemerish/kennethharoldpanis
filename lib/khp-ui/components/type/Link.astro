@@ -1,0 +1,35 @@
+---
+/**
+ * Link, every navigation in an Astro template (KHP §4.3). `external` opens a
+ * new tab safely. A card that is a link is a `Card` with `href` (KHP §4.4).
+ * For a link that looks like a button, use ButtonLink.
+ */
+import type { HTMLAttributes } from "astro/types";
+import { cn } from "../../utils/cn";
+
+const TONE = {
+  inherit: "",
+  brand: "text-brand-700 hover:text-brand-800",
+  muted: "text-neutral-600 hover:text-neutral-900",
+  quiet: "text-neutral-500 hover:text-brand-700",
+  strong: "text-neutral-900 hover:text-brand-700",
+} as const;
+
+type Props = HTMLAttributes<"a"> & {
+  href: string;
+  tone?: keyof typeof TONE;
+  external?: boolean;
+  underline?: boolean;
+  class?: string;
+};
+
+const { href, tone = "inherit", external = false, underline = false, class: className, ...rest } = Astro.props;
+---
+
+<a
+  href={href}
+  target={external ? "_blank" : undefined}
+  rel={external ? "noopener noreferrer" : undefined}
+  class={cn(TONE[tone], underline && "underline decoration-2 underline-offset-2", className)}
+  {...rest}
+><slot /></a>

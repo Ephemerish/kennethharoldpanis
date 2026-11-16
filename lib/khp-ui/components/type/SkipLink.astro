@@ -1,0 +1,15 @@
+---
+/** SkipLink, the first thing a keyboard reaches: jump past the navigation (KHP §1.6). */
+interface Props {
+  href?: string;
+}
+
+const { href = "#main" } = Astro.props;
+---
+
+<a
+  href={href}
+  class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-toast focus:bg-brand-700 focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:text-neutral-0"
+>
+  Skip to content
+</a>

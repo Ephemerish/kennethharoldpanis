@@ -1,0 +1,15 @@
+---
+import { getCollection } from "astro:content";
+import Blogs from "@app/pages/blogs/Blogs.astro";
+import { pageCount } from "@app/pages/blogs/model";
+
+export const prerender = true;
+
+// Page 1 lives at /blogs; this route serves pages 2 and up.
+export async function getStaticPaths() {
+  const total = pageCount((await getCollection("blog")).length);
+  return Array.from({ length: Math.max(0, total - 1) }, (_, i) => ({ params: { page: String(i + 2) } }));
+}
+---
+
+<Blogs page={Number(Astro.params.page)} />

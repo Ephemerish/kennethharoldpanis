@@ -1,19 +1,7 @@
 ---
+import Bio from "@app/pages/bio/Bio.astro";
+
 export const prerender = true;
-import Layout from "@/layouts/MainLayout.astro";
-import { PageSection } from "@/components";
-import ExperienceSection from "./_components/ExperienceSection.astro";
-import CertificationsSection from "./_components/CertificationsSection.astro";
 ---
 
-<Layout
-  title="Bio - Kenneth Harold Panis"
-  description="About Kenneth Harold Panis, software developer with certifications across AWS, Google Cloud, and FinOps."
-  image="/images/me/me.jpg"
-  type="profile"
->
-  <PageSection variant="hero">
-    <ExperienceSection />
-    <CertificationsSection />
-  </PageSection>
-</Layout>
+<Bio />

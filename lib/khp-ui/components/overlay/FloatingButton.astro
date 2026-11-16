@@ -1,0 +1,23 @@
+---
+/**
+ * FloatingButton, a tool pinned to the right edge under the top bar, with its
+ * name shown beside it on hover and focus (KHP §3.5). Release notes take the
+ * first slot (`stack={0}`); collapse-all, drawn by script, takes the next.
+ * The icon is the slot; `label` is its name.
+ */
+import type { HTMLAttributes } from "astro/types";
+type Props = HTMLAttributes<"button"> & {
+  label: string;
+  stack?: 0 | 1;
+};
+
+const { label, stack = 0, ...rest } = Astro.props;
+---
+
+<button
+  type="button" class="float-btn" data-stack={stack}
+  {...rest}
+>
+  <slot />
+</button>
+<span class="float-tip" data-stack={stack} aria-hidden="true">{label}</span>

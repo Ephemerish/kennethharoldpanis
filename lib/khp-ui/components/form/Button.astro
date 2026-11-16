@@ -1,0 +1,20 @@
+---
+/** Button, a real <button> in the site's button styles (KHP §4.2). */
+import type { HTMLAttributes } from "astro/types";
+import { buttonVariants, type ButtonVariants } from "./button";
+import { cn } from "../../utils/cn";
+
+type Props = HTMLAttributes<"button"> & ButtonVariants & {
+  type?: "button" | "submit" | "reset";
+  class?: string;
+};
+
+const { type = "button", variant, size, class: className, ...rest } = Astro.props;
+---
+
+<button
+  type={type} class={cn(buttonVariants({ variant, size }), className)}
+  {...rest}
+>
+  <slot />
+</button>

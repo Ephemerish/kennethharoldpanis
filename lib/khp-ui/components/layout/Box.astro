@@ -1,0 +1,25 @@
+---
+/**
+ * Box, a plain element for structure no other primitive names: a positioned
+ * layer, a wrapper that clips. Reach for Stack, Row or Grid first (KHP §4.9).
+ */
+import type { HTMLAttributes } from "astro/types";
+import { cn } from "../../utils/cn";
+import { SPACE_TOP, type SpaceTop } from "./space";
+
+type Props = HTMLAttributes<"div"> & {
+  as?: string;
+  space?: SpaceTop;
+  class?: string;
+};
+
+const { as = "div", space = "none", class: className, ...rest } = Astro.props;
+const Tag = as as "div";
+---
+
+<Tag
+  class={cn(SPACE_TOP[space], className)}
+  {...rest}
+>
+  <slot />
+</Tag>

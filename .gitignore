@@ -25,3 +25,7 @@ pnpm-debug.log*
 
 # sql files
 *.sql
+
+# Playwright
+test-results/
+playwright-report/

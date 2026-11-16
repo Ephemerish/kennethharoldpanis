@@ -1,0 +1,33 @@
+---
+/**
+ * SectionHeader, a section's centred title: `prefix`, the `accent` word in the
+ * brand gradient, `suffix`. Under it, at most a fact from the data (`subtitle`,
+ * KHP §6.7). No bar (KHP §5.9). `level={1}` when it is the page's first title.
+ */
+import Accent from "./Accent.astro";
+
+interface Props {
+  prefix?: string;
+  accent: string;
+  suffix?: string;
+  subtitle?: string;
+  level?: 1 | 2;
+  /** An id for the title, so a section can be named by it (aria-labelledby). */
+  id?: string;
+  class?: string;
+}
+
+const { prefix, accent, suffix, subtitle, level = 2, id, class: extraClass = "" } = Astro.props as Props;
+const Title = level === 1 ? "h1" : "h2";
+---
+
+<div class:list={["text-center mb-12 sm:mb-16", extraClass]}>
+  <Title id={id} class="text-3xl sm:text-4xl md:text-5xl font-bold text-neutral-900">
+    {prefix && `${prefix} `}<Accent>{accent}</Accent>{suffix && ` ${suffix}`}
+  </Title>
+  {subtitle && (
+    <p class="mt-4 text-base sm:text-lg text-neutral-600">
+      {subtitle}
+    </p>
+  )}
+</div>

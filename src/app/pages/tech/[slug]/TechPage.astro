@@ -1,0 +1,49 @@
+---
+/**
+ * /tech/[slug]: every project, post, role and certification that names one
+ * tech. "Built with" when real work used it, "Certified in" when only a
+ * certification covers it (`usedInWork`, KHP §1.1).
+ */
+import MainLayout from "@app/layout/MainLayout.astro";
+import { Chip, PageSection, PageHeader, Row, VisuallyHidden } from "@ui";
+import TaxonomyResults from "@app/features/taxonomy/TaxonomyResults.astro";
+import { getTechBySlug } from "@data/taxonomy/technologies";
+import type { AnyEntry } from "@app/features/entries/model";
+import { countLabel, usedInWork, type BioRecord } from "@app/features/taxonomy/collect";
+
+interface Props {
+  slug: string;
+  entries: AnyEntry[];
+  bio: BioRecord[];
+}
+
+const { slug, entries, bio } = Astro.props;
+const tech = getTechBySlug(slug);
+const label = tech?.name ?? slug;
+const prefix = usedInWork([...entries, ...bio]) ? "Built with" : "Certified in";
+---
+
+<MainLayout
+  title={`${prefix} ${label} - Kenneth Harold Panis`}
+  description={`Projects, posts, roles and certifications that name ${label}.`}
+>
+  <PageSection variant="hero">
+    <PageHeader
+      prefix={prefix}
+      accent={label}
+      subtitle={countLabel([...entries, ...bio])}
+      size="md"
+    />
+
+    {tech?.url && (
+      <Row justify="center" class="-mt-6 mb-12">
+        <Chip variant="link" href={tech.url} target="_blank" rel="noopener noreferrer" class="gap-2 px-4 py-2 text-sm">
+          Visit website
+          <VisuallyHidden>(opens in a new tab)</VisuallyHidden>
+        </Chip>
+      </Row>
+    )}
+
+    <TaxonomyResults entries={entries} bio={bio} />
+  </PageSection>
+</MainLayout>

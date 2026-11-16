@@ -1,0 +1,28 @@
+---
+import Layout from "@app/layout/MainLayout.astro";
+import { Grid, PageSection, PageHeader } from "@ui";
+import { Toaster } from "@ui";
+import ContactForm from "./ContactForm.astro";
+import ContactSidebar from "./ContactSidebar.astro";
+---
+
+<Layout
+  title="Contact - Kenneth Harold Panis"
+  description="Get in touch with Kenneth Harold Panis about a role, a freelance project or a collaboration."
+  image="/images/me/me.jpg"
+  type="website"
+>
+  <PageSection variant="hero">
+    <PageHeader
+      prefix="Let's"
+      accent="Connect"
+    />
+
+    <Grid cols="halves" gap="3xl" class="lg:gap-20">
+      <ContactForm />
+      <ContactSidebar />
+    </Grid>
+  </PageSection>
+
+  <Toaster client:idle position="top-right" richColors closeButton expand={false} visibleToasts={3} />
+</Layout>

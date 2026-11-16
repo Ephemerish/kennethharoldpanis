@@ -1,0 +1,73 @@
+---
+/**
+ * Text, every run of words that isn't a heading (KHP §5.4). Sizes and tones
+ * are named steps; `as` picks the element (p, span, time, strong...).
+ */
+import type { HTMLAttributes } from "astro/types";
+import { cn } from "../../utils/cn";
+
+const SIZE = {
+  inherit: "",
+  /** Fine print: dates on cards, chip text. */
+  xs: "text-xs",
+  /** Small text: card descriptions, labels. */
+  sm: "text-sm",
+  /** Body text in cards. */
+  body: "text-sm sm:text-base",
+  base: "text-base",
+  /** A card's lead or a sidebar's main text. */
+  large: "text-base sm:text-lg",
+  /** The home page's paragraphs. */
+  lead: "text-base sm:text-lg md:text-xl",
+  /** A page subtitle. */
+  intro: "text-lg sm:text-xl md:text-2xl",
+  xl: "text-xl",
+} as const;
+
+const TONE = {
+  inherit: "",
+  strong: "text-neutral-900",
+  default: "text-neutral-700",
+  muted: "text-neutral-600",
+  subtle: "text-neutral-500",
+  brand: "text-brand-700",
+} as const;
+
+type Props = HTMLAttributes<"p"> & {
+  as?: string;
+  size?: keyof typeof SIZE;
+  tone?: keyof typeof TONE;
+  weight?: "normal" | "medium" | "semibold" | "bold";
+  align?: "start" | "center";
+  leading?: "normal" | "relaxed" | "tight";
+  /** For `as="time"`: the machine-readable date. */
+  datetime?: string;
+  /** Cut to this many lines with an ellipsis. */
+  clamp?: 1 | 2 | 3 | 4;
+  class?: string;
+};
+
+const {
+  as = "p",
+  size = "inherit",
+  tone = "default",
+  weight,
+  align,
+  leading,
+  clamp,
+  class: className,
+  ...rest
+} = Astro.props;
+const Tag = as as "p";
+
+const weightClass = weight && { normal: "font-normal", medium: "font-medium", semibold: "font-semibold", bold: "font-bold" }[weight];
+const leadingClass = leading && { normal: "leading-normal", relaxed: "leading-relaxed", tight: "leading-tight" }[leading];
+const clampClass = clamp && { 1: "line-clamp-1", 2: "line-clamp-2", 3: "line-clamp-3", 4: "line-clamp-4" }[clamp];
+---
+
+<Tag
+  class={cn(SIZE[size], TONE[tone], weightClass, leadingClass, clampClass, align === "center" && "text-center", className)}
+  {...rest}
+>
+  <slot />
+</Tag>

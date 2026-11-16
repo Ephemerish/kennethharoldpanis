@@ -1,0 +1,18 @@
+---
+/** How to reach him, as plain facts: the address, where he is, when he answers. */
+import { Card, Fact, Facts, Heading, Text } from "@ui";
+import EmailLink from "@app/shared/EmailLink.astro";
+import { site } from "@data/site";
+---
+
+<Card variant="floating">
+  <Heading level={2} size="card" class="mb-6">Get in touch</Heading>
+  <Facts layout="stack" gap="lg">
+    <Fact label="Email"><EmailLink address={site.email} class="text-base text-brand-700 hover:text-brand-800 break-all" showAddress /></Fact>
+    <Fact label="Location"><Text as="span" size="base">{site.location}</Text></Fact>
+    <Fact label="Response time">
+      <Text as="span" size="base">Usually within 24 hours</Text>
+      <Text size="sm" tone="subtle">Monday to Friday, 9 AM - 6 PM PHT</Text>
+    </Fact>
+  </Facts>
+</Card>

@@ -1,0 +1,28 @@
+---
+/** Previous and next for the blog list. Page 1 is /blogs, page n /blogs/page/n. */
+import { pageHref } from "./model";
+import { Link, Row, Text } from "@ui";
+
+interface Props {
+  currentPage: number;
+  totalPages: number;
+}
+
+const { currentPage, totalPages } = Astro.props;
+const disablePrevious = currentPage <= 1;
+const disableNext = currentPage >= totalPages;
+const base = "inline-block bg-neutral-100 px-3 py-2";
+---
+
+<Row as="nav" justify="between" class="mt-10" aria-label="Blog pages">
+  {disablePrevious ? (
+    <Text as="span" size="inherit" tone="subtle" class={base} aria-disabled="true">Previous</Text>
+  ) : (
+    <Link href={pageHref(currentPage - 1)} rel="prev" class={`${base} hover:bg-neutral-900 hover:text-neutral-0`}>Previous</Link>
+  )}
+  {disableNext ? (
+    <Text as="span" size="inherit" tone="subtle" class={base} aria-disabled="true">Next</Text>
+  ) : (
+    <Link href={pageHref(currentPage + 1)} rel="next" class={`${base} hover:bg-neutral-900 hover:text-neutral-0`}>Next</Link>
+  )}
+</Row>

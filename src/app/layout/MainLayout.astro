@@ -1,0 +1,37 @@
+---
+/**
+ * MainLayout, the frame around every page (KHP §2.1): head, navigation, the
+ * page, footer. The navigation persists across view transitions.
+ */
+import "@ui/tokens/theme.css";
+import { ClientRouter } from "astro:transitions";
+import Head, { type Props as HeadProps } from "./Head.astro";
+import Navbar from "./Navbar";
+import Footer from "./Footer.astro";
+import Analytics from "@app/features/analytics/Analytics.astro";
+import { Box, Frame, SkipLink } from "@ui";
+
+type Props = HeadProps;
+
+const props = Astro.props;
+---
+
+<!doctype html>
+<html lang="en" class="no-js" transition:animate="none">
+  <head>
+    <Head {...props} />
+    <!-- Smooth same-origin page transitions; persists nav state across navigations -->
+    <ClientRouter />
+  </head>
+  <body class="w-full min-h-screen flex flex-col bg-neutral-0 antialiased">
+    <SkipLink />
+    <Navbar client:idle path={Astro.url.pathname} transition:persist />
+    <Box as="main" id="main" class="flex-1 relative flex flex-col">
+      <slot />
+      {/* On a short page, the side rules run on down to the footer. */}
+      <Frame grow backdrop="none" aria-hidden="true" />
+    </Box>
+    <Footer />
+    <Analytics />
+  </body>
+</html>

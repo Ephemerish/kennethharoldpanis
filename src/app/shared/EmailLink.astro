@@ -1,0 +1,47 @@
+---
+/**
+ * Email link that never writes the real address into the server HTML, so
+ * Cloudflare's Email Address Obfuscation leaves it alone. The address is split
+ * into data attributes and joined on the client on `astro:page-load`, so it
+ * also works across view transitions.
+ *
+ * Pass a slot (an icon) for an icon-only link, or set `showAddress`. Without
+ * script the link goes to /contact and the address reads "name [at] domain",
+ * so it still works (KHP §7.8).
+ */
+import { site } from "@data/site";
+
+interface Props {
+  address?: string;
+  class?: string;
+  showAddress?: boolean;
+  ariaLabel?: string;
+}
+
+const { address = site.email, class: className, showAddress = false, ariaLabel } = Astro.props;
+const [user, domain] = address.split("@");
+---
+
+<a
+  href="/contact"
+  data-email-user={user}
+  data-email-domain={domain}
+  data-email-text={showAddress ? "" : undefined}
+  class={className}
+  aria-label={ariaLabel}
+>
+  {showAddress ? `${user} [at] ${domain}` : <slot />}
+</a>
+
+<script>
+  function decodeEmails() {
+    document.querySelectorAll<HTMLAnchorElement>("a[data-email-user]").forEach((a) => {
+      const { emailUser: user, emailDomain: domain } = a.dataset;
+      if (!user || !domain) return;
+      a.href = `mailto:${user}@${domain}`;
+      if (a.hasAttribute("data-email-text")) a.textContent = `${user}@${domain}`;
+    });
+  }
+
+  document.addEventListener("astro:page-load", decodeEmails);
+</script>

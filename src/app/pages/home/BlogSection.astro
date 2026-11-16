@@ -1,0 +1,20 @@
+---
+/** The home page's posts: the newest few, in the same cards as everywhere. */
+import { ButtonLink, PageSection, Row, SectionHeader } from "@ui";
+import EntryGrid from "@app/features/entries/EntryGrid.astro";
+import { lists } from "@data/settings";
+import { getCollection } from "astro:content";
+import { asPosts, sortPosts } from "@app/features/entries/model";
+
+const posts = asPosts(sortPosts(await getCollection("blog")).slice(0, lists.homePosts));
+---
+
+<PageSection variant="plain">
+  <SectionHeader prefix="Latest from the" accent="Blog" />
+  <EntryGrid entries={posts} class="mb-8 sm:mb-12" />
+  <Row justify="center">
+    <ButtonLink href="/blogs" variant="outlineBrand" size="lg" class="text-base sm:text-lg font-semibold">
+      Read All Blogs
+    </ButtonLink>
+  </Row>
+</PageSection>

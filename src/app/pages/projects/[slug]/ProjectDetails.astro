@@ -1,0 +1,82 @@
+---
+/**
+ * ProjectDetails, the project's overview card above the story.
+ *
+ * A plain panel. Tech now lives in the shared article
+ * header (TechChips); this card holds the project-only detail: materials,
+ * a facts grid, and Key features / Challenges side by side.
+ */
+import { Chip, Fact, Facts, Grid, List, ListItem, Panel, PanelSection } from "@ui";
+import type { CollectionEntry } from "astro:content";
+import { formatMonth } from "@app/calc/format";
+
+interface Props {
+  data: CollectionEntry<"projects">["data"];
+}
+
+const { data } = Astro.props;
+
+const fmt = formatMonth;
+
+const overview = data.overview;
+const materials = overview?.materials ?? [];
+const hasMaterials = materials.length > 0;
+
+const academic = overview?.academic;
+// Timeline only when there's an end date, the header already shows the start.
+const facts = [
+  data.endDate
+    ? { label: "Timeline", value: `${fmt(data.startDate)} – ${fmt(data.endDate)}` }
+    : null,
+  overview?.team?.length ? { label: "Team", value: overview.team.join(", ") } : null,
+  academic?.institution ? { label: "Institution", value: academic.institution } : null,
+  academic?.supervisor ? { label: "Supervisor", value: academic.supervisor } : null,
+  academic?.researchArea ? { label: "Research area", value: academic.researchArea } : null,
+].filter(Boolean) as { label: string; value: string }[];
+
+const keyFeatures = overview?.keyFeatures ?? [];
+const challenges = overview?.challenges ?? [];
+
+const hasLists = keyFeatures.length > 0 || challenges.length > 0;
+const hasAnything = hasMaterials || facts.length > 0 || hasLists;
+
+---
+
+{hasAnything && (
+  <Panel title="Overview">
+    {hasMaterials && (
+      <PanelSection heading="Materials & tools" divided>
+        <List direction="row" gap="sm">
+          {materials.map((m) => <ListItem><Chip variant="outline" size="md" class="py-1.5 font-normal text-neutral-600">{m}</Chip></ListItem>)}
+        </List>
+      </PanelSection>
+    )}
+
+    {facts.length > 0 && (
+      <PanelSection divided>
+        <Facts gap="none" class="gap-x-8 gap-y-5">
+          {facts.map((f) => <Fact label={f.label}>{f.value}</Fact>)}
+        </Facts>
+      </PanelSection>
+    )}
+
+    {hasLists && (
+      <Grid cols="halves-md" gap="none">
+        {keyFeatures.length > 0 && (
+          <PanelSection heading="Key features">
+            <List gap="none" class="space-y-2.5 text-sm text-neutral-700">
+              {keyFeatures.map((f) => <ListItem marker="square">{f}</ListItem>)}
+            </List>
+          </PanelSection>
+        )}
+        {challenges.length > 0 && (
+          <PanelSection heading="Challenges" side={keyFeatures.length > 0}>
+            <List gap="none" class="space-y-2.5 text-sm text-neutral-700">
+              {challenges.map((c) => <ListItem marker="square-muted">{c}</ListItem>)}
+            </List>
+          </PanelSection>
+        )}
+      </Grid>
+    )}
+  </Panel>
+)}

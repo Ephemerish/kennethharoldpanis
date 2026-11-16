@@ -1,0 +1,13 @@
+---
+/** Certifications in the data's order, the same order as the home hero. */
+import { Box, List, ListItem, SectionHeader } from "@ui";
+import { certifications } from "@data/bio/certifications";
+import CertificationCard from "./CertificationCard.astro";
+---
+
+<Box as="section" aria-labelledby="certifications">
+  <SectionHeader prefix="My" accent="Certifications" id="certifications" />
+  <List gap="lg">
+    {certifications.map((cert) => <ListItem><CertificationCard cert={cert} /></ListItem>)}
+  </List>
+</Box>

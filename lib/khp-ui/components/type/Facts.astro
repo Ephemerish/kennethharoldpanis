@@ -1,0 +1,15 @@
+---
+/** Facts, a list of labelled values (a dl), laid out as a Grid or a Stack. */
+import { cn } from "../../utils/cn";
+import { GAP, type Gap } from "../layout/space";
+
+interface Props {
+  layout?: "grid" | "stack";
+  gap?: Gap;
+  class?: string;
+}
+
+const { layout = "grid", gap = "lg", class: className } = Astro.props;
+---
+
+<dl class={cn(layout === "grid" ? "grid grid-cols-2 sm:grid-cols-3" : "flex flex-col", GAP[gap], className)}><slot /></dl>

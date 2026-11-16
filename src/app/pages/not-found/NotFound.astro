@@ -1,0 +1,31 @@
+---
+/** The 404 page. */
+import Layout from "@app/layout/MainLayout.astro";
+import { Box, ButtonLink, Frame, Heading, Link, Row, Stack, Text } from "@ui";
+---
+
+<Layout title="404 - Page Not Found" noindex>
+  <Frame as="section" topBorder pad="md">
+    <Stack gap="none" align="center" class="justify-center min-h-[70vh] text-center">
+      <Box class="max-w-lg mx-auto">
+        <Heading level={1} size="title" class="md:text-4xl mb-3 sm:mb-4">Page Not Found</Heading>
+        <Text size="large" tone="muted" leading="relaxed" class="mb-6 sm:mb-8">
+          This page doesn't exist, or it has moved. One of these should get you back on track.
+        </Text>
+
+        <Row stackBelow="sm" justify="center" gap="md">
+          <ButtonLink href="/" variant="default" class="w-full sm:w-auto">Go back to Home</ButtonLink>
+          <ButtonLink href="/projects" variant="outline" class="w-full sm:w-auto">View Projects</ButtonLink>
+        </Row>
+
+        <Box class="mt-8 sm:mt-12 text-sm text-neutral-600">
+          <Text tone="inherit">Still lost? You can also:</Text>
+          <Row wrap justify="center" gap="lg" class="mt-2">
+            <Link href="/blogs" tone="muted">Read the Blog</Link>
+            <Link href="/contact" tone="muted">Contact Me</Link>
+          </Row>
+        </Box>
+      </Box>
+    </Stack>
+  </Frame>
+</Layout>

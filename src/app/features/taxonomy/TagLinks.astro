@@ -1,0 +1,19 @@
+---
+/** Tags as links to their /tags page: on articles and on /bio. */
+import { Chip, List, ListItem } from "@ui";
+import { getTagLabel } from "@data/taxonomy/tags";
+
+interface Props {
+  tags: readonly string[];
+  size?: "sm" | "md";
+}
+
+const { tags, size = "md" } = Astro.props;
+const pad = size === "sm" ? "px-2.5 py-1 text-xs" : "px-3 py-1.5 text-sm";
+---
+
+<List direction="row" gap="sm">
+  {tags.map((tag) => (
+    <ListItem><Chip variant="link" size={size === "sm" ? "link-sm" : "link-md"} href={`/tags/${tag}`}>{getTagLabel(tag)}</Chip></ListItem>
+  ))}
+</List>

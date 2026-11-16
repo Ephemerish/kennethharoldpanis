@@ -1,0 +1,71 @@
+---
+/**
+ * Page-view beacon (docs/systems/analytics.md). Sends one view per page,
+ * including view-transition navigations, to /api/analytics. Skipped on local
+ * hosts. Never blocks the page and never logs.
+ */
+---
+
+<script is:inline>
+  (function () {
+    // Inline scripts can run again after a view-transition swap; listen once.
+    if (window.__khpAnalytics) return;
+    window.__khpAnalytics = true;
+    var host = location.hostname;
+    if (host === "localhost" || host === "127.0.0.1" || host === "0.0.0.0" || host === "::1" || host.endsWith(".local")) return;
+
+    function id(store, key, prefix) {
+      try {
+        var value = store.getItem(key);
+        if (!value) {
+          value = prefix + Date.now() + "_" + Math.random().toString(36).slice(2, 11);
+          store.setItem(key, value);
+        }
+        return value;
+      } catch (e) {
+        return null;
+      }
+    }
+
+    function loadTime() {
+      try {
+        var nav = performance.getEntriesByType("navigation")[0];
+        return nav && nav.loadEventEnd > 0 ? Math.round(nav.loadEventEnd - nav.startTime) : null;
+      } catch (e) {
+        return null;
+      }
+    }
+
+    function send() {
+      var data = {
+        visitorId: id(localStorage, "visitor_id", "v_") || "session_" + Date.now(),
+        sessionId: id(sessionStorage, "session_id", "s_"),
+        path: location.pathname,
+        referrer: document.referrer,
+        userAgent: navigator.userAgent,
+        screenWidth: screen.width,
+        screenHeight: screen.height,
+        viewportWidth: innerWidth,
+        viewportHeight: innerHeight,
+        devicePixelRatio: devicePixelRatio || 1,
+        language: navigator.language,
+        timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+        colorScheme: document.documentElement.classList.contains("dark") ? "dark" : "light",
+        connectionType: (navigator.connection && navigator.connection.effectiveType) || "unknown",
+        touchEnabled: "ontouchstart" in window || navigator.maxTouchPoints > 0,
+        loadTime: loadTime(),
+      };
+      fetch("/api/analytics", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+        keepalive: true,
+      }).catch(function () {});
+    }
+
+    // astro:page-load fires on the first load and after every navigation.
+    document.addEventListener("astro:page-load", function () {
+      setTimeout(send, 100);
+    });
+  })();
+</script>

@@ -1,0 +1,22 @@
+---
+/** ListItem, one entry in a List; `marker="square"` adds the lime square. */
+import type { HTMLAttributes } from "astro/types";
+import { cn } from "../../utils/cn";
+
+type Props = HTMLAttributes<"li"> & {
+  marker?: "none" | "square" | "square-muted";
+  class?: string;
+};
+
+const { marker = "none", class: className, ...rest } = Astro.props;
+---
+
+<li
+  class={cn(marker !== "none" && "flex gap-2.5", className)}
+  {...rest}
+>
+  {marker !== "none" && (
+    <span class:list={["mt-2 w-1.5 h-1.5 shrink-0", marker === "square" ? "bg-brand-500" : "bg-neutral-300"]} aria-hidden="true"></span>
+  )}
+  {marker !== "none" ? <span class="leading-relaxed"><slot /></span> : <slot />}
+</li>

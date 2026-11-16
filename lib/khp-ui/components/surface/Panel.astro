@@ -1,0 +1,21 @@
+---
+/**
+ * Panel, a bordered box with a header strip, split into PanelSections: the
+ * project overview. One look for every "facts at a glance" block.
+ */
+import { cn } from "../../utils/cn";
+
+interface Props {
+  title: string;
+  class?: string;
+}
+
+const { title, class: className } = Astro.props;
+---
+
+<section class={cn("border border-neutral-200 bg-neutral-0 shadow-sm", className)}>
+  <div class="px-6 sm:px-8 py-3.5 bg-neutral-50 border-b border-neutral-200">
+    <span class="text-sm font-semibold text-neutral-700 tracking-tight">{title}</span>
+  </div>
+  <slot />
+</section>

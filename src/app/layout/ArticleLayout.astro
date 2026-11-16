@@ -1,0 +1,128 @@
+---
+/**
+ * ArticleLayout, the shared page shell for any long-form entry.
+ *
+ * Blog posts and projects both render through this layout so the page
+ * chrome (bordered shell, header, meta row, hero image, facets)
+ * and the content engine (<Prose />) are defined once. Collection-specific
+ * UI is passed through the `actions`, `lead` and `overlay` slots.
+ */
+import MainLayout from "./MainLayout.astro";
+import { site } from "@data/site";
+import Prose from "@app/features/article/Prose.astro";
+import ContentImageViewer from "@app/features/article/ContentImageViewer";
+import TechChips from "@app/features/entries/TechChips.astro";
+import { formatDate, isoDay } from "@app/calc/format";
+import TagLinks from "@app/features/taxonomy/TagLinks.astro";
+import { coverBackdrop } from "@app/features/entries/cover-image.mjs";
+import { Box, Frame, Heading, Image, Label, Row, Stack, StatusPill, Text } from "@ui";
+
+interface Badge {
+  label: string;
+  variant: "brand" | "neutral" | "success" | "warning" | "error";
+}
+
+interface Props {
+  title: string;
+  description?: string;
+  heroImage?: string;
+  ogType?: string;
+  date?: Date;
+  readTime?: string;
+  tags?: string[];
+  tech?: string[];
+  badges?: Badge[];
+  // When false, the default slot is rendered as-is instead of being wrapped in
+  // <Prose>. Lets a custom engine (e.g. pretext) own the whole body render.
+  proseBody?: boolean;
+  // When false, the hero image is not rendered, but heroImage is still used as
+  // the OG/share image. Lets the pretext post skip a redundant cover on-page.
+  showHero?: boolean;
+}
+
+const {
+  title,
+  description,
+  heroImage,
+  ogType = "article",
+  date,
+  readTime,
+  tags,
+  tech,
+  badges,
+  proseBody = true,
+  showHero = true,
+} = Astro.props;
+
+const hasFacets = (tech && tech.length > 0) || (tags && tags.length > 0);
+
+const ogImage = heroImage ? `/images/${heroImage}` : site.image;
+const hasActions = Astro.slots.has("actions");
+const hasLead = Astro.slots.has("lead");
+const hasOverlay = Astro.slots.has("overlay");
+---
+
+<MainLayout title={`${title} - ${site.name}`} description={description} image={ogImage} type={ogType}>
+  <Frame as="section" pad="md" class="text-neutral-900">
+    <Box as="article">
+      <Box as="header" class="mb-8">
+        {/* Title and status */}
+        <Row wrap gap="md" class="mb-4">
+          <Heading level={1} size="article">{title}</Heading>
+          {badges?.map((badge) => <StatusPill variant={badge.variant} class="border">{badge.label}</StatusPill>)}
+        </Row>
+
+        {/* When, and how long it reads */}
+        {(date || readTime) && (
+          <Text size="sm" tone="muted" class="mb-6">
+            {date && <Text as="time" size="inherit" tone="inherit" datetime={isoDay(date)}>{formatDate(date)}</Text>}{date && readTime && " · "}{readTime}
+          </Text>
+        )}
+
+        {description && <Text size="xl" leading="relaxed" class="mb-8">{description}</Text>}
+
+        {heroImage && showHero && (
+          <Box class="relative w-full aspect-video overflow-hidden shadow-lg mb-8 bg-black">
+            <Image src={coverBackdrop(heroImage)} alt="" aria-hidden="true" fit="cover" priority class="absolute inset-0 w-full h-full opacity-70" />
+            <Image id="article-hero" src={`/images/${heroImage}`} alt={title} fit="contain" priority class="relative w-full h-full" />
+          </Box>
+        )}
+
+        {/* Collection-specific actions (a project's live app and code) */}
+        {hasActions && (
+          <Row wrap gap="md"><slot name="actions" /></Row>
+        )}
+
+        {/* The same facets for posts and projects */}
+        {hasFacets && (
+          <Stack gap="lg" class="mt-8 pt-6 border-t border-neutral-200">
+            {tech && tech.length > 0 && (
+              <Row stackBelow="sm" align="start" gap="sm" class="sm:items-baseline sm:gap-5">
+                <Label size="2xs" tone="subtle" as="span" class="sm:w-20 shrink-0">Built with</Label>
+                <TechChips tech={tech} />
+              </Row>
+            )}
+            {tags && tags.length > 0 && (
+              <Row stackBelow="sm" align="start" gap="sm" class="sm:items-baseline sm:gap-5">
+                <Label size="2xs" tone="subtle" as="span" class="sm:w-20 shrink-0">Tagged</Label>
+                <TagLinks tags={tags} />
+              </Row>
+            )}
+          </Stack>
+        )}
+      </Box>
+
+      {/* Lead: visuals and quick context before the story */}
+      {hasLead && (
+        <Stack gap="xl" class="mb-12"><slot name="lead" /></Stack>
+      )}
+
+      {/* Content engine: Prose by default, or raw for a custom engine */}
+      {proseBody ? <Prose><slot /></Prose> : <slot />}
+    </Box>
+
+    {/* Wires the hero and every markdown image to the zoomable viewer */}
+    <ContentImageViewer client:idle />
+    {hasOverlay && <slot name="overlay" />}
+  </Frame>
+</MainLayout>

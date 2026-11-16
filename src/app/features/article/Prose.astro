@@ -1,0 +1,37 @@
+---
+import { Prose as ProseText } from "@ui";
+/**
+ * Prose, the single rendering engine for long-form markdown content.
+ *
+ * Both blog posts and projects render their `<Content />` through this
+ * component, so the article typography, figure/caption styling, table
+ * enhancement and collapsible-section behaviour are defined exactly once.
+ * Change it here and every blog and project updates together.
+ *
+ * Usage:
+ *   <Prose><Content /></Prose>
+ */
+---
+
+<ProseText id="article-content">
+  <slot />
+</ProseText>
+
+
+<script>
+  import { enhanceTables } from "./prose/enhanceTables";
+  import { initCollapsibleSections } from "./prose/collapsibleSections";
+
+  // Use astro:page-load instead of DOMContentLoaded so the script also runs
+  // after a same-app navigation through ClientRouter (view transitions).
+  // astro:page-load fires on both initial load and every in-app navigation.
+  document.addEventListener('astro:page-load', function() {
+    document.querySelector('[data-collapse-button]')?.remove();
+    document.querySelector('[data-collapse-tooltip]')?.remove();
+    const article = document.getElementById('article-content');
+    if (!article) return;
+
+    enhanceTables(article);
+    initCollapsibleSections(article);
+  });
+</script>

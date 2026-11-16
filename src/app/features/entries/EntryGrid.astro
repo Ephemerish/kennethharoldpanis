@@ -1,0 +1,23 @@
+---
+/**
+ * EntryGrid, every list of projects and posts on the site: the home page's
+ * sections, /projects, /blogs, and the tag and tech pages (KHP §4.10). One to
+ * three columns of EntryCards; the first row loads its covers first.
+ */
+import { Grid, ListItem } from "@ui";
+import EntryCard from "./EntryCard.astro";
+import { FIRST_ROW, toCard, type AnyEntry } from "./model";
+
+interface Props {
+  entries: readonly AnyEntry[];
+  class?: string;
+}
+
+const { entries, class: className } = Astro.props;
+---
+
+<Grid as="ul" cols="cards" gap="2xl" class={className}>
+  {entries.map((item, i) => (
+    <ListItem class="h-full"><EntryCard card={toCard(item)} priority={i < FIRST_ROW} /></ListItem>
+  ))}
+</Grid>

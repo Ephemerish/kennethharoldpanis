@@ -1,0 +1,49 @@
+---
+/**
+ * EntryCard, the one card for a project or a post, everywhere it's listed
+ * (KHP §4.10). Featured projects and the newest post use it too: they come
+ * first in the list, they don't look different.
+ *
+ * The whole card is one link (KHP §4.4). Reads `CardData` from `toCard`, so it
+ * never branches on the kind: a project brings its status, a post its read
+ * time, and both show in the same places.
+ */
+import { Box, Card, Chip, Heading, List, ListItem, Stack, StatusPill, Text } from "@ui";
+import { formatDate, isoDay } from "@app/calc/format";
+import { getTagLabel } from "@data/taxonomy/tags";
+import Cover from "./Cover.astro";
+import type { CardData } from "./model";
+
+interface Props {
+  card: CardData;
+  priority?: boolean;
+}
+
+const { card, priority = false } = Astro.props;
+---
+
+<Card href={card.href} hoverable padding="none" class="flex h-full flex-col overflow-hidden">
+  <Box class="relative">
+    <Cover title={card.title} image={card.image} engine={card.engine} priority={priority} />
+    {card.status && (
+      <StatusPill variant={card.status.variant} class="absolute right-4 top-4 border">{card.status.label}</StatusPill>
+    )}
+  </Box>
+
+  <Stack gap="sm" grow class="p-6 sm:p-8">
+    <Heading level={2} size="card" class="line-clamp-2 group-hover:text-brand-700">{card.title}</Heading>
+
+    <Text size="sm" tone="subtle">
+      <Text as="time" size="inherit" tone="inherit" datetime={isoDay(card.date)}>{formatDate(card.date)}</Text>{card.readTime && ` · ${card.readTime}`}
+    </Text>
+
+    {card.summary && <Text size="sm" tone="muted" clamp={3} class="mt-1">{card.summary}</Text>}
+
+    {card.tags.length > 0 && (
+      <List direction="row" gap="none" class="mt-auto gap-1 pt-3">
+        {card.tags.map((tag) => <ListItem><Chip variant="tag" size="tag">{getTagLabel(tag)}</Chip></ListItem>)}
+      </List>
+    )}
+
+  </Stack>
+</Card>

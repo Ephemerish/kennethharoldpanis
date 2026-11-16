@@ -1,0 +1,35 @@
+---
+/**
+ * One role or school on the bio. The summary row says who, where and when;
+ * opening it shows what it was and every technology used there (KHP §10.3).
+ */
+import { AccordionItem, Heading, Logo, Row, Stack, Text } from "@ui";
+import TechChips from "@app/features/entries/TechChips.astro";
+import TagLinks from "@app/features/taxonomy/TagLinks.astro";
+import { isCurrent, yearsLabel, type TimelineEntry } from "@data/bio/experience";
+
+interface Props {
+  role: TimelineEntry;
+  tech: string[];
+}
+
+const { role, tech } = Astro.props;
+const current = isCurrent(role);
+---
+
+<AccordionItem id={role.slug} open={current}>
+  <Row slot="summary" align="start" gap="md">
+    <Logo name={role.org} src={role.image} />
+    <Stack gap="none" class="min-w-0">
+      <Heading level={3} size="item">{role.title}</Heading>
+      <Text size="body" tone="muted" weight="medium">{role.org}</Text>
+      <Text as="span" size="sm" tone="subtle" class="font-mono">{yearsLabel(role)}</Text>
+    </Stack>
+  </Row>
+
+  <Stack gap="lg">
+    <Text size="body" leading="relaxed">{role.description}</Text>
+    {tech.length > 0 && <TechChips tech={tech} size="sm" />}
+    {role.tags.length > 0 && <TagLinks tags={role.tags} size="sm" />}
+  </Stack>
+</AccordionItem>

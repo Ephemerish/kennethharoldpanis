@@ -1,0 +1,20 @@
+---
+/** The home page's projects: the first few, featured ones first, in the same cards as everywhere. */
+import { ButtonLink, PageSection, Row, SectionHeader } from "@ui";
+import EntryGrid from "@app/features/entries/EntryGrid.astro";
+import { lists } from "@data/settings";
+import { getCollection } from "astro:content";
+import { asProjects, sortProjects } from "@app/features/entries/model";
+
+const projects = asProjects(sortProjects(await getCollection("projects")).slice(0, lists.homeProjects));
+---
+
+<PageSection variant="hero">
+  <SectionHeader prefix="Featured" accent="Projects" />
+  <EntryGrid entries={projects} class="mb-8 sm:mb-12" />
+  <Row justify="center">
+    <ButtonLink href="/projects" variant="gradient" size="lg" class="text-base sm:text-lg font-semibold">
+      View All Projects
+    </ButtonLink>
+  </Row>
+</PageSection>

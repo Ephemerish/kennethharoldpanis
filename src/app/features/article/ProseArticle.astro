@@ -1,0 +1,27 @@
+---
+/** The prose engine: the post's markdown through ArticleLayout and Prose. */
+import ArticleLayout from "@app/layout/ArticleLayout.astro";
+import { readTime } from "@app/calc/format";
+import type { CollectionEntry } from "astro:content";
+import type { AstroComponentFactory } from "astro/runtime/server/index.js";
+
+interface Props {
+  entry: CollectionEntry<"blog">;
+  Content: AstroComponentFactory;
+}
+
+const { entry, Content } = Astro.props;
+const fm = entry.data;
+---
+
+<ArticleLayout
+  title={fm.title}
+  description={fm.description}
+  heroImage={fm.image}
+  date={fm.pubDate}
+  readTime={readTime(entry.body ?? "")}
+  tags={fm.tags}
+  tech={fm.tech}
+>
+  <Content />
+</ArticleLayout>

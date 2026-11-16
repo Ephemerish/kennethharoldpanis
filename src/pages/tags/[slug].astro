@@ -1,60 +1,16 @@
 ---
+import TagPage from "@app/pages/tags/[slug]/TagPage.astro";
+import { loadTaxonomy } from "@app/features/taxonomy/collect";
+
 export const prerender = true;
-import MainLayout from "@/layouts/MainLayout.astro";
-import { EntryCollectionGrid, PageSection, PageHeader } from "@/components";
-import { getCollection } from "astro:content";
-import type { CollectionEntry } from "astro:content";
-import { getTagBySlug } from "@/data/tags";
 
-type Tagged =
-  | { entry: CollectionEntry<"projects">; kind: "project" }
-  | { entry: CollectionEntry<"blog">; kind: "blog" };
-
-// Newest first; blogs use pubDate, projects fall back to end/start date.
-const dateOf = ({ entry }: Tagged) =>
-  ("pubDate" in entry.data && entry.data.pubDate) ||
-  ("endDate" in entry.data && entry.data.endDate) ||
-  (entry.data as CollectionEntry<"projects">["data"]).startDate;
-
+// One page per tag that anything on the site carries.
 export async function getStaticPaths() {
-  const [projects, blogs] = await Promise.all([
-    getCollection("projects"),
-    getCollection("blog"),
-  ]);
-
-  const all: Tagged[] = [
-    ...projects.map((entry) => ({ entry, kind: "project" as const })),
-    ...blogs.map((entry) => ({ entry, kind: "blog" as const })),
-  ];
-
-  // One page per tag slug that is actually used by at least one entry.
-  const slugs = new Set<string>();
-  for (const { entry } of all) for (const tag of entry.data.tags) slugs.add(tag);
-
-  return [...slugs].map((slug) => ({
-    params: { slug },
-    props: { slug, entries: all.filter(({ entry }) => entry.data.tags.includes(slug)) },
-  }));
+  const taxonomy = await loadTaxonomy();
+  return [...taxonomy.tagSlugs].map((slug) => ({ params: { slug }, props: { slug, ...taxonomy.withTag(slug) } }));
 }
 
-const { slug, entries } = Astro.props as { slug: string; entries: Tagged[] };
-const label = getTagBySlug(slug)?.label ?? slug;
-const sorted = [...entries].sort((a, b) => dateOf(b).valueOf() - dateOf(a).valueOf());
-const count = `${sorted.length} ${sorted.length === 1 ? "entry" : "entries"}`;
+const { slug, entries, bio } = Astro.props;
 ---
 
-<MainLayout
-  title={`Tagged “${label}” - Kenneth Harold Panis`}
-  description={`Projects and posts tagged ${label}.`}
->
-  <PageSection variant="hero">
-    <PageHeader
-      prefix="Tagged"
-      accent={label}
-      subtitle={`${count} tagged ${label}.`}
-      size="md"
-    />
-
-    <EntryCollectionGrid entries={sorted} />
-  </PageSection>
-</MainLayout>
+<TagPage slug={slug} entries={entries} bio={bio} />

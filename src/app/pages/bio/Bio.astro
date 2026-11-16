@@ -1,0 +1,20 @@
+---
+/** /bio: his experience, with the tech he used in each role, then his certifications. */
+import Layout from "@app/layout/MainLayout.astro";
+import { PageSection, Stack } from "@ui";
+import ExperienceSection from "./ExperienceSection.astro";
+import CertificationsSection from "./CertificationsSection.astro";
+---
+
+<Layout
+  title="Bio - Kenneth Harold Panis"
+  description="About Kenneth Harold Panis: where he has worked and studied, the tech he used there, and his AWS, Google Cloud and FinOps certifications."
+  type="profile"
+>
+  <PageSection variant="hero">
+    <Stack gap="3xl" class="mx-auto w-full max-w-4xl">
+      <ExperienceSection />
+      <CertificationsSection />
+    </Stack>
+  </PageSection>
+</Layout>

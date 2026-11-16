@@ -1,36 +1,13 @@
 ---
-import { ProseArticle, PretextArticle } from "@/components";
-import ArticleNotFound from "./_components/ArticleNotFound.astro";
 import { getCollection } from "astro:content";
-import { DEFAULT_ENGINE, type EngineKey } from "@/lib/engines";
+import BlogPost from "@app/pages/blogs/[slug]/BlogPost.astro";
 
 export const prerender = true;
 
 export async function getStaticPaths() {
-  const blogEntries = await getCollection("blog");
-  return blogEntries.map((entry) => ({
-    params: { slug: entry.slug },
-    props: { entry },
-  }));
+  const entries = await getCollection("blog");
+  return entries.map((entry) => ({ params: { slug: entry.id }, props: { entry } }));
 }
-
-const { entry } = Astro.props;
-const rendered = entry ? await entry.render() : null;
-const Content = rendered?.Content;
-
-// Engine registry -> component. Each blog entry declares an `engine` in its
-// frontmatter (defaulting to the markdown renderer). Add a new engine by
-// registering it in src/lib/engines and mapping its key here.
-const ENGINE_COMPONENTS: Record<EngineKey, any> = {
-  prose: ProseArticle,
-  pretext: PretextArticle,
-};
-const engineKey = (entry?.data.engine ?? DEFAULT_ENGINE) as EngineKey;
-const ArticleEngine = ENGINE_COMPONENTS[engineKey] ?? ProseArticle;
 ---
 
-{entry && Content ? (
-  <ArticleEngine entry={entry} Content={Content} />
-) : (
-  <ArticleNotFound />
-)}
+<BlogPost entry={Astro.props.entry} />

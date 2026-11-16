@@ -1,0 +1,18 @@
+---
+/** Field, a control with its label above it (KHP §4.1). The control is the slot. */
+interface Props {
+  label: string;
+  for: string;
+  required?: boolean;
+}
+
+const { label, for: htmlFor, required = false } = Astro.props;
+---
+
+<div>
+  <label for={htmlFor} class="block text-sm font-semibold text-neutral-900 mb-3">
+    {label}
+    {required && <span class="text-error-600" aria-hidden="true"> *</span>}
+  </label>
+  <slot />
+</div>

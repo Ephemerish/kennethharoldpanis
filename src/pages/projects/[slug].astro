@@ -1,54 +1,13 @@
 ---
 import { getCollection } from "astro:content";
-import ArticleLayout from "@/layouts/ArticleLayout.astro";
-import type { CollectionEntry } from "astro:content";
-import ProjectActions from "./_components/ProjectActions.astro";
-import ProjectLead from "./_components/ProjectLead.astro";
-import ProjectUpdates from "./_components/ProjectUpdates.astro";
+import ProjectDetail from "@app/pages/projects/[slug]/ProjectDetail.astro";
 
 export const prerender = true;
 
 export async function getStaticPaths() {
   const projects = await getCollection("projects");
-  return projects.map((project) => ({
-    params: { slug: project.slug },
-    props: { project },
-  }));
+  return projects.map((project) => ({ params: { slug: project.id }, props: { project } }));
 }
-
-const { project } = Astro.props as { project: CollectionEntry<"projects"> };
-const { Content } = await project.render();
-const d = project.data;
-
-const statusText = {
-  completed: "Completed",
-  "in-progress": "In Progress",
-  planned: "Planned",
-};
-
-const statusColors = {
-  completed: "bg-success-200 text-success-800",
-  "in-progress": "bg-warning-200 text-warning-800",
-  planned: "bg-neutral-200 text-neutral-600",
-};
-
-// Header carries only the status pill; the date comes from ArticleLayout.
-const badges = [{ label: statusText[d.status], class: statusColors[d.status] }];
-
-const galleryImages = (d.gallery ?? []).map((img) => `/images/${img}`);
 ---
 
-<ArticleLayout
-  title={d.title}
-  description={d.description}
-  heroImage={d.image}
-  date={d.startDate}
-  badges={badges}
-  tags={d.tags}
-  tech={d.tech}
->
-  <ProjectActions slot="actions" links={d.links} />
-  <ProjectLead slot="lead" data={d} galleryImages={galleryImages} />
-  <ProjectUpdates slot="lead" slug={project.slug} />
-  <Content />
-</ArticleLayout>
+<ProjectDetail project={Astro.props.project} />

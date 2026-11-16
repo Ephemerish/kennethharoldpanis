@@ -1,0 +1,87 @@
+---
+/**
+ * The contact form. With script it sends in place and says how it went in a
+ * toast (sonner); without, the browser posts it and the endpoint answers
+ * /thank-you or /contact/not-sent (KHP §7.8, §1.1). The subject is the Radix
+ * Select, server-rendered so it shows with the page (KHP §4.6), with a native
+ * select inside NoScript for readers without script.
+ */
+import { SubjectSelect } from "./SubjectSelect";
+import { Box, Button, Card, Field, Form, Heading, Input, NativeSelect, NoScript, Textarea } from "@ui";
+import { contactLimits } from "@data/settings";
+import { SUBJECTS } from "@data/contact/subjects";
+---
+
+<Card variant="floating" padding="lg" class="self-start">
+  <Box class="text-center mb-8">
+    <Heading level={2} size="title">Send me a message</Heading>
+  </Box>
+
+  <Form id="contact-form" method="post" action="/api/contact" gap="xl">
+    <Field label="Full Name" for="name" required>
+      <Input id="name" required autocomplete="name" maxlength={contactLimits.name} placeholder="Your full name" />
+    </Field>
+
+    <Field label="Email Address" for="email" required>
+      <Input id="email" type="email" required autocomplete="email" maxlength={contactLimits.email} placeholder="your.email@example.com" />
+    </Field>
+
+    <Field label="Subject" for="subject" required>
+      <Box class="js-only"><SubjectSelect client:load name="subject" /></Box>
+      <NoScript><NativeSelect id="subject" name="subject" required options={SUBJECTS} placeholder="Select a subject" /></NoScript>
+    </Field>
+
+    <Field label="Message" for="message" required>
+      <Textarea id="message" rows={5} required maxlength={contactLimits.message} placeholder="Tell me about your project, question, or how I can help you..." />
+    </Field>
+
+    {/* Left empty by people; bots fill it, and the endpoint drops their message. */}
+    <Box class="hidden" aria-hidden="true">
+      <Field label="Website" for="website">
+        <Input id="website" tabindex="-1" autocomplete="off" />
+      </Field>
+    </Box>
+
+    <Button type="submit" variant="gradient" class="w-full h-auto py-4 px-6 text-base font-semibold">Send Message</Button>
+  </Form>
+</Card>
+
+<script>
+  import { sendContact } from "@app/api/contact";
+
+  async function showToast(type: "success" | "error", title: string, description: string) {
+    try {
+      const { toast } = await import("sonner");
+      if (type === "success") toast.success(title, { description, duration: 5000 });
+      else toast.error(title, { description, duration: 5000 });
+    } catch {
+      alert(`${title}: ${description}`);
+    }
+  }
+
+  // Wire the form once per page, including after a view transition.
+  document.addEventListener("astro:page-load", () => {
+    const form = document.getElementById("contact-form") as HTMLFormElement | null;
+    if (!form || form.dataset.wired) return;
+    form.dataset.wired = "true";
+
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const button = form.querySelector<HTMLButtonElement>('button[type="submit"]')!;
+      const label = button.textContent;
+      button.textContent = "Sending...";
+      button.disabled = true;
+      try {
+        // Throws when the server refuses, so a failed send is never shown as sent.
+        await sendContact(new FormData(form));
+        await showToast("success", "Message sent successfully!", "I'll get back to you soon.");
+        form.reset();
+      } catch {
+        await showToast("error", "Failed to send message", "Please try again or email me directly.");
+      } finally {
+        button.textContent = label;
+        button.disabled = false;
+      }
+    });
+  });
+</script>

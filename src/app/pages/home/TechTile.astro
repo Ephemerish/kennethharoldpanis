@@ -1,0 +1,26 @@
+---
+/** One technology on the home page: its logo and name, opening its /tech page. */
+import { Image, Link, ListItem, Text } from "@ui";
+import { techSlug, type Technology } from "@data/taxonomy/technologies";
+
+interface Props {
+  tech: Technology;
+}
+
+const { tech } = Astro.props;
+---
+
+<ListItem>
+  <Link
+    href={`/tech/${techSlug(tech.name)}`}
+    class="flex w-24 shrink-0 flex-col items-center gap-2 border border-neutral-200 bg-neutral-0 px-2 py-3 text-center text-xs text-neutral-700 hover:border-brand-500 hover:text-brand-700 hover:shadow-brand sm:w-28"
+    title={`See where I've used ${tech.name}`}
+  >
+    {tech.imagePath ? (
+      <Image src={tech.imagePath} darkSrc={tech.imagePathDark} alt="" width="48" height="48" fit="contain" class="h-12 w-12" />
+    ) : (
+      <Text as="span" size="xl" tone="inherit" weight="bold" class="flex h-12 w-12 items-center justify-center" aria-hidden="true">{tech.name[0]}</Text>
+    )}
+    <Text as="span" tone="inherit" class="w-full truncate">{tech.name}</Text>
+  </Link>
+</ListItem>

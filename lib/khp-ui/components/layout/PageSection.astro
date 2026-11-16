@@ -1,0 +1,22 @@
+---
+/**
+ * PageSection, one band of a page (KHP §3.1): a Frame with section padding.
+ *
+ *   variant   "hero", bg-hero-gradient backdrop | "plain", page colour
+ *   topBorder false drops the rule above (the first band under the top bar)
+ */
+import Frame from "./Frame.astro";
+
+interface Props {
+  variant?: "hero" | "plain";
+  topBorder?: boolean;
+  id?: string;
+  class?: string;
+}
+
+const { variant = "hero", topBorder = true, id, class: extraClass } = Astro.props;
+---
+
+<Frame as="section" id={id} backdrop={variant} topBorder={topBorder} pad="md" class={extraClass}>
+  <slot />
+</Frame>

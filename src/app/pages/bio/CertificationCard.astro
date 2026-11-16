@@ -1,0 +1,47 @@
+---
+/**
+ * One certification: its official badge, what it covers, the tech it relates
+ * to, and the public credential.
+ */
+import { ArrowSquareOutIcon } from "@phosphor-icons/react";
+import { Box, ButtonLink, Card, Heading, Logo, Row, Stack, Text, VisuallyHidden } from "@ui";
+import TechChips from "@app/features/entries/TechChips.astro";
+import TagLinks from "@app/features/taxonomy/TagLinks.astro";
+import type { Certification } from "@data/bio/certifications";
+
+interface Props {
+  cert: Certification;
+}
+
+const { cert } = Astro.props;
+---
+
+<Card id={cert.slug} padding="none" class="scroll-mt-24 overflow-hidden">
+  <Row stackBelow="sm" align="start" gap="lg" class="p-6 sm:gap-6 sm:p-7">
+    <Logo name={cert.issuer} src={cert.image} size="lg" />
+
+    <Stack gap="lg" class="min-w-0 flex-1">
+      <Box>
+        <Heading level={3} size="item">{cert.title}</Heading>
+        <Text size="body" tone="muted" weight="medium" class="mt-1">
+          {cert.issuer}
+          {cert.issuedDate && <Text as="span" tone="subtle"> · {cert.issuedDate}</Text>}
+        </Text>
+      </Box>
+
+      <Text size="body" leading="relaxed">{cert.description}</Text>
+
+      <TechChips tech={cert.tech} size="sm" />
+
+      {cert.tags.length > 0 && <TagLinks tags={cert.tags} size="sm" />}
+
+      <Row>
+        <ButtonLink href={cert.credentialUrl} target="_blank" rel="noopener noreferrer" variant="outlineBrand" size="sm" class="gap-1.5">
+          Verify credential
+          <ArrowSquareOutIcon className="h-4 w-4" aria-hidden="true" />
+          <VisuallyHidden>for {cert.title} (opens in a new tab)</VisuallyHidden>
+        </ButtonLink>
+      </Row>
+    </Stack>
+  </Row>
+</Card>
