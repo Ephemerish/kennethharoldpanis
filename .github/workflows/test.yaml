@@ -18,5 +18,8 @@ jobs:
           node-version: 22
           cache: pnpm
       - run: pnpm install --frozen-lockfile
-      # Type check, design tokens, tests, build, then checks on the built pages.
+      # The browser the end-to-end and performance tests drive.
+      - run: pnpm exec playwright install --with-deps chromium
+      # Types, tokens, composition, unit tests, build, output checks, then
+      # every page and feature in a browser, and the performance budget.
       - run: pnpm verify

@@ -9,7 +9,7 @@ Before any change, decision or answer about the site:
 1. Read [STANDARDS.md](STANDARDS.md), its sections 1 and 10, then every file its "Read by task" table names for your task. When unsure, read all of `docs/standards/`.
 2. Before building anything, read [docs/systems.md](docs/systems.md), the registry of what the site already has, and reuse or extend it (KHP §1.4). Before changing a system, read its file in [docs/systems/](docs/systems/), above all its "Must stay true".
 3. Put code where [docs/structure.md](docs/structure.md) says (KHP §8.1). Use components from [lib/khp-ui/AGENTS.md](lib/khp-ui/AGENTS.md) before writing markup.
-4. Run `pnpm verify` and check the change on screen in light and dark, at 375px and 1440px, before calling it done (KHP §9.2, §9.3).
+4. Run `pnpm verify` (types, checks, build, then every page and feature in a browser and the performance budget) and check the change on screen in light and dark, at 375px and 1440px, before calling it done (KHP §9.2, §9.3).
 5. Cite the rules you applied by number (`KHP §5.1`) when you explain a decision.
 
 A change that breaks a standard is not done, however well it works. If a standard is wrong, change it in the same change, with the reason.
@@ -34,11 +34,14 @@ Ask of every change you make:
 - **A portfolio first** (§10): the site shows employers, recruiters and engineers what Kenneth can do. His role and certifications are on the first screen, and every claim links to its proof.
 - **The owner's words stay; filler goes** (§6.6): never rewrite his own copy. A generic line is replaced by a fact from the data, and a label never claims what the data doesn't say. A new visible element or section needs his say first.
 - **Right, or it says so** (§1.1): a date, status or claim on screen is true. A form never says "sent" when it wasn't.
-- **One home per fact** (§1.3): name, email, social links and navigation live in `src/app/shared/site.ts`; colours only in `lib/khp-ui/tokens/theme.css`.
+- **One home per fact** (§1.3): content, data and tunables live in `src/data/`. Name, email, social links and navigation are in `src/data/site.ts`; list sizes, contact limits and the performance budget in `src/data/settings.ts`; posts and projects in `src/data/content/`. Colours only in `lib/khp-ui/tokens/theme.css`.
+- **Pages are built from components** (§4.9): templates in `src/app/pages`, `src/app/features` and `src/app/layout` compose `@ui` components and write no raw HTML. A new pattern becomes a component in `lib/khp-ui` first. `pnpm check:composition` fails on a raw element.
 - **The site's visual language** (§3, §4, §5): lime brand, headings with one accent word in `text-brand-gradient`, centred section headers with a subtitle and a short gradient bar, the bordered rails column, gradient cards with `shadow-elegant`, square corners, Outfit. Build new things from the lib components so they look like the rest.
+- **No AI slop** (§5.9): no coloured side stripe on a card, no sparkle or emoji decoration, no badge that repeats its text, no purple glow, no filler. The owner's gradient accent word, gradient cards and labels are his look, not slop. `pnpm check:tokens` fails on a side stripe.
 - **Theme colours only** (§5.1): no hex, `rgb()` or Tailwind default palette class outside `lib/khp-ui/tokens/`. `pnpm check:tokens` fails on raw colour, default palette classes, rounded corners and raw z-index.
 - **Light and dark** (§5.2): every scale step has a dark value. The site is light until the reader switches; the choice is remembered.
 - **Motion on a budget** (§5.8, §7.6): snappy like Ebb. Transitions change only colour, background, border, shadow, opacity and transform, using the motion tokens. Motion pauses when unseen, nothing hydrates eagerly on the home page, and reduced motion stops it all.
+- **A performance budget for every page** (§7.7): LCP, CLS, TBT, INP, JavaScript, HTML and scroll smoothness, with the numbers in `src/data/settings.ts`. `pnpm test:perf` measures it. `server.mjs` serves precompressed files with long caching; covers above the fold load first; no CSS blur.
 - **Every tag and technology traces to real work** (§7.1): projects, posts, roles and certifications carry them, and `pnpm check:taxonomy` fails on one that nothing carries.
 - **Library first** (§1.4): Radix, sonner, Phosphor, nanostores before custom code.
 - **Colocate** (§8.1): code lives with the page that uses it and moves up only when a second user appears.
@@ -51,6 +54,7 @@ Ask of every change you make:
 | --- | --- |
 | Rules | [STANDARDS.md](STANDARDS.md) and `docs/standards/` |
 | Where code goes | [docs/structure.md](docs/structure.md) |
+| Tests and what they cover | [docs/systems/testing.md](docs/systems/testing.md) |
 | What exists, and what must survive a change | [docs/systems.md](docs/systems.md) |
 | Components | [lib/khp-ui/AGENTS.md](lib/khp-ui/AGENTS.md) |
 | Where these rules came from | [docs/standards/ebb-port.md](docs/standards/ebb-port.md) |

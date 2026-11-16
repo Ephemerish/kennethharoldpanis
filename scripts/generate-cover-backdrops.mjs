@@ -4,7 +4,7 @@ import sharp from "sharp";
 import { coverBackdrop } from "../src/app/features/entries/cover-image.mjs";
 
 const root = resolve(import.meta.dirname, "..");
-const content = resolve(root, "src/content");
+const content = resolve(root, "src/data/content");
 const files = await readdir(content, { recursive: true });
 const images = new Set();
 const missing = [];

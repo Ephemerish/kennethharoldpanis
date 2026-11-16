@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { ListIcon as Bars3Icon, XIcon as XMarkIcon } from "@phosphor-icons/react";
 import Search from "@app/features/search/Search";
-import { apps } from "@app/data/apps";
-import { isCurrent, navLinks as links, site } from "@app/shared/site";
+import { apps } from "@data/apps/apps";
+import { isCurrent, navLinks as links, site } from "@data/site";
 import { AppsMenu } from "./nav/AppsMenu";
 import { MobileMenu } from "./nav/MobileMenu";
 import { ThemeToggle } from "./ThemeToggle";

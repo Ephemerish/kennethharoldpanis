@@ -29,7 +29,8 @@ cases. If the system writes a generated file, say how to regenerate it.
 ## Checks
 
 Link the scripts that guard the system and give the commands to run them
-(`pnpm verify` runs astro check, check:tokens, test, build and check:output).
+(`pnpm verify` runs astro check, check:tokens, check:composition, test, build,
+check:output, test:e2e and test:perf).
 Say "None" when nothing automated covers the system. Do not claim a page was
 checked by eye because a script passed.
 

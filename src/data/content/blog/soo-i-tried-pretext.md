@@ -3,7 +3,7 @@ title: 'Soo I tried pretext'
 author: 'Kenneth Harold Panis'
 pubDate: 2026-06-20
 description: 'I tried pretext, a little tool that figures out how text fits before the page even draws it, and this whole post is the demo, so see for yourself.'
-tags: ['performance', 'developer-tools']
+tags: ['developer-tools']
 tech: ['TypeScript', 'React', 'Astro', 'pretext.js']
 engine: pretext
 ---

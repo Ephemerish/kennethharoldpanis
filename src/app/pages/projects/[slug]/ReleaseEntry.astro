@@ -5,9 +5,9 @@
  * Version chip + date + optional title, then the notes grouped under their
  * change category. Used in the project article's release drawer.
  */
-import { Chip } from "@ui";
-import { displayVersion, formatReleaseDate, releaseAnchor } from "@app/data/patch-notes";
-import type { ChangeCategory, Release } from "@app/data/patch-notes";
+import { Box, Chip, Heading, List, ListItem, Row, Stack, Text } from "@ui";
+import { displayVersion, formatReleaseDate, releaseAnchor } from "@data/apps/patch-notes";
+import type { ChangeCategory, Release } from "@data/apps/patch-notes";
 
 interface Props {
   release: Release;
@@ -32,32 +32,23 @@ const categoryVariant: Record<
 };
 ---
 
-<article id={releaseAnchor(app, release.version)} class:list={["scroll-mt-24", extraClass]}>
-  <header>
-    <div class="flex flex-wrap items-center gap-x-3 gap-y-1.5">
+<Box as="article" id={releaseAnchor(app, release.version)} class:list={["scroll-mt-24", extraClass]}>
+  <Box as="header">
+    <Row wrap gap="none" class="gap-x-3 gap-y-1.5">
       <Chip variant="brand" size="xs">{displayVersion(release.version)}</Chip>
-      <time datetime={release.date} class="text-sm text-neutral-500">
-        {formatReleaseDate(release)}
-      </time>
-    </div>
-    {release.title && (
-      <h3 class="mt-2 text-xl font-semibold text-neutral-900">{release.title}</h3>
-    )}
-  </header>
+      <Text as="time" datetime={release.date} size="sm" tone="subtle">{formatReleaseDate(release)}</Text>
+    </Row>
+    {release.title && <Heading level={3} size="item" weight="semibold" class="mt-2 text-xl">{release.title}</Heading>}
+  </Box>
 
-  <div class="mt-4 space-y-5">
+  <Stack gap="lg" space="sm">
     {release.changes.map((group) => (
-      <div>
+      <Box>
         <Chip variant={categoryVariant[group.category]} size="xs">{group.category}</Chip>
-        <ul class="mt-2.5 space-y-2.5">
-          {group.items.map((item) => (
-            <li class="flex gap-2.5 text-sm text-neutral-700 leading-relaxed">
-              <span class="mt-2 w-1.5 h-1.5 bg-brand-500 shrink-0" />
-              <span>{item}</span>
-            </li>
-          ))}
-        </ul>
-      </div>
+        <List gap="none" class="mt-2.5 space-y-2.5 text-sm text-neutral-700">
+          {group.items.map((item) => <ListItem marker="square">{item}</ListItem>)}
+        </List>
+      </Box>
     ))}
-  </div>
-</article>
+  </Stack>
+</Box>

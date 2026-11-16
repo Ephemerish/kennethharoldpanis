@@ -128,7 +128,7 @@ export default function Search({ className, autoFocus = false }: { className?: s
           onKeyDown={onKeyDown}
           placeholder="Search"
           data-search-input
-          className="w-full bg-transparent text-sm text-neutral-900 placeholder:text-neutral-400 outline-none"
+          className="w-full bg-transparent text-sm text-neutral-900 placeholder:text-neutral-500 outline-none"
           autoComplete="off"
           spellCheck={false}
           aria-label="Search projects, posts, tags, and tech"
@@ -159,7 +159,7 @@ export default function Search({ className, autoFocus = false }: { className?: s
           ) : (
             <>
               {label && (
-                <p className="px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-neutral-400">
+                <p className="px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-neutral-500">
                   {label}
                 </p>
               )}
@@ -183,7 +183,10 @@ export default function Search({ className, autoFocus = false }: { className?: s
                   >
                     <span className="flex items-center justify-center w-7 h-7 shrink-0 bg-neutral-100 text-neutral-500">
                       {item.imagePath ? (
-                        <img src={item.imagePath} alt="" className="w-4 h-4 object-contain" />
+                        <>
+                          <img src={item.imagePath} alt="" className={cn("w-4 h-4 object-contain", item.imagePathDark && "dark:hidden")} />
+                          {item.imagePathDark && <img src={item.imagePathDark} alt="" className="hidden w-4 h-4 object-contain dark:block" />}
+                        </>
                       ) : (
                         <Ic className="w-4 h-4" aria-hidden="true" />
                       )}
@@ -191,7 +194,7 @@ export default function Search({ className, autoFocus = false }: { className?: s
                     <span className="flex-1 min-w-0 text-sm text-neutral-900 truncate">
                       <Highlight text={item.title} tokens={tokens} />
                     </span>
-                    <span className="shrink-0 text-[11px] font-medium uppercase tracking-wider text-neutral-400">
+                    <span className="shrink-0 text-[11px] font-medium uppercase tracking-wider text-neutral-500">
                       {meta.label}
                     </span>
                   </a>

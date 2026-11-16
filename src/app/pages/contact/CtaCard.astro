@@ -1,6 +1,6 @@
 ---
-import { Card, Chip } from "@ui";
-import { currentRole } from "@app/data/experience";
+import { Card, Chip, Heading, List, ListItem, Text } from "@ui";
+import { currentRole } from "@data/bio/experience";
 
 // The stack of the current role, from the bio: never a list typed here.
 const current = currentRole;
@@ -8,15 +8,13 @@ const stackChips = current?.tech ?? [];
 ---
 
 <Card variant="brand">
-  <h2 class="text-xl sm:text-2xl font-bold mb-3 sm:mb-4">Ready to work together?</h2>
-  <p class="text-brand-50 mb-4 sm:mb-6 text-sm sm:text-base">
+  <Heading level={2} size="card" tone="inherit" class="mb-3 sm:mb-4">Ready to work together?</Heading>
+  <Text size="body" tone="inherit" class="mb-4 sm:mb-6 text-brand-50">
     {current ? `${current.title} at ${current.org}` : "Software Engineer"}, with a
     Computer Engineering background. I work mostly on the frontend, and across
     the full stack when the work needs it.
-  </p>
-  <div class="flex flex-wrap gap-2">
-    {stackChips.map((chip) => (
-      <Chip variant="white">{chip}</Chip>
-    ))}
-  </div>
+  </Text>
+  <List direction="row" gap="sm">
+    {stackChips.map((chip) => <ListItem><Chip variant="onBrand">{chip}</Chip></ListItem>)}
+  </List>
 </Card>

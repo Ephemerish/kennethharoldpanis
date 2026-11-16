@@ -6,8 +6,8 @@
  */
 import { ChartLineUpIcon, CloudIcon } from "@phosphor-icons/react";
 import type { Icon } from "@phosphor-icons/react";
-import type { TagSlug } from "./tags";
-import type { TechName } from "./technologies";
+import type { TagSlug } from "../taxonomy/tags";
+import type { TechName } from "../taxonomy/technologies";
 
 export type Certification = {
   /** The card's anchor on /bio. */
@@ -21,8 +21,9 @@ export type Certification = {
   badge?: string;
   summary: string;
   focusAreas: string[];
-  /** From the registries; a typo fails the type check. */
-  tags: TagSlug[];
+  /** From the registries; a typo fails the type check. A certification is
+   *  usually told by its tech alone. */
+  tags?: TagSlug[];
   tech?: TechName[];
   Icon: Icon;
   accent: "brand" | "dark";
@@ -35,6 +36,7 @@ export type Certification = {
 export const certifications: Certification[] = [
   {
     slug: "finops-certified-practitioner",
+    badge: "badges/finops-foundation.png",
     title: "FinOps Certified Practitioner",
     shortTitle: "FinOps Practitioner",
     issuer: "FinOps Foundation",
@@ -48,13 +50,14 @@ export const certifications: Certification[] = [
       "Forecasting & Budgeting",
       "Unit Economics",
     ],
-    tags: ["finops", "cloud"],
+    tech: ["FinOps"],
     Icon: ChartLineUpIcon,
     accent: "brand",
     chipVariant: "brand",
   },
   {
     slug: "google-associate-cloud-engineer",
+    badge: "badges/google-associate-cloud-engineer.png",
     title: "Google Associate Cloud Engineer",
     shortTitle: "Google Cloud Engineer",
     issuer: "Google Cloud",
@@ -68,7 +71,6 @@ export const certifications: Certification[] = [
       "Monitoring & Logging",
       "Deployment & Operations",
     ],
-    tags: ["cloud"],
     tech: ["Google Cloud", "Cloud Run"],
     Icon: CloudIcon,
     accent: "dark",
@@ -77,6 +79,7 @@ export const certifications: Certification[] = [
   },
   {
     slug: "aws-solutions-architect-associate",
+    badge: "badges/aws-solutions-architect-associate.png",
     title: "AWS Certified Solutions Architect - Associate",
     shortTitle: "AWS Solutions Architect",
     issuer: "Amazon Web Services",
@@ -84,7 +87,6 @@ export const certifications: Certification[] = [
     summary:
       "Associate-level certification validating the ability to design secure, resilient, high-performing, and cost-optimized architectures on AWS.",
     focusAreas: ["EC2", "S3", "VPC", "Lambda", "RDS", "Well-Architected"],
-    tags: ["cloud"],
     tech: ["AWS"],
     Icon: CloudIcon,
     accent: "dark",

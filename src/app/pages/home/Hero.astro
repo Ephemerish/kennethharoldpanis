@@ -4,92 +4,63 @@ import {
   EnvelopeIcon,
   FileTextIcon as DocumentTextIcon,
 } from "@phosphor-icons/react";
-import { currentRole } from "@app/data/experience";
-import { certifications } from "@app/data/certifications";
+import { currentRole } from "@data/bio/experience";
+import { Box, ButtonLink, Chip, Frame, Heading, Image, List, ListItem, Row, Stack, Text } from "@ui";
+import { certifications } from "@data/bio/certifications";
 
 // Who he is now and what he is certified in, straight from the bio's data.
 const current = currentRole;
 const earned = certifications.filter((cert) => !cert.status);
 ---
 
-<div class="w-full py-6 md:py-8 lg:py-10 overflow-hidden bg-neutral-0 relative">
-  <div class="absolute inset-0">
-    <div class="max-w-7xl mx-auto h-full px-4 sm:px-6 lg:px-8">
-      <div class="bg-hero-gradient border-l border-r border-neutral-200 h-full"></div>
-    </div>
-  </div>
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
-    <div class="px-4 sm:px-6 lg:px-8">
-      <div class="items-center justify-center align-middle flex flex-col md:flex-row gap-8 md:gap-12">
-        <div class="order-1 md:order-2 flex items-center justify-center">
-          <div class="relative w-[200px] h-[200px] sm:w-[250px] sm:h-[250px] md:w-[300px] md:h-[300px] lg:w-[350px] lg:h-[350px] overflow-hidden border-4 border-brand-600">
-            <img
-              src="/images/me/me.jpg"
-              alt="Kenneth Harold Panis"
-              class="w-full h-full object-cover"
-              loading="eager"
-              width="240"
-              height="240"
-              decoding="async"
-              fetchpriority="high"
-            />
-          </div>
-        </div>
+<Frame backdrop="hero" pad="lg" class="w-full">
+  <Row stackBelow="md" justify="center" gap="none" class="gap-8 md:gap-12">
+    <Row justify="center" class="order-1 md:order-2">
+      <Box class="relative w-[200px] h-[200px] sm:w-[250px] sm:h-[250px] md:w-[300px] md:h-[300px] lg:w-[350px] lg:h-[350px] overflow-hidden border-4 border-brand-600">
+        <Image src="/images/me/me.jpg" alt="Kenneth Harold Panis" width="350" height="350" fit="cover" priority class="w-full h-full" />
+      </Box>
+    </Row>
 
-        <div class="order-2 md:order-1 flex flex-col justify-center space-y-6 text-center md:text-left flex-1">
-          <div class="space-y-4">
-            <h1 class="text-2xl font-bold tracking-tighter sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl/none">
-              Hi, I'm <span class="text-brand-600">Kenneth</span>
-            </h1>
-            {current && (
-              <p class="text-base sm:text-lg md:text-xl font-semibold text-neutral-800">
-                {current.title} at {current.org}
-              </p>
-            )}
-            <p class="max-w-[600px] mx-auto md:mx-0 text-neutral-600 text-base sm:text-lg md:text-xl">
-              I'm drawn to creating things that solve random problems and bring ideas to life.
-            </p>
-            <p class="max-w-[600px] mx-auto md:mx-0 text-neutral-600 text-base sm:text-lg md:text-xl">
-              I have a plan to create projects, and this is where all my thoughts and projects will be on display,
-              everything from weekend experiments to things I'm actually proud of or not, we'll see.
-            </p>
-          </div>
+    <Stack gap="xl" class="order-2 md:order-1 flex-1 justify-center text-center md:text-left">
+      <Stack gap="lg">
+        <Heading level={1} size="hero">
+          Hi, I'm <Text as="span" tone="inherit" class="text-brand-600">Kenneth</Text>
+        </Heading>
+        {current && (
+          <Text size="lead" tone="strong" weight="semibold" class="text-neutral-800">{current.title} at {current.org}</Text>
+        )}
+        <Text size="lead" tone="muted" class="max-w-[600px] mx-auto md:mx-0">
+          I'm drawn to creating things that solve random problems and bring ideas to life.
+        </Text>
+        <Text size="lead" tone="muted" class="max-w-[600px] mx-auto md:mx-0">
+          I have a plan to create projects, and this is where all my thoughts and projects will be on display,
+          everything from weekend experiments to things I'm actually proud of or not, we'll see.
+        </Text>
+      </Stack>
 
-          {earned.length > 0 && (
-            <ul class="flex flex-wrap justify-center md:justify-start gap-2" aria-label="Certifications">
-              {earned.map((cert) => (
-                <li>
-                  <a
-                    href={`/bio#${cert.slug}`}
-                    class="inline-flex items-center gap-1.5 border border-brand-200 bg-brand-50 px-3 py-1.5 text-xs sm:text-sm font-medium text-brand-800 hover:bg-brand-100 hover:border-brand-300"
-                    title={cert.title}
-                  >
-                    <CertificateIcon className="h-4 w-4" weight="fill" aria-hidden="true" />
-                    {cert.shortTitle}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          )}
+      {earned.length > 0 && (
+        <List direction="row" gap="sm" class="justify-center md:justify-start" aria-label="Certifications">
+          {earned.map((cert) => (
+            <ListItem>
+              <Chip variant="brand" size="sm" href={`/bio#${cert.slug}`} title={cert.title} class="gap-1.5 py-1.5 hover:bg-brand-100 hover:border-brand-300">
+                <CertificateIcon className="h-4 w-4" weight="fill" aria-hidden="true" />
+                {cert.shortTitle}
+              </Chip>
+            </ListItem>
+          ))}
+        </List>
+      )}
 
-          <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 mt-6 sm:mt-8 w-full sm:w-auto">
-            <a
-              href="/contact"
-              class="w-full sm:w-auto inline-flex items-center justify-center px-6 py-3 bg-brand-700 hover:bg-brand-800 text-neutral-0 text-sm sm:text-base font-medium"
-            >
-              <EnvelopeIcon className="mr-2 h-4 w-4" aria-hidden="true" />
-              Get In Touch
-            </a>
-            <a
-              href="/projects"
-              class="w-full sm:w-auto inline-flex items-center justify-center px-6 py-3 border-2 border-neutral-300 text-neutral-900 hover:bg-neutral-100 text-sm sm:text-base font-medium"
-            >
-              <DocumentTextIcon className="mr-2 h-4 w-4" aria-hidden="true" />
-              View Projects
-            </a>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
+      <Row stackBelow="sm" gap="md" class="mt-6 sm:mt-8 w-full sm:w-auto">
+        <ButtonLink href="/contact" class="w-full sm:w-auto h-auto px-6 py-3 text-sm sm:text-base">
+          <EnvelopeIcon className="mr-2 h-4 w-4" aria-hidden="true" />
+          Get In Touch
+        </ButtonLink>
+        <ButtonLink href="/projects" variant="outline" class="w-full sm:w-auto h-auto px-6 py-3 border-2 border-neutral-300 text-neutral-900 text-sm sm:text-base">
+          <DocumentTextIcon className="mr-2 h-4 w-4" aria-hidden="true" />
+          View Projects
+        </ButtonLink>
+      </Row>
+    </Stack>
+  </Row>
+</Frame>

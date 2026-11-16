@@ -1,0 +1,208 @@
+/**
+ * Every interactive feature works the way a visitor uses it (KHP §9.2):
+ * navigation, search, the mobile menu, the theme, the apps menu, release
+ * notes, collapsible sections, the image viewer, the marquee, the live cover,
+ * bio anchors and the contact form.
+ */
+import { expect, test, type Page } from "@playwright/test";
+
+const isMobile = (name: string) => name === "mobile";
+
+/** The top bar hydrates when the browser is idle; wait for it like a reader would. */
+async function navReady(page: Page) {
+  await page.waitForFunction(() => !document.querySelector('astro-island[component-url*="Navbar"][ssr]'));
+}
+
+async function search(page: Page, mobile: boolean) {
+  await navReady(page);
+  if (mobile) await page.getByRole("button", { name: "Toggle menu" }).click();
+  return page.locator("input[data-search-input]:visible");
+}
+
+test("the top bar marks the page you are on", async ({ page }, info) => {
+  test.skip(isMobile(info.project.name), "The desktop bar shows the links.");
+  await page.goto("/projects");
+  await navReady(page);
+  await expect(page.getByRole("navigation").getByRole("link", { name: "Projects", exact: true })).toHaveAttribute("aria-current", "page");
+  await page.getByRole("navigation").getByRole("link", { name: "Bio", exact: true }).click();
+  await expect(page).toHaveURL(/\/bio$/);
+  await expect(page.getByRole("navigation").getByRole("link", { name: "Bio", exact: true })).toHaveAttribute("aria-current", "page");
+});
+
+test("search finds a project and opens it with the keyboard", async ({ page }, info) => {
+  await page.goto("/");
+  const input = await search(page, isMobile(info.project.name));
+  await input.fill("pundo");
+  await expect(page.getByRole("option", { name: /Pundo/ }).first()).toBeVisible();
+  await input.press("Enter");
+  await expect(page).toHaveURL(/\/projects\/pundo$/);
+});
+
+test("the mobile menu opens, closes on Escape, and holds search", async ({ page }, info) => {
+  test.skip(!isMobile(info.project.name), "Only narrow screens have the menu.");
+  await page.goto("/");
+  await navReady(page);
+  await page.getByRole("button", { name: "Toggle menu" }).click();
+  const menu = page.locator("#mobile-menu");
+  await expect(menu).toBeVisible();
+  await expect(menu.getByRole("link", { name: "Contact" })).toBeVisible();
+  await page.keyboard.press("Escape");
+  await expect(menu).toBeHidden();
+});
+
+test("'Search for something else' focuses search at any width", async ({ page }) => {
+  await page.goto("/tags/web-app");
+  await navReady(page);
+  await page.getByRole("button", { name: "Search for something else" }).click();
+  await expect(page.locator("input[data-search-input]:focus")).toHaveCount(1);
+});
+
+test("the theme switch is remembered across pages", async ({ page }, info) => {
+  await page.goto("/");
+  await navReady(page);
+  if (isMobile(info.project.name)) await page.getByRole("button", { name: "Toggle menu" }).click();
+  await page.getByRole("button", { name: /Switch to dark theme/ }).first().click();
+  await expect(page.locator("html")).toHaveClass(/dark/);
+  await page.goto("/bio");
+  await expect(page.locator("html")).toHaveClass(/dark/);
+  await page.reload();
+  await expect(page.locator("html")).toHaveClass(/dark/);
+});
+
+test("the apps menu opens and closes with Escape", async ({ page }, info) => {
+  test.skip(isMobile(info.project.name), "Apps sit in the mobile menu instead.");
+  await page.goto("/");
+  await navReady(page);
+  const button = page.getByRole("button", { name: "Apps" });
+  await button.click();
+  await expect(page.locator("#apps-menu")).toBeVisible();
+  await expect(page.locator("#apps-menu").getByRole("link", { name: /Pundo/ })).toHaveAttribute("target", "_blank");
+  await page.keyboard.press("Escape");
+  await expect(page.locator("#apps-menu")).toBeHidden();
+  await expect(button).toBeFocused();
+});
+
+test("release notes open in a drawer and return focus when closed", async ({ page }) => {
+  await page.goto("/projects/pundo");
+  const trigger = page.getByRole("button", { name: "Open Pundo release notes" });
+  await trigger.click();
+  const drawer = page.getByRole("dialog", { name: "Release notes" });
+  await expect(drawer).toBeVisible();
+  await page.keyboard.press("Escape");
+  await expect(drawer).toBeHidden();
+  await expect(trigger).toBeFocused();
+});
+
+test("article sections fold one at a time and all at once", async ({ page }) => {
+  await page.goto("/blogs/micro-frontends-experience-ripplev2");
+  const toggle = page.locator("#article-content .section-toggle").first();
+  await expect(toggle).toHaveAttribute("aria-expanded", "true");
+  await toggle.click();
+  await expect(toggle).toHaveAttribute("aria-expanded", "false");
+  await toggle.click();
+  await page.getByRole("button", { name: "Hide All Sections" }).click();
+  await expect(page.locator("#article-content .section-toggle[aria-expanded='true']")).toHaveCount(0);
+});
+
+test("an article's cover opens in the image viewer", async ({ page }) => {
+  await page.goto("/blogs/is-n8n-even-worth-it");
+  await page.locator("#article-hero").click();
+  const viewer = page.getByRole("dialog", { name: "Image viewer" });
+  await expect(viewer).toBeVisible();
+  await page.keyboard.press("Escape");
+  await expect(viewer).toBeHidden();
+});
+
+test("the technologies marquee moves, and pauses under the pointer", async ({ page }, info) => {
+  test.skip(isMobile(info.project.name), "Hover is a pointer behaviour.");
+  await page.goto("/");
+  // The track never stops moving, so act on its still container.
+  const marquee = page.locator("[data-marquee]").first();
+  const track = marquee.locator(".marquee-track");
+  await marquee.scrollIntoViewIfNeeded();
+  const position = () => track.evaluate((el) => getComputedStyle(el).transform);
+  const first = await position();
+  await page.waitForTimeout(400);
+  expect(await position()).not.toBe(first);
+  await marquee.hover();
+  await expect(track).toHaveCSS("animation-play-state", "paused");
+});
+
+test("the pretext cover comes alive when scrolled into view", async ({ page }) => {
+  await page.goto("/");
+  const still = page.locator("[data-pretext-still]").first();
+  await still.scrollIntoViewIfNeeded();
+  await expect(still.locator("canvas")).toHaveCSS("visibility", "visible", { timeout: 10_000 });
+});
+
+test("a bio anchor lands on its card", async ({ page }) => {
+  await page.goto("/bio#aws-solutions-architect-associate");
+  await expect(page.locator("#aws-solutions-architect-associate")).toBeInViewport();
+});
+
+test("the current role is open, and opening another shows the tech used there", async ({ page }) => {
+  await page.goto("/bio");
+  const current = page.locator("details#alphaus");
+  await expect(current).toHaveAttribute("open", "");
+  await expect(current.getByRole("link", { name: /Module Federation/ })).toBeVisible();
+  const college = page.locator("details#bohol-island-state-university");
+  await expect(college).not.toHaveAttribute("open", "");
+  await college.locator("summary").click();
+  await expect(college).toHaveAttribute("open", "");
+  await expect(college.getByText("Tech I used")).toBeVisible();
+  await expect(college.getByRole("link", { name: /LoRa/ })).toBeVisible();
+});
+
+test("an anchor to a closed role opens it", async ({ page }) => {
+  await page.goto("/bio#bohol-island-state-university");
+  await expect(page.locator("details#bohol-island-state-university")).toHaveAttribute("open", "");
+});
+
+test.describe("the contact form", () => {
+  test("won't send until every field is filled", async ({ page }) => {
+    let posted = false;
+    await page.route("**/api/contact", (route) => {
+      posted = true;
+      return route.fulfill({ json: { success: true } });
+    });
+    await page.goto("/contact");
+    await page.getByRole("button", { name: "Send Message" }).click();
+    expect(posted).toBe(false);
+    await expect(page.locator("#name:invalid")).toHaveCount(1);
+  });
+
+  async function fill(page: Page) {
+    await page.locator("#name").fill("Ada Lovelace");
+    await page.locator("#email").fill("ada@example.com");
+    await page.locator("#subject").click();
+    await page.getByRole("option", { name: "Job Opportunity" }).click();
+    await page.locator("#message").fill("Hello there.");
+  }
+
+  test("says it was sent only when the server accepts it", async ({ page }) => {
+    await page.route("**/api/contact", (route) => route.fulfill({ json: { success: true } }));
+    await page.goto("/contact");
+    await fill(page);
+    await page.getByRole("button", { name: "Send Message" }).click();
+    await expect(page.getByText("Message sent successfully!")).toBeVisible();
+    await expect(page.locator("#name")).toHaveValue("");
+  });
+
+  test("says it failed when the server refuses, and keeps the message", async ({ page }) => {
+    await page.route("**/api/contact", (route) => route.fulfill({ status: 502, json: { success: false, error: "Failed to send email" } }));
+    await page.goto("/contact");
+    await fill(page);
+    await page.getByRole("button", { name: "Send Message" }).click();
+    await expect(page.getByText("Failed to send message")).toBeVisible();
+    await expect(page.locator("#message")).toHaveValue("Hello there.");
+  });
+});
+
+test("titles keep the space around their accent word", async ({ page }) => {
+  await page.goto("/bio");
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("My Bio");
+  await expect(page.getByRole("heading", { level: 2, name: "My Experience" })).toBeVisible();
+  await page.goto("/");
+  await expect(page.getByRole("heading", { name: "Technologies I Work With" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Latest from the Blog" })).toBeVisible();
+});

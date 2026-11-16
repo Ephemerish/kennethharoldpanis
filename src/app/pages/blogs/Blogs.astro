@@ -1,7 +1,7 @@
 ---
 /** /blogs and /blogs/page/n: every post, newest first. */
 import MainLayout from "@app/layout/MainLayout.astro";
-import { PageSection, PageHeader } from "@ui";
+import { Box, PageSection, PageHeader } from "@ui";
 import Pagination from "./Pagination.astro";
 import BlogsGrid from "./BlogsGrid.astro";
 import EmptyBlogsState from "./EmptyBlogsState.astro";
@@ -46,9 +46,7 @@ const blogsForPage: CollectionEntry<"blog">[] = allBlogs.slice(
     )}
 
     {totalPages > 1 && (
-      <div class="mt-12 sm:mt-16">
-        <Pagination currentPage={currentPage} totalPages={totalPages} />
-      </div>
+      <Box space="xl"><Pagination currentPage={currentPage} totalPages={totalPages} /></Box>
     )}
   </PageSection>
 </MainLayout>

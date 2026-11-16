@@ -4,13 +4,13 @@
  * sitemap and search read it, so they can never disagree about what exists.
  *
  * Projects and posts come from the content collections; roles and
- * certifications from src/app/data. Each knows its tags, its tech and where
+ * certifications from src/data/bio. Each knows its tags, its tech and where
  * it lives on the site.
  */
 import { getCollection, type CollectionEntry } from "astro:content";
-import { timeline, type TimelineEntry } from "@app/data/experience";
-import { certifications, type Certification } from "@app/data/certifications";
-import { techSlug } from "@app/data/technologies";
+import { timeline, type TimelineEntry } from "@data/bio/experience";
+import { certifications, type Certification } from "@data/bio/certifications";
+import { techSlug } from "@data/taxonomy/technologies";
 import { newestFirst, type AnyEntry } from "@app/features/entries/model";
 
 export type BioRecord =
@@ -20,15 +20,15 @@ export type BioRecord =
 export type TaxonomyItem = AnyEntry | BioRecord;
 
 export const tagsOf = (item: TaxonomyItem): readonly string[] =>
-  "entry" in item ? item.entry.data.tags : item.record.tags;
+  "entry" in item ? item.entry.data.tags : (item.record.tags ?? []);
 
 export const techOf = (item: TaxonomyItem): readonly string[] =>
   "entry" in item ? item.entry.data.tech : (item.record.tech ?? []);
 
 /** Where an item lives: its page, or its card on /bio. */
 export const hrefOf = (item: TaxonomyItem): string => {
-  if (item.kind === "blog") return `/blogs/${item.entry.slug}`;
-  if (item.kind === "project") return `/projects/${item.entry.slug}`;
+  if (item.kind === "blog") return `/blogs/${item.entry.id}`;
+  if (item.kind === "project") return `/projects/${item.entry.id}`;
   return `/bio#${item.record.slug}`;
 };
 

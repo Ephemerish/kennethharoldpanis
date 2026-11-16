@@ -17,7 +17,7 @@ The readers are employers, recruiters and other engineers, often on a phone, oft
 
 ## 10.2 The first screen says who and what
 
-The home hero shows his name, his current role ("Software Engineer at Alphaus Inc", from the timeline entry whose `end` is `current`), and his earned certifications as chips (`shortTitle`) that link to their cards on `/bio`. Both come from `src/app/data/`, so they change when the data does. Keep them on the first screen at 375px and 1440px.
+The home hero shows his name, his current role ("Software Engineer at Alphaus Inc", from the timeline entry whose `end` is `current`), and his earned certifications as chips (`shortTitle`) that link to their cards on `/bio`. Both come from `src/data/bio/`, so they change when the data does. Keep them on the first screen at 375px and 1440px.
 
 ## 10.3 Every claim links to proof
 
@@ -29,10 +29,10 @@ A claim on screen leads to what backs it:
 | A post | The post |
 | A live app | The app, and its release notes in the project page's drawer |
 | A certification | "Verify credential", the issuer's public record |
-| A role | Its card on `/bio`, and the project or post it produced |
+| A role | Its card on `/bio`, which opens to the tech used there: its own and that of the project or post it produced (`href`), each chip linking to its tech page |
 | A technology or tag | Its page, listing everything that carries it |
 
-A claim with no proof on the site is removed, or the proof is added first. A role card does not yet link to the work it produced; the gap is in [content registries](../systems/content-registries.md).
+A claim with no proof on the site is removed, or the proof is added first. A role card has no "Read the write-up" link: the owner asked for the tech used there instead, and each tech chip opens the page listing that work, so the proof is one click away either way.
 
 ## 10.4 Every technology and tag traces to real work
 
@@ -47,7 +47,7 @@ Describe work by what it did and what he did in it: what was built, for whom, wh
 An engineer reading the site judges his work by it. So it is fast, accessible and polished:
 
 - `pnpm verify` passes (§9.2).
-- The home page keeps its performance budget (§7.6), and motion keeps to §5.8.
+- Every page keeps the performance budget (§7.6, §7.7), and motion keeps to §5.8.
 - Text meets WCAG AA contrast in both themes (§1.6, §5.3).
 - Everything works by keyboard, with visible focus (§1.6).
 - Reduced motion stops all motion (§5.8).

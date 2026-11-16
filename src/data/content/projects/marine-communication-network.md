@@ -3,7 +3,7 @@ title: "Communication Network Prototype for Monitoring of Small Fishing Boats"
 description: "An undergraduate thesis project developing a LoRa-based communication prototype for monitoring small fishing boats (bangka) in the Philippines. Despite achieving 882-meter range and functional network operations, the research identified key limitations and provided recommendations for future improvements in maritime IoT systems."
 image: "Theses 5.jpg"
 gallery: ["Theses.jpg", "Theses 2.jpg", "Theses 3.jpg", "Theses 4.jpg", "Theses.svg"]
-tags: ["maritime-safety", "mobile-app", "emergency-response", "gps-tracking", "microcontroller", "thesis", "hardware"]
+tags: ["hardware", "thesis"]
 tech: ["Arduino", "LoRa", "IoT", "Flutter", "Firebase", "Raspberry Pi"]
 featured: false
 status: "completed"

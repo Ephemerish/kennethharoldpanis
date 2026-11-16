@@ -36,7 +36,7 @@ is not set up or fails, the site works the same.
 
 ## Checks
 
-None. No test covers the beacon, the endpoint or the table.
+None. No test covers the beacon, the endpoint or the table. The browser tests run on `127.0.0.1`, which the beacon skips ([Testing](testing.md)).
 
 ## Known limits
 

@@ -41,7 +41,7 @@ export interface Release {
 }
 
 export interface AppReleases {
-  /** App name, matching `App.name` in src/app/data/apps.ts. */
+  /** App name, matching `App.name` in src/data/apps/apps.ts. */
   name: string;
   /** Project content slug (/projects/<slug>) when a project page exists. */
   projectSlug?: string;

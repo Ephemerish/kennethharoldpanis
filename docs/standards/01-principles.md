@@ -25,16 +25,18 @@ Each fact is written once and read everywhere:
 
 | Fact | Home |
 | ---- | ---- |
-| Name, URL, description, email, default share image, social links, navigation | `src/app/shared/site.ts` |
+| Name, URL, description, email, default share image, social links, navigation | `src/data/site.ts` |
+| How many entries the home page and `/blogs` show, the contact form's limits, the performance budget | `src/data/settings.ts` |
 | Colours, gradients, shadows, layers | `lib/khp-ui/tokens/theme.css` |
-| Technologies and tags | `src/app/data/technologies.ts`, `tags.ts` |
-| Work and school history, certifications | `src/app/data/experience.ts`, `certifications.ts` |
-| Live apps | `src/app/data/apps.ts` |
+| How a button, field, chip, card or heading looks | its component in `lib/khp-ui/components/` |
+| Technologies and tags | `src/data/taxonomy/technologies.ts`, `tags.ts` |
+| Work and school history, certifications, the resume flag | `src/data/bio/experience.ts`, `certifications.ts`, `resume.ts` |
+| Live apps and their release notes | `src/data/apps/apps.ts`, `src/data/apps/patch-notes/` |
+| Posts and projects | `src/data/content/blog/`, `src/data/content/projects/` |
 | How entries sort, and the project status words | `src/app/features/entries/model.ts` |
 | What carries each tag and technology | `src/app/features/taxonomy/collect.ts` (`loadTaxonomy`) |
-| Contact subjects | `src/app/features/contact/subjects.ts` |
-| Blog page size and page URLs | `src/app/pages/blogs/model.ts` |
-| How many entries the home page shows | `src/app/pages/home/limits.ts` |
+| Contact subjects | `src/data/contact/subjects.ts` |
+| Blog page URLs | `src/app/pages/blogs/model.ts` |
 
 Known repeats are recorded as gaps in the system files.
 
@@ -48,9 +50,9 @@ Whoever finds a dead link, an unused component, an option nobody passes, a page 
 
 ## 1.6 Accessible
 
-- Every action is a `<button>`, every navigation an `<a>`; never one inside the other.
+- Every action is a `<button>`, every navigation an `<a>`; never one inside the other. Every page has exactly one `h1`.
 - Every field has a visible label above it (§4.1).
-- Focus is visible everywhere (`:focus-visible` draws a 2px `brand-500` outline). A "Skip to content" link is the first thing on every page.
+- Focus is visible everywhere (`:focus-visible` draws a 2px `brand-500` outline). A "Skip to content" link (`SkipLink`) is the first thing on every page.
 - The current page carries `aria-current="page"` (§2.4).
 - Icons beside words are `aria-hidden`; an icon alone has an `aria-label`.
 - Text meets WCAG AA contrast in both themes: white text sits on `brand-700`, not `brand-600` (§5.3). A gap that remains is recorded in [theme tokens](../systems/theme-tokens.md). *Why:* the site is itself a work sample (§10.6); this rule used to accept the palette's shortfall.

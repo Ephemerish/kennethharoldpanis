@@ -10,7 +10,7 @@
 
 ## 2.1 The frame
 
-Every page has the same top bar and footer, from `src/app/layout/`, reading their links from `site.ts`. A "Skip to content" link comes first and jumps to `#main`. The page body is a column, so on a short page the footer sits at the bottom of the window and the rails run on down to it.
+Every page has the same top bar and footer, from `src/app/layout/`, reading their links from `src/data/site.ts`. A "Skip to content" link comes first and jumps to `#main`. The page body is a column, so on a short page the footer sits at the bottom of the window and the rails run on down to it.
 
 - Top bar: the owner's name in `text-brand-gradient` as the home link, then Home, Bio, Projects, Blogs, the Apps menu, Contact, search and the theme toggle. It is sticky and persists across view transitions.
 - Below `lg`, the links, search, apps and theme toggle move into one menu under the bar. Escape or a link closes it. "Search for something else" opens it with search focused.
@@ -41,7 +41,7 @@ A slug is the content file's name. A role or certification has no page of its ow
 
 ## 2.4 The current page is marked
 
-The top bar and the mobile menu colour the current page's link `brand-700` and set `aria-current="page"`, for the page and its sub-pages (`isCurrent` in `site.ts`). The persisted top bar reads the URL again on `astro:page-load`, so the mark follows view transitions.
+The top bar and the mobile menu colour the current page's link `brand-700` and set `aria-current="page"`, for the page and its sub-pages (`isCurrent` in `src/data/site.ts`). The persisted top bar reads the URL again on `astro:page-load`, so the mark follows view transitions.
 
 ## 2.5 No dead ends
 

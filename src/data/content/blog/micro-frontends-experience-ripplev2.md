@@ -4,7 +4,7 @@ author: 'Kenneth Harold Panis'
 pubDate: 2025-08-16
 image: 'Microfrontend.png'
 description: 'We spent 9 months building a complex app with micro frontends as a four person team. What worked, what nearly broke us, and whether we would do it again.'
-tags: ['micro-frontends', 'architecture']
+tags: ['architecture']
 tech: ['React', 'Nx', 'Module Federation', 'TypeScript', 'Zustand']
 ---
 

@@ -9,10 +9,12 @@ interface Props {
   variant: "brand" | "neutral" | "success" | "warning" | "error";
   Icon?: Icon;
   iconWeight?: "regular" | "fill" | "duotone" | "bold";
+  /** "lg" for the corner of a wide featured card. */
+  size?: "md" | "lg";
   class?: string;
 }
 
-const { variant, Icon, iconWeight = "fill", class: extraClass = "" } = Astro.props as Props;
+const { variant, Icon, iconWeight = "fill", size = "md", class: extraClass = "" } = Astro.props as Props;
 
 const variantClass = {
   brand: "bg-brand-700 text-neutral-0",
@@ -24,10 +26,11 @@ const variantClass = {
 ---
 
 <span class:list={[
-  "inline-flex items-center gap-1.5 px-3 py-1.5 text-xs sm:text-sm font-semibold shadow-sm",
+  "inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold",
+  size === "lg" ? "px-3 py-1.5 sm:px-4 sm:py-2 shadow-lg" : "px-3 py-1.5 shadow-sm",
   variantClass,
   extraClass,
 ]}>
-  {Icon && <Icon className="w-3.5 h-3.5" weight={iconWeight} />}
+  {Icon && <Icon className={size === "lg" ? "w-4 h-4" : "w-3.5 h-3.5"} weight={iconWeight} aria-hidden="true" />}
   <slot />
 </span>

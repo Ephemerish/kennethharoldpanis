@@ -1,4 +1,5 @@
 ---
+import { Grid } from "@ui";
 import EntryCard from "@app/features/entries/EntryCard.astro";
 import type { CollectionEntry } from "astro:content";
 
@@ -10,11 +11,7 @@ const { projects } = Astro.props;
 ---
 
 {projects.length > 0 && (
-  <section>
-    <div class="grid grid-cols-1 gap-8 sm:gap-10 sm:grid-cols-2 lg:grid-cols-3">
-      {projects.map((project) => (
-        <EntryCard entry={project} kind="project" />
-      ))}
-    </div>
-  </section>
+  <Grid as="section" cols="cards">
+    {projects.map((project) => <EntryCard entry={project} kind="project" />)}
+  </Grid>
 )}

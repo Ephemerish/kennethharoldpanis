@@ -1,5 +1,7 @@
 /** Paging for /blogs: page 1 is /blogs, page n is /blogs/page/n. */
-export const POSTS_PER_PAGE = 6;
+import { lists } from "@data/settings";
+
+export const POSTS_PER_PAGE = lists.postsPerPage;
 
 export const pageHref = (page: number) => (page <= 1 ? "/blogs" : `/blogs/page/${page}`);
 

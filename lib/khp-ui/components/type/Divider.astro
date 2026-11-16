@@ -1,0 +1,15 @@
+---
+/** Divider, the short gradient bar under a centred title (KHP §3.2). */
+import { cn } from "../../utils/cn";
+
+interface Props {
+  width?: "sm" | "md" | "lg";
+  thickness?: "thin" | "thick";
+  class?: string;
+}
+
+const { width = "md", thickness = "thick", class: className } = Astro.props;
+const widthClass = { sm: "w-16", md: "w-24", lg: "w-32" }[width];
+---
+
+<div class={cn(widthClass, thickness === "thick" ? "h-1" : "h-0.5", "bg-brand-gradient mx-auto", className)} aria-hidden="true"></div>

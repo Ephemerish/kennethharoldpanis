@@ -1,5 +1,5 @@
 import type { APIRoute } from "astro";
-import { site } from "@app/shared/site";
+import { site } from "@data/site";
 
 export const prerender = true;
 

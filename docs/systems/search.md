@@ -41,7 +41,9 @@ visit counts come from is [Analytics](analytics.md).
 
 ## Checks
 
-None. The index, ranking and combobox have no tests.
+- `pnpm test:e2e` ([Testing](testing.md)), at both widths: typing "pundo" shows the project as an option and Enter opens it; "Search for something else" on a tag page focuses a search box. On mobile the search is reached through the menu.
+- `pnpm test:perf` measures typing in search against the INP budget.
+- None for ranking scores, "Popular" suggestions or the index's contents.
 
 ## Known limits
 

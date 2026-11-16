@@ -297,6 +297,12 @@
       0 4px 10px -2px rgb(0 0 0 / calc(0.06 * var(--shadow-strength)));
   }
 
+  /* A soft halo behind a page title (PageHeader glow). A radial gradient, not a CSS blur:
+     it looks the same and costs nothing to repaint while scrolling. */
+  .soft-glow {
+    background: radial-gradient(closest-side, color-mix(in srgb, var(--brand-100) 70%, transparent), transparent);
+  }
+
   .text-brand-gradient {
     background: linear-gradient(135deg, var(--brand-600) 0%, var(--brand-500) 100%);
     -webkit-background-clip: text;
@@ -305,6 +311,68 @@
   }
 
 }
+
+/* A tool pinned to the right edge under the top bar, named beside it on
+   hover and focus (FloatingButton.astro; collapse-all builds one in script).
+   data-stack="0" is the first slot, "1" the one below it. */
+.float-btn {
+  position: fixed;
+  z-index: var(--z-float);
+  top: 5rem;
+  right: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border: 1px solid var(--neutral-200);
+  background: var(--neutral-0);
+  color: var(--neutral-600);
+  box-shadow: var(--shadow-lg);
+}
+.float-btn:hover,
+.float-btn:focus-visible { color: var(--brand-700); background: var(--brand-50); }
+.float-btn[data-stack="1"] { top: 8.5rem; }
+.float-tip {
+  position: fixed;
+  z-index: var(--z-tooltip);
+  top: 5.375rem;
+  right: 3.75rem;
+  padding: 0.375rem 0.75rem;
+  background: var(--neutral-800);
+  color: var(--neutral-0);
+  font-size: 0.75rem;
+  font-weight: 500;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity var(--duration-fast) var(--ease-out);
+}
+.float-tip[data-stack="1"] { top: 8.875rem; }
+.float-btn:hover + .float-tip,
+.float-btn:focus-visible + .float-tip { opacity: 1; }
+@media (min-width: 640px) {
+  .float-btn { right: 1rem; width: 3rem; height: 3rem; }
+  .float-btn[data-stack="1"] { top: 8.75rem; }
+  .float-tip { right: 4.5rem; top: 5.5rem; font-size: 0.875rem; }
+  .float-tip[data-stack="1"] { top: 9.25rem; }
+}
+
+/* A panel sliding over the page from the right (Drawer.astro). */
+.drawer {
+  position: fixed;
+  inset: 0 0 0 auto;
+  width: min(100vw, 34rem);
+  max-width: none;
+  height: 100dvh;
+  max-height: none;
+  margin: 0 0 0 auto;
+  padding: 0;
+  border: 0;
+  background: var(--neutral-0);
+  box-shadow: var(--shadow-2xl);
+}
+.drawer::backdrop { background: color-mix(in srgb, var(--neutral-950) 30%, transparent); }
 
 @layer base {
   * { border-color: var(--neutral-200); }

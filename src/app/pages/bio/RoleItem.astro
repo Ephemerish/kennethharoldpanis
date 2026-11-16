@@ -1,0 +1,46 @@
+---
+/**
+ * One role or school on the bio. The summary row says who, where and when;
+ * opening it shows what it was and every technology used there (KHP §10.3).
+ */
+import { AccordionItem, Box, Heading, Image, Label, Row, Stack, Text } from "@ui";
+import TechChips from "@app/features/entries/TechChips.astro";
+import TagLinks from "@app/features/taxonomy/TagLinks.astro";
+import { isCurrent, yearsLabel, type TimelineEntry } from "@data/bio/experience";
+
+interface Props {
+  role: TimelineEntry;
+  tech: string[];
+}
+
+const { role, tech } = Astro.props;
+const current = isCurrent(role);
+---
+
+<AccordionItem id={role.slug} open={current}>
+  <Row slot="summary" align="start" gap="md">
+    <Box class="flex h-12 w-12 shrink-0 items-center justify-center border border-neutral-200 bg-white p-1.5">
+      {role.logo ? (
+        <Image src={role.logo} alt="" width="40" height="40" fit="contain" class="h-full w-full" />
+      ) : (
+        <role.Icon className="h-6 w-6 text-ink" aria-hidden="true" />
+      )}
+    </Box>
+    <Stack gap="none" class="min-w-0">
+      <Heading level={3} size="item">{role.title}</Heading>
+      <Text size="body" tone="muted" weight="medium">{role.org}</Text>
+      <Text as="span" size="sm" tone="subtle" class="font-mono">{yearsLabel(role)}</Text>
+    </Stack>
+  </Row>
+
+  <Stack gap="lg">
+    <Text size="body" leading="relaxed">{role.body}</Text>
+    {tech.length > 0 && (
+      <Box>
+        <Label class="mb-3">Tech I used</Label>
+        <TechChips tech={tech} size="sm" />
+      </Box>
+    )}
+    {role.tags.length > 0 && <TagLinks tags={role.tags} size="sm" />}
+  </Stack>
+</AccordionItem>

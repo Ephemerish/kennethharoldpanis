@@ -1,0 +1,80 @@
+---
+/**
+ * Chip, a small label: a tag, a technology, a focus area, a change type.
+ * With `href` it is a link (a tag or tech page); `dot` adds the lime square,
+ * `logo` a technology's logo. One component, so every chip on the site
+ * changes together (KHP §4.5).
+ */
+import type { HTMLAttributes } from "astro/types";
+import { cn } from "../../utils/cn";
+
+const VARIANT = {
+  brand: "bg-brand-50 text-brand-800 border border-brand-200",
+  neutral: "bg-neutral-100 text-neutral-700 border border-neutral-200",
+  /** A plain tag on a card. */
+  tag: "bg-neutral-100 text-neutral-900 border border-neutral-200",
+  /** A technology, with or without its logo. */
+  outline: "bg-neutral-50 text-neutral-700 border border-neutral-200",
+  /** A tag that links to its page. */
+  link: "bg-brand-50 text-brand-700 border border-brand-200",
+  success: "bg-success-50 text-success-800 border border-success-200",
+  warning: "bg-warning-50 text-warning-800 border border-warning-200",
+  error: "bg-error-50 text-error-800 border border-error-200",
+  /** On a brand-gradient surface: follows the theme's text on lime. */
+  onBrand: "bg-neutral-0/20 text-neutral-0",
+  /** Over a photo, which is dark in both themes. */
+  overlay: "bg-white/20 text-white",
+} as const;
+
+const HOVER = {
+  link: "hover:bg-brand-100",
+  outline: "hover:border-brand-300 hover:bg-brand-50",
+} as const;
+
+const SIZE = {
+  xs: "px-2 py-1 text-xs",
+  sm: "px-3 py-1 text-xs sm:text-sm",
+  md: "px-3 py-1 text-sm",
+  /** Tags on a card. */
+  tag: "px-3 py-1.5 text-xs",
+  /** Linked tags beside a timeline entry. */
+  "link-sm": "px-2.5 py-1 text-xs",
+  /** Linked tags under an article. */
+  "link-md": "px-3 py-1.5 text-sm",
+  /** A technology with its logo, compact. */
+  "logo-sm": "py-1 pl-1.5 pr-2.5 gap-1.5 text-xs",
+  /** A technology with its logo. */
+  "logo-md": "py-1.5 pl-2 pr-3 gap-2 text-sm",
+} as const;
+
+type Props = HTMLAttributes<"a"> & {
+  variant?: keyof typeof VARIANT;
+  size?: keyof typeof SIZE;
+  dot?: boolean;
+  logo?: string;
+  /** The logo for dark mode, when the main one is dark ink. */
+  logoDark?: string;
+  class?: string;
+};
+
+const { variant = "neutral", size = "sm", href, dot = false, logo, logoDark, class: className, ...rest } = Astro.props;
+const Tag = href ? "a" : "span";
+const logoSize = size === "logo-sm" ? "w-4 h-4" : "w-5 h-5";
+---
+
+<Tag
+  href={href}
+  class={cn(
+    "inline-flex items-center font-medium",
+    SIZE[size],
+    VARIANT[variant],
+    href && HOVER[variant as keyof typeof HOVER],
+    className
+  )}
+  {...rest}
+>
+  {dot && <span class="w-1.5 h-1.5 bg-brand-500 mr-1.5" aria-hidden="true"></span>}
+  {logo && <img src={logo} alt="" class={cn(logoSize, "object-contain", logoDark && "dark:hidden")} loading="lazy" decoding="async" />}
+  {logoDark && <img src={logoDark} alt="" class={cn(logoSize, "object-contain hidden dark:block")} loading="lazy" decoding="async" />}
+  <slot />
+</Tag>

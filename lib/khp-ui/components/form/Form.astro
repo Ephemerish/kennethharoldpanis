@@ -1,0 +1,23 @@
+---
+/** Form, a form laid out as a Stack. */
+import type { HTMLAttributes } from "astro/types";
+import { cn } from "../../utils/cn";
+import { GAP, type Gap } from "../layout/space";
+
+type Props = HTMLAttributes<"form"> & {
+  id?: string;
+  method?: "get" | "post";
+  action?: string;
+  gap?: Gap;
+  class?: string;
+};
+
+const { gap = "xl", class: className, ...rest } = Astro.props;
+---
+
+<form
+  class={cn("flex flex-col", GAP[gap], className)}
+  {...rest}
+>
+  <slot />
+</form>

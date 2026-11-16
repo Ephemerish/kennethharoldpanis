@@ -1,0 +1,55 @@
+---
+/**
+ * Frame, the site's bordered column (KHP §3.1): a full-width band whose
+ * content sits between two rules down the page, the "rails". PageSection is a
+ * Frame with section padding; the top bar, footer and article use it directly.
+ *
+ *   backdrop  "plain" (page colour) | "hero" (bg-hero-gradient) | "none"
+ *   inset     pad the content inside the rails (the usual) or not
+ */
+import type { HTMLAttributes } from "astro/types";
+import { cn } from "../../utils/cn";
+
+type Props = HTMLAttributes<"div"> & {
+  as?: string;
+  backdrop?: "plain" | "hero" | "none";
+  topBorder?: boolean;
+  /** Vertical padding of the band. */
+  pad?: "none" | "sm" | "md" | "lg";
+  /** Fill the remaining height of the page (the filler under a short page). */
+  grow?: boolean;
+  class?: string;
+  innerClass?: string;
+};
+
+const {
+  as = "div",
+  backdrop = "plain",
+  topBorder = false,
+  pad = "none",
+  grow = false,
+  class: className,
+  innerClass,
+  ...rest
+} = Astro.props;
+const Tag = as as "div";
+
+const padClass = { none: "", sm: "py-4", md: "py-8 sm:py-12", lg: "py-6 md:py-8 lg:py-10" }[pad];
+const backdropClass = { plain: "bg-neutral-0", hero: "bg-hero-gradient", none: "" }[backdrop];
+---
+
+<Tag
+  class={cn("relative overflow-hidden bg-neutral-0", topBorder && "border-t border-neutral-200", grow && "flex-1", className)}
+  {...rest}
+>
+  <div class="absolute inset-0" aria-hidden="true">
+    <div class="max-w-7xl mx-auto h-full px-4 sm:px-6 lg:px-8">
+      <div class:list={[backdropClass, "border-l border-r border-neutral-200 h-full"]}></div>
+    </div>
+  </div>
+  <div class={cn("max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative", padClass)}>
+    <div class={cn("px-4 sm:px-6 lg:px-8", innerClass)}>
+      <slot />
+    </div>
+  </div>
+</Tag>

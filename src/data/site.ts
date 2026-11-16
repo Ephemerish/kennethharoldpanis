@@ -10,6 +10,7 @@ export const site = {
   description:
     "Kenneth Harold Panis, software engineer. Projects, write-ups and certifications across web, cloud and embedded systems.",
   email: "kennethpanis24@gmail.com",
+  location: "Philippines",
   image: "/images/me/me.jpg",
 } as const;
 

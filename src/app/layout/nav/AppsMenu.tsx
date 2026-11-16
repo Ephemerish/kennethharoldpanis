@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { ArrowSquareOutIcon, CaretDownIcon } from "@phosphor-icons/react";
-import type { App } from "@app/data/apps";
+import type { App } from "@data/apps/apps";
 
 /** The Apps dropdown in the top bar: each live app, opening in a new tab. */
 export function AppsMenu({ apps }: { apps: App[] }) {

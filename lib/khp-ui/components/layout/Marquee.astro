@@ -1,0 +1,46 @@
+---
+/**
+ * Marquee, a row that drifts sideways forever (KHP §5.8). The slot is
+ * rendered twice so the loop has no seam; the second copy is inert, so it is
+ * neither tabbed to nor read out. It pauses on hover, on focus and when off
+ * screen, and is a still, wrapped list under reduced motion.
+ */
+import { cn } from "../../utils/cn";
+import { GAP, type Gap } from "./space";
+
+interface Props {
+  /** Seconds for one full loop; longer is slower. */
+  seconds?: number;
+  reverse?: boolean;
+  gap?: Gap;
+  label?: string;
+  class?: string;
+}
+
+const { seconds = 60, reverse = false, gap = "md", label, class: className } = Astro.props;
+const items = await Astro.slots.render("default");
+const copyClass = cn("flex shrink-0", GAP[gap], gap === "md" ? "pr-3 sm:pr-4" : "pr-4");
+---
+
+<div class={cn("marquee py-2", className)} aria-label={label} data-marquee>
+  <div class:list={["marquee-track", reverse && "marquee-reverse"]} style={`--marquee-duration:${seconds}s`}>
+    <ul class={copyClass} set:html={items} />
+    <ul class={copyClass} data-marquee-copy aria-hidden="true" inert set:html={items} />
+  </div>
+</div>
+
+<script>
+  // Pause every marquee while it is off screen, so it costs nothing there.
+  document.addEventListener("astro:page-load", () => {
+    const observer = new IntersectionObserver((entries) =>
+      entries.forEach((entry) => {
+        const track = entry.target.querySelector<HTMLElement>(".marquee-track");
+        if (track) track.style.animationPlayState = entry.isIntersecting ? "" : "paused";
+      })
+    );
+    document.querySelectorAll<HTMLElement>("[data-marquee]:not([data-wired])").forEach((marquee) => {
+      marquee.dataset.wired = "true";
+      observer.observe(marquee);
+    });
+  });
+</script>

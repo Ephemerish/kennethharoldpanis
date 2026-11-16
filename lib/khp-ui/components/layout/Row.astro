@@ -1,0 +1,54 @@
+---
+/**
+ * Row, children side by side with an even gap (KHP §4.9). `wrap` lets them
+ * flow onto new lines; `stackBelow` stacks them under a breakpoint.
+ */
+import type { HTMLAttributes } from "astro/types";
+import { cn } from "../../utils/cn";
+import { ALIGN, GAP, JUSTIFY, SPACE_TOP, type Gap, type SpaceTop } from "./space";
+
+type Props = HTMLAttributes<"div"> & {
+  as?: string;
+  gap?: Gap;
+  align?: keyof typeof ALIGN;
+  justify?: keyof typeof JUSTIFY;
+  wrap?: boolean;
+  stackBelow?: "sm" | "md" | "lg";
+  space?: SpaceTop;
+  class?: string;
+};
+
+const {
+  as = "div",
+  gap = "md",
+  align = "center",
+  justify,
+  wrap = false,
+  stackBelow,
+  space = "none",
+  class: className,
+  ...rest
+} = Astro.props;
+const Tag = as as "div";
+
+const direction = {
+  sm: "flex flex-col sm:flex-row",
+  md: "flex flex-col md:flex-row",
+  lg: "flex flex-col lg:flex-row",
+}[stackBelow ?? "sm"];
+---
+
+<Tag
+  class={cn(
+    stackBelow ? direction : "flex flex-row",
+    GAP[gap],
+    ALIGN[align],
+    justify && JUSTIFY[justify],
+    wrap && "flex-wrap",
+    SPACE_TOP[space],
+    className
+  )}
+  {...rest}
+>
+  <slot />
+</Tag>

@@ -5,17 +5,22 @@
   "version": "0.0.1",
   "scripts": {
     "dev": "astro dev",
-    "build": "node --experimental-strip-types --no-warnings scripts/check-taxonomy.mjs && node scripts/generate-cover-backdrops.mjs && astro build",
-    "preview": "astro preview",
+    "build": "node --experimental-strip-types --no-warnings scripts/check-taxonomy.mjs && node scripts/generate-cover-backdrops.mjs && astro build && node scripts/compress-assets.mjs",
+    "preview": "node server.mjs",
+    "start": "node server.mjs",
     "astro": "astro",
     "check": "astro check",
     "check:tokens": "node scripts/check-design-tokens.mjs",
+    "check:composition": "node scripts/check-composition.mjs",
     "check:taxonomy": "node --experimental-strip-types --no-warnings scripts/check-taxonomy.mjs",
     "check:output": "node scripts/check-home-performance.mjs && node scripts/check-release-control.mjs",
-    "test": "node --experimental-strip-types --test scripts/test-cover-runtime.mjs",
-    "verify": "pnpm check && pnpm check:tokens && pnpm test && pnpm build && pnpm check:output",
+    "test": "node --experimental-strip-types --test \"tests/unit/*.test.mjs\"",
+    "test:e2e": "playwright test --project=desktop --project=mobile",
+    "test:perf": "playwright test --project=performance --workers=1",
+    "verify": "pnpm check && pnpm check:tokens && pnpm check:composition && pnpm check:assets && pnpm test && pnpm build && pnpm check:output && pnpm test:e2e && pnpm test:perf",
     "sync-notes": "node scripts/sync-patch-notes.mjs",
-    "optimize-images": "node scripts/optimize-images.mjs"
+    "optimize-images": "node scripts/optimize-images.mjs",
+    "check:assets": "node --experimental-strip-types --no-warnings scripts/check-assets.mjs"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.4",
@@ -44,6 +49,8 @@
     "typescript": "^5.9.2"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.14.0",
+    "@playwright/test": "^1.65.1",
     "@types/node": "^26.6.4",
     "sharp": "^0.34.4"
   }

@@ -1,0 +1,46 @@
+---
+/**
+ * AccordionItem, a card whose summary row opens to show more (a native
+ * <details>, so it works by keyboard and without script). The summary is the
+ * `summary` slot; what it reveals is the default slot. `open` starts it open.
+ * There is no coloured side edge: a stripe down one side is an AI tell
+ * (KHP §5.9). A link to its
+ * `id` (/bio#alphaus) opens it: browsers only open a <details> for a target
+ * inside it, so the script below covers the item itself.
+ */
+import { CaretDownIcon } from "@phosphor-icons/react";
+import { cn } from "../../utils/cn";
+
+interface Props {
+  open?: boolean;
+  id?: string;
+  class?: string;
+}
+
+const { open = false, id, class: className } = Astro.props;
+---
+
+<details
+  id={id}
+  open={open}
+  class={cn(
+    "group scroll-mt-24 bg-card-gradient border border-neutral-200 shadow-elegant open:shadow-floating",
+    className
+  )}
+>
+  <summary class="flex cursor-pointer list-none items-start gap-4 p-5 sm:p-6 hover:bg-neutral-0 [&::-webkit-details-marker]:hidden">
+    <div class="min-w-0 flex-1"><slot name="summary" /></div>
+    <CaretDownIcon className="mt-1 h-5 w-5 shrink-0 text-neutral-500 group-open:rotate-180 group-hover:text-brand-700" aria-hidden="true" />
+  </summary>
+  <div class="border-t border-neutral-200 px-5 pb-6 pt-5 sm:px-6"><slot /></div>
+</details>
+
+<script>
+  const openTarget = () => {
+    const id = decodeURIComponent(location.hash.slice(1));
+    const target = id && document.getElementById(id);
+    if (target instanceof HTMLDetailsElement) target.open = true;
+  };
+  openTarget();
+  addEventListener("hashchange", openTarget);
+</script>

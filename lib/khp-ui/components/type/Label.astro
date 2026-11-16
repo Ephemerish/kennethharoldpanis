@@ -1,0 +1,24 @@
+---
+/** Label, the small uppercase line that names a group ("Focus areas", "Built with"). */
+import type { HTMLAttributes } from "astro/types";
+import { cn } from "../../utils/cn";
+
+type Props = HTMLAttributes<"p"> & {
+  as?: string;
+  tone?: "subtle" | "brand";
+  size?: "xs" | "2xs";
+  class?: string;
+};
+
+const { as = "p", tone = "subtle", size = "xs", class: className, ...rest } = Astro.props;
+const Tag = as as "p";
+const toneClass = { subtle: "text-neutral-500", brand: "text-brand-700" }[tone];
+const sizeClass = { xs: "text-xs", "2xs": "text-[11px]" }[size];
+---
+
+<Tag
+  class={cn(sizeClass, "font-semibold uppercase tracking-wider", toneClass, className)}
+  {...rest}
+>
+  <slot />
+</Tag>

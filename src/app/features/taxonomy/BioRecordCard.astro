@@ -4,9 +4,9 @@
  * a link to its card on /bio.
  */
 import { ArrowRightIcon } from "@phosphor-icons/react";
-import { Card, IconBadge } from "@ui";
+import { Card, Heading, IconBadge, Label, Stack, Text } from "@ui";
 import { hrefOf, type BioRecord } from "./collect";
-import { yearsLabel } from "@app/data/experience";
+import { yearsLabel } from "@data/bio/experience";
 
 interface Props {
   item: BioRecord;
@@ -24,12 +24,12 @@ const label = isRole ? "Experience" : "Certification";
 
 <Card href={hrefOf(item)} hoverable padding="sm" class="motion-lift flex h-full items-start gap-4">
   <IconBadge Icon={item.record.Icon} variant="subtle" size="sm" weight="regular" />
-  <div class="min-w-0 flex-1">
-    <p class="text-xs font-semibold uppercase tracking-wider text-brand-700">{label}</p>
-    <h3 class="mt-1 text-base font-bold leading-snug text-neutral-900 group-hover:text-brand-700">{title}</h3>
-    <p class="mt-0.5 text-sm text-neutral-600">
-      {where}{when && <span class="text-neutral-400"> · {when}</span>}
-    </p>
-  </div>
+  <Stack gap="none" class="min-w-0 flex-1">
+    <Label tone="brand">{label}</Label>
+    <Heading level={3} size="small" class="mt-1 group-hover:text-brand-700">{title}</Heading>
+    <Text size="sm" tone="muted" class="mt-0.5">
+      {where}{when && <Text as="span" tone="subtle"> · {when}</Text>}
+    </Text>
+  </Stack>
   <ArrowRightIcon className="mt-1 h-4 w-4 shrink-0 text-neutral-400 group-hover:text-brand-700" aria-hidden="true" />
 </Card>

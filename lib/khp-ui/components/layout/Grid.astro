@@ -1,0 +1,41 @@
+---
+/**
+ * Grid, equal columns that add up as the screen widens (KHP §4.9). Each
+ * layout is a named preset, so every card grid on the site steps the same way.
+ */
+import type { HTMLAttributes } from "astro/types";
+import { cn } from "../../utils/cn";
+import { GAP, SPACE_TOP, type Gap, type SpaceTop } from "./space";
+
+const COLUMNS = {
+  /** Entry and record cards: 1, then 2, then 3. */
+  cards: "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3",
+  /** Cards on a page with a sidebar-free wide column: 1, 2, then 3 at xl. */
+  "cards-wide": "grid-cols-1 sm:grid-cols-2 xl:grid-cols-3",
+  /** Two halves from lg. */
+  halves: "grid-cols-1 lg:grid-cols-2",
+  /** Two halves from md. */
+  "halves-md": "grid-cols-1 md:grid-cols-2",
+  /** A fixed summary column beside the main one, from lg (the bio). */
+  /** Short facts: 2, then 3. */
+  facts: "grid-cols-2 sm:grid-cols-3",
+} as const;
+
+type Props = HTMLAttributes<"div"> & {
+  as?: string;
+  cols?: keyof typeof COLUMNS;
+  gap?: Gap;
+  space?: SpaceTop;
+  class?: string;
+};
+
+const { as = "div", cols = "cards", gap = "2xl", space = "none", class: className, ...rest } = Astro.props;
+const Tag = as as "div";
+---
+
+<Tag
+  class={cn("grid", COLUMNS[cols], GAP[gap], SPACE_TOP[space], className)}
+  {...rest}
+>
+  <slot />
+</Tag>

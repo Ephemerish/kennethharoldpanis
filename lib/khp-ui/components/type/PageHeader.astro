@@ -7,9 +7,11 @@
  *   <PageHeader prefix="My" accent="Certifications" subtitle="..." />
  *   <PageHeader accent="Let's connect" subtitle="..." />
  *
- * `glow` adds the decorative brand-100 blur behind the heading (used on hero pages).
+ * `glow` adds the soft brand halo (`soft-glow`) behind the heading (used on hero pages).
  * `size` controls h1 scale: "lg" (default, 4xl→7xl) or "md" (3xl→5xl) for sub-pages.
  */
+import Accent from "./Accent.astro";
+
 interface Props {
   prefix?: string;
   accent: string;
@@ -46,13 +48,13 @@ const dividerWidth = size === "lg" ? "w-32" : "w-24";
 <div class:list={["text-center mb-12 sm:mb-16 relative", extraClass]}>
   {glow && (
     <div class="absolute inset-0 -z-10">
-      <div class="absolute top-0 left-1/2 w-96 h-96 bg-brand-100/30 blur-3xl transform -translate-x-1/2 -translate-y-1/2" />
+      <div class="absolute top-0 left-1/2 w-[36rem] h-[36rem] soft-glow opacity-60 -translate-x-1/2 -translate-y-1/2" />
     </div>
   )}
   <div>
     <h1 class:list={["font-bold mb-6", headingClass]}>
       {prefix && <span class="text-neutral-900">{prefix} </span>}
-      <span class="text-brand-gradient">{accent}</span>
+      <Accent>{accent}</Accent>
       {suffix && <span class="text-neutral-900"> {suffix}</span>}
     </h1>
     {subtitle && (

@@ -4,7 +4,7 @@ author: 'Kenneth Harold Panis'
 pubDate: 2025-11-16
 image: 'n8n.png'
 description: 'My honest take on n8n after actually living with it, where it saves time, where it falls apart, and how I ended up using it as a staging ground for real code.'
-tags: ['automation', 'workflow', 'developer-tools', 'integration']
+tags: ['developer-tools']
 tech: ['n8n', 'Node.js']
 ---
 

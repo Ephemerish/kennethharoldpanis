@@ -1,5 +1,5 @@
 ---
-import { Card, IconBadge, ButtonLink } from "@ui";
+import { ButtonLink, Card, Heading, IconBadge, Row, Text } from "@ui";
 import { FileTextIcon, DownloadSimpleIcon } from "@phosphor-icons/react";
 
 interface Props {
@@ -10,17 +10,11 @@ const { resumePdfPath } = Astro.props;
 ---
 
 <Card padding="lg" class="text-center">
-  <div class="flex justify-center mb-6">
-    <IconBadge Icon={FileTextIcon} variant="brand" size="lg" />
-  </div>
-  <h2 class="text-2xl sm:text-3xl font-bold text-neutral-900 mb-4">
-    Download my resume
-  </h2>
-  <p class="text-base sm:text-lg text-neutral-700 leading-relaxed mb-6">
-    Latest version of my CV, printable PDF.
-  </p>
+  <Row justify="center" class="mb-6"><IconBadge Icon={FileTextIcon} variant="brand" size="lg" /></Row>
+  <Heading level={2} size="title" class="mb-4">Download my resume</Heading>
+  <Text size="large" leading="relaxed" class="mb-6">Latest version of my CV, printable PDF.</Text>
   <ButtonLink href={resumePdfPath} variant="gradient" size="lg" class="text-base sm:text-lg font-semibold">
-    <DownloadSimpleIcon className="mr-2 w-5 h-5" />
+    <DownloadSimpleIcon className="mr-2 w-5 h-5" aria-hidden="true" />
     Download PDF
   </ButtonLink>
 </Card>

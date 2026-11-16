@@ -1,80 +1,42 @@
 ---
 import { SubjectSelect } from "./SubjectSelect";
-import { Card } from "@ui";
+import { Box, Button, Card, Divider, Field, Form, Heading, Input, Text, Textarea } from "@ui";
+import { contactLimits } from "@data/settings";
 ---
 
 <Card variant="floating" padding="lg" class="order-2 lg:order-1">
-  <div class="text-center mb-8">
-    <h2 class="text-2xl sm:text-3xl font-bold text-neutral-900 mb-3">
-      Send me a message
-    </h2>
-    <p class="text-neutral-600">I'll get back to you within 24 hours</p>
-    <div class="w-16 h-0.5 bg-brand-gradient mx-auto mt-4"></div>
-  </div>
+  <Box class="text-center mb-8">
+    <Heading level={2} size="title" class="mb-3">Send me a message</Heading>
+    <Text tone="muted">I'll get back to you within 24 hours</Text>
+    <Divider width="sm" thickness="thin" class="mt-4" />
+  </Box>
 
-  <form class="space-y-6 sm:space-y-8" id="contact-form" method="POST">
-    <div class="group">
-      <label for="name" class="block text-sm font-semibold text-neutral-900 mb-3">
-        Full Name <span class="text-error-600">*</span>
-      </label>
-      <input
-        type="text"
-        id="name"
-        name="name"
-        required
-        class="w-full px-4 py-4 border-2 border-neutral-300 focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 hover:border-neutral-400 text-base bg-neutral-0/50 backdrop-blur-sm"
-        placeholder="Your full name"
-      />
-    </div>
+  <Form id="contact-form" method="post" gap="xl">
+    <Field label="Full Name" for="name" required>
+      <Input id="name" required autocomplete="name" maxlength={contactLimits.name} placeholder="Your full name" />
+    </Field>
 
-    <div class="group">
-      <label for="email" class="block text-sm font-semibold text-neutral-900 mb-3">
-        Email Address <span class="text-error-600">*</span>
-      </label>
-      <input
-        type="email"
-        id="email"
-        name="email"
-        required
-        class="w-full px-4 py-4 border-2 border-neutral-300 focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 hover:border-neutral-400 text-base bg-neutral-0/50 backdrop-blur-sm"
-        placeholder="your.email@example.com"
-      />
-    </div>
+    <Field label="Email Address" for="email" required>
+      <Input id="email" type="email" required autocomplete="email" maxlength={contactLimits.email} placeholder="your.email@example.com" />
+    </Field>
 
-    <div>
-      <label for="subject" class="block text-sm font-semibold text-neutral-900 mb-3">
-        Subject <span class="text-error-600">*</span>
-      </label>
+    <Field label="Subject" for="subject" required>
       <SubjectSelect client:load name="subject" />
-    </div>
+    </Field>
 
-    <div>
-      <label for="message" class="block text-sm font-semibold text-neutral-900 mb-3">
-        Message <span class="text-error-600">*</span>
-      </label>
-      <textarea
-        id="message"
-        name="message"
-        rows="5"
-        required
-        class="w-full px-4 py-4 border-2 border-neutral-300 focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 hover:border-neutral-400 resize-vertical text-base bg-neutral-0/50 backdrop-blur-sm"
-        placeholder="Tell me about your project, question, or how I can help you..."
-      ></textarea>
-    </div>
+    <Field label="Message" for="message" required>
+      <Textarea id="message" rows={5} required maxlength={contactLimits.message} placeholder="Tell me about your project, question, or how I can help you..." />
+    </Field>
 
-    <!-- Left empty by people; bots fill it, and the endpoint drops their message. -->
-    <div class="hidden" aria-hidden="true">
-      <label for="website">Website</label>
-      <input id="website" name="website" type="text" tabindex="-1" autocomplete="off" />
-    </div>
+    {/* Left empty by people; bots fill it, and the endpoint drops their message. */}
+    <Box class="hidden" aria-hidden="true">
+      <Field label="Website" for="website">
+        <Input id="website" tabindex="-1" autocomplete="off" />
+      </Field>
+    </Box>
 
-    <button
-      type="submit"
-      class="w-full bg-brand-gradient text-neutral-0 font-semibold py-4 px-6 shadow-brand text-base"
-    >
-      Send Message
-    </button>
-  </form>
+    <Button type="submit" variant="gradient" class="w-full h-auto py-4 px-6 text-base font-semibold">Send Message</Button>
+  </Form>
 </Card>
 
 <script>

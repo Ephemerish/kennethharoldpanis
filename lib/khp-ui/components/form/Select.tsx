@@ -1,8 +1,10 @@
+/** Select, Radix's listbox in the shared field style; submits with its form through `name` and `required` (KHP §4.6). */
 import * as React from "react"
 import * as SelectPrimitive from "@radix-ui/react-select"
 import { CaretDownIcon as ChevronDownIcon, CaretUpIcon as ChevronUpIcon } from "@phosphor-icons/react"
 
-import { cn } from "../utils/cn"
+import { cn } from "../../utils/cn"
+import { FIELD_CLASS } from "./field"
 
 const Select = SelectPrimitive.Root
 
@@ -27,7 +29,7 @@ const SelectTrigger = React.forwardRef<
   <SelectPrimitive.Trigger
     ref={ref}
     className={cn(
-      "flex h-auto w-full items-center justify-between border-2 border-neutral-300 bg-neutral-0/50 px-4 py-4 text-base focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 hover:border-neutral-400 disabled:cursor-not-allowed disabled:opacity-50 data-[placeholder]:text-neutral-500 text-neutral-900",
+      FIELD_CLASS, "flex h-auto items-center justify-between disabled:cursor-not-allowed disabled:opacity-50 data-[placeholder]:text-neutral-500",
       className
     )}
     {...props}

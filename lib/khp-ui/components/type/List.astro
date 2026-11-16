@@ -1,0 +1,27 @@
+---
+/**
+ * List, a ul or ol laid out like a Stack or a wrapping Row (KHP §4.9).
+ * Items are ListItem; `marker="square"` draws the site's lime square.
+ */
+import type { HTMLAttributes } from "astro/types";
+import { cn } from "../../utils/cn";
+import { GAP, SPACE_TOP, type Gap, type SpaceTop } from "../layout/space";
+
+type Props = HTMLAttributes<"ul"> & {
+  ordered?: boolean;
+  direction?: "column" | "row";
+  gap?: Gap;
+  space?: SpaceTop;
+  class?: string;
+};
+
+const { ordered = false, direction = "column", gap = "sm", space = "none", class: className, ...rest } = Astro.props;
+const Tag = ordered ? "ol" : "ul";
+---
+
+<Tag
+  class={cn("flex", direction === "row" ? "flex-row flex-wrap" : "flex-col", GAP[gap], SPACE_TOP[space], className)}
+  {...rest}
+>
+  <slot />
+</Tag>

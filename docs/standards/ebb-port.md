@@ -34,6 +34,8 @@ The site keeps its own visual language, described in §3 to §5. From Ebb and Pu
 | Ebb: no lint for "tokens only" | `check-design-tokens.mjs` checks raw colour, default palette classes, rounded corners and raw z-index | A fixed mistake gets the check that would have caught it (Ebb §1.0) |
 | Ebb §6.12: motion tokens, reduced motion turns it off | Motion allowed under a budget: cheap properties only, paused when unseen, nothing eager on the home page (§5.8, §7.6) | The owner wants the site snappy like Ebb, and moving. v2 had turned all motion off |
 | Ebb: follow the system theme | Light by default, dark only when the reader picks it | The owner's choice |
+| Ebb §10.2: apps import UI from `@ebb/ui` only, and never restyle a lib component | §4.9: page, feature and layout templates compose `@ui` components and write no raw HTML element; `pnpm check:composition` fails on one. A page may still add classes to a component | Astro templates are HTML, so the rule names raw elements, not imports, and a script can check it. The owner's pages carry their own classes on components; banning them would change his look (§6.6) |
+| Ebb §10.5: measure performance in the production build, with budgets for loads and clicks | §7.7: a budget for every page's load, scroll and interactions in `src/data/settings.ts`, measured by `pnpm test:perf` on the production build through `server.mjs`, with the CPU slowed 4x | A personal site has no API reads to budget. Google's "good" Core Web Vitals are the common norm for a public page, and a test keeps them from slipping |
 
 ## Rejected by the owner
 

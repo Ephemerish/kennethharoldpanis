@@ -1,25 +1,17 @@
 ---
-import { Card, IconBadge, ButtonLink } from "@ui";
+import { ButtonLink, Card, Heading, IconBadge, Row, Text } from "@ui";
 import { ArrowRightIcon, HourglassIcon } from "@phosphor-icons/react";
 ---
 
 <Card padding="lg" class="text-center">
-  <div class="flex justify-center mb-6">
-    <IconBadge Icon={HourglassIcon} variant="warning" size="lg" />
-  </div>
-  <h2 class="text-2xl sm:text-3xl font-bold text-neutral-900 mb-4">
-    Resume coming soon
-  </h2>
-  <p class="text-base sm:text-lg text-neutral-700 leading-relaxed mb-6">
-    I'm putting the latest version together.
-  </p>
-  <div class="flex flex-col sm:flex-row gap-3 justify-center">
+  <Row justify="center" class="mb-6"><IconBadge Icon={HourglassIcon} variant="warning" size="lg" /></Row>
+  <Heading level={2} size="title" class="mb-4">Resume coming soon</Heading>
+  <Text size="large" leading="relaxed" class="mb-6">I'm putting the latest version together.</Text>
+  <Row stackBelow="sm" justify="center" gap="md" class="sm:gap-3">
     <ButtonLink href="/contact" variant="gradient" size="lg" class="text-base sm:text-lg font-semibold">
       Get In Touch
-      <ArrowRightIcon className="ml-3 w-5 h-5" />
+      <ArrowRightIcon className="ml-3 w-5 h-5" aria-hidden="true" />
     </ButtonLink>
-    <ButtonLink href="/bio" variant="outlineBrand" size="lg" class="text-base sm:text-lg font-semibold">
-      Back to Bio
-    </ButtonLink>
-  </div>
+    <ButtonLink href="/bio" variant="outlineBrand" size="lg" class="text-base sm:text-lg font-semibold">Back to Bio</ButtonLink>
+  </Row>
 </Card>

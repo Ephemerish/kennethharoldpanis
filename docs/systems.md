@@ -14,17 +14,18 @@ change (KHP §1.5). Use [the template](systems/TEMPLATE.md) for a new one.
 
 | System | Owns | Contract |
 | --- | --- | --- |
-| Theme tokens | The brand, neutral and status scales for light and dark, `white`, `black`, `ink`, the brand gradients and shadows, square corners, layers, the motion tokens, transitions and utilities (`motion-lift`, `motion-zoom`, the marquee) and the reduced-motion switch, `stretched-link`, the section toggle styles, the theme script and toggle, the token guard | [Theme tokens](systems/theme-tokens.md) |
-| Frame and navigation | `MainLayout`, the skip link, `PageSection` and the rails column, the top bar, Apps menu, mobile menu, footer, `navLinks` and the current-page mark | [Frame and navigation](systems/frame-and-navigation.md) |
+| Theme tokens | The brand, neutral and status scales for light and dark, `white`, `black`, `ink`, the brand gradients and shadows, `soft-glow`, square corners, layers, the motion tokens, transitions and utilities (`motion-lift`, `motion-zoom`, the marquee) and the reduced-motion switch, `stretched-link`, `.float-btn` and `.float-tip`, `.drawer`, the section toggle styles, the theme script and toggle, the token guard | [Theme tokens](systems/theme-tokens.md) |
+| Components | The `lib/khp-ui` components every page is composed from, and the composition check (KHP §4.9) | [lib/khp-ui/AGENTS.md](../lib/khp-ui/AGENTS.md) |
+| Frame and navigation | `MainLayout`, `SkipLink`, `Frame`, `PageSection` and the rails column, the top bar, Apps menu, mobile menu, footer, `site.ts` (`navLinks`, `isCurrent`) and the current-page mark | [Frame and navigation](systems/frame-and-navigation.md) |
 
 ## Content
 
 | System | Owns | Contract |
 | --- | --- | --- |
-| Content registries | The content schema, tags, technologies, engines enum, experience, certifications, resume flag, apps; the taxonomy (`loadTaxonomy`, tag and tech pages, their "From my bio" cards, tag links) and the taxonomy check | [Content registries](systems/content-registries.md) |
-| Entries | Entry cards (grid and featured), covers (a still, then live; or an image with a backdrop), grids, tag and tech chips, list sorting and project status words, backdrop generation | [Entries](systems/entries.md) |
+| Content registries | `src/data/`: the content collections (`src/content.config.ts` over `src/data/content/`), tags, technologies, the engines enum, experience, certifications, resume flag, apps, `settings.ts`; the taxonomy (`loadTaxonomy`, tag and tech pages, their "From my bio" cards, tag links), the taxonomy check and the logo visibility check (`check-assets.mjs`) | [Content registries](systems/content-registries.md) |
+| Entries | Entry cards (grid and featured), covers (a still, then live; or an image with a backdrop), first-row eager covers, grids, tag and tech chips, list sorting and project status words, backdrop generation | [Entries](systems/entries.md) |
 | Article engines | `ArticleLayout`, the prose and pretext engines, Prose enhancements, figures, the image viewer, the live cover's frame loop | [Article engines](systems/article-engines.md) |
-| Release notes | The mirrored app release notes, the sync script, the project release drawer | [Release notes](systems/release-notes.md) |
+| Release notes | The mirrored app release notes, the sync script, the project page's release-notes button and drawer | [Release notes](systems/release-notes.md) |
 
 ## Features
 
@@ -37,12 +38,18 @@ change (KHP §1.5). Use [the template](systems/TEMPLATE.md) for a new one.
 
 | System | Owns | Contract |
 | --- | --- | --- |
-| Head and SEO | Page titles, description, canonical, share cards, the favicon, `noindex`, sitemap, robots | [Head and SEO](systems/head-and-seo.md) |
+| Head and SEO | Page titles, description, canonical, share cards, the favicon, `noindex`, sitemap, robots; the production server (`server.mjs`), precompression and caching | [Head and SEO](systems/head-and-seo.md) |
 | Analytics | The page-view beacon, `/api/analytics`, the fail-soft Supabase client, the table setup script | [Analytics](systems/analytics.md) |
+| Testing | The unit, end-to-end, accessibility (axe, both themes) and performance suites, the Playwright config, the route list and the vitals helpers, the performance budget's measurement | [Testing](systems/testing.md) |
 
 ## Checks at a glance
 
-`pnpm verify` runs `astro check`, `check:tokens`, `test`, `build` (which runs
-the taxonomy check and the backdrop script first) and `check:output` (the home
-page's performance budget and the release-note controls) (KHP §9.2). Search, contact, analytics, head and SEO and the frame have no
-automated checks; their files say what to try by hand.
+`pnpm verify` runs `astro check`, `check:tokens`, `check:composition`, `test`
+(unit), `build` (the taxonomy check and the backdrop script first, the
+compressed copies last), `check:output` (the home page's checks and the
+release-note controls), `test:e2e` (every page and feature in a browser) and
+`test:perf` (the performance budget) (KHP §9.2). The browser suites cover the
+frame, search, contact's form, release notes, article enhancements and the
+image viewer by behaviour; [testing](systems/testing.md) lists what they try
+and each system's file says what is still tried by hand. Analytics and the
+head tags have no automated checks.

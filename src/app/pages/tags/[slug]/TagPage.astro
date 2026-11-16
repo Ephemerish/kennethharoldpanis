@@ -3,7 +3,7 @@
 import MainLayout from "@app/layout/MainLayout.astro";
 import { PageSection, PageHeader } from "@ui";
 import TaxonomyResults from "@app/features/taxonomy/TaxonomyResults.astro";
-import { getTagBySlug } from "@app/data/tags";
+import { getTagBySlug } from "@data/taxonomy/tags";
 import type { AnyEntry } from "@app/features/entries/model";
 import type { BioRecord } from "@app/features/taxonomy/collect";
 
@@ -15,7 +15,8 @@ interface Props {
 
 const { slug, entries, bio } = Astro.props;
 const total = entries.length + bio.length;
-const label = getTagBySlug(slug)?.label ?? slug;
+const tag = getTagBySlug(slug);
+const label = tag?.label ?? slug;
 const count = `${total} ${total === 1 ? "entry" : "entries"}`;
 ---
 
@@ -27,7 +28,7 @@ const count = `${total} ${total === 1 ? "entry" : "entries"}`;
     <PageHeader
       prefix="Tagged"
       accent={label}
-      subtitle={`${count} tagged ${label}.`}
+      subtitle={tag ? `${tag.description} ${count}.` : `${count} tagged ${label}.`}
       size="md"
     />
 

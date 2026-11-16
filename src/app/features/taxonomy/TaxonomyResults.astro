@@ -3,6 +3,7 @@
  * What a tag or technology is attached to: projects and posts as cards, then
  * the roles and certifications on the bio that carry it.
  */
+import { Box, Button, Grid, Label, ListItem, Row } from "@ui";
 import EntryCollectionGrid from "@app/features/entries/EntryCollectionGrid.astro";
 import BioRecordCard from "./BioRecordCard.astro";
 import type { AnyEntry } from "@app/features/entries/model";
@@ -19,20 +20,16 @@ const { entries, bio } = Astro.props;
 {entries.length > 0 && <EntryCollectionGrid entries={entries} />}
 
 {bio.length > 0 && (
-  <section class:list={[entries.length > 0 && "mt-16 sm:mt-20"]} aria-labelledby="from-bio">
-    <h2 id="from-bio" class="mb-6 text-xs font-semibold uppercase tracking-wider text-neutral-500">From my bio</h2>
-    <ul class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-      {bio.map((item) => <li><BioRecordCard item={item} /></li>)}
-    </ul>
-  </section>
+  <Box as="section" space={entries.length > 0 ? "2xl" : "none"} aria-labelledby="from-bio">
+    <Label as="h2" id="from-bio" class="mb-6">From my bio</Label>
+    <Grid as="ul" cols="cards" gap="lg">
+      {bio.map((item) => <ListItem><BioRecordCard item={item} /></ListItem>)}
+    </Grid>
+  </Box>
 )}
 
-<div class="mt-12 sm:mt-16 text-center">
-  <button
-    type="button"
-    onclick="window.dispatchEvent(new CustomEvent('open-search'))"
-    class="text-brand-700 hover:text-brand-800 font-medium"
-  >
+<Row justify="center" space="xl">
+  <Button variant="link" class="h-auto px-0 text-brand-700 hover:text-brand-800 no-underline hover:no-underline" onclick="window.dispatchEvent(new CustomEvent('open-search'))">
     Search for something else
-  </button>
-</div>
+  </Button>
+</Row>

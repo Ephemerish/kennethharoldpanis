@@ -1,6 +1,6 @@
 import type { APIRoute } from "astro";
-import { getTagBySlug, getTagLabel } from "@app/data/tags";
-import { getTechBySlug, techSlug } from "@app/data/technologies";
+import { getTagBySlug, getTagLabel } from "@data/taxonomy/tags";
+import { getTechBySlug, techSlug } from "@data/taxonomy/technologies";
 import { hrefOf, loadTaxonomy, tagsOf, techOf, type TaxonomyItem } from "@app/features/taxonomy/collect";
 import type { SearchItem } from "@app/api/stores";
 
@@ -57,7 +57,7 @@ export const GET: APIRoute = async () => {
 
   for (const [slug, count] of techCounts) {
     const tech = getTechBySlug(slug);
-    items.push({ type: "tech", title: tech?.name ?? slug, url: `/tech/${slug}`, count, imagePath: tech?.imagePath });
+    items.push({ type: "tech", title: tech?.name ?? slug, url: `/tech/${slug}`, count, imagePath: tech?.imagePath, imagePathDark: tech?.imagePathDark });
   }
 
   return new Response(JSON.stringify(items), { headers: { "Content-Type": "application/json" } });

@@ -6,7 +6,7 @@
  * (this drives the content schema) and map its key in
  * src/app/pages/blogs/[slug]/BlogPost.astro.
  *
- * Dependency-free on purpose: src/content/config.ts imports it.
+ * Dependency-free on purpose: src/content.config.ts imports it.
  */
 
 export type EngineKey = "prose" | "pretext";

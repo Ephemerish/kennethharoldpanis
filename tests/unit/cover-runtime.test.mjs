@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
-import { visibleAnimation, coverSize } from "../src/app/features/article/pretext/animation.ts";
+import { visibleAnimation, coverSize } from "../../src/app/features/article/pretext/animation.ts";
 
 function platform() {
   let intersect;

@@ -1,15 +1,20 @@
+/**
+ * Content collections (docs/systems/content-registries.md): posts and projects
+ * are markdown under src/data/content, beside the rest of the site's data.
+ */
 import { defineCollection, z } from "astro:content";
-import { getAllTagSlugs } from "@app/data/tags";
-import { getAllTechNames } from "@app/data/technologies";
+import { glob } from "astro/loaders";
+import { getAllTagSlugs } from "@data/taxonomy/tags";
+import { getAllTechNames } from "@data/taxonomy/technologies";
 import { ENGINE_KEYS, DEFAULT_ENGINE, engineHasLiveCover } from "@app/features/article/engines";
 
-// Tags must be registered slugs in src/app/data/tags.ts — an unknown or
+// Tags must be registered slugs in src/data/taxonomy/tags.ts — an unknown or
 // misspelled tag fails the build, keeping the vocabulary consistent.
 // Every entry needs at least one tag.
 const tagSlugs = getAllTagSlugs() as [string, ...string[]];
 const tagsSchema = z.array(z.enum(tagSlugs)).min(1, "Add at least one tag.");
 
-// Tech must be a name registered in src/app/data/technologies.ts (case-insensitive),
+// Tech must be a name registered in src/data/taxonomy/technologies.ts (case-insensitive),
 // so it resolves to a logo + /tech page. Every entry needs at least one.
 const techNames = new Set(getAllTechNames().map((name) => name.toLowerCase()));
 const techSchema = z
@@ -20,12 +25,12 @@ const techSchema = z
     (arr) => ({
       message: `Unknown tech: ${arr
         .filter((t) => !techNames.has(t.toLowerCase()))
-        .join(", ")}. Register it in src/app/data/technologies.ts.`,
+        .join(", ")}. Register it in src/data/taxonomy/technologies.ts.`,
     })
   );
 
 const blogCollection = defineCollection({
-  type: "content",
+  loader: glob({ pattern: "**/*.md", base: "./src/data/content/blog" }),
   schema: z.object({
     title: z.string(),
     pubDate: z.date(),
@@ -46,7 +51,7 @@ const blogCollection = defineCollection({
 });
 
 const projectCollection = defineCollection({
-  type: "content",
+  loader: glob({ pattern: "**/*.md", base: "./src/data/content/projects" }),
   schema: z.object({
     // Identity + listing — read by the cards and the sort/filter logic.
     title: z.string(),

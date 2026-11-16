@@ -1,7 +1,7 @@
 import { ArrowSquareOutIcon } from "@phosphor-icons/react";
 import Search from "@app/features/search/Search";
-import { isCurrent, type NavLink } from "@app/shared/site";
-import type { App } from "@app/data/apps";
+import { isCurrent, type NavLink } from "@data/site";
+import type { App } from "@data/apps/apps";
 import { ThemeToggle } from "../ThemeToggle";
 
 interface Props {
@@ -34,7 +34,7 @@ export function MobileMenu({ links, apps, path, focusSearch = false, onLinkClick
         ))}
         {apps.length > 0 && (
           <div className="pt-2 mt-2 border-t border-neutral-200">
-            <span className="block px-3 py-1 text-xs font-semibold uppercase tracking-wide text-neutral-400">
+            <span className="block px-3 py-1 text-xs font-semibold uppercase tracking-wide text-neutral-500">
               Apps
             </span>
             {apps.map((app) => (

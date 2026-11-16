@@ -3,7 +3,7 @@ title: "Pundo"
 description: "A personal budgeting app for tracking income, expenses, and transfers across your accounts. Set monthly budgets, see where your money goes over time, and keep your data yours. A side project I built and took into closed beta."
 image: "pundo/logo.svg"
 gallery: ["pundo/02-first-transaction.png", "pundo/04-budget-plan.png", "pundo/05-before-after.png", "pundo/07-roadmap.png"]
-tags: ["fintech", "budgeting", "50-30-20", "beta", "side-project", "web-app"]
+tags: ["web-app", "side-project"]
 tech: ["Svelte 5", "TypeScript", "Tailwind CSS", "Drizzle ORM", "Neon", "PostgreSQL", "better-auth", "pnpm", "Vite", "Docker", "Cloud Run", "Paraglide", "shadcn", "Lottie", "ESLint", "Prettier"]
 featured: true
 status: "in-progress"

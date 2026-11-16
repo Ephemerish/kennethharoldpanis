@@ -1,17 +1,14 @@
 ---
-/**
- * Every technology, as two rows that drift in opposite directions (KHP §5.8).
- * Each tile opens its /tech page. The second copy of a row only closes the
- * loop, so it is inert: not focusable and not read out.
- */
-import { PageSection, SectionHeader } from "@ui";
-import { technologies, techSlug, type Technology } from "@app/data/technologies";
+/** Every technology, as two rows that drift in opposite directions (KHP §5.8). */
+import { Marquee, PageSection, SectionHeader, Stack } from "@ui";
+import { technologies, type Technology } from "@data/taxonomy/technologies";
+import TechTile from "./TechTile.astro";
 
 const all: readonly Technology[] = technologies;
 const split = Math.ceil(all.length / 2);
 const rows = [all.slice(0, split), all.slice(split)];
 // About 2.6s per tile keeps both rows at the same, unhurried speed.
-const duration = (count: number) => `${Math.round(count * 2.6)}s`;
+const seconds = (count: number) => Math.round(count * 2.6);
 ---
 
 <PageSection variant="plain">
@@ -20,53 +17,11 @@ const duration = (count: number) => `${Math.round(count * 2.6)}s`;
     suffix="I Work With"
     subtitle="Each one opens the projects, posts and roles where I used it."
   />
-  <div class="space-y-3" aria-label="Technologies" data-marquee-group>
+  <Stack gap="md" aria-label="Technologies">
     {rows.map((row, i) => (
-      <div class="marquee py-2">
-        <div
-          class:list={["marquee-track", i % 2 === 1 && "marquee-reverse"]}
-          style={`--marquee-duration:${duration(row.length)}`}
-        >
-          {[0, 1].map((copy) => (
-            <ul
-              class="flex shrink-0 gap-3 pr-3 sm:gap-4 sm:pr-4"
-              data-marquee-copy={copy === 1 ? "" : undefined}
-              aria-hidden={copy === 1 ? "true" : undefined}
-              inert={copy === 1}
-            >
-              {row.map((tech) => (
-                <li>
-                  <a
-                    href={`/tech/${techSlug(tech.name)}`}
-                    class="flex w-24 shrink-0 flex-col items-center gap-2 border border-neutral-200 bg-neutral-0 px-2 py-3 text-center text-xs text-neutral-700 hover:border-brand-500 hover:text-brand-700 hover:shadow-brand sm:w-28"
-                    title={`See where I've used ${tech.name}`}
-                  >
-                    {tech.imagePath ? (
-                      <img src={tech.imagePath} alt="" class="h-12 w-12 object-contain" width="48" height="48" loading="lazy" decoding="async" />
-                    ) : (
-                      <span class="flex h-12 w-12 items-center justify-center text-xl font-bold" aria-hidden="true">{tech.name[0]}</span>
-                    )}
-                    <span class="w-full truncate">{tech.name}</span>
-                  </a>
-                </li>
-              ))}
-            </ul>
-          ))}
-        </div>
-      </div>
+      <Marquee seconds={seconds(row.length)} reverse={i % 2 === 1}>
+        {row.map((tech) => <TechTile tech={tech} />)}
+      </Marquee>
     ))}
-  </div>
+  </Stack>
 </PageSection>
-
-<script>
-  // Pause the marquee while it is off screen, so it costs nothing there.
-  document.addEventListener("astro:page-load", () => {
-    const group = document.querySelector<HTMLElement>("[data-marquee-group]");
-    if (!group || group.dataset.wired) return;
-    group.dataset.wired = "true";
-    const tracks = group.querySelectorAll<HTMLElement>(".marquee-track");
-    new IntersectionObserver(([entry]) => {
-      tracks.forEach((track) => (track.style.animationPlayState = entry.isIntersecting ? "" : "paused"));
-    }).observe(group);
-  });
-</script>

@@ -17,6 +17,8 @@ export interface SearchItem {
   keywords?: string[];
   count?: number;
   imagePath?: string;
+  /** The logo for dark mode, when the main one is dark ink. */
+  imagePathDark?: string;
   date?: string;
 }
 

@@ -1,6 +1,7 @@
 ---
 /** Previous and next for the blog list. Page 1 is /blogs, page n /blogs/page/n. */
 import { pageHref } from "./model";
+import { Link, Row, Text } from "@ui";
 
 interface Props {
   currentPage: number;
@@ -13,15 +14,15 @@ const disableNext = currentPage >= totalPages;
 const base = "inline-block bg-neutral-100 px-3 py-2";
 ---
 
-<nav class="flex justify-between mt-10" aria-label="Blog pages">
+<Row as="nav" justify="between" class="mt-10" aria-label="Blog pages">
   {disablePrevious ? (
-    <span class={`${base} text-neutral-400`} aria-disabled="true">Previous</span>
+    <Text as="span" size="inherit" tone="subtle" class={base} aria-disabled="true">Previous</Text>
   ) : (
-    <a href={pageHref(currentPage - 1)} rel="prev" class={`${base} hover:bg-neutral-900 hover:text-neutral-0`}>Previous</a>
+    <Link href={pageHref(currentPage - 1)} rel="prev" class={`${base} hover:bg-neutral-900 hover:text-neutral-0`}>Previous</Link>
   )}
   {disableNext ? (
-    <span class={`${base} text-neutral-400`} aria-disabled="true">Next</span>
+    <Text as="span" size="inherit" tone="subtle" class={base} aria-disabled="true">Next</Text>
   ) : (
-    <a href={pageHref(currentPage + 1)} rel="next" class={`${base} hover:bg-neutral-900 hover:text-neutral-0`}>Next</a>
+    <Link href={pageHref(currentPage + 1)} rel="next" class={`${base} hover:bg-neutral-900 hover:text-neutral-0`}>Next</Link>
   )}
-</nav>
+</Row>

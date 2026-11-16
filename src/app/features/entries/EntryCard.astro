@@ -13,9 +13,10 @@
  */
 import { formatDate, isoDay, readTime as calculateReadTime } from "@app/calc/format";
 import type { CollectionEntry } from "astro:content";
-import { getTagLabel } from "@app/data/tags";
+import { getTagLabel } from "@data/taxonomy/tags";
 import Cover from "./Cover.astro";
 import Tags from "./Tags.astro";
+import { Box, Chip, Heading, IconText, Link, Row, Stack, StatusPill, Text, VisuallyHidden } from "@ui";
 import { PROJECT_STATUS } from "./model";
 import {
   CalendarBlankIcon as CalendarIcon,
@@ -31,19 +32,21 @@ interface Props {
   entry: CollectionEntry<"blog"> | CollectionEntry<"projects">;
   kind: "blog" | "project";
   variant?: "default" | "featured";
+  /** Above the fold on load: fetch its cover first instead of lazily (KHP §7.7). */
+  priority?: boolean;
 }
 
-const { entry, kind, variant = "default" } = Astro.props;
+const { entry, kind, variant = "default", priority = false } = Astro.props;
 const isBlog = kind === "blog";
 
 const title = entry.data.title;
 const image = entry.data.image;
 const tags = entry.data.tags ?? [];
-const href = `${isBlog ? "/blogs" : "/projects"}/${entry.slug}`;
+const href = `${isBlog ? "/blogs" : "/projects"}/${entry.id}`;
 
 const blog = isBlog ? (entry.data as CollectionEntry<"blog">["data"]) : null;
 const project = !isBlog ? (entry.data as CollectionEntry<"projects">["data"]) : null;
-const readTime = isBlog ? calculateReadTime(entry.body) : null;
+const readTime = isBlog ? calculateReadTime(entry.body ?? "") : null;
 
 const date = isBlog ? blog!.pubDate : project!.endDate ?? project!.startDate;
 // The engine ("type") tells <Cover /> how to render: live demo vs static image.
@@ -59,138 +62,103 @@ const lead = isBlog
 ---
 
 {variant === "featured" ? (
-  <article class="relative w-full group cursor-pointer overflow-hidden shadow-elegant border-2 border-transparent hover:border-brand-500 hover:shadow-floating motion-lift">
-    <a href={href} class="block">
-      <div class="relative">
-        <Cover
-          engine={coverEngine}
-          image={image}
-          title={title}
-          loading="eager"
-        />
-        <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/35 to-transparent group-hover:from-black/75 group-hover:via-black/25 pointer-events-none"></div>
+  <Box as="article" class="relative w-full group cursor-pointer overflow-hidden shadow-elegant border-2 border-transparent hover:border-brand-500 hover:shadow-floating motion-lift">
+    <Link href={href} class="block">
+      <Box class="relative">
+        <Cover engine={coverEngine} image={image} title={title} loading="eager" />
+        <Box class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/35 to-transparent group-hover:from-black/75 group-hover:via-black/25 pointer-events-none" />
 
         {/* Why it leads, and the project's status */}
         {lead && (
-          <div class="absolute top-4 left-4 sm:top-6 sm:left-6 flex items-center gap-1.5 bg-brand-700 text-white px-3 py-1.5 sm:px-4 sm:py-2 text-xs sm:text-sm font-semibold shadow-lg">
-            <lead.Icon className="w-4 h-4" weight={lead.weight} aria-hidden="true" />
+          <StatusPill variant="brand" size="lg" Icon={lead.Icon} iconWeight={lead.weight} class="absolute top-4 left-4 sm:top-6 sm:left-6">
             {lead.label}
-          </div>
+          </StatusPill>
         )}
         {project && (
-          <div class={`absolute top-4 right-4 sm:top-6 sm:right-6 px-3 py-1.5 sm:px-4 sm:py-2 text-xs sm:text-sm font-semibold border shadow-lg ${PROJECT_STATUS[project.status].class}`}>
+          <StatusPill variant={PROJECT_STATUS[project.status].variant} size="lg" class="absolute top-4 right-4 sm:top-6 sm:right-6 border">
             {PROJECT_STATUS[project.status].label}
-          </div>
+          </StatusPill>
         )}
 
-        <div class="absolute inset-0 flex flex-col justify-end p-5 sm:p-8 lg:p-10 text-white pointer-events-none">
-          <div class="max-w-4xl">
+        <Stack gap="none" class="absolute inset-0 justify-end p-5 sm:p-8 lg:p-10 text-white pointer-events-none">
+          <Box class="max-w-4xl">
+            <Heading level={2} size="feature" tone="inherit" class="mb-3 sm:mb-4 group-hover:text-brand-300">{title}</Heading>
 
-            <h2 class="text-2xl sm:text-3xl lg:text-4xl font-bold mb-3 sm:mb-4 leading-tight group-hover:text-brand-300">
-              {title}
-            </h2>
-
-            <div class="flex flex-wrap items-center gap-x-4 gap-y-2 mb-4 sm:mb-5 text-white/80 text-sm">
-              <time datetime={isoDay(date)} class="flex items-center gap-1.5">
-                <CalendarIcon className="w-4 h-4" />
-                {formatDate(date)}
-              </time>
-              {readTime && (
-                <span class="flex items-center gap-1.5">
-                  <ClockIcon className="w-4 h-4" />
-                  {readTime}
-                </span>
-              )}
+            <Row wrap gap="none" class="gap-x-4 gap-y-2 mb-4 sm:mb-5">
+              <IconText Icon={CalendarIcon} as="time" datetime={isoDay(date)} class="text-sm text-white/80">{formatDate(date)}</IconText>
+              {readTime && <IconText Icon={ClockIcon} class="text-sm text-white/80">{readTime}</IconText>}
               {project?.overview?.academic?.institution && (
-                <span class="hidden sm:inline">{project.overview.academic.institution}</span>
+                <Text as="span" size="sm" tone="inverse-muted" class="hidden sm:inline">{project.overview.academic.institution}</Text>
               )}
-            </div>
+            </Row>
 
             {project?.description && (
-              <p class="hidden sm:block text-base lg:text-lg text-white/90 mb-5 leading-relaxed max-w-3xl line-clamp-2">
+              <Text size="large" tone="inherit" leading="relaxed" clamp={2} class="hidden sm:block mb-5 max-w-3xl text-white/90">
                 {project.description}
-              </p>
+              </Text>
             )}
 
-            <div class="flex flex-wrap gap-2 mb-5">
-              {tags.slice(0, 4).map((tag) => (
-                <span class="px-3 py-1 bg-white/20 text-sm font-medium">
-                  {getTagLabel(tag)}
-                </span>
-              ))}
-              {tags.length > 4 && (
-                <span class="px-3 py-1 bg-white/20 text-sm font-medium">
-                  +{tags.length - 4} more
-                </span>
-              )}
-            </div>
+            <Row wrap gap="sm" class="mb-5">
+              {tags.slice(0, 4).map((tag) => <Chip variant="overlay" size="md">{getTagLabel(tag)}</Chip>)}
+              {tags.length > 4 && <Chip variant="overlay" size="md">+{tags.length - 4} more</Chip>}
+            </Row>
 
-            <div class="flex items-center text-sm sm:text-base font-semibold group-hover:text-brand-300">
-              <span>{ctaLabel}</span>
-              <ArrowRightIcon className="w-5 h-5 ml-2" />
-            </div>
-          </div>
-        </div>
-      </div>
-    </a>
-  </article>
+            <Row gap="sm" class="text-sm sm:text-base font-semibold group-hover:text-brand-300">
+              <Text as="span" tone="inherit">{ctaLabel}</Text>
+              <ArrowRightIcon className="w-5 h-5" aria-hidden="true" />
+            </Row>
+          </Box>
+        </Stack>
+      </Box>
+    </Link>
+  </Box>
 ) : (
-  <article class="relative group bg-card-gradient overflow-hidden shadow-elegant border border-neutral-200/50 hover:bg-neutral-0 hover:border-brand-300/60 hover:shadow-floating motion-lift cursor-pointer h-full flex flex-col">
-    <div class="flex-1 flex flex-col">
-      <div class="relative overflow-hidden">
-        <div class="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/20 z-raised pointer-events-none"></div>
-        <Cover engine={coverEngine} image={image} title={title} loading="lazy" />
+  <Stack as="article" gap="none" class="relative group bg-card-gradient overflow-hidden shadow-elegant border border-neutral-200/50 hover:bg-neutral-0 hover:border-brand-300/60 hover:shadow-floating motion-lift cursor-pointer h-full">
+    <Box class="relative overflow-hidden">
+      <Box class="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/20 z-raised pointer-events-none" />
+      <Cover engine={coverEngine} image={image} title={title} loading={priority ? "eager" : "lazy"} />
 
-        {readTime && (
-          <div class="absolute top-4 right-4 bg-neutral-0 px-3 py-1.5 text-xs font-semibold text-neutral-700 border border-neutral-200/50 shadow-sm z-raised pointer-events-none flex items-center gap-1.5">
-            <ClockIcon className="w-3.5 h-3.5" />
-            {readTime}
-          </div>
-        )}
+      {readTime && (
+        <IconText Icon={ClockIcon} iconSize="sm" class="absolute top-4 right-4 bg-neutral-0 px-3 py-1.5 text-xs font-semibold text-neutral-700 border border-neutral-200/50 shadow-sm z-raised pointer-events-none">
+          {readTime}
+        </IconText>
+      )}
+      {project && (
+        <StatusPill variant={PROJECT_STATUS[project.status].variant} class="absolute top-4 right-4 border z-raised pointer-events-none">
+          {PROJECT_STATUS[project.status].label}
+        </StatusPill>
+      )}
+    </Box>
 
-        {project && (
-          <div class={`absolute top-4 right-4 px-3 py-1.5 text-xs font-semibold border shadow-sm z-raised pointer-events-none ${PROJECT_STATUS[project.status].class}`}>
-            {PROJECT_STATUS[project.status].label}
-          </div>
-        )}
-      </div>
+    <Stack gap="none" grow class="p-6 sm:p-8">
+      <Heading level={2} size="card" class="mb-3 line-clamp-2 group-hover:text-brand-700">
+        <Link href={href} stretched>{title}</Link>
+      </Heading>
 
-      <div class="p-6 sm:p-8 flex-1 flex flex-col">
-        <h2 class="text-xl sm:text-2xl font-bold text-neutral-900 mb-3 line-clamp-2 group-hover:text-brand-700 leading-tight">
-          <a href={href} class="stretched-link">{title}</a>
-        </h2>
+      <IconText Icon={CalendarIcon} as="time" datetime={isoDay(date)} class="mb-4 text-sm text-neutral-500">{formatDate(date)}</IconText>
 
-        <div class="flex items-center gap-1.5 text-sm text-neutral-500 mb-4">
-          <CalendarIcon className="w-4 h-4" />
-          <time datetime={isoDay(date)}>{formatDate(date)}</time>
-        </div>
+      {project?.description && (
+        <Text size="sm" tone="muted" clamp={3} class="mb-4">{project.description}</Text>
+      )}
 
-        {project?.description && (
-          <p class="text-neutral-600 text-sm mb-4 line-clamp-3">
-            {project.description}
-          </p>
-        )}
+      {project?.links?.code && (
+        <Row class="mb-4">
+          <Link href={project.links.code} external tone="muted" class="relative z-raised text-sm font-medium inline-flex items-center gap-1">
+            <GithubIcon className="w-3.5 h-3.5" aria-hidden="true" />
+            Code
+            <VisuallyHidden>for {title} (opens in a new tab)</VisuallyHidden>
+          </Link>
+        </Row>
+      )}
 
-        {project?.links?.code && (
-          <div class="flex gap-3 mb-4 text-sm">
-            <a href={project.links.code} target="_blank" rel="noopener noreferrer" class="relative z-raised text-neutral-600 hover:text-neutral-800 font-medium flex items-center gap-1">
-              <GithubIcon className="w-3.5 h-3.5" />
-              Code
-            </a>
-          </div>
-        )}
+      <Box class="mb-4">
+        <Tags tags={tags} />
+      </Box>
 
-        <div class="mb-4">
-          <Tags tags={tags} />
-        </div>
-
-        <div class="flex-1"></div>
-
-        <div class="flex items-center text-neutral-900 text-sm font-medium pt-3 border-t border-neutral-100 group-hover:text-brand-700 mt-auto" aria-hidden="true">
-          <span>{ctaLabel}</span>
-          <ArrowRightIcon className="w-4 h-4 ml-1.5" />
-        </div>
-      </div>
-    </div>
-  </article>
+      <Row gap="none" class="mt-auto pt-3 border-t border-neutral-100 text-sm font-medium text-neutral-900 group-hover:text-brand-700" aria-hidden="true">
+        <Text as="span" tone="inherit">{ctaLabel}</Text>
+        <ArrowRightIcon className="w-4 h-4 ml-1.5" />
+      </Row>
+    </Stack>
+  </Stack>
 )}

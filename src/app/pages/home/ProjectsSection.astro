@@ -1,10 +1,9 @@
 ---
-import { PageSection, SectionHeader, ButtonLink } from "@ui";
+import { Box, ButtonLink, Grid, PageSection, Row, SectionHeader } from "@ui";
 import EntryCard from "@app/features/entries/EntryCard.astro";
 import { ArrowRightIcon } from "@phosphor-icons/react";
-import { HOME_PROJECTS as HOMEPAGE_PROJECTS_LIMIT } from "./limits";
+import { lists } from "@data/settings";
 import { getCollection } from "astro:content";
-import type { CollectionEntry } from "astro:content";
 import { sortProjects } from "@app/features/entries/model";
 
 const [featuredProject, ...otherProjects] = sortProjects(await getCollection("projects"));
@@ -18,31 +17,21 @@ const [featuredProject, ...otherProjects] = sortProjects(await getCollection("pr
   />
 
   {featuredProject && (
-    <div class="mb-12 sm:mb-16">
+    <Box class="mb-12 sm:mb-16">
       <EntryCard entry={featuredProject} kind="project" variant="featured" />
-    </div>
+    </Box>
   )}
 
   {otherProjects.length > 0 && (
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 sm:gap-10 mb-8 sm:mb-12">
-      {otherProjects
-        .slice(0, HOMEPAGE_PROJECTS_LIMIT - 1)
-        .map((project: CollectionEntry<"projects">) => (
-          <EntryCard entry={project} kind="project" />
-        ))
-      }
-    </div>
+    <Grid cols="cards" class="mb-8 sm:mb-12">
+      {otherProjects.slice(0, lists.homeProjects - 1).map((project) => <EntryCard entry={project} kind="project" />)}
+    </Grid>
   )}
 
-  <div class="text-center">
-    <ButtonLink
-      href="/projects"
-      variant="gradient"
-      size="lg"
-      class="text-base sm:text-lg font-semibold"
-    >
+  <Row justify="center">
+    <ButtonLink href="/projects" variant="gradient" size="lg" class="text-base sm:text-lg font-semibold">
       View All Projects
-      <ArrowRightIcon className="ml-3 w-5 h-5" />
+      <ArrowRightIcon className="ml-3 w-5 h-5" aria-hidden="true" />
     </ButtonLink>
-  </div>
+  </Row>
 </PageSection>

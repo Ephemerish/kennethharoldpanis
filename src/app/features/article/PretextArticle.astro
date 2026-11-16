@@ -12,6 +12,7 @@
  * fully accessible and indexable even before pretext runs.
  */
 import ArticleLayout from "@app/layout/ArticleLayout.astro";
+import { Box } from "@ui";
 import PretextEngine from "./PretextEngine.tsx";
 import PretextCover from "./PretextCover.tsx";
 import type { Block, Seg } from "./PretextEngine";
@@ -24,8 +25,8 @@ interface Props {
 
 const { entry } = Astro.props;
 const fm = entry.data;
-const readTime = countReadTime(entry.body);
-const blocks = parseBlocks(entry.body);
+const readTime = countReadTime(entry.body ?? "");
+const blocks = parseBlocks(entry.body ?? "");
 
 // Split inline markdown links out of a line so they stay clickable.
 function parseInline(text: string): Seg[] {
@@ -110,11 +111,8 @@ function parseBlocks(md: string): Block[] {
   proseBody={false}
   showHero={false}
 >
-  <div
-    slot="lead"
-    class="w-full aspect-[2/1] sm:aspect-[21/9] overflow-hidden shadow-lg"
-  >
-    <PretextCover client:load title={fm.title} variant="featured"/>
-  </div>
+  <Box slot="lead" class="w-full aspect-[2/1] sm:aspect-[21/9] overflow-hidden shadow-lg">
+    <PretextCover client:load title={fm.title} variant="featured" />
+  </Box>
   <PretextEngine client:load blocks={blocks} />
 </ArticleLayout>

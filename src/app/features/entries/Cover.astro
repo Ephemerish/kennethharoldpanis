@@ -11,6 +11,7 @@
 import PretextCover from "@app/features/article/PretextCover";
 import { engineHasLiveCover } from "@app/features/article/engines";
 import { coverBackdrop } from "./cover-image.mjs";
+import { Box, Image } from "@ui";
 
 interface Props {
   /** Engine / type that decides how the cover renders. */
@@ -34,41 +35,29 @@ const stillPhrases = [
 ---
 
 {live ? (
-  <div class="pretext-still relative aspect-video w-full overflow-hidden" data-pretext-still aria-hidden="true">
+  <Box class="pretext-still relative aspect-video w-full overflow-hidden" data-pretext-still aria-hidden="true">
     {stillPhrases.map((phrase, index) => (
-      <span
+      <Box
+        as="span"
         class="pretext-strip"
         style={`--column:${index};--offset:${(index * 37) % 110 - 65}px;--tilt:${[4, -5, 2, -3, 6, -2][index % 6]}deg;--ink:${[0.55, 0.85, 0.4, 0.7][index % 4]}`}
       >
         {`${phrase} · ${phrase} · ${phrase}`}
-      </span>
+      </Box>
     ))}
     <svg class="absolute inset-0 h-full w-full" viewBox="0 0 1200 675" fill="none" aria-hidden="true">
       <path d="M-80 160C130 80 255 330 455 210S740 65 860 210s210 100 410-20" stroke="var(--art-glow)" stroke-opacity=".28" stroke-width="2" />
       <path d="M-70 190C145 110 260 360 465 240S750 95 870 240s210 100 410-20" stroke="var(--art-glow)" stroke-opacity=".1" />
     </svg>
-    <div class="absolute inset-0">
+    <Box class="absolute inset-0">
       <PretextCover client:visible title={title} showTitle={false} />
-    </div>
-  </div>
+    </Box>
+  </Box>
 ) : (
-  <div class="relative w-full aspect-video overflow-hidden bg-black">
-    <img
-      src={coverBackdrop(image ?? "")}
-      alt=""
-      aria-hidden="true"
-      class="absolute inset-0 w-full h-full object-cover opacity-70 motion-zoom"
-      loading={loading}
-      decoding="async"
-    />
-    <img
-      src={`/images/${image}`}
-      alt={title}
-      class="relative w-full h-full object-contain motion-zoom"
-      loading={loading}
-      decoding="async"
-    />
-  </div>
+  <Box class="relative w-full aspect-video overflow-hidden bg-black">
+    <Image src={coverBackdrop(image ?? "")} alt="" aria-hidden="true" fit="cover" priority={loading === "eager"} class="absolute inset-0 w-full h-full opacity-70 motion-zoom" />
+    <Image src={`/images/${image}`} alt={title} fit="contain" priority={loading === "eager"} class="relative w-full h-full motion-zoom" />
+  </Box>
 )}
 
 <style>
@@ -88,7 +77,7 @@ const stillPhrases = [
     border-inline: 1px solid color-mix(in srgb, var(--art-glow) 14%, transparent);
     background: linear-gradient(90deg, var(--art-strip-1), var(--art-strip-2) 45%, var(--art-strip-3));
     color: var(--art-glow);
-    font: 600 clamp(8px, 1vw, 13px)/1.7 monospace;
+    font: 600 clamp(8px, 1vw, 13px)/1.7 var(--font-mono);
     letter-spacing: 0.22em;
     writing-mode: vertical-rl;
     text-orientation: upright;

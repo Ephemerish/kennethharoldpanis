@@ -59,24 +59,20 @@ export function initCollapsibleSections(article: HTMLElement) {
 
   if (sections.length < 2) return;
 
-  // A floating button hides or shows every section; its name shows beside it.
-  const top = document.querySelector("[data-release-trigger]") ? "top-[8.5rem] sm:top-[8.75rem]" : "top-20";
+  // A floating button hides or shows every section, styled like every
+  // floating tool (.float-btn in theme.css); it sits under release notes.
+  const stack = document.querySelector("[data-release-trigger]") ? "1" : "0";
   const all = document.createElement("button");
   all.type = "button";
+  all.className = "float-btn";
   all.dataset.collapseButton = "";
-  all.className = `fixed ${top} right-2 sm:right-4 z-float w-11 h-11 sm:w-12 sm:h-12 bg-neutral-0 text-neutral-700 border border-neutral-200 hover:border-neutral-300 shadow-lg flex items-center justify-center`;
+  all.dataset.stack = stack;
 
-  const tooltip = document.createElement("div");
+  const tooltip = document.createElement("span");
+  tooltip.className = "float-tip";
   tooltip.dataset.collapseTooltip = "";
+  tooltip.dataset.stack = stack;
   tooltip.setAttribute("aria-hidden", "true");
-  tooltip.className = `fixed ${top === "top-20" ? "top-20 right-14 sm:right-16" : "top-[8.5rem] sm:top-[8.75rem] right-[3.75rem] sm:right-[4.5rem]"} z-tooltip bg-neutral-800 text-neutral-0 px-3 py-1.5 text-xs sm:text-sm font-medium shadow-lg opacity-0 pointer-events-none whitespace-nowrap`;
-
-  const show = () => (tooltip.style.opacity = "1");
-  const hide = () => (tooltip.style.opacity = "0");
-  all.addEventListener("mouseenter", show);
-  all.addEventListener("mouseleave", hide);
-  all.addEventListener("focus", show);
-  all.addEventListener("blur", hide);
 
   let collapsed = false;
   const render = () => {

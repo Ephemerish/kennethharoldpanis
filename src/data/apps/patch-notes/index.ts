@@ -22,7 +22,7 @@ export { CHANGE_CATEGORIES } from "./types";
 
 /**
  * AppUpdates, one app joined with everything the page needs about it: its
- * card details from src/app/data/apps.ts, its project page when one exists, and
+ * card details from src/data/apps/apps.ts, its project page when one exists, and
  * its releases, newest first.
  */
 export interface AppUpdates {

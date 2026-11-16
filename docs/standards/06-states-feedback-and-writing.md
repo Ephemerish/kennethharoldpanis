@@ -27,7 +27,7 @@ An empty list says so in the owner's words: the blog's "No blog posts yet", the 
 
 ## 6.5 Dates and numbers
 
-Content dates go through `formatDate` in `src/app/calc/format.ts`: "March 29, 2026", in UTC, so a date never shifts by a day with the server's time zone. A `<time>` carries the ISO day in `datetime`, from `isoDay`. Release dates go through `formatReleaseDate`, which builds the day in UTC too. Reading time is `readTime`: "6 min read". The bio timeline shows its years as written in `experience.ts`, joined with an en dash ("2020 – 2024", "2024 – Current") by `TimelineEntryCard` and `BioRecordCard`. A project's timeline in its Overview card uses its own month format ("Mar 2024 – Dec 2024").
+Content dates go through `formatDate` in `src/app/calc/format.ts`: "March 29, 2026", in UTC, so a date never shifts by a day with the server's time zone. A `<time>` carries the ISO day in `datetime`, from `isoDay`. Release dates go through `formatReleaseDate`, which builds the day in UTC too. Reading time is `readTime`: "6 min read". The bio timeline shows its years as written in `experience.ts`, joined with an en dash ("2020 – 2024", "2024 – Current") by `yearsLabel` in `experience.ts`, read by `RoleItem` and `BioRecordCard`. A project's timeline in its Overview card uses its own month format ("Mar 2024 – Dec 2024").
 
 ## 6.6 The owner's words and look
 

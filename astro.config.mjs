@@ -53,7 +53,9 @@ export default defineConfig({
 
   integrations: [mdx(), react()],
 
+  // Middleware mode: server.mjs serves dist/client precompressed and hands
+  // everything else to Astro (KHP §7.7).
   adapter: node({
-    mode: "standalone",
+    mode: "middleware",
   }),
 });

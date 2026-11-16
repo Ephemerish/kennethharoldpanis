@@ -3,12 +3,12 @@
  * ArticleLayout, the shared page shell for any long-form entry.
  *
  * Blog posts and projects both render through this layout so the page
- * chrome (bordered shell, header, meta row, hero image, back-nav, footer)
+ * chrome (bordered shell, header, meta row, hero image, facets)
  * and the content engine (<Prose />) are defined once. Collection-specific
  * UI is passed through the `actions`, `lead` and `overlay` slots.
  */
 import MainLayout from "./MainLayout.astro";
-import { site } from "@app/shared/site";
+import { site } from "@data/site";
 import Prose from "@app/features/article/Prose.astro";
 import ContentImageViewer from "@app/features/article/ContentImageViewer";
 import TechChips from "@app/features/entries/TechChips.astro";
@@ -16,10 +16,11 @@ import { formatDate, isoDay } from "@app/calc/format";
 import TagLinks from "@app/features/taxonomy/TagLinks.astro";
 import { coverBackdrop } from "@app/features/entries/cover-image.mjs";
 import { CalendarBlankIcon as CalendarIcon, ClockIcon } from "@phosphor-icons/react";
+import { Box, Frame, Heading, IconText, Image, Label, Row, Stack, StatusPill, Text } from "@ui";
 
 interface Badge {
   label: string;
-  class: string;
+  variant: "brand" | "neutral" | "success" | "warning" | "error";
 }
 
 interface Props {
@@ -56,132 +57,73 @@ const {
 
 const hasFacets = (tech && tech.length > 0) || (tags && tags.length > 0);
 
-const ogImage = heroImage ? `/images/${heroImage}` : "/images/me/me.jpg";
+const ogImage = heroImage ? `/images/${heroImage}` : site.image;
 const hasActions = Astro.slots.has("actions");
 const hasLead = Astro.slots.has("lead");
 const hasOverlay = Astro.slots.has("overlay");
 ---
 
 <MainLayout title={`${title} - ${site.name}`} description={description} image={ogImage} type={ogType}>
-  <section class="bg-neutral-0 text-neutral-900 relative overflow-hidden">
-    <div class="absolute inset-0">
-      <div class="max-w-7xl mx-auto h-full px-4 sm:px-6 lg:px-8">
-        <div class="bg-neutral-0 border-l border-r border-neutral-200 h-full"></div>
-      </div>
-    </div>
+  <Frame as="section" pad="md" class="text-neutral-900">
+    <Box as="article">
+      <Box as="header" class="mb-8">
+        {/* Title and status */}
+        <Row wrap gap="md" class="mb-4">
+          <Heading level={1} size="article">{title}</Heading>
+          {badges?.map((badge) => <StatusPill variant={badge.variant} class="border">{badge.label}</StatusPill>)}
+        </Row>
 
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 relative">
-      <div class="px-4 sm:px-6 lg:px-8">
-        <article>
-          <header class="mb-8">
-            {/* Title + badges */}
-            <div class="flex flex-wrap items-center gap-3 mb-4">
-              <h1 class="text-4xl md:text-5xl font-bold text-neutral-900 leading-tight">
-                {title}
-              </h1>
-              {badges?.map((badge) => (
-                <span class={`px-3 py-1 text-sm font-medium ${badge.class}`}>
-                  {badge.label}
-                </span>
-              ))}
-            </div>
+        {/* When, and how long it reads */}
+        <Row gap="lg" class="mb-6 text-neutral-700">
+          {date && <IconText Icon={CalendarIcon} as="time" datetime={isoDay(date)} class="text-sm">{formatDate(date)}</IconText>}
+          {date && readTime && <Text as="span" tone="subtle" aria-hidden="true">•</Text>}
+          {readTime && <IconText Icon={ClockIcon} class="text-sm">{readTime}</IconText>}
+        </Row>
 
-            {/* Meta row: date + read time */}
-            <div class="flex items-center gap-4 text-neutral-700 mb-6">
-              {date && (
-                <time datetime={isoDay(date)} class="flex items-center gap-1.5 text-sm">
-                  <CalendarIcon className="w-4 h-4" />
-                  {formatDate(date)}
-                </time>
-              )}
-              {date && readTime && <span class="text-neutral-400">•</span>}
-              {readTime && (
-                <span class="flex items-center gap-1.5 text-sm">
-                  <ClockIcon className="w-4 h-4" />
-                  {readTime}
-                </span>
-              )}
-            </div>
+        {description && <Text size="xl" leading="relaxed" class="mb-8">{description}</Text>}
 
-            {/* Optional description */}
-            {description && (
-              <p class="text-xl text-neutral-700 mb-8 leading-relaxed">
-                {description}
-              </p>
+        {heroImage && showHero && (
+          <Box class="relative w-full aspect-video overflow-hidden shadow-lg mb-8 bg-black">
+            <Image src={coverBackdrop(heroImage)} alt="" aria-hidden="true" fit="cover" priority class="absolute inset-0 w-full h-full opacity-70" />
+            <Image id="article-hero" src={`/images/${heroImage}`} alt={title} fit="contain" priority class="relative w-full h-full" />
+          </Box>
+        )}
+
+        {/* Collection-specific actions (a project's live app and code) */}
+        {hasActions && (
+          <Row wrap gap="md"><slot name="actions" /></Row>
+        )}
+
+        {/* The same facets for posts and projects */}
+        {hasFacets && (
+          <Stack gap="lg" class="mt-8 pt-6 border-t border-neutral-200">
+            {tech && tech.length > 0 && (
+              <Row stackBelow="sm" align="start" gap="sm" class="sm:items-baseline sm:gap-5">
+                <Label size="2xs" tone="subtle" as="span" class="sm:w-20 shrink-0">Built with</Label>
+                <TechChips tech={tech} />
+              </Row>
             )}
-
-            {/* Hero image */}
-            {heroImage && showHero && (
-              <div class="relative w-full aspect-video overflow-hidden shadow-lg mb-8 bg-black">
-                <img
-                  src={coverBackdrop(heroImage)}
-                  alt=""
-                  aria-hidden="true"
-                  class="absolute inset-0 w-full h-full object-cover opacity-70"
-                  decoding="async"
-                />
-                <img
-                  id="article-hero"
-                  src={`/images/${heroImage}`}
-                  alt={title}
-                  class="relative w-full h-full object-contain"
-                  loading="eager"
-                  decoding="async"
-                />
-              </div>
+            {tags && tags.length > 0 && (
+              <Row stackBelow="sm" align="start" gap="sm" class="sm:items-baseline sm:gap-5">
+                <Label size="2xs" tone="subtle" as="span" class="sm:w-20 shrink-0">Tagged</Label>
+                <TagLinks tags={tags} />
+              </Row>
             )}
+          </Stack>
+        )}
+      </Box>
 
-            {/* Collection-specific actions (e.g. project demo/github buttons) */}
-            {hasActions && (
-              <div class="flex flex-wrap gap-3">
-                <slot name="actions" />
-              </div>
-            )}
+      {/* Lead: visuals and quick context before the story */}
+      {hasLead && (
+        <Stack gap="xl" class="mb-12"><slot name="lead" /></Stack>
+      )}
 
-            {/* Shared facets — identical for blogs and projects */}
-            {hasFacets && (
-              <div class="mt-8 pt-6 border-t border-neutral-200 space-y-4">
-                {tech && tech.length > 0 && (
-                  <div class="flex flex-col sm:flex-row sm:items-baseline gap-2 sm:gap-5">
-                    <span class="text-[11px] font-semibold uppercase tracking-wider text-neutral-400 sm:w-20 shrink-0">
-                      Built with
-                    </span>
-                    <TechChips tech={tech} />
-                  </div>
-                )}
-                {tags && tags.length > 0 && (
-                  <div class="flex flex-col sm:flex-row sm:items-baseline gap-2 sm:gap-5">
-                    <span class="text-[11px] font-semibold uppercase tracking-wider text-neutral-400 sm:w-20 shrink-0">
-                      Tagged
-                    </span>
-                    <TagLinks tags={tags} />
-                  </div>
-                )}
-              </div>
-            )}
-          </header>
+      {/* Content engine: Prose by default, or raw for a custom engine */}
+      {proseBody ? <Prose><slot /></Prose> : <slot />}
+    </Box>
 
-          {/* Lead: visuals / quick context shown before the story */}
-          {hasLead && (
-            <div class="mb-12 space-y-8">
-              <slot name="lead" />
-            </div>
-          )}
-
-          {/* Content engine: Prose by default, or raw for a custom engine */}
-          {proseBody ? (
-            <Prose>
-              <slot />
-            </Prose>
-          ) : (
-            <slot />
-          )}
-        </article>
-      </div>
-    </div>
-
-    {/* Wires the hero + every markdown image to the zoomable viewer */}
+    {/* Wires the hero and every markdown image to the zoomable viewer */}
     <ContentImageViewer client:idle />
     {hasOverlay && <slot name="overlay" />}
-  </section>
+  </Frame>
 </MainLayout>

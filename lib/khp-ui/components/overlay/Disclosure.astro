@@ -1,0 +1,18 @@
+---
+/** Disclosure, a summary that shows or hides what is under it (details). */
+import { cn } from "../../utils/cn";
+import { SPACE_TOP, type SpaceTop } from "../layout/space";
+
+interface Props {
+  summary: string;
+  space?: SpaceTop;
+  class?: string;
+}
+
+const { summary, space = "none", class: className } = Astro.props;
+---
+
+<details class={cn("border-t border-neutral-200 pt-5", SPACE_TOP[space], className)}>
+  <summary class="cursor-pointer text-sm font-medium text-neutral-600 hover:text-neutral-900">{summary}</summary>
+  <div class="mt-7"><slot /></div>
+</details>

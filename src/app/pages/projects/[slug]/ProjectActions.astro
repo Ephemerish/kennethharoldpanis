@@ -1,4 +1,5 @@
 ---
+import { Box, ButtonLink, VisuallyHidden } from "@ui";
 import { ArrowSquareOutIcon as ArrowTopRightOnSquareIcon } from "@phosphor-icons/react";
 import GitHubIcon from "@app/shared/GitHubIcon.astro";
 
@@ -10,29 +11,20 @@ const { links } = Astro.props;
 ---
 
 {links?.live && (
-  <a
-    href={links.live}
-    target="_blank"
-    rel="noopener noreferrer"
-    class="group/live bg-brand-gradient text-neutral-0 px-6 py-3 font-semibold flex w-full justify-center items-center gap-2.5"
-  >
-    <span class="relative flex h-2.5 w-2.5" aria-hidden="true">
-      <span class="absolute inline-flex h-full w-full bg-neutral-0 opacity-75"></span>
-      <span class="relative inline-flex h-2.5 w-2.5 bg-neutral-0"></span>
-    </span>
+  <ButtonLink href={links.live} target="_blank" rel="noopener noreferrer" variant="gradient" class="h-auto w-full gap-2.5 px-6 py-3 text-base font-semibold">
+    <Box as="span" class="relative flex h-2.5 w-2.5" aria-hidden="true">
+      <Box as="span" class="absolute inline-flex h-full w-full bg-neutral-0 opacity-75" />
+      <Box as="span" class="relative inline-flex h-2.5 w-2.5 bg-neutral-0" />
+    </Box>
     Visit Live Site
     <ArrowTopRightOnSquareIcon className="w-4 h-4 opacity-80" aria-hidden="true" />
-    <span class="sr-only">(opens in a new tab)</span>
-  </a>
+    <VisuallyHidden>(opens in a new tab)</VisuallyHidden>
+  </ButtonLink>
 )}
 {links?.code && (
-  <a
-    href={links.code}
-    target="_blank"
-    rel="noopener noreferrer"
-    class="border border-brand-300 text-brand-700 px-6 py-3 hover:bg-brand-50  font-medium inline-flex items-center"
-  >
+  <ButtonLink href={links.code} target="_blank" rel="noopener noreferrer" variant="outline" class="h-auto border-brand-300 px-6 py-3 text-base text-brand-700 hover:bg-brand-50">
     <GitHubIcon class="w-4 h-4 mr-2" />
     View Code
-  </a>
+    <VisuallyHidden>(opens in a new tab)</VisuallyHidden>
+  </ButtonLink>
 )}

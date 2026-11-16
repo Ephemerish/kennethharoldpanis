@@ -1,6 +1,7 @@
 import type { APIRoute } from "astro";
-import { site } from "@app/shared/site";
-import { SUBJECTS } from "@app/features/contact/subjects";
+import { site } from "@data/site";
+import { contactLimits } from "@data/settings";
+import { SUBJECTS } from "@data/contact/subjects";
 
 /**
  * Contact form endpoint (docs/systems/contact.md). Validates the message,
@@ -9,7 +10,7 @@ import { SUBJECTS } from "@app/features/contact/subjects";
  */
 export const prerender = false;
 
-const LIMITS = { name: 120, email: 254, message: 5000 } as const;
+const LIMITS = contactLimits;
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 const json = (status: number, body: Record<string, unknown>) =>

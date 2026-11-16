@@ -19,7 +19,7 @@ const fm = entry.data;
   description={fm.description}
   heroImage={fm.image}
   date={fm.pubDate}
-  readTime={readTime(entry.body)}
+  readTime={readTime(entry.body ?? "")}
   tags={fm.tags}
   tech={fm.tech}
 >

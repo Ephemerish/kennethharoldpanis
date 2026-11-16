@@ -1,0 +1,39 @@
+---
+/**
+ * PanelSection, one part of a Panel, with an optional small heading. Parts
+ * are divided by a rule (`divided`); `side` draws the left rule for the second
+ * of two parts laid side by side.
+ */
+import type { Icon } from "@phosphor-icons/react";
+import { cn } from "../../utils/cn";
+
+interface Props {
+  heading?: string;
+  Icon?: Icon;
+  iconTone?: "brand" | "muted";
+  /** Draw a rule under this part (all but the last). */
+  divided?: boolean;
+  /** A rule on the left from md, for the second of two side-by-side parts. */
+  side?: boolean;
+  class?: string;
+}
+
+const { heading, Icon, iconTone = "brand", divided = false, side = false, class: className } = Astro.props;
+---
+
+<div
+  class={cn(
+    "px-6 sm:px-8 py-6",
+    divided && "border-b border-neutral-200",
+    side && "border-t md:border-t-0 md:border-l border-neutral-200",
+    className
+  )}
+>
+  {heading && (
+    <h3 class="text-[11px] font-semibold uppercase tracking-wider text-neutral-500 mb-4 flex items-center gap-2">
+      {Icon && <Icon className={cn("w-4 h-4", iconTone === "brand" ? "text-brand-500" : "text-neutral-400")} aria-hidden="true" />}
+      {heading}
+    </h3>
+  )}
+  <slot />
+</div>

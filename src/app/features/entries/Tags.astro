@@ -1,5 +1,6 @@
 ---
-import { getTagLabel } from "@app/data/tags";
+import { Chip, List, ListItem } from "@ui";
+import { getTagLabel } from "@data/taxonomy/tags";
 
 const { tags } = Astro.props;
 
@@ -11,15 +12,8 @@ interface Props {
 // nest links. Clickable tags live on the detail pages and /tags.
 ---
 
-<div class="flex flex-wrap">
-  {
-    tags.map((tag: string) => (
-      <span 
-        class="inline-flex items-center px-3 py-1.5 bg-neutral-100 text-neutral-900 text-xs font-medium border border-neutral-200 mr-1 mb-1"
-      >
-        <span class="w-1.5 h-1.5 bg-brand-500 mr-1.5"></span>
-        {getTagLabel(tag)}
-      </span>
-    ))
-  }
-</div>
+<List direction="row" gap="none" class="gap-1">
+  {tags.map((tag) => (
+    <ListItem><Chip variant="tag" size="tag" dot>{getTagLabel(tag)}</Chip></ListItem>
+  ))}
+</List>

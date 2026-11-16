@@ -1,0 +1,48 @@
+---
+/**
+ * Image, every picture in an Astro template (KHP §7.5). Lazy by default;
+ * `priority` loads it first (the one image above the fold). `alt=""` marks
+ * a decorative image. `darkSrc` swaps in a version made for dark mode (a
+ * logo whose ink would vanish on a dark tile); only the one shown is fetched.
+ */
+import type { HTMLAttributes } from "astro/types";
+import { cn } from "../../utils/cn";
+
+type Props = HTMLAttributes<"img"> & {
+  src: string;
+  alt: string;
+  width?: number | string;
+  height?: number | string;
+  fit?: "cover" | "contain" | "none";
+  priority?: boolean;
+  darkSrc?: string;
+  class?: string;
+};
+
+const { src, alt, width, height, fit = "none", priority = false, darkSrc, class: className, ...rest } = Astro.props;
+const fitClass = { cover: "object-cover", contain: "object-contain", none: "" }[fit];
+---
+
+<img
+  src={src}
+  alt={alt}
+  width={width}
+  height={height}
+  loading={priority ? "eager" : "lazy"}
+  fetchpriority={priority ? "high" : undefined}
+  decoding="async"
+  class={cn(fitClass, className, darkSrc && "dark:hidden")}
+  {...rest}
+/>
+{darkSrc && (
+  <img
+    src={darkSrc}
+    alt={alt}
+    width={width}
+    height={height}
+    loading="lazy"
+    decoding="async"
+    class={cn(fitClass, className, "hidden dark:block")}
+    {...rest}
+  />
+)}

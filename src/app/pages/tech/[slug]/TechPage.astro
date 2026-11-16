@@ -1,9 +1,9 @@
 ---
 /** /tech/[slug]: every project and post built with one technology. */
 import MainLayout from "@app/layout/MainLayout.astro";
-import { PageSection, PageHeader } from "@ui";
+import { Chip, PageSection, PageHeader, Row, VisuallyHidden } from "@ui";
 import TaxonomyResults from "@app/features/taxonomy/TaxonomyResults.astro";
-import { getTechBySlug } from "@app/data/technologies";
+import { getTechBySlug } from "@data/taxonomy/technologies";
 import type { AnyEntry } from "@app/features/entries/model";
 import type { BioRecord } from "@app/features/taxonomy/collect";
 
@@ -33,16 +33,12 @@ const count = `${total} ${total === 1 ? "entry" : "entries"}`;
     />
 
     {tech?.url && (
-      <div class="-mt-6 mb-12 text-center">
-        <a
-          href={tech.url}
-          target="_blank"
-          rel="noopener noreferrer"
-          class="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-brand-700 border border-brand-200 bg-brand-50 hover:bg-brand-100"
-        >
+      <Row justify="center" class="-mt-6 mb-12">
+        <Chip variant="link" href={tech.url} target="_blank" rel="noopener noreferrer" class="gap-2 px-4 py-2 text-sm">
           Visit website
-        </a>
-      </div>
+          <VisuallyHidden>(opens in a new tab)</VisuallyHidden>
+        </Chip>
+      </Row>
     )}
 
     <TaxonomyResults entries={entries} bio={bio} />

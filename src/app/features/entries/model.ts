@@ -19,11 +19,11 @@ export const newestFirst = (a: AnyEntry, b: AnyEntry) => entryDate(b).valueOf() 
 /** A project's status, said the same way on its card and its page. */
 export const PROJECT_STATUS: Record<
   CollectionEntry<"projects">["data"]["status"],
-  { label: string; class: string }
+  { label: string; variant: "success" | "warning" | "neutral" }
 > = {
-  completed: { label: "Completed", class: "bg-success-100 text-success-800 border-success-200" },
-  "in-progress": { label: "In Progress", class: "bg-warning-100 text-warning-800 border-warning-200" },
-  planned: { label: "Planned", class: "bg-neutral-100 text-neutral-700 border-neutral-200" },
+  completed: { label: "Completed", variant: "success" },
+  "in-progress": { label: "In Progress", variant: "warning" },
+  planned: { label: "Planned", variant: "neutral" },
 };
 
 /** Featured projects first, then newest by end (else start) date. */
@@ -39,3 +39,6 @@ export function sortProjects(projects: CollectionEntry<"projects">[]) {
 export function sortPosts(posts: CollectionEntry<"blog">[]) {
   return [...posts].sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 }
+
+/** Cards in the first row of a grid: above the fold, so their covers load first. */
+export const FIRST_ROW = 3;

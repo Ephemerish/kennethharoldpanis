@@ -8,8 +8,8 @@
  */
 import { BriefcaseIcon, GraduationCapIcon } from "@phosphor-icons/react";
 import type { Icon } from "@phosphor-icons/react";
-import type { TagSlug } from "./tags";
-import type { TechName } from "./technologies";
+import type { TagSlug } from "../taxonomy/tags";
+import type { TechName } from "../taxonomy/technologies";
 
 export type TimelineEntry = {
   slug: string;
@@ -21,30 +21,35 @@ export type TimelineEntry = {
   tags: TagSlug[];
   tech?: TechName[];
   Icon: Icon;
+  /** The organisation's logo, under public/ (checked by check-assets.mjs). */
+  logo?: string;
+  /** The project or post this role produced: its tech counts as tech used here. */
   href?: string;
 };
 
 export const timeline: TimelineEntry[] = [
   {
     slug: "alphaus",
+    logo: "/images/orgs/alphaus.svg",
     title: "Software Engineer",
     org: "Alphaus Inc",
     start: "2024",
     end: "current",
     body: "Focused on the Ripple product, leading the shift to a micro-frontend architecture to modernize its capabilities. Handled full-stack development across UI updates, backend services, and CI/CD pipelines. Managed the testing and delivery workflows to ensure stable, low-risk production releases.",
-    tags: ["web-app", "micro-frontends", "architecture", "collaboration", "finops"],
-    tech: ["React", "TypeScript", "Module Federation", "Nx", "Zustand"],
+    tags: ["web-app", "architecture"],
+    tech: ["React", "TypeScript", "Module Federation", "Nx", "Zustand", "FinOps"],
     Icon: BriefcaseIcon,
     href: "/blogs/micro-frontends-experience-ripplev2",
   },
   {
     slug: "bohol-island-state-university",
+    logo: "/images/orgs/bohol-island-state-university.png",
     title: "BS Computer Engineering",
     org: "Bohol Island State University",
     start: "2020",
     end: "2024",
     body: "Undergraduate degree in Computer Engineering. Thesis work built a marine communication network for monitoring small fishing boats.",
-    tags: ["education", "thesis", "hardware", "microcontroller"],
+    tags: ["education", "thesis", "hardware"],
     tech: ["Arduino", "LoRa", "IoT", "Flutter", "Firebase", "Raspberry Pi"],
     Icon: GraduationCapIcon,
     href: "/projects/marine-communication-network",

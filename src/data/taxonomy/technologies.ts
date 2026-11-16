@@ -10,6 +10,12 @@
 export interface Technology {
   name: string;
   imagePath?: string;
+  /**
+   * The logo for dark mode, when the main one is dark ink that would vanish on
+   * a dark tile. scripts/check-assets.mjs measures every logo on both themes
+   * and fails when one can't be seen.
+   */
+  imagePathDark?: string;
   category: 'frontend' | 'backend' | 'database' | 'devops' | 'tools' | 'cloud' | 'mobile' | 'other';
   url?: string;
 }
@@ -54,7 +60,7 @@ export const technologies = [
   },
   {
     name: 'Zustand',
-    imagePath: '/images/tech-logos/zustand.jpeg',
+    imagePath: '/images/tech-logos/zustand.png',
     category: 'frontend',
     url: 'https://zustand-demo.pmnd.rs/'
   },
@@ -151,6 +157,7 @@ export const technologies = [
   {
     name: 'LoRa',
     imagePath: '/images/tech-logos/lora.png',
+    imagePathDark: '/images/tech-logos/lora-dark.png',
     category: 'other',
     url: 'https://lora-alliance.org/'
   },
@@ -164,6 +171,7 @@ export const technologies = [
   {
     name: 'Drizzle ORM',
     imagePath: '/images/tech-logos/drizzle-orm.svg',
+    imagePathDark: '/images/tech-logos/drizzle-orm-dark.svg',
     category: 'backend',
     url: 'https://orm.drizzle.team/'
   },
@@ -182,18 +190,20 @@ export const technologies = [
   {
     name: 'better-auth',
     imagePath: '/images/tech-logos/better-auth.svg',
+    imagePathDark: '/images/tech-logos/better-auth-dark.svg',
     category: 'backend',
     url: 'https://www.better-auth.com/'
   },
   {
     name: 'Paraglide',
-    imagePath: '/images/tech-logos/paraglide.jpg',
+    imagePath: '/images/tech-logos/paraglide.png',
     category: 'tools',
     url: 'https://inlang.com/m/gerre34r/library-inlang-paraglideJs'
   },
   {
     name: 'shadcn',
     imagePath: '/images/tech-logos/shadcn-ui.svg',
+    imagePathDark: '/images/tech-logos/shadcn-ui-dark.svg',
     category: 'frontend',
     url: 'https://ui.shadcn.com/'
   },
@@ -214,6 +224,7 @@ export const technologies = [
   {
     name: 'Nx',
     imagePath: '/images/tech-logos/nx.svg',
+    imagePathDark: '/images/tech-logos/nx-dark.svg',
     category: 'tools',
     url: 'https://nx.dev/'
   },
@@ -226,8 +237,15 @@ export const technologies = [
   {
     name: 'AWS',
     imagePath: '/images/tech-logos/aws.svg',
+    imagePathDark: '/images/tech-logos/aws-dark.svg',
     category: 'cloud',
     url: 'https://aws.amazon.com/'
+  },
+  {
+    name: 'FinOps',
+    imagePath: '/images/tech-logos/finops.png',
+    category: 'cloud',
+    url: 'https://www.finops.org/'
   },
   {
     name: 'Google Cloud',

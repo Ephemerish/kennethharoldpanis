@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@ui/components/Select";
-import { SUBJECTS } from "@app/features/contact/subjects";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@ui/components/form/Select";
+import { SUBJECTS } from "@data/contact/subjects";
 
 interface SubjectSelectProps {
   name?: string;

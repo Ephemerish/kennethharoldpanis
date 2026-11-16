@@ -2,7 +2,7 @@
 title: "Pidada"
 description: "A focusing app for making space for what matters and getting started. It is still taking shape, with more details to come."
 image: "pidada/logo.svg"
-tags: ["productivity", "focus", "side-project", "web-app"]
+tags: ["web-app", "side-project"]
 tech: ["React"]
 featured: false
 status: "in-progress"
