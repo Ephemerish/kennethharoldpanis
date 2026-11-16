@@ -3,12 +3,12 @@
 import MainLayout from "@app/layout/MainLayout.astro";
 import { Box, PageSection, PageHeader } from "@ui";
 import Pagination from "./Pagination.astro";
-import BlogsGrid from "./BlogsGrid.astro";
+import EntryGrid from "@app/features/entries/EntryGrid.astro";
 import EmptyBlogsState from "./EmptyBlogsState.astro";
 import { getCollection } from "astro:content";
 import type { CollectionEntry } from "astro:content";
 import { POSTS_PER_PAGE, pageCount } from "./model";
-import { sortPosts } from "@app/features/entries/model";
+import { asPosts, sortPosts } from "@app/features/entries/model";
 
 interface Props {
   page: number;
@@ -36,13 +36,12 @@ const blogsForPage: CollectionEntry<"blog">[] = allBlogs.slice(
     <PageHeader
       prefix="My"
       accent="Blogs"
-      subtitle="Posts from my projects and work: what I tried, what broke, what I learned."
     />
 
     {allBlogs.length === 0 ? (
       <EmptyBlogsState />
     ) : (
-      <BlogsGrid blogs={blogsForPage} />
+      <EntryGrid entries={asPosts(blogsForPage)} />
     )}
 
     {totalPages > 1 && (

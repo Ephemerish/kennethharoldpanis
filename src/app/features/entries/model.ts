@@ -1,8 +1,10 @@
 /**
- * Entries: blog posts and projects as one kind of thing, for pages that list
- * both (tag and tech pages). Pure functions, no rendering.
+ * Entries: projects and posts as one kind of thing. Every list of them, on
+ * every page, renders through `toCard`, `EntryCard` and `EntryGrid`. Pure
+ * functions, no rendering.
  */
 import type { CollectionEntry } from "astro:content";
+import { readTime } from "@app/calc/format";
 
 export type AnyEntry =
   | { kind: "blog"; entry: CollectionEntry<"blog"> }
@@ -42,3 +44,57 @@ export function sortPosts(posts: CollectionEntry<"blog">[]) {
 
 /** Cards in the first row of a grid: above the fold, so their covers load first. */
 export const FIRST_ROW = 3;
+
+/**
+ * What a card shows, the same fields for a project and a post (KHP §4.10): a
+ * card never branches on the kind, it reads this. A project's status and a
+ * post's read time are the only facts one kind has and the other doesn't.
+ */
+export interface CardData {
+  href: string;
+  title: string;
+  /** The cover: an image under /images, or an engine that draws a live cover. */
+  image?: string;
+  engine?: string;
+  date: Date;
+  summary?: string;
+  tags: readonly string[];
+  /** A project's status, said in words. */
+  status?: (typeof PROJECT_STATUS)[keyof typeof PROJECT_STATUS];
+  /** A post's read time ("6 min read"). */
+  readTime?: string;
+  /** The words of the card's last line. */
+  action: string;
+}
+
+export function toCard(item: AnyEntry): CardData {
+  if (item.kind === "blog") {
+    const { data, id, body } = item.entry;
+    return {
+      href: `/blogs/${id}`,
+      title: data.title,
+      image: data.image,
+      engine: data.engine,
+      date: data.pubDate,
+      summary: data.description,
+      tags: data.tags,
+      readTime: readTime(body ?? ""),
+      action: "Read post",
+    };
+  }
+  const { data, id } = item.entry;
+  return {
+    href: `/projects/${id}`,
+    title: data.title,
+    image: data.image,
+    date: data.endDate ?? data.startDate,
+    summary: data.description,
+    tags: data.tags,
+    status: PROJECT_STATUS[data.status],
+    action: "View project",
+  };
+}
+
+/** Wrap a collection's entries as AnyEntry, for a grid. */
+export const asProjects = (entries: CollectionEntry<"projects">[]): AnyEntry[] => entries.map((entry) => ({ kind: "project", entry }));
+export const asPosts = (entries: CollectionEntry<"blog">[]): AnyEntry[] => entries.map((entry) => ({ kind: "blog", entry }));

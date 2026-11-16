@@ -6,7 +6,7 @@ import CertificationCard from "./CertificationCard.astro";
 ---
 
 <Box as="section" aria-labelledby="certifications">
-  <SectionHeader prefix="My" accent="Certifications" subtitle="Markers of where I've been learning." id="certifications" />
+  <SectionHeader prefix="My" accent="Certifications" id="certifications" />
   <List gap="lg">
     {certifications.map((cert) => <ListItem><CertificationCard cert={cert} /></ListItem>)}
   </List>

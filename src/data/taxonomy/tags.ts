@@ -8,24 +8,23 @@
  *     and an item carries at most three.
  * scripts/check-taxonomy.mjs fails the build when any of that breaks. Content
  * names tags by slug through the schema; roles and certifications through the
- * `TagSlug` type. Every tag has a /tags page, introduced by its `description`.
+ * `TagSlug` type. Every tag has a /tags page.
  */
 
 export interface Tag {
   slug: string;
   label: string;
   /** One line on what the tag gathers, shown on its page. */
-  description: string;
 }
 
 export const tags = [
-  { slug: "web-app", label: "Web App", description: "Apps that run in the browser, from work and from my own projects." },
-  { slug: "side-project", label: "Side Project", description: "Things I build and run on my own time." },
-  { slug: "architecture", label: "Architecture", description: "How larger frontends are split, shared and shipped." },
-  { slug: "developer-tools", label: "Developer Tools", description: "Tools I tried in earnest, and what I made of them." },
-  { slug: "hardware", label: "Hardware", description: "Work with physical devices: boards, radios and computers." },
-  { slug: "thesis", label: "Thesis", description: "My undergraduate research and what came out of it." },
-  { slug: "education", label: "Education", description: "Where I studied." },
+  { slug: "web-app", label: "Web App" },
+  { slug: "side-project", label: "Side Project" },
+  { slug: "architecture", label: "Architecture" },
+  { slug: "developer-tools", label: "Developer Tools" },
+  { slug: "hardware", label: "Hardware" },
+  { slug: "thesis", label: "Thesis" },
+  { slug: "education", label: "Education" },
 ] as const satisfies readonly Tag[];
 
 /** A registered tag's slug. */

@@ -7,7 +7,7 @@
 export const lists = {
   /** Projects on the home page, the featured one included. */
   homeProjects: 3,
-  /** Posts on the home page under the latest one. */
+  /** Posts on the home page, newest first. */
   homePosts: 6,
   /** Posts per page on /blogs. */
   postsPerPage: 6,

@@ -21,7 +21,7 @@ names or `var(--…)`. Component shapes belong to the lib components
   - Dark scales on `:root.dark`: every step mirrored (light `brand-50` becomes the darkest lime, `neutral-0` becomes near-black), `--shadow-strength: 3`.
   - `@theme`: `--color-*: initial` clears Tailwind's palette, then defines `white`, `black` and `ink` (near-black that stays dark in both themes). Outfit and the mono stack. Shadow sizes scaled by `--shadow-strength`. `--radius-*: initial`, so corners are square. A few large spacing steps.
   - `@theme inline`: maps each scale step to its class name (`bg-brand-600`, `text-neutral-700`).
-  - Utilities: `z-*` layers and `stretched-link`.
+  - Utilities: `z-*` layers.
   - Brand utilities: `bg-brand-gradient` (`brand-700` to `brand-800`, under white text), `bg-hero-gradient` (`neutral-0` to `brand-50`), `bg-card-gradient` (`neutral-0` to `neutral-50`), `text-brand-gradient` (`brand-600` to `brand-500`), `shadow-brand`, `shadow-elegant`, `shadow-floating`.
   - `soft-glow`: a halo as a radial gradient of `brand-100`, used by `PageHeader`'s `glow`, the site's only glow (KHP §5.9). They replaced CSS blurs, which repaint on every scroll frame (KHP §7.7).
   - `.float-btn` and `.float-tip`: a fixed tool at the right edge under the top bar (`z-float`) and its name beside it (`z-tooltip`), shown on the button's hover and focus. `data-stack="1"` moves both to the second slot. Shared by `FloatingButton` and the collapse-all button (KHP §3.5).
@@ -29,7 +29,7 @@ names or `var(--…)`. Component shapes belong to the lib components
   - Base: border colour, body background and text, Outfit.
   - Motion tokens on `:root`: `--duration-fast` (150ms), `--duration-base` (250ms), `--duration-slow` (600ms), `--ease-out`.
   - Base transitions on `a`, `button`, `summary`, `input`, `textarea`, `[role="button"]`, `[role="option"]` and `.motion-surface`: colour, background, border, text decoration colour, shadow, opacity and transform, at `--duration-fast`.
-  - Motion utilities: `motion-lift` (lifts 2px on hover, eased at `--duration-base`), `motion-zoom` (scales to 1.03 when its `.group` is hovered, at `--duration-slow`), `marquee` (clips the row and fades its edges with a mask), `marquee-track` (runs `@keyframes marquee`, a `translate3d` to -50%, over `--marquee-duration`, 60s by default; paused while its `.marquee` is hovered or holds focus), `marquee-reverse`.
+  - Motion: `--duration-fast` and `--ease-out`; the base transition on controls and `.motion-surface`; `marquee`, `marquee-track` and `marquee-reverse` (KHP §5.8).
   - Reduced motion: under `prefers-reduced-motion: reduce` every animation and transition lasts 0.01ms and runs once, scrolling is not smooth, and the marquee becomes a still, wrapped, centred list with its `[data-marquee-copy]` hidden.
   - Focus: a 2px `brand-500` outline; the search input draws focus on its wrapper instead.
 - `lib/khp-ui/tokens/prose.css`: only the collapsible section toggle styles (`#article-content .section-toggle`). The rest of the article type is `Prose` in `lib/khp-ui/components/type/`.
@@ -47,7 +47,7 @@ names or `var(--…)`. Component shapes belong to the lib components
 5. The site is light until the reader picks dark. The saved choice is applied before first paint and after every view-transition swap, so a dark reader never sees a light flash.
 6. Motion changes only colour, background, border, shadow, opacity and transform, and what travels moves by `transform` (KHP §5.8). A transition on a layout property would make the page lay out again on every hover.
 7. Layers are used by name, lowest to highest: raised, nav, dropdown, float, drawer, modal, popover, tooltip, toast.
-8. `stretched-link` is how a grid card becomes one link without nesting links (KHP §4.4).
+8. A card that is a link is a `Card` with `href`; nothing clickable sits inside it (KHP §4.4).
 9. Reduced motion stops every transition and animation, and leaves the marquee as a readable list showing each technology once (KHP §5.8).
 10. Durations come from the motion tokens, so the site moves at one pace.
 11. No CSS blur filter. A halo is `soft-glow`, which scrolls for free (KHP §7.7).

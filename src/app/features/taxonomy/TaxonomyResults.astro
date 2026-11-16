@@ -4,7 +4,7 @@
  * the roles and certifications on the bio that carry it.
  */
 import { Box, Button, Grid, Label, ListItem, Row } from "@ui";
-import EntryCollectionGrid from "@app/features/entries/EntryCollectionGrid.astro";
+import EntryGrid from "@app/features/entries/EntryGrid.astro";
 import BioRecordCard from "./BioRecordCard.astro";
 import type { AnyEntry } from "@app/features/entries/model";
 import type { BioRecord } from "./collect";
@@ -17,7 +17,7 @@ interface Props {
 const { entries, bio } = Astro.props;
 ---
 
-{entries.length > 0 && <EntryCollectionGrid entries={entries} />}
+{entries.length > 0 && <EntryGrid entries={entries} />}
 
 {bio.length > 0 && (
   <Box as="section" space={entries.length > 0 ? "2xl" : "none"} aria-labelledby="from-bio">

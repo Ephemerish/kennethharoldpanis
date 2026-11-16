@@ -33,7 +33,7 @@ What we call things on this site, in code, in docs and on screen. One thing, one
 | card | A bordered surface (`Card`). A card that opens is an `AccordionItem` |
 | chip | A small bordered label (`Chip`): a tech, a tag or a status |
 | label | The small uppercase line naming a group (`Label`) |
-| subtitle | The line under a page or section title. Optional; one sentence, at most 15 words, says what, never how (§6.7) |
+| subtitle | A fact from the data under a page title (a count, a latest release). Never written words: no taglines (§6.7) |
 | marquee | The home page's two draggable rows of tech tiles (`Marquee`) |
 | article engine | How a post's body renders (`prose`, `pretext`); see docs/systems/article-engines.md |
 

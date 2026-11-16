@@ -1,164 +1,55 @@
 ---
 /**
- * EntryCard, the ONE card for blog posts and projects.
+ * EntryCard, the one card for a project or a post, everywhere it's listed
+ * (KHP §4.10). Featured projects and the newest post use it too: they come
+ * first in the list, they don't look different.
  *
- * `kind`     "blog" | "project", which collection the entry is from
- * `variant`  "default" | "featured"
- *              default  = grid card (used in listings/grids)
- *              featured = full-width hero card (the lead/featured slot)
- *
- * One component so blog and project cards stay identical in structure and
- * styling. Kind-specific bits (status vs read-time, description, links) are
- * the only differences. Change the look here once and everything follows.
+ * The whole card is one link (KHP §4.4). Reads `CardData` from `toCard`, so it
+ * never branches on the kind: a project brings its status, a post its read
+ * time, and both show in the same places.
  */
-import { formatDate, isoDay, readTime as calculateReadTime } from "@app/calc/format";
-import type { CollectionEntry } from "astro:content";
+import { ArrowRightIcon, CalendarBlankIcon, ClockIcon } from "@phosphor-icons/react";
+import { Box, Card, Chip, Heading, IconText, List, ListItem, Row, Stack, StatusPill, Text } from "@ui";
+import { formatDate, isoDay } from "@app/calc/format";
 import { getTagLabel } from "@data/taxonomy/tags";
 import Cover from "./Cover.astro";
-import Tags from "./Tags.astro";
-import { Box, Chip, Heading, IconText, Link, Row, Stack, StatusPill, Text, VisuallyHidden } from "@ui";
-import { PROJECT_STATUS } from "./model";
-import {
-  CalendarBlankIcon as CalendarIcon,
-  ClockIcon,
-  ArrowRightIcon,
-  GithubLogoIcon as GithubIcon,
-  StarIcon,
-  RocketLaunchIcon,
-  BookOpenIcon,
-} from "@phosphor-icons/react";
+import type { CardData } from "./model";
 
 interface Props {
-  entry: CollectionEntry<"blog"> | CollectionEntry<"projects">;
-  kind: "blog" | "project";
-  variant?: "default" | "featured";
-  /** Above the fold on load: fetch its cover first instead of lazily (KHP §7.7). */
+  card: CardData;
   priority?: boolean;
 }
 
-const { entry, kind, variant = "default", priority = false } = Astro.props;
-const isBlog = kind === "blog";
-
-const title = entry.data.title;
-const image = entry.data.image;
-const tags = entry.data.tags ?? [];
-const href = `${isBlog ? "/blogs" : "/projects"}/${entry.id}`;
-
-const blog = isBlog ? (entry.data as CollectionEntry<"blog">["data"]) : null;
-const project = !isBlog ? (entry.data as CollectionEntry<"projects">["data"]) : null;
-const readTime = isBlog ? calculateReadTime(entry.body ?? "") : null;
-
-const date = isBlog ? blog!.pubDate : project!.endDate ?? project!.startDate;
-// The engine ("type") tells <Cover /> how to render: live demo vs static image.
-const coverEngine = isBlog ? blog!.engine : undefined;
-const ctaLabel = isBlog ? "Read post" : "View project";
-// The corner pill says why this card leads: a project the owner marked
-// featured, or the newest post. Never a label the data doesn't back.
-const lead = isBlog
-  ? { Icon: BookOpenIcon, label: "Latest post", weight: "regular" as const }
-  : project?.featured
-    ? { Icon: StarIcon, label: "Featured", weight: "fill" as const }
-    : null;
+const { card, priority = false } = Astro.props;
 ---
 
-{variant === "featured" ? (
-  <Box as="article" class="relative w-full group cursor-pointer overflow-hidden shadow-elegant border-2 border-transparent hover:border-brand-500 hover:shadow-floating">
-    <Link href={href} class="block">
-      <Box class="relative">
-        <Cover engine={coverEngine} image={image} title={title} loading="eager" />
-        <Box class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/35 to-transparent group-hover:from-black/75 group-hover:via-black/25 pointer-events-none" />
-
-        {/* Why it leads, and the project's status */}
-        {lead && (
-          <StatusPill variant="brand" size="lg" Icon={lead.Icon} iconWeight={lead.weight} class="absolute top-4 left-4 sm:top-6 sm:left-6">
-            {lead.label}
-          </StatusPill>
-        )}
-        {project && (
-          <StatusPill variant={PROJECT_STATUS[project.status].variant} size="lg" class="absolute top-4 right-4 sm:top-6 sm:right-6 border">
-            {PROJECT_STATUS[project.status].label}
-          </StatusPill>
-        )}
-
-        <Stack gap="none" class="absolute inset-0 justify-end p-5 sm:p-8 lg:p-10 text-white pointer-events-none">
-          <Box class="max-w-4xl">
-            <Heading level={2} size="feature" tone="inherit" class="mb-3 sm:mb-4 group-hover:text-brand-300">{title}</Heading>
-
-            <Row wrap gap="none" class="gap-x-4 gap-y-2 mb-4 sm:mb-5">
-              <IconText Icon={CalendarIcon} as="time" datetime={isoDay(date)} class="text-sm text-white/80">{formatDate(date)}</IconText>
-              {readTime && <IconText Icon={ClockIcon} class="text-sm text-white/80">{readTime}</IconText>}
-              {project?.overview?.academic?.institution && (
-                <Text as="span" size="sm" tone="inverse-muted" class="hidden sm:inline">{project.overview.academic.institution}</Text>
-              )}
-            </Row>
-
-            {project?.description && (
-              <Text size="large" tone="inherit" leading="relaxed" clamp={2} class="hidden sm:block mb-5 max-w-3xl text-white/90">
-                {project.description}
-              </Text>
-            )}
-
-            <Row wrap gap="sm" class="mb-5">
-              {tags.slice(0, 4).map((tag) => <Chip variant="overlay" size="md">{getTagLabel(tag)}</Chip>)}
-              {tags.length > 4 && <Chip variant="overlay" size="md">+{tags.length - 4} more</Chip>}
-            </Row>
-
-            <Row gap="sm" class="text-sm sm:text-base font-semibold group-hover:text-brand-300">
-              <Text as="span" tone="inherit">{ctaLabel}</Text>
-              <ArrowRightIcon className="w-5 h-5" aria-hidden="true" />
-            </Row>
-          </Box>
-        </Stack>
-      </Box>
-    </Link>
+<Card href={card.href} hoverable padding="none" class="flex h-full flex-col overflow-hidden">
+  <Box class="relative">
+    <Cover title={card.title} image={card.image} engine={card.engine} priority={priority} />
+    {card.status && (
+      <StatusPill variant={card.status.variant} class="absolute right-4 top-4 border">{card.status.label}</StatusPill>
+    )}
   </Box>
-) : (
-  <Stack as="article" gap="none" class="relative group bg-card-gradient overflow-hidden shadow-elegant border border-neutral-200/50 hover:bg-neutral-0 hover:border-brand-300/60 hover:shadow-floating cursor-pointer h-full">
-    <Box class="relative overflow-hidden">
-      <Box class="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/20 z-raised pointer-events-none" />
-      <Cover engine={coverEngine} image={image} title={title} loading={priority ? "eager" : "lazy"} />
 
-      {readTime && (
-        <IconText Icon={ClockIcon} iconSize="sm" class="absolute top-4 right-4 bg-neutral-0 px-3 py-1.5 text-xs font-semibold text-neutral-700 border border-neutral-200/50 shadow-sm z-raised pointer-events-none">
-          {readTime}
-        </IconText>
-      )}
-      {project && (
-        <StatusPill variant={PROJECT_STATUS[project.status].variant} class="absolute top-4 right-4 border z-raised pointer-events-none">
-          {PROJECT_STATUS[project.status].label}
-        </StatusPill>
-      )}
-    </Box>
+  <Stack gap="md" grow class="p-6 sm:p-8">
+    <Heading level={2} size="card" class="line-clamp-2 group-hover:text-brand-700">{card.title}</Heading>
 
-    <Stack gap="none" grow class="p-6 sm:p-8">
-      <Heading level={2} size="card" class="mb-3 line-clamp-2 group-hover:text-brand-700">
-        <Link href={href} stretched>{title}</Link>
-      </Heading>
+    <Row wrap gap="md" class="text-sm text-neutral-600">
+      <IconText Icon={CalendarBlankIcon} as="time" datetime={isoDay(card.date)}>{formatDate(card.date)}</IconText>
+      {card.readTime && <IconText Icon={ClockIcon}>{card.readTime}</IconText>}
+    </Row>
 
-      <IconText Icon={CalendarIcon} as="time" datetime={isoDay(date)} class="mb-4 text-sm text-neutral-500">{formatDate(date)}</IconText>
+    {card.summary && <Text size="sm" tone="muted" clamp={3}>{card.summary}</Text>}
 
-      {project?.description && (
-        <Text size="sm" tone="muted" clamp={3} class="mb-4">{project.description}</Text>
-      )}
+    {card.tags.length > 0 && (
+      <List direction="row" gap="none" class="gap-1">
+        {card.tags.map((tag) => <ListItem><Chip variant="tag" size="tag" dot>{getTagLabel(tag)}</Chip></ListItem>)}
+      </List>
+    )}
 
-      {project?.links?.code && (
-        <Row class="mb-4">
-          <Link href={project.links.code} external tone="muted" class="relative z-raised text-sm font-medium inline-flex items-center gap-1">
-            <GithubIcon className="w-3.5 h-3.5" aria-hidden="true" />
-            Code
-            <VisuallyHidden>for {title} (opens in a new tab)</VisuallyHidden>
-          </Link>
-        </Row>
-      )}
-
-      <Box class="mb-4">
-        <Tags tags={tags} />
-      </Box>
-
-      <Row gap="none" class="mt-auto pt-3 border-t border-neutral-100 text-sm font-medium text-neutral-900 group-hover:text-brand-700" aria-hidden="true">
-        <Text as="span" tone="inherit">{ctaLabel}</Text>
-        <ArrowRightIcon className="w-4 h-4 ml-1.5" />
-      </Row>
-    </Stack>
+    <Row gap="sm" class="mt-auto border-t border-neutral-200 pt-4 text-sm font-medium text-neutral-900 group-hover:text-brand-700" aria-hidden="true">
+      <Text as="span" tone="inherit">{card.action}</Text>
+      <ArrowRightIcon className="h-4 w-4" />
+    </Row>
   </Stack>
-)}
+</Card>

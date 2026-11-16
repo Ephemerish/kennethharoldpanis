@@ -1,31 +1,18 @@
 ---
-import { Box, ButtonLink, Grid, PageSection, Row, SectionHeader } from "@ui";
-import EntryCard from "@app/features/entries/EntryCard.astro";
+/** The home page's posts: the newest few, in the same cards as everywhere. */
+import { ButtonLink, PageSection, Row, SectionHeader } from "@ui";
+import EntryGrid from "@app/features/entries/EntryGrid.astro";
 import { ArrowRightIcon } from "@phosphor-icons/react";
 import { lists } from "@data/settings";
 import { getCollection } from "astro:content";
-import { sortPosts } from "@app/features/entries/model";
+import { asPosts, sortPosts } from "@app/features/entries/model";
 
-const [mostRecentBlog, ...otherBlogs] = sortPosts(await getCollection("blog"));
+const posts = asPosts(sortPosts(await getCollection("blog")).slice(0, lists.homePosts));
 ---
 
 <PageSection variant="plain">
-  <SectionHeader
-    prefix="Latest from the"
-    accent="Blog"
-    subtitle="Notes from building things: what worked, what broke, and what I would do again."
-  />
-
-  {mostRecentBlog && (
-    <Box class="mb-12 sm:mb-16">
-      <EntryCard entry={mostRecentBlog} kind="blog" variant="featured" />
-    </Box>
-  )}
-
-  <Grid cols="cards" class="mb-8 sm:mb-12">
-    {otherBlogs.slice(0, lists.homePosts).map((blog) => <EntryCard entry={blog} kind="blog" />)}
-  </Grid>
-
+  <SectionHeader prefix="Latest from the" accent="Blog" />
+  <EntryGrid entries={posts} class="mb-8 sm:mb-12" />
   <Row justify="center">
     <ButtonLink href="/blogs" variant="outlineBrand" size="lg" class="text-base sm:text-lg font-semibold">
       Read All Blogs

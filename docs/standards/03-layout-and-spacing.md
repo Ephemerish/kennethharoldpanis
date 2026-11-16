@@ -29,7 +29,6 @@ Gaps and the space above a block are named steps in `lib/khp-ui/components/layou
 | ------- | ----- |
 | Bands | `PageSection`: `py-8 sm:py-12` |
 | Header and content | `mb-12 sm:mb-16` (both headers) |
-| A featured card and the grid under it | `mb-12 sm:mb-16` |
 | Cards in a grid | `Grid`'s default gap, `2xl`: `gap-8 sm:gap-10` |
 | Inside a card | `Card` padding: `sm` `p-4 sm:p-5`, `md` `p-6 sm:p-8`, `lg` `p-8 sm:p-10` |
 | Label and its control | `mb-3` |

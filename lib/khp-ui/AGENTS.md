@@ -10,7 +10,7 @@ Before writing markup, check this list. If a component is close but not right, e
 
 | File | Holds |
 | ---- | ----- |
-| `tokens/theme.css` | The brand, neutral, success, warning and error scales for light and their mirrored dark values (`:root.dark`); `white`, `black`, `ink`; Outfit; shadows; square corners; layers; the brand utilities (`bg-brand-gradient`, `bg-hero-gradient`, `bg-card-gradient`, `text-brand-gradient`, `shadow-elegant`, `shadow-floating`, `shadow-brand`); `soft-glow` (the page title's halo, a radial gradient, not a CSS blur); `stretched-link`; `.float-btn` and `.float-tip` (a floating tool and its name, in two slots by `data-stack`); `.drawer` (the right-hand drawer and its backdrop); motion (KHP §5.8): the tokens `--duration-fast`, `--duration-base`, `--duration-slow` and `--ease-out`, the base transitions on links, buttons, fields and `.motion-surface`, the utilities `motion-lift`, `motion-zoom`, `marquee`, `marquee-track` and `marquee-reverse`, and the reduced-motion switch that stops them |
+| `tokens/theme.css` | The brand, neutral, success, warning and error scales for light and their mirrored dark values (`:root.dark`); `white`, `black`, `ink`; Outfit; shadows; square corners; layers; the brand utilities (`bg-brand-gradient`, `bg-hero-gradient`, `bg-card-gradient`, `text-brand-gradient`, `shadow-elegant`, `shadow-floating`, `shadow-brand`); `soft-glow` (the page title's halo, a radial gradient, not a CSS blur); `.float-btn` and `.float-tip` (a floating tool and its name, in two slots by `data-stack`); `.drawer` (the right-hand drawer and its backdrop); motion (KHP §5.8): `--duration-fast` and `--ease-out`, the base transition on links, buttons, fields and `.motion-surface`, `marquee`, `marquee-track` and `marquee-reverse`, and the reduced-motion switch; resilience (KHP §7.8): `js-only`, `no-js-only`, `img[data-broken]` |
 | `tokens/prose.css` | Only the collapsible section toggle styles. Article type lives in `components/type/Prose.astro` |
 
 ## Components
@@ -24,7 +24,7 @@ Props are typed. Most extend Astro's `HTMLAttributes<...>`, so plain attributes 
 | `Box` | A plain element for structure nothing else names (a positioned layer, a clipping wrapper). `as`, `space`. Reach for `Stack`, `Row` or `Grid` first |
 | `Stack` | Children one above another. `as`, `gap`, `align`, `space`, `grow` (fill a column parent) |
 | `Row` | Children side by side. `as`, `gap`, `align` (default `center`), `justify`, `wrap`, `stackBelow` (`sm`, `md`, `lg`: a column under that width), `space` |
-| `Grid` | Equal columns by named preset. `as`, `cols` (`cards` 1-2-3, `cards-wide` 1-2-3 at `xl`, `halves`, `halves-md`, `facts` 2-3), `gap` (default `2xl`), `space` |
+| `Grid` | Equal columns by named preset. `as`, `cols` (`cards` 1-2-3, `halves`, `halves-md`, `facts` 2-3), `gap` (default `2xl`), `space` |
 | `Frame` | The bordered column with its rails (KHP §3.1). `as`, `backdrop` (`plain`, `hero`, `none`), `topBorder`, `pad` (`none`, `sm`, `md`, `lg`), `grow`, `innerClass`. The footer, home hero, article layout, 404 page and `MainLayout`'s filler use it directly |
 | `PageSection` | One band of a page: a `Frame` with `pad="md"`. `variant` (`hero`, the default, or `plain`), `topBorder` (default true), `id` |
 | `Marquee` | A row that drifts sideways forever (KHP §5.8). `seconds` (one loop, default 60), `reverse`, `gap`, `label`. Renders its slot once and its script clones it for the seamless loop (half the HTML), the copy `inert`; pauses on hover, focus, drag and off screen. Drag it with a mouse or finger (it moves the same CSS animation's clock); a drag never follows a link; vertical page scroll still works on touch |
@@ -35,11 +35,11 @@ Props are typed. Most extend Astro's `HTMLAttributes<...>`, so plain attributes 
 
 | Component | Use for, and its props |
 | --------- | ---------------------- |
-| `Heading` | Every title. `level` (1 to 6, default 2), `size` (`hero`, `page`, `section`, `article`, `feature`, `title`, `card`, `item`, `small`), `tone` (`strong`, `inherit`, `inverse`, `brand`), `weight`, `align` |
+| `Heading` | Every title. `level` (1 to 6, default 2), `size` (`hero`, `page`, `section`, `article`, `title`, `card`, `item`, `small`), `tone` (`strong`, `inherit`, `brand`), `weight`, `align` |
 | `Accent` | The `text-brand-gradient` word inside a heading. No props |
-| `Text` | Every run of words that isn't a heading. `as`, `size` (`inherit`, `xs`, `sm`, `body`, `base`, `large`, `lead`, `intro`, `xl`), `tone` (`inherit`, `strong`, `default`, `muted`, `subtle`, `brand`, `inverse`, `inverse-muted`; `subtle`, `neutral-500`, is the faintest text that passes AA, so there is no fainter tone), `weight`, `align`, `leading`, `datetime`, `clamp` (1 to 4 lines) |
+| `Text` | Every run of words that isn't a heading. `as`, `size` (`inherit`, `xs`, `sm`, `body`, `base`, `large`, `lead`, `intro`, `xl`), `tone` (`inherit`, `strong`, `default`, `muted`, `subtle`, `brand`; `subtle`, `neutral-500`, is the faintest text that passes AA, so there is no fainter tone), `weight`, `align`, `leading`, `datetime`, `clamp` (1 to 4 lines) |
 | `Label` | The small uppercase line that names a group ("Built with"). `as`, `tone` (`subtle`, `brand`), `size` (`xs`, `2xs`) |
-| `Link` | Every navigation in an Astro template (KHP §4.3). `href`, `tone` (`inherit`, `brand`, `muted`, `quiet`, `strong`), `external` (new tab, `rel="noopener noreferrer"`), `stretched` (covers its card, KHP §4.4), `underline` |
+| `Link` | Every navigation in an Astro template (KHP §4.3). `href`, `tone` (`inherit`, `brand`, `muted`, `quiet`, `strong`), `external` (new tab, `rel="noopener noreferrer"`), `underline`. A card that is a link is a `Card` with `href` |
 | `List`, `ListItem` | A `ul` or `ol` laid out as a column or a wrapping row. `List`: `ordered`, `direction` (`column`, `row`), `gap`, `space`. `ListItem`: `marker` (`none`, `square`, `square-muted`) |
 | `Divider` | The short gradient bar under a centred title. `width` (`sm`, `md`, `lg`), `thickness` (`thin`, `thick`) |
 | `IconText` | A Phosphor icon beside a few words (a date, a read time). `Icon`, `as`, `iconSize` (`sm`, `md`, `lg`), `datetime` |
@@ -47,8 +47,8 @@ Props are typed. Most extend Astro's `HTMLAttributes<...>`, so plain attributes 
 | `SkipLink` | "Skip to content", the first focusable thing on the page. `href` (default `#main`) |
 | `Facts`, `Fact` | Labelled values as a `dl`. `Facts`: `layout` (`grid`, `stack`), `gap`. `Fact`: `label`; the value is the slot |
 | `Prose` | The type of long-form markdown (KHP §5.5): headings, lists, quotes, code, links, figures. `id`. The article feature wraps it with tables and collapsible sections |
-| `PageHeader` | A page's centred `h1` from `prefix`, `accent` (in `text-brand-gradient`) and `suffix`, an optional `subtitle`, and a short gradient bar. `size` (`lg` or `md`); `glow` adds a `soft-glow` halo behind it |
-| `SectionHeader` | A section's centred title, composed the same way, with `subtitle` and the bar. `level` (2, the default, or 1 when it is the page's first title, so the page has one `h1`), `id` (on the title, for an anchor) |
+| `PageHeader` | A page's centred `h1` from `prefix`, `accent` (in `text-brand-gradient`) and `suffix`, an optional `subtitle` (a fact from the data only, never a tagline, KHP §6.7), and a short gradient bar. `size` (`lg` or `md`); `glow` adds a `soft-glow` halo behind it |
+| `SectionHeader` | A section's centred title, composed the same way, with an optional `subtitle` (a fact from the data only, KHP §6.7) and the bar. `level` (2, the default, or 1 when it is the page's first title, so the page has one `h1`), `id` (on the title, for an anchor) |
 
 ### Media (`components/media/`)
 
@@ -61,9 +61,9 @@ Props are typed. Most extend Astro's `HTMLAttributes<...>`, so plain attributes 
 | Component | Use for, and its props |
 | --------- | ---------------------- |
 | `Card` | The content surface. `variant` (`default`: `bg-card-gradient`, `shadow-elegant`; `subtle`: flat; `floating`: `shadow-floating`, forms and sidebars; `brand`: `bg-brand-gradient`, white text), `hoverable` (a `group` with `motion-surface`; on hover a `neutral-0` background, a `brand-300` border and `shadow-floating`), `padding` (`none`, `sm`, `md`, `lg`), `as`, `href` (renders a link), `target`, `rel`, `id` (an anchor other pages link to) |
-| `Chip` | Every small label: tags, linked tags, technologies with logos, focus areas, versions, change categories. `variant` (`brand`, `neutral`, `tag`, `outline`, `link`, `success`, `warning`, `error`, `onBrand` over a brand surface, `overlay` over a photo), `size` (`xs`, `sm`, `md`, `tag`, `link-sm`, `link-md`, `logo-sm`, `logo-md`), `href` (a link, with a hover for `link` and `outline`), `dot` (the lime square), `logo` (a technology's logo), `logoDark` (its dark-theme variant) |
+| `Chip` | Every small label: tags, linked tags, tech with logos, versions, change categories. `variant` (`brand`, `neutral`, `tag`, `outline`, `link`, `success`, `warning`, `error`), `size` (`xs`, `sm`, `md`, `tag`, `link-sm`, `link-md`, `logo-sm`, `logo-md`), `href` (a link, with a hover for `link` and `outline`), `dot` (the lime square), `logo` (a technology's logo), `logoDark` (its dark-theme variant) |
 | `AccordionItem` | A card whose summary row opens to show more: a native `<details>`, so it works by keyboard and without script. The `summary` slot is the row; the default slot is what it reveals. `open`, `id` (a link to `#id` opens it). No coloured side edge (KHP §5.9). The roles on `/bio` |
-| `StatusPill` | A status or "Featured" pill, optionally with an icon. `variant` (`brand`: `brand-700`, white text; `neutral`, `success`, `warning`, `error`), `Icon`, `iconWeight`, `size` (`md`, or `lg` for a featured card's corner) |
+| `StatusPill` | A state in words (Completed, In Progress). `variant` (`brand`: `brand-700`, white text; `neutral`, `success`, `warning`, `error`). One size |
 | `IconBadge` | A square holding one Phosphor icon. `Icon`, `variant` (`brand`, `dark`, `warning`, `success`, `subtle`), `size` (`sm` to `xl`), `weight` |
 | `Panel`, `PanelSection` | A bordered box with a header strip, in parts: the project's Overview card. `Panel`: `title`, `Icon`. `PanelSection`: `heading`, `Icon`, `iconTone` (`brand`, `muted`), `divided` (a rule under it), `side` (a rule on its left from `md`) |
 

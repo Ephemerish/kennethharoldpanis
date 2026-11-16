@@ -7,10 +7,11 @@ The catalogue is [lib/khp-ui/AGENTS.md](../../lib/khp-ui/AGENTS.md). Use a compo
 - Every field has its name above it (§4.1).
 - Buttons come from `buttonVariants` (§4.2).
 - Links in articles are underlined (§4.3).
-- A card is one link; other links in it are raised above it (§4.4).
+- A card that is a link is one link with nothing clickable inside (§4.4).
 - Chips, status pills and small uppercase labels are part of the style (§4.5).
 - Fields share one style; dropdowns are Radix Select (§4.6).
 - Pages are composed from components, never raw HTML (§4.9).
+- Generic unless needed: one component per kind of thing, no variant the data doesn't call for (§4.10).
 
 ## 4.1 Labels above controls
 
@@ -35,26 +36,23 @@ Sizes `default` (`h-10`), `sm` (`h-9`), `lg` (`h-11`), `icon` (`h-10 w-10`). Eve
 
 Links in article text are `brand-700`, underlined with a `brand-400` decoration (`Prose`). Navigation links in bars and lists are not underlined and turn `brand-700` on hover. In an Astro template a plain link is `Link` from `@ui` (a button-styled one is `ButtonLink`, a chip `Chip` with `href`). `tone` sets the colours; `external` opens a new tab with `rel="noopener noreferrer"`.
 
-## 4.4 Cards and stretched links
+## 4.4 Cards
 
-`Card` from `@ui` is the surface: `bg-card-gradient` with `shadow-elegant`. With `hoverable` it takes a `neutral-0` background, a `brand-300` border and `shadow-floating` on hover, eased by `motion-surface`. `id` gives it an anchor other pages can link to. Entry cards follow the same look (`EntryCard`):
+`Card` from `@ui` is the surface: `bg-card-gradient` with `shadow-elegant`. With `hoverable` it takes a `neutral-0` background, a `brand-300` border and `shadow-floating` on hover (§5.8). `id` gives it an anchor other pages can link to. With `href` the whole card is one link.
 
-- A grid card's title holds its one link, with `stretched-link`, which covers the card. A project's "Code" link is raised above it (`relative z-raised`). Badges over the cover are `pointer-events-none`, so clicks reach the card.
-- A featured card is a dark photo overlay (a black gradient, white text, a lead pill and a project's status pill), and the whole card is one link with no other link inside. The lead pill says why it leads (§6.6).
-- A certification card is not one link. "Verify credential" is its `stretched-link`; its tech chips and tag links are real links raised above it (`relative z-raised`).
+- A project or a post is an `EntryCard`: the whole card is one link, with no other link inside it (§4.10).
 - A role or certification on a tag or tech page (`BioRecordCard`) is one link to its card on `/bio`.
-
-Raised parts use `z-raised`, which stays under the top bar (`z-nav`). Cards that are links lift on hover with `motion-lift` (§5.8).
+- A card with several actions is not a link: a certification card holds "Verify credential", its tech chips and its tag links as separate links.
 
 Never put a link inside another link: nested links are invalid HTML and browsers split them.
 
 ## 4.5 Chips, pills and labels
 
-- `Chip` for every short label: tags (`tag`, with the brand square), linked tags (`link`), technologies with their logos (`outline`), focus areas, versions and change categories in release notes, tags over a featured card's photo (`overlay`), and the current role's stack on the contact page's call-to-action card (`onBrand`).
-- `StatusPill` for a state or "Featured", with an icon. The `brand` pill is `brand-700` with white text. Project status reads "Completed", "In Progress" or "Planned" on `success`, `warning` and `neutral`; the word is always there, so colour is never the only signal.
+- `Chip` for every short label: tags (`tag`, with the brand square), linked tags (`link`), tech with its logo (`outline`), versions and change categories in release notes.
+- `StatusPill` for a state, in words, one size. The `brand` pill is `brand-700` with white text. Project status reads "Completed", "In Progress" or "Planned" on `success`, `warning` and `neutral`; the word is always there, so colour is never the only signal.
 - `IconBadge` for the square icon on certification and resume cards.
 - Tags on entry cards are plain chips with a small brand square. On articles and on the bio's role and certification cards they are `link` chips to their tag page (`TagLinks`).
-- Small uppercase labels with wide tracking ("Built with", "Tagged", "Focus areas", "Related tech", "From my bio", the search result type, "Apps" in the mobile menu, table headers) are part of the style.
+- Small uppercase labels with wide tracking ("Built with", "Tagged", "From my bio", the search result type, "Apps" in the mobile menu, table headers) are part of the style.
 
 ## 4.6 Fields and Select
 
@@ -80,10 +78,24 @@ A page, a feature and a layout are built from the components in [lib/khp-ui](../
 
 `pnpm check:composition` (`scripts/check-composition.mjs`) fails on a raw element in an `.astro` template under `src/app/pages`, `src/app/features` or `src/app/layout`. React islands are not scanned. *Why:* chips, fields and headings were written by hand on each page, so changing one look meant finding every copy. A component is the one copy.
 
+
+## 4.10 Generic unless needed
+
+One kind of thing has one component, and it looks the same everywhere it appears. Projects and posts are one kind of thing (an entry): one `EntryCard`, in one `EntryGrid`, on the home page, `/projects`, `/blogs`, and tag and tech pages.
+
+- **No variant without a reason in the data.** A variant exists only when the thing itself differs (a project has a status, a post a read time) and then it is a field of the same component (`CardData`), never a second layout. "Featured" and "newest" are an order, not a look: they come first.
+- **The component reads one shape.** `toCard` turns a project or a post into `CardData`; the card never branches on the kind. A new kind of entry adds a case to `toCard`, not a card.
+- **No wrappers that only rename.** A `ProjectsGrid` that is `EntryGrid` with projects, or a `FeaturedProjects` that is a `Stack` of cards, is deleted; the page uses the generic one.
+- **Before writing a component, look for the generic one** in `lib/khp-ui` and `src/app/features` (§1.4). If it is close, extend it.
+- **When one is replaced, the old one goes,** with every option only it used (§1.5).
+
+*Why:* on November 16, 2026 the owner found two card designs for the same thing (a dark full-width "featured" card and a light grid card) and separate wrappers per page, and asked for one generic card. The old `EntryCard` (two layouts in one file), `Cover`, `Tags`, `EntryCollectionGrid`, `FeaturedProjects`, `ProjectsGrid` and `BlogsGrid` were deleted and rebuilt as `toCard`, `EntryCard`, `Cover` and `EntryGrid`; options only they used went with them (`Heading` size `feature`, `StatusPill` size `lg` and icons, `Chip` variants `overlay` and `onBrand`, `Text` tones `inverse` and `inverse-muted`, `Link` `stretched` and the `stretched-link` utility, `Grid` `cards-wide`). Cards also lost their in-card "Code" link: one card, one link.
+
 ## Checklist
 
 - [ ] Labels above every field (§4.1); buttons from `buttonVariants` (§4.2).
-- [ ] No link inside a link; cards use a stretched title link or are one link (§4.4).
+- [ ] No link inside a link; a card that is a link holds nothing clickable (§4.4).
+- [ ] One component per kind of thing; no new variant or wrapper the data doesn't need; replaced code deleted (§4.10).
 - [ ] Status is shown in words, not colour alone (§4.5).
 - [ ] New icons from Phosphor, hidden beside words (§4.8).
 - [ ] Templates use lib components only; a new pattern became a component first; `pnpm check:composition` passes (§4.9).

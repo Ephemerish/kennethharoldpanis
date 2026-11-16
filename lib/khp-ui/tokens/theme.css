@@ -264,12 +264,6 @@
 @utility z-tooltip { z-index: var(--z-tooltip); }
 @utility z-toast { z-index: var(--z-toast); }
 
-/* A card's main link covers the whole card, so other links inside it stay
-   valid HTML instead of nesting one anchor in another (KHP §4.4). */
-@utility stretched-link {
-  &::after { content: ""; position: absolute; inset: 0; z-index: 1; }
-}
-
 /* Brand utilities: the site's look */
 @layer utilities {
   /* Carries white text on buttons and the current timeline strip, so it runs

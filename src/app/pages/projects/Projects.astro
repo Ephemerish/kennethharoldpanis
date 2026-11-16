@@ -1,15 +1,12 @@
 ---
-/** /projects: featured projects first, then the rest. */
+/** /projects: every project, featured ones first, in the same cards as everywhere. */
 import Layout from "@app/layout/MainLayout.astro";
 import { PageSection, PageHeader } from "@ui";
-import FeaturedProjects from "./FeaturedProjects.astro";
-import ProjectsGrid from "./ProjectsGrid.astro";
+import EntryGrid from "@app/features/entries/EntryGrid.astro";
 import { getCollection } from "astro:content";
-import { sortProjects } from "@app/features/entries/model";
+import { asProjects, sortProjects } from "@app/features/entries/model";
 
-const allProjects = sortProjects(await getCollection("projects"));
-const featuredProjects = allProjects.filter((project) => project.data.featured);
-const regularProjects = allProjects.filter((project) => !project.data.featured);
+const projects = asProjects(sortProjects(await getCollection("projects")));
 ---
 
 <Layout
@@ -22,11 +19,9 @@ const regularProjects = allProjects.filter((project) => !project.data.featured);
     <PageHeader
       prefix="My"
       accent="Projects"
-      subtitle="A collection of things I've built, experiments I've tried, and problems I've solved."
       glow
     />
 
-    <FeaturedProjects projects={featuredProjects} />
-    <ProjectsGrid projects={regularProjects} />
+    <EntryGrid entries={projects} />
   </PageSection>
 </Layout>

@@ -13,6 +13,191 @@ export const APP_RELEASES: AppReleases[] = [
     "projectSlug": "pundo",
     "releases": [
       {
+        "version": "0.15.0",
+        "date": "2026-11-09",
+        "title": "Instant Pages, A Notification Bell, And A New Dashboard",
+        "changes": [
+          {
+            "category": "Added",
+            "items": [
+              "Every page now opens the moment you click, showing its layout right away while its numbers load",
+              "A new bell in the top bar shows what needs you, like cards due soon and recurring transactions to review, plus your recent messages. It replaces the Coming up section on the dashboard",
+              "The dashboard is rebuilt around two questions: where you stand now, and what happened this period",
+              "One bar shows where the period went: spent, set aside, and left",
+              "Running total can now show stacked bars by category",
+              "Income and Expenses now show the change from the period before, and you can open each change to see how it was worked out",
+              "Expenses has one chart with three views. Over time shows bars or lines, Running total compares with the period before, and Share shows each category as a tile",
+              "Account balances replaces Cash Flow and follows each account across the period",
+              "Dialogs now look like the paperwork they stand for. Transactions are receipts, accounts are bank application forms, categories and budgets are written on ruled paper, and confirmations read as notices",
+              "Every saved transaction now shows a barcode of its reference number. Click it to copy the reference, or paste or scan the reference into Transactions search to find that transaction",
+              "An animated Pundo logo now plays while the app loads, starting from the logo itself"
+            ]
+          },
+          {
+            "category": "Changed",
+            "items": [
+              "One very large day no longer flattens the month. Its bar runs off the top with the real total printed above it",
+              "Stacked bars now build from the bottom up, one part at a time, with the smallest part at the bottom and the largest on top",
+              "Switches are larger and match the other controls",
+              "The breakdown behind every figure now reads like a receipt, and card statements, partner bills, and recent transactions share the same look",
+              "Empty pages now have friendly illustrations and clear next steps",
+              "Chart tooltips name the full date, list the largest parts first, and end with the total",
+              "Accounts and Categories use the same tiles instead of rings",
+              "Longer lists like recurring transactions, reminders, and settled bills now have pages",
+              "Dates and amounts read the same way across the app, and more messages say what to do next",
+              "Cards, tables, and summary bars now share one paper look across the app, so every screen feels like the same set of records",
+              "On ruled paper, fields sit exactly on the lines, and the lines move with the form as you scroll"
+            ]
+          }
+        ]
+      },
+      {
+        "version": "0.14.18",
+        "date": "2026-11-09",
+        "title": "Clearer Credit Cards And Budget Subcategory Fixes",
+        "changes": [
+          {
+            "category": "Changed",
+            "items": [
+              "Card payments now say Record payment, because Pundo keeps a record of a payment you already made and never sends money to your bank",
+              "The payment form has Use statement balance and Use full balance buttons that fill in the amount for you",
+              "Card purchases, payments, and refunds each explain what they do while you enter them",
+              "Credit card help uses the current labels and makes clear that statement balances and paid badges are estimates to compare with your bank statement",
+              "Long dropdowns now have a search box, so you can find a category or account by typing",
+              "Row menus work fully from the keyboard, close after you pick an action, and stay on screen near the edge of a phone",
+              "Small labels are easier to read, with sentence case instead of capitals and nothing smaller than 12px",
+              "Error messages now say what could not be done and what to try next",
+              "Restore and record payment confirmations no longer use the red delete style"
+            ]
+          },
+          {
+            "category": "Fixed",
+            "items": [
+              "A card without billing dates no longer shows its whole balance as billed or guesses a due date. It asks you to set billing dates instead",
+              "An overdue statement now says how many days overdue it is instead of showing a negative number of days",
+              "A fully paid statement with new purchases no longer says that no statement has closed",
+              "Paying more than you owe now shows the extra as Card credit instead of losing it",
+              "Accounts and the dashboard now show the same card figures, including payments you recorded outside Pundo",
+              "The dashboard statement breakdown no longer includes purchases that have not been billed yet",
+              "A new budget now shares each bucket across subcategories only, so no money is lost to parent categories",
+              "A parent category stays a grouping when all of its subcategories move to another bucket",
+              "A parent category whose subcategories have no limits now shows zero instead of an old limit",
+              "A parent category whose withdrawals and reversals add up to a negative total now shows that total instead of zero"
+            ]
+          }
+        ]
+      },
+      {
+        "version": "0.14.17",
+        "date": "2026-10-14",
+        "title": "Loaned Out And Loan Payable",
+        "changes": [
+          {
+            "category": "Changed",
+            "items": [
+              "Loaned out and Loan payable are separate transaction types. Loaned out has Lend money and Receive repayment. Loan payable has Borrow money and Pay loan. Existing records keep their correct type",
+              "The type picker shows each type’s icon and colour, and marks the selected type in the menu",
+              "Action tabs use colours that show whether money is coming in or going out"
+            ]
+          },
+          {
+            "category": "Fixed",
+            "items": [
+              "The Basic entry in the type picker now has its own icon",
+              "Type tabs wrap on narrow screens so their labels stay readable",
+              "Switching transaction type no longer shows a missing amount error before you enter an amount"
+            ]
+          }
+        ]
+      },
+      {
+        "version": "0.14.16",
+        "date": "2026-10-13",
+        "title": "Borrowed Money And One Place To Pick A Type",
+        "changes": [
+          {
+            "category": "Added",
+            "items": [
+              "You can now record money you borrowed with Loan payable. Borrow money adds the cash to your account and the debt to the loan, and Pay loan reduces both, while any interest you pay counts as an expense",
+              "Loans you gave and loans you owe now each have two clear actions: Lend money and Receive repayment for money you lent, and Borrow money and Pay loan for money you owe. These work in recurring rules, imports, exports, and backups too"
+            ]
+          },
+          {
+            "category": "Changed",
+            "items": [
+              "The transaction and recurring dialogs show their name at the top, with the type picker on the same line, so the header stays short",
+              "Income, Expense, and Move money are grouped under Basic in the type picker, and you choose between them with tabs inside the form, so the type list stays short",
+              "The type picker always shows the type you are on, and its list fits every type without cutting any off"
+            ]
+          },
+          {
+            "category": "Fixed",
+            "items": [
+              "A loan form no longer shows Expense as its type",
+              "Labels that contain a highlighted glossary term now update when their text changes, instead of staying stuck on the first wording shown"
+            ]
+          }
+        ]
+      },
+      {
+        "version": "0.14.15",
+        "date": "2026-10-12",
+        "title": "Cash Predictions That Match Your Wallet",
+        "changes": [
+          {
+            "category": "Changed",
+            "items": [
+              "While the bills and coins in your cash account are still loading, the payment controls stay disabled and a message says the counts are being checked, so nothing is guessed in the meantime"
+            ]
+          },
+          {
+            "category": "Fixed",
+            "items": [
+              "Predicting the bills for a payment no longer offers more copies of a bill than your cash account holds, and it stays quiet when the account does not have enough cash to cover the amount",
+              "Reopening the transaction editor refreshes the bills and coins your cash account holds, so a bill you just recorded shows up right away without reloading the page",
+              "Money coming into a tracked cash account, like income or a recovery, records the bills you received under In and the change you gave back under Out",
+              "An income with no change no longer shows a zero change line"
+            ]
+          }
+        ]
+      },
+      {
+        "version": "0.14.14",
+        "date": "2026-10-09",
+        "title": "Future Transactions And Remembered Choices",
+        "changes": [
+          {
+            "category": "Changed",
+            "items": [
+              "Transaction, recurring, account, category, reminder, card payment, and partner forms remember more of your last successful choices. Saved accounts and categories are checked against the options still available when a form opens",
+              "Form history is kept in your browser. If browser storage is unavailable, saving a form still works"
+            ]
+          },
+          {
+            "category": "Fixed",
+            "items": [
+              "Future dated transactions now appear in the selected period and in All time. A distinct pattern and Future date label make them easy to spot, while today’s report totals still stop at today",
+              "A future card purchase is no longer labeled Unpaid before its date"
+            ]
+          }
+        ]
+      },
+      {
+        "version": "0.14.13",
+        "date": "2026-10-08",
+        "title": "Income Dates And Recurring Interest",
+        "changes": [
+          {
+            "category": "Fixed",
+            "items": [
+              "You can move an income transaction, such as a salary, to another date without purchase posting or installment settings blocking the save",
+              "When you generate overdue recurring interest, Pundo calculates each amount from the account balance on its own date. Later deposits and purchases no longer change interest for earlier dates",
+              "Income paid into savings shows its saved account when edited. Recurring income rules remain Income when edited, and switching a new rule to Income clears the preselected account"
+            ]
+          }
+        ]
+      },
+      {
         "version": "0.14.12",
         "date": "2026-10-02",
         "title": "Morning Reports And Less Background Work",
@@ -1218,6 +1403,132 @@ export const APP_RELEASES: AppReleases[] = [
     "name": "Pidada",
     "projectSlug": "pidada",
     "releases": [
+      {
+        "version": "v0.7.8",
+        "date": "2026-11-02",
+        "changes": [
+          {
+            "category": "Added",
+            "items": [
+              "Settings → Sounds now has separate Test session end and Test Check-in controls. Stop test ends playback immediately; every test stops within 30 seconds and leaves your sessions unchanged."
+            ]
+          },
+          {
+            "category": "Fixed",
+            "items": [
+              "Alarm playback uses one sound channel. Repeated alarm requests and interrupted playback no longer start competing playback attempts or extend a timed alarm's deadline.",
+              "Open tabs coordinate alarm sound where the browser supports it, so one tab rings while the others keep the question visible. A tab blocked from playing sound lets another tab ring.",
+              "Alarm tests show playback errors, stop when you leave Settings or hide the page, and give way to a real session alarm. Changing the selected sound ends the current test."
+            ]
+          }
+        ]
+      },
+      {
+        "version": "v0.7.7",
+        "date": "2026-10-31",
+        "changes": [
+          {
+            "category": "Added",
+            "items": [
+              "The web Skins editor now offers 20 GIF backgrounds, 20 timer borders and 20 particle choices in flat galleries. Additions include moonlit and sunlit cities, soft motion designs, Porcelain and Marquetry frames, dandelions, paper cranes, lanterns and ripples.",
+              "A skin is your complete design: timer face, font, background, border and particles. Choose from ten timer faces and ten font families. Fonts apply across the timer card, including session tabs, tasks and controls. Choices save with your account and follow partner sharing."
+            ]
+          },
+          {
+            "category": "Changed",
+            "items": [
+              "Apply returns directly to your space with Settings closed. Back preserves your draft and reopens Settings. Timer face and Font sit beside Background, Timer border and Particles in the Skins editor.",
+              "The ten timer faces are Standard, Nixie, Vacuum fluorescent, Liquid crystal, Flip-dot, Progress arc, LED matrix, Word clock, Reels and Ticker tape. Picking one plays an eight-second sample; Replay animation restarts it without starting a session.",
+              "Both timer-face and font pickers include Standard. Fonts now range from rounded Fredoka and handwritten Patrick Hand to pixel VT323, script Lobster, Bungee arcade lettering, Orbitron and Special Elite typewriter ink. Previously saved fonts remain available for existing skins.",
+              "Every face now shares one readout size standard. Real numeral height is measured across fonts, fixed positions keep digits steady, and long durations retain every minute and second. Word clock tells time entirely in words, with larger written values, compact inline uppercase units and tighter spacing. Older saved faces map to their replacements without resetting accounts.",
+              "Nixie glass, housing and mesh stay fixed while only the selected cathode lights. The tube no longer fades, blinks or shifts. VFD uses separate luminous cells behind a glass grid with brief afterglow; LCD remains a flat reflective panel with dark, unlit segments. Reels turn cylindrical wheels, Ticker tape slides whole time units sideways, and Progress arc adds an elapsed-time sweep above steady numerals.",
+              "Readout sizing uses browser font metrics and ResizeObserver when the slot, font or digit count changes; Word clock also fits long durations at minute boundaries. Ordinary ticks do not remeasure the clock. Artwork is self-hosted, each face has its own component and source credits, and all share the existing timer and validated duration editor. Samples stop when hidden, unfocused or covered; reduced-motion, Save-Data and still-display settings still apply.",
+              "Font families are calibrated to the same apparent capital height across the whole timer card. Gallery specimens use common label and clock sizes. Backgrounds share a protective veil; borders share edge budgets; built-in and uploaded particles share size, opacity and performance limits without changing the uploaded files.",
+              "Fire edges now meet with clean angled corner joins. Existing frames have connected rails, balanced corner artwork and repeatable edge details; Living ivy has deliberate corner leaves.",
+              "Decorations rest when you switch tabs or leave the browser window. Pidada uses page visibility and window focus signals to detect when decorations can rest. Optional animation stops; the timer clock, session updates and alarm logic keep running while the app remains open.",
+              "Artwork also pauses outside the visible area or behind a covering dialog. Built-in animations switch to still posters; uploaded GIFs without posters temporarily release their image decoder. Gallery previews stay still.",
+              "Burning now forms a connected fire border using a small animated WebP at 25 frames per second. Living ivy grows around one continuous SVG path over a 20-second cycle. The browser runs its animation through WAAPI, with the vine reveal limited to 12 updates per second and no custom JavaScript frame loop.",
+              "Reduced-motion and Save-Data choices keep artwork still. Particles retain their frame-rate and count limits, so optional effects cannot grow without bounds."
+            ]
+          },
+          {
+            "category": "Fixed",
+            "items": [
+              "An unanswered Check-in now keeps its alarm active through the existing timer tick. Interrupted or ended playback resumes on the same audio element, and a lost local alarm is restored while the question remains open. Healthy playback continues without restarting each second.",
+              "Production builds no longer try to compile archived artwork source pages or the mobile particle document as server assets. The artwork and its source records remain intact.",
+              "Friend, partner and sent-request reads now have rules matching their queries. Access remains limited to your own keys, requests and relationships.",
+              "A pending Check-in owns its alarm until you answer. Cancelling an old countdown or cleaning up a previous session cannot silence it, and Escape no longer hushes the question. Completion alarms still follow your chosen ring duration.",
+              "A still-pending alarm can recover if the browser interrupts audio playback. An answered Check-in or expired completion alarm stays silent. Browsers may still require a click before allowing sound, and a closed tab cannot ring."
+            ]
+          }
+        ]
+      },
+      {
+        "version": "v0.7.6",
+        "date": "2026-10-30",
+        "changes": [
+          {
+            "category": "Added",
+            "items": [
+              "Change your space in Settings → Appearance. Choose Background, Timer border or Particles, preview your design, then Apply changes.",
+              "The library includes ten animated GIF backgrounds, ten timer borders and ten particle effects. Burning and Living ivy add animated borders.",
+              "Upload your own images and tsParticles JSON effects. Particle files keep their original JSON for export."
+            ]
+          },
+          {
+            "category": "Changed",
+            "items": [
+              "New spaces start with no background, timer border or particles. Reset to default returns every appearance choice to None. Appearance display settings follow your account like the other Settings controls.",
+              "Settings has a visible header label and opens to Appearance. Background, Timer border and Particles use tabs beside the editor title, with a compact layout on phones.",
+              "Signed-in designs and personal uploads save to your account. Share design with partner controls whether your partner sees your saved design; guest designs stay on the device."
+            ]
+          },
+          {
+            "category": "Fixed",
+            "items": [
+              "Paired timers use matching sizes and each displays its owner's shared design. Larger borders stay aligned with the timer when the preview resizes.",
+              "Failed saves keep your draft. Changes from another device offer a choice, and files in a saved design cannot be removed underneath it."
+            ]
+          }
+        ]
+      },
+      {
+        "version": "v0.7.5",
+        "date": "2026-10-24",
+        "changes": [
+          {
+            "category": "Added",
+            "items": [
+              "Session changes wait safely on this device when you lose connection. If another device makes an incompatible change, keep a local copy before choosing the synced version."
+            ]
+          },
+          {
+            "category": "Changed",
+            "items": [
+              "Routine connection interruptions stay quiet. Save failures and conflicting session changes offer recovery without covering an alarm.",
+              "Chat and friend controls distinguish changes waiting to sync from confirmed changes, so a slow connection does not hold unrelated controls.",
+              "Unsent chat messages keep a local copy across navigation and account changes. Retrying uses the same message, and saved text stays accessible if the partnership ends."
+            ]
+          },
+          {
+            "category": "Fixed",
+            "items": [
+              "Session syncing keeps the workspace, Settings, and drafts open instead of restarting the app's loading screen.",
+              "Settings load failures offer a separate retry. Slow first loads explain when device settings are shown, and loading recovery preserves pending edits.",
+              "Account changes clear old notices and reset loading progress. Browser chat alerts stay silent and close when their account or conversation changes.",
+              "Task reordering cancels safely when the list changes or a gesture is interrupted. Replacing an active goal saves both account changes together.",
+              "A newer friend-access decision replaces obsolete retry controls from an earlier action. Older local records with missing optional fields can be imported.",
+              "The app opens while account and timer ownership are still loading, instead of returning a server error before the first screen.",
+              "Alarms and Check-ins now take focus above Settings. Their controls remain reachable, one Escape handles one surface, and Settings keeps its place underneath.",
+              "Menus, date pickers, and notification actions stay interactive inside dialogs. Timer shortcuts yield while you use controls or answer a question.",
+              "Expired completion alarms stay quiet after sleep or reload. Muted or cancelled interface sounds cannot replay on a later click, and sound previews cannot replace real alarms.",
+              "Offline session changes reconcile against the latest record. Settled sessions keep their history, retries do not double-count task time, and a stale completion cannot repeatedly enqueue itself.",
+              "Guest tabs preserve independent work instead of replacing each other's lists. Guest history is no longer truncated after 500 sessions, and interrupted imports preserve local work.",
+              "History stays current beyond the timer's recent-session window. Chat opens its newest messages and keeps read receipts from moving backward."
+            ]
+          }
+        ]
+      },
       {
         "version": "v0.7.4",
         "date": "2026-09-27",

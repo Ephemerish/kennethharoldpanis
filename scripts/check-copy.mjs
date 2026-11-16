@@ -1,7 +1,7 @@
 /**
  * Holds the interface's words to KHP §6.7 (ported from Ebb §8 and §1.16.3 and
  * Pundo §13): a line says what something is, never how to use the screen; a
- * subtitle is one sentence of at most 15 words; a label is 1 to 3 words; a
+ * subtitle is never a written tagline, only a fact from the data; a label is 1 to 3 words; a
  * title has no full stop; no filler, no em dash, no emoji; and the glossary's
  * word for each thing (docs/GLOSSARY.md, its "Not" column). Reads the
  * templates, the UI library and src/data, but not the owner's articles
@@ -16,7 +16,6 @@ const SCAN = ["src/app", "src/pages", "src/data", "lib/khp-ui/components"];
 const EXT = /\.(astro|tsx?|mjs)$/;
 const SKIP = [/^src\/data\/content\//, /^src\/data\/apps\/patch-notes\//];
 
-const SUBTITLE_WORDS = 15;
 const LABEL_WORDS = 3;
 
 // Telling the reader how to work the page: the page should make it obvious.
@@ -80,10 +79,10 @@ for (const top of SCAN) {
         for (const text of visible(line))
           for (const { re, not, say } of BANNED)
             if (re.test(text)) hits.push(`${at}  glossary  "${not}": say "${say}" (docs/GLOSSARY.md)`);
-      for (const m of line.matchAll(/\bsubtitle="([^"]+)"/g)) {
-        const text = m[1];
-        if (words(text) > SUBTITLE_WORDS) hits.push(`${at}  subtitle over ${SUBTITLE_WORDS} words (${words(text)})`);
-        if (/[.!?]\s+\S/.test(text)) hits.push(`${at}  subtitle is more than one sentence`);
+      // No tagline under a title (KHP §6.7): a subtitle is a fact computed from
+      // the data (a count, a version), never words written into a template.
+      for (const m of line.matchAll(/\bsubtitle="([^"]*)"/g)) {
+        hits.push(`${at}  tagline subtitle "${m[1]}": a title stands alone; a subtitle only states a fact from the data`);
       }
       for (const m of line.matchAll(/<Label\b[^>]*>([^<{]+)<\/Label>/g)) {
         if (words(m[1]) > LABEL_WORDS) hits.push(`${at}  label over ${LABEL_WORDS} words: "${m[1].trim()}"`);

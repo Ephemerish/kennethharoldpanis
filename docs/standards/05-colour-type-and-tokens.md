@@ -85,7 +85,7 @@ Rules for the motion that stays:
 | -------- | ---------------- | ----- |
 | A coloured or thick stripe down one side of a card or callout, the most-cited tell | None. An item that matters now says so in its content ("2024 – Current", open by default). A quote's thin rule is the one exception, a print convention | `pnpm check:tokens` ("side stripe") |
 | Pills everywhere; a badge that repeats the text beside it | A chip is a tag, a technology, a status or a fact (a focus area, a version); never decoration, never a repeat ("Current" beside "2024 – Current") | Review |
-| A subtitle under every title; a line telling the reader how to use the page | §6.7: a title can stand alone; a line says what, never how | `pnpm check:copy` |
+| A tagline under every title; a line telling the reader how to use the page | §6.7: no taglines, a title stands alone; only a fact from the data goes under it; a line says what, never how | `pnpm check:copy` |
 | Verbose, redundant text; filler words | The budgets and words of §6.7 | `pnpm check:copy` |
 | Sparkle, magic-wand and rocket icons; emoji | Phosphor icons that say what a thing is (a checklist for features, a bolt for challenges); no emoji | `pnpm check:copy` (emoji), review |
 | Purple, indigo or blue-to-purple gradients; neon glows | Lime and neutral only (§5.1); the one glow is the page title's `soft-glow` (§5.6) | `pnpm check:tokens` |
@@ -97,7 +97,7 @@ Rules for the motion that stays:
 | A layout no one chose: centred hero, three icon-topped feature cards, a stat banner | A section exists because it shows his work (§10) | Review |
 | Sub-groups and labels that don't hold for every item ("Data" over three AWS services on a card where everything is cloud) | Tech and tags only; a flat row of chips; the least common denominator (§1.7) | Review |
 
-**His look is not slop.** Some of it is on the slop lists: the gradient accent word, gradient cards with a soft shadow, small uppercase labels, centred headers with a short bar. They stay. They are his choices, used in fixed places (one accent word per heading, labels only to name a group), and the site that dropped them was rejected as "ugly and generic". The rule is not "avoid anything a model might make"; it is "nothing on screen is there by default".
+**His look is not slop.** Some of it is on the slop lists: the gradient accent word, gradient cards with a soft shadow, small uppercase labels, centred headers with a short bar (without a tagline, §6.7). They stay. They are his choices, used in fixed places (one accent word per heading, labels only to name a group), and the site that dropped them was rejected as "ugly and generic". The rule is not "avoid anything a model might make"; it is "nothing on screen is there by default".
 
 A new element on this list needs the owner's say (§6.6).
 
