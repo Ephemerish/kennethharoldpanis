@@ -1,7 +1,7 @@
 ---
 import Layout from "@app/layout/MainLayout.astro";
 import { Grid, PageSection, PageHeader } from "@ui";
-import { Toaster } from "@ui/components/overlay/Toaster";
+import { Toaster } from "@ui";
 import ContactForm from "./ContactForm.astro";
 import ContactSidebar from "./ContactSidebar.astro";
 ---
@@ -24,12 +24,5 @@ import ContactSidebar from "./ContactSidebar.astro";
     </Grid>
   </PageSection>
 
-  <Toaster
-    client:idle
-    position="top-right"
-    richColors
-    closeButton
-    expand={false}
-    visibleToasts={3}
-  />
+  <Toaster client:idle position="top-right" richColors closeButton expand={false} visibleToasts={3} />
 </Layout>

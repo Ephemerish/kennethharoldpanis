@@ -1,21 +1,13 @@
-import {
-  RocketLaunchIcon,
-  BookOpenIcon,
-  TagIcon,
-  CpuIcon,
-  BriefcaseIcon,
-  CertificateIcon,
-} from "@phosphor-icons/react";
-import type { Icon } from "@phosphor-icons/react";
 import type { ItemType, SearchItem, PopularResponse } from "@app/api/stores";
 
-export const TYPE_META: Record<ItemType, { label: string; Icon: Icon }> = {
-  project: { label: "Project", Icon: RocketLaunchIcon },
-  blog: { label: "Blog", Icon: BookOpenIcon },
-  tag: { label: "Tag", Icon: TagIcon },
-  tech: { label: "Tech", Icon: CpuIcon },
-  experience: { label: "Experience", Icon: BriefcaseIcon },
-  certification: { label: "Certification", Icon: CertificateIcon },
+/** What each result is, in the glossary's word. Said in words, never an icon (KHP §4.8). */
+export const TYPE_META: Record<ItemType, { label: string }> = {
+  project: { label: "Project" },
+  blog: { label: "Post" },
+  tag: { label: "Tag" },
+  tech: { label: "Tech" },
+  experience: { label: "Experience" },
+  certification: { label: "Certification" },
 };
 
 // Analytics-driven popularity from /api/popular, flattened across every

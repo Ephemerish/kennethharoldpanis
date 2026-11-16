@@ -75,8 +75,8 @@ for (const tech of technologies) {
       problems.push(`${tech.name} logo is ${(share * 100).toFixed(0)}% visible on the ${theme} tile (${file}). Give it ${theme === "dark" ? "an imagePathDark" : "a darker main logo"}.`);
   }
 }
-for (const cert of certifications) if (cert.badge) await exists(`/images/${cert.badge}`, `${cert.title} badge`);
-for (const role of timeline) if (role.logo) await exists(role.logo, `${role.org} logo`);
+for (const cert of certifications) await exists(cert.image, `${cert.title} badge`);
+for (const role of timeline) if (role.image) await exists(role.image, `${role.org} logo`);
 
 if (problems.length) {
   console.error(`\nAsset check failed (${problems.length}):\n  - ${problems.join("\n  - ")}\n`);

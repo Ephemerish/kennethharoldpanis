@@ -63,8 +63,6 @@ export interface CardData {
   status?: (typeof PROJECT_STATUS)[keyof typeof PROJECT_STATUS];
   /** A post's read time ("6 min read"). */
   readTime?: string;
-  /** The words of the card's last line. */
-  action: string;
 }
 
 export function toCard(item: AnyEntry): CardData {
@@ -79,7 +77,6 @@ export function toCard(item: AnyEntry): CardData {
       summary: data.description,
       tags: data.tags,
       readTime: readTime(body ?? ""),
-      action: "Read post",
     };
   }
   const { data, id } = item.entry;
@@ -91,7 +88,6 @@ export function toCard(item: AnyEntry): CardData {
     summary: data.description,
     tags: data.tags,
     status: PROJECT_STATUS[data.status],
-    action: "View project",
   };
 }
 

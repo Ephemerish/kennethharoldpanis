@@ -1,46 +1,18 @@
 ---
-import { Box, Card, Heading, IconBadge, Row, Stack, Text } from "@ui";
+/** How to reach him, as plain facts: the address, where he is, when he answers. */
+import { Card, Fact, Facts, Heading, Text } from "@ui";
 import EmailLink from "@app/shared/EmailLink.astro";
 import { site } from "@data/site";
-import { EnvelopeIcon, MapPinIcon, ClockIcon } from "@phosphor-icons/react";
-
-const contactInfo = [
-  {
-    Icon: EnvelopeIcon,
-    title: "Email",
-    email: site.email,
-  },
-  {
-    Icon: MapPinIcon,
-    title: "Location",
-    body: site.location,
-  },
-  {
-    Icon: ClockIcon,
-    title: "Response Time",
-    body: "Usually within 24 hours",
-    subtext: "Monday to Friday, 9 AM - 6 PM PHT",
-  },
-];
 ---
 
 <Card variant="floating">
-  <Heading level={2} size="card" class="mb-4 sm:mb-6">Get in touch</Heading>
-
-  <Stack gap="lg">
-    {contactInfo.map((info) => (
-      <Row align="start" gap="md">
-        <IconBadge Icon={info.Icon} variant="subtle" size="sm" weight="regular" class="sm:w-12 sm:h-12" />
-        <Box>
-          <Heading level={3} size="small" weight="semibold" class="text-sm sm:text-base">{info.title}</Heading>
-          {info.email ? (
-            <EmailLink address={info.email} class="text-brand-700 hover:text-brand-800 text-sm sm:text-base break-all" showAddress />
-          ) : (
-            <Text size="body" tone="muted">{info.body}</Text>
-          )}
-          {info.subtext && <Text size="inherit" tone="subtle" class="text-xs sm:text-sm">{info.subtext}</Text>}
-        </Box>
-      </Row>
-    ))}
-  </Stack>
+  <Heading level={2} size="card" class="mb-6">Get in touch</Heading>
+  <Facts layout="stack" gap="lg">
+    <Fact label="Email"><EmailLink address={site.email} class="text-base text-brand-700 hover:text-brand-800 break-all" showAddress /></Fact>
+    <Fact label="Location"><Text as="span" size="base">{site.location}</Text></Fact>
+    <Fact label="Response time">
+      <Text as="span" size="base">Usually within 24 hours</Text>
+      <Text size="sm" tone="subtle">Monday to Friday, 9 AM - 6 PM PHT</Text>
+    </Fact>
+  </Facts>
 </Card>

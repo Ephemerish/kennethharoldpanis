@@ -23,8 +23,6 @@ export { default as Label } from "./components/type/Label.astro";
 export { default as Link } from "./components/type/Link.astro";
 export { default as List } from "./components/type/List.astro";
 export { default as ListItem } from "./components/type/ListItem.astro";
-export { default as Divider } from "./components/type/Divider.astro";
-export { default as IconText } from "./components/type/IconText.astro";
 export { default as VisuallyHidden } from "./components/type/VisuallyHidden.astro";
 export { default as SkipLink } from "./components/type/SkipLink.astro";
 export { default as Facts } from "./components/type/Facts.astro";
@@ -35,11 +33,11 @@ export { default as SectionHeader } from "./components/type/SectionHeader.astro"
 
 // Media.
 export { default as Image } from "./components/media/Image.astro";
+export { default as Logo } from "./components/media/Logo.astro";
 
 // Surfaces: things with a background.
 export { default as Card } from "./components/surface/Card.astro";
 export { default as Chip } from "./components/surface/Chip.astro";
-export { default as IconBadge } from "./components/surface/IconBadge.astro";
 export { default as StatusPill } from "./components/surface/StatusPill.astro";
 export { default as Panel } from "./components/surface/Panel.astro";
 export { default as PanelSection } from "./components/surface/PanelSection.astro";

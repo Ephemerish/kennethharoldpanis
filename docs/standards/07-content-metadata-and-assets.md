@@ -48,6 +48,7 @@ Removed: the owner's visual style keeps the original `favicon.ico` and his photo
 The home page is the first page most readers load, so it has a budget. `scripts/check-home-performance.mjs` (`pnpm check:output`) checks it on the built HTML:
 
 - No island hydrates with `client:load`. The top bar waits for idle.
+- On every page, an island is server-rendered, so it is on screen with the page and only becomes interactive later. `client:only` (nothing on screen until its script runs) is for something that cannot render on the server, and says why in a comment.
 - The pretext post's card paints its still strips (`data-pretext-still`) at once; the live `PretextCover` hydrates over them with `client:visible`.
 - No CSS blur classes (`blur-2xl`, `backdrop-blur`); a blur repaints on every scroll frame.
 - The marquee's second copy is `inert`, so it is not tabbed to or read out twice.
@@ -74,7 +75,7 @@ The page-load numbers are Google's "good" Core Web Vitals. `pnpm test:perf` (`te
 
 - **Compressed and cached.** `pnpm build` ends with `scripts/compress-assets.mjs`, which writes a Brotli (`.br`) and a gzip (`.gz`) copy of every text file of 1 KB or more in `dist/client`. `server.mjs` sends the smallest copy the browser accepts. Hashed files under `/_astro/` are cached for a year as `immutable`; HTML is `must-revalidate`; other files are cached for a day. It answers `304` when `If-Modified-Since` matches.
 - **First row eager.** Covers above the fold load first (§7.5).
-- **No CSS blur filters.** A `blur-*` or `backdrop-blur` class repaints on every scroll frame. A soft halo is `soft-glow` from `theme.css`, a radial gradient that costs nothing to scroll.
+- **No CSS blur filters.** A `blur-*` or `backdrop-blur` class repaints on every scroll frame. There are no halos or glows (§5.9).
 - **Motion on its budget** (§5.8), and the home page's own checks (§7.6).
 
 *Why:* the site served every file uncompressed. The home page's HTML was 89 KB on the wire; Brotli brings it to 11 KB. The PageHeader glow and the certification card halo were CSS blurs, which made scrolling heavy. A budget with a test makes "fast" a number a change can break, not a feeling.
@@ -90,7 +91,8 @@ A reader may have script off or broken, images blocked, storage refused (private
 | Storage refused | The theme toggle works for the page; analytics falls back to a session id | Every `localStorage` and `sessionStorage` call is in `try` |
 | An old browser | The marquee drifts without the drag or the off-screen pause; everything else reads | Feature checks before `IntersectionObserver` and `getAnimations` |
 | A request fails | Search says "Search isn't available right now"; the contact form says it failed and keeps the message; analytics fails silently | Each fetch has an error state |
-| Fonts fail | Text shows in the system font | `--font-sans` falls back to `ui-sans-serif, system-ui` |
+| Fonts fail or are slow | Text shows in the system font and never re-wraps | Outfit is served by the site (`/fonts`), preloaded, `font-display: optional`; `--font-sans` falls back to `ui-sans-serif, system-ui` |
+| An image or logo is missing | Its name's initials show instead | `Logo` draws initials under the image; a missing or failed image leaves them showing |
 | A slow network | The first screen paints first; images below it wait | §7.5, §7.7 |
 
 Rules:

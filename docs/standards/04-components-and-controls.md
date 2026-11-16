@@ -11,6 +11,7 @@ The catalogue is [lib/khp-ui/AGENTS.md](../../lib/khp-ui/AGENTS.md). Use a compo
 - Chips, status pills and small uppercase labels are part of the style (§4.5).
 - Fields share one style; dropdowns are Radix Select (§4.6).
 - Pages are composed from components, never raw HTML (§4.9).
+- An icon is a control, a signal or a logo, never decoration (§4.8).
 - Generic unless needed: one component per kind of thing, no variant the data doesn't call for (§4.10).
 
 ## 4.1 Labels above controls
@@ -50,13 +51,13 @@ Never put a link inside another link: nested links are invalid HTML and browsers
 
 - `Chip` for every short label: tags (`tag`, with the brand square), linked tags (`link`), tech with its logo (`outline`), versions and change categories in release notes.
 - `StatusPill` for a state, in words, one size. The `brand` pill is `brand-700` with white text. Project status reads "Completed", "In Progress" or "Planned" on `success`, `warning` and `neutral`; the word is always there, so colour is never the only signal.
-- `IconBadge` for the square icon on certification and resume cards.
+- `Logo` for an organisation's logo or a certification's badge on a white plate; initials when there is no image.
 - Tags on entry cards are plain chips with a small brand square. On articles and on the bio's role and certification cards they are `link` chips to their tag page (`TagLinks`).
 - Small uppercase labels with wide tracking ("Built with", "Tagged", "From my bio", the search result type, "Apps" in the mobile menu, table headers) are part of the style.
 
 ## 4.6 Fields and Select
 
-A form is `Form`, each control sits in a `Field` (its label above it), and the controls are `Input`, `Textarea` and the Radix `Select`. All three share `FIELD_CLASS` (`form/field.ts`): `border-2 border-neutral-300` with `px-4 py-4`, and a `brand-500` border and soft ring on focus. Radix submits the Select with the form through its own `name` and `required`; do not add a hidden input. The subject Select hydrates with `client:load`, so it is ready before the reader reaches it.
+A form is `Form`, each control sits in a `Field` (its label above it), and the controls are `Input`, `Textarea` and the Radix `Select`. All three share `FIELD_CLASS` (`form/field.ts`): `border-2 border-neutral-300` with `px-4 py-4`, and a `brand-500` border and soft ring on focus. Radix submits the Select with the form through its own `name` and `required`; do not add a hidden input. The subject Select is server-rendered and hydrates with `client:load`, so it is on screen with the page and ready before the reader reaches it; it gets `name` and `required` only once hydrated, so its server markup holds no hidden required field to block a form sent without script (§7.8). Without script, `NativeSelect` inside `NoScript` takes its place. Never `client:only` for it: the field would appear only after React and Radix load.
 
 ## 4.7 Pagination
 
@@ -64,7 +65,19 @@ The blog list pages with `src/app/pages/blogs/Pagination.astro`: "Previous" and 
 
 ## 4.8 Icons
 
-Phosphor (`@phosphor-icons/react`) for new icons. The GitHub, LinkedIn and envelope icons in `src/app/shared/` (`GitHubIcon`, `LinkedInIcon`, `EnvelopeIcon`), the toast status icons and the section toggle icons (built in a plain script) are inline SVG. An icon beside words is `aria-hidden`; an icon alone has an `aria-label`.
+An icon has a job or it isn't there. Three jobs:
+
+| Job | Examples |
+| --- | -------- |
+| It is the control | The menu, close, theme, zoom and release-notes buttons; the accordion and select carets |
+| It signals behaviour words don't show | The arrow that marks a link opening a new tab; the magnifier that marks the search field |
+| It is a logo | GitHub, LinkedIn, email (icon-only links with an `aria-label`); tech logos; organisation logos and certification badges (`Logo`) |
+
+Never an icon beside words that already say the same thing: no calendar before a date, no clock before a read time, no arrow after "View All Projects", no envelope on "Get In Touch", no rocket beside "Project", no icon in a coloured square beside "Email". `IconText` and `IconBadge`, which existed to do exactly that, are deleted. A thing with no image shows its initials (`Logo`), not a stand-in icon.
+
+Phosphor (`@phosphor-icons/react`) for the icons that stay; the brand logos in `src/app/shared/` are inline SVG. An icon beside words is `aria-hidden`; an icon alone has an `aria-label`. `pnpm check:icons` (`scripts/check-icons.mjs`) allows Phosphor only in the files it lists, each with its job, and fails on any other.
+
+*Why:* on November 16, 2026 the owner called the icons and bars "stupid" and "unnecessary". An icon repeating its word is the commonest AI tell after the side stripe (§5.9).
 
 ## 4.9 Pages are composed from components
 
@@ -97,5 +110,5 @@ One kind of thing has one component, and it looks the same everywhere it appears
 - [ ] No link inside a link; a card that is a link holds nothing clickable (§4.4).
 - [ ] One component per kind of thing; no new variant or wrapper the data doesn't need; replaced code deleted (§4.10).
 - [ ] Status is shown in words, not colour alone (§4.5).
-- [ ] New icons from Phosphor, hidden beside words (§4.8).
+- [ ] Every icon is a control, a signal or a logo; `pnpm check:icons` passes (§4.8).
 - [ ] Templates use lib components only; a new pattern became a component first; `pnpm check:composition` passes (§4.9).

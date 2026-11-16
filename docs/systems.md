@@ -14,7 +14,7 @@ change (KHP §1.5). Use [the template](systems/TEMPLATE.md) for a new one.
 
 | System | Owns | Contract |
 | --- | --- | --- |
-| Theme tokens | The brand, neutral and status scales for light and dark, `white`, `black`, `ink`, the brand gradients and shadows, `soft-glow`, square corners, layers, the motion tokens, transitions and utilities (`motion-lift`, `motion-zoom`, the marquee) and the reduced-motion switch, `stretched-link`, `.float-btn` and `.float-tip`, `.drawer`, the section toggle styles, the theme script and toggle, the token guard | [Theme tokens](systems/theme-tokens.md) |
+| Theme tokens | The brand, neutral and status scales for light and dark, `white`, `black`, `ink`, the brand gradients and shadows, the self-hosted Outfit, square corners, layers, the motion token, the base transition, the marquee and the reduced-motion switch, the resilience classes (`js-only`, `no-js-only`), `.float-btn` and `.float-tip`, `.drawer`, the section toggle styles, the theme script and toggle, the token guard | [Theme tokens](systems/theme-tokens.md) |
 | Components | The `lib/khp-ui` components every page is composed from, and the composition check (KHP §4.9) | [lib/khp-ui/AGENTS.md](../lib/khp-ui/AGENTS.md) |
 | Frame and navigation | `MainLayout`, `SkipLink`, `Frame`, `PageSection` and the rails column, the top bar, Apps menu, mobile menu, footer, `site.ts` (`navLinks`, `isCurrent`) and the current-page mark | [Frame and navigation](systems/frame-and-navigation.md) |
 

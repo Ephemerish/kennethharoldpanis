@@ -15,8 +15,7 @@ import TechChips from "@app/features/entries/TechChips.astro";
 import { formatDate, isoDay } from "@app/calc/format";
 import TagLinks from "@app/features/taxonomy/TagLinks.astro";
 import { coverBackdrop } from "@app/features/entries/cover-image.mjs";
-import { CalendarBlankIcon as CalendarIcon, ClockIcon } from "@phosphor-icons/react";
-import { Box, Frame, Heading, IconText, Image, Label, Row, Stack, StatusPill, Text } from "@ui";
+import { Box, Frame, Heading, Image, Label, Row, Stack, StatusPill, Text } from "@ui";
 
 interface Badge {
   label: string;
@@ -74,11 +73,11 @@ const hasOverlay = Astro.slots.has("overlay");
         </Row>
 
         {/* When, and how long it reads */}
-        <Row gap="lg" class="mb-6 text-neutral-700">
-          {date && <IconText Icon={CalendarIcon} as="time" datetime={isoDay(date)} class="text-sm">{formatDate(date)}</IconText>}
-          {date && readTime && <Text as="span" tone="subtle" aria-hidden="true">•</Text>}
-          {readTime && <IconText Icon={ClockIcon} class="text-sm">{readTime}</IconText>}
-        </Row>
+        {(date || readTime) && (
+          <Text size="sm" tone="muted" class="mb-6">
+            {date && <Text as="time" size="inherit" tone="inherit" datetime={isoDay(date)}>{formatDate(date)}</Text>}{date && readTime && " · "}{readTime}
+          </Text>
+        )}
 
         {description && <Text size="xl" leading="relaxed" class="mb-8">{description}</Text>}
 

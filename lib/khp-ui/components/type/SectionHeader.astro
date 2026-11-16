@@ -1,13 +1,8 @@
 ---
 /**
- * SectionHeader, in-page H2 block. Compose title from prefix + accent + suffix.
- * Smaller sibling of PageHeader, used for sections within a page.
- *
- *   <SectionHeader accent="Technologies" suffix="I Work With" subtitle="…" />
- *   <SectionHeader prefix="Featured" accent="Projects" subtitle="…" />
- *
- * `level={1}` when it is the first title on a page with no PageHeader, so the
- * page still has exactly one h1 (KHP §1.6).
+ * SectionHeader, a section's centred title: `prefix`, the `accent` word in the
+ * brand gradient, `suffix`. Under it, at most a fact from the data (`subtitle`,
+ * KHP §6.7). No bar (KHP §5.9). `level={1}` when it is the page's first title.
  */
 import Accent from "./Accent.astro";
 
@@ -27,13 +22,12 @@ const Title = level === 1 ? "h1" : "h2";
 ---
 
 <div class:list={["text-center mb-12 sm:mb-16", extraClass]}>
-  <Title id={id} class="text-3xl sm:text-4xl md:text-5xl font-bold text-neutral-900 mb-4">
+  <Title id={id} class="text-3xl sm:text-4xl md:text-5xl font-bold text-neutral-900">
     {prefix && `${prefix} `}<Accent>{accent}</Accent>{suffix && ` ${suffix}`}
   </Title>
   {subtitle && (
-    <p class="mt-4 sm:mt-6 text-lg sm:text-xl text-neutral-600 max-w-3xl mx-auto px-2 leading-relaxed">
+    <p class="mt-4 text-base sm:text-lg text-neutral-600">
       {subtitle}
     </p>
   )}
-  <div class="w-24 h-1 bg-brand-gradient mt-6 mx-auto" />
 </div>

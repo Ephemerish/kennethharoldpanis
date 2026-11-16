@@ -57,18 +57,3 @@ export const $popular = createFetcherStore<PopularResponse>([
 
 // --- Writes -----------------------------------------------------------------
 
-/**
- * Sends the contact form. Throws with the server's words when it is refused,
- * so the form never reports a failed send as sent. A plain call, not a
- * mutator store: nanoquery's mutate() swallows errors.
- */
-export async function sendContact(form: FormData): Promise<void> {
-  let result: { success?: boolean; error?: string } | null = null;
-  try {
-    const res = await fetch("/api/contact", { method: "POST", body: form, headers: { Accept: "application/json" } });
-    result = await res.json();
-  } catch {
-    throw new Error("Failed to send message");
-  }
-  if (!result?.success) throw new Error(result?.error || "Failed to send message");
-}

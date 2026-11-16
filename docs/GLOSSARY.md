@@ -37,6 +37,25 @@ What we call things on this site, in code, in docs and on screen. One thing, one
 | marquee | The home page's two draggable rows of tech tiles (`Marquee`) |
 | article engine | How a post's body renders (`prose`, `pretext`); see docs/systems/article-engines.md |
 
+## Field names
+
+The data model, `src/data/model.ts`. The same field name means the same thing on every kind of item.
+
+| Field | Means | On |
+| ----- | ----- | -- |
+| `slug` | Its URL part, or its anchor on `/bio` | everything |
+| `title` | Its name | everything |
+| `description` | One or two sentences about it | everything |
+| `image` | A path under `public/`: a cover, an organisation's logo, a certification's badge | everything (optional except on a certification) |
+| `tags`, `tech` | From the registries | everything |
+| `startDate`, `endDate` | When it ran; no `endDate` while it is still going | projects, roles, schools |
+| `pubDate` | When a post was published | posts |
+| `issuedDate` | When a certification was earned | certifications |
+| `org`, `issuer` | Who it was with | roles and schools, certifications |
+| `href` | The project or post a role produced | roles |
+
+Not used: `body`, `summary`, `logo`, `badge`, `start`, `end`, `Icon`.
+
 ## Adding a term
 
 1. Look here first. If the thing has a word, use it.

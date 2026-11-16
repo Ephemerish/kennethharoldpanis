@@ -38,7 +38,7 @@ const TYPES = {
 
 /** Hashed build output never changes; everything else is checked each time. */
 function cacheControl(path) {
-  if (path.includes(`${sep}_astro${sep}`)) return "public, max-age=31536000, immutable";
+  if (path.includes(`${sep}_astro${sep}`) || path.includes(`${sep}fonts${sep}`)) return "public, max-age=31536000, immutable";
   if (path.endsWith(".html")) return "public, max-age=0, must-revalidate";
   return "public, max-age=86400";
 }

@@ -37,7 +37,7 @@ Which lime step: a lime surface under white text is `brand-700` (the default but
 
 ## 5.4 Type
 
-Outfit for everything (weights 300 to 700 from Google Fonts); `ui-monospace` and the system stack for code and the timeline dates. Sizes are Tailwind's defaults (`text-xs` to `text-7xl`), stepped up by breakpoint (`text-3xl sm:text-4xl md:text-5xl`). `Heading` and `Text` name the steps the site uses (`Heading` `size="card"`, `Text` `size="body"`), so titles and text of one kind match on every page (§4.9). Headings are bold. The owner's headings and buttons are in Title Case ("View All Projects"); keep them as written (§6.6). Small labels are `text-xs` or `text-[11px]`, semibold, uppercase, `tracking-wider`, in `neutral-500` (`Label`), never `neutral-400` (§4.5, §5.3).
+Outfit for everything, one variable file served by the site from `/fonts` (`font-display: optional`, preloaded, cached a year; no Google Fonts), falling back to the system font; `ui-monospace` and the system stack for code and the timeline dates. Sizes are Tailwind's defaults (`text-xs` to `text-7xl`), stepped up by breakpoint (`text-3xl sm:text-4xl md:text-5xl`). `Heading` and `Text` name the steps the site uses (`Heading` `size="card"`, `Text` `size="body"`), so titles and text of one kind match on every page (§4.9). Headings are bold. The owner's headings and buttons are in Title Case ("View All Projects"); keep them as written (§6.6). Small labels are `text-xs` or `text-[11px]`, semibold, uppercase, `tracking-wider`, in `neutral-500` (`Label`), never `neutral-400` (§4.5, §5.3).
 
 ## 5.5 Article text
 
@@ -49,7 +49,6 @@ Corners are square: the theme clears `--radius-*`, and `pnpm check:tokens` fails
 
 - Gradients: `bg-brand-gradient` (buttons, bars, the brand card), `bg-hero-gradient` (hero bands), `bg-card-gradient` (cards), `text-brand-gradient` (accent words).
 - Shadows: `shadow-elegant` (cards), `shadow-floating` (form and sidebar cards, and cards on hover), `shadow-brand` (gradient buttons), `shadow-lg` or stronger on things that float (the search panel, the Select list, toasts, floating tools, the release drawer); the Apps menu uses `shadow-elegant`. `--shadow-strength` makes shadows stronger in dark so they still show.
-- Soft glow: the `PageHeader` glow on hero pages, drawn with `soft-glow`, a radial gradient. It is the only glow (§5.9). No CSS blur filter anywhere (§7.7); the home page check fails on one (§7.6).
 
 ## 5.7 Layers
 
@@ -87,8 +86,11 @@ Rules for the motion that stays:
 | Pills everywhere; a badge that repeats the text beside it | A chip is a tag, a technology, a status or a fact (a focus area, a version); never decoration, never a repeat ("Current" beside "2024 – Current") | Review |
 | A tagline under every title; a line telling the reader how to use the page | §6.7: no taglines, a title stands alone; only a fact from the data goes under it; a line says what, never how | `pnpm check:copy` |
 | Verbose, redundant text; filler words | The budgets and words of §6.7 | `pnpm check:copy` |
-| Sparkle, magic-wand and rocket icons; emoji | Phosphor icons that say what a thing is (a checklist for features, a bolt for challenges); no emoji | `pnpm check:copy` (emoji), review |
-| Purple, indigo or blue-to-purple gradients; neon glows | Lime and neutral only (§5.1); the one glow is the page title's `soft-glow` (§5.6) | `pnpm check:tokens` |
+| Icons beside words that already say it (a calendar before a date, an arrow after "View all", an icon in a coloured square beside "Email"); sparkle, rocket and wand icons; emoji | An icon is a control, a signal or a logo (§4.8); no emoji | `pnpm check:icons`, `pnpm check:copy` |
+| Bars and rules as decoration: a short bar under every title, a divider under a card heading, a rule above "Read more" | Space separates things. A rule only between table rows and the parts of a panel. No title bar | Review |
+| A "Read more →" line on a card that is already a link | The whole card is the link; no action line (§4.10) | Review |
+| A glow behind a title | None | Review |
+| Purple, indigo or blue-to-purple gradients; neon glows | Lime and neutral only (§5.1); no glows | `pnpm check:tokens` |
 | Faint grey text, glassmorphism, blur | Text `neutral-500` or darker (§5.3); no blur (§7.7) | `pnpm check:tokens`, axe, `check:output` |
 | Many shades and opacities of one colour | The theme's steps only; opacity for overlays on photos and "off" states | `pnpm check:tokens` |
 | Monospace for names people read | Monospace for code and the timeline's years (his choice), never a name | Review |
@@ -97,11 +99,11 @@ Rules for the motion that stays:
 | A layout no one chose: centred hero, three icon-topped feature cards, a stat banner | A section exists because it shows his work (§10) | Review |
 | Sub-groups and labels that don't hold for every item ("Data" over three AWS services on a card where everything is cloud) | Tech and tags only; a flat row of chips; the least common denominator (§1.7) | Review |
 
-**His look is not slop.** Some of it is on the slop lists: the gradient accent word, gradient cards with a soft shadow, small uppercase labels, centred headers with a short bar (without a tagline, §6.7). They stay. They are his choices, used in fixed places (one accent word per heading, labels only to name a group), and the site that dropped them was rejected as "ugly and generic". The rule is not "avoid anything a model might make"; it is "nothing on screen is there by default".
+**His look is not slop.** Some of it is on the slop lists: the gradient accent word, gradient cards with a soft shadow, small uppercase labels, centred headers. They stay, without the bar, the tagline (§6.7) or the glow, which he asked to remove. They stay. They are his choices, used in fixed places (one accent word per heading, labels only to name a group), and the site that dropped them was rejected as "ugly and generic". The rule is not "avoid anything a model might make"; it is "nothing on screen is there by default".
 
 A new element on this list needs the owner's say (§6.6).
 
-*Why:* on November 16, 2026 the owner pointed at the lime stripe down the current role's card ("too AI, it's AI slop"), then at "Open one to see the tech I used there", and asked for a standard copied from Ebb and Pundo and enforced. The stripe and the article `h4` callout bar were removed, `AccordionItem`'s `accent` prop was deleted, the "Key features" sparkle became a checklist, the redundant "Current" pill went, the how-to subtitles went, the tech categories on cards went (§1.7), and `check:tokens` and `check:copy` now fail on what they could catch.
+*Why:* on November 16, 2026 the owner pointed at the lime stripe down the current role's card ("too AI, it's AI slop"), then at "Open one to see the tech I used there", and asked for a standard copied from Ebb and Pundo and enforced. The stripe and the article `h4` callout bar were removed, `AccordionItem`'s `accent` prop was deleted, the "Key features" sparkle became a checklist, the redundant "Current" pill went, the how-to subtitles went, the tech categories on cards went (§1.7), and `check:tokens` and `check:copy` now fail on what they could catch. Later the same day he asked for the "stupid icons", "the bars" and "the unnecessary bullshit" to go: the decorative icons (`IconText`, `IconBadge`, panel and button icons, search type icons), the bar under every title (`Divider`), the glow behind page titles, and the card's "View project →" line and its rule were removed, and `check:icons` was added.
 
 ### Sources for §5.9
 

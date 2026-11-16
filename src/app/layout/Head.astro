@@ -35,11 +35,8 @@ const imageUrl = new URL(image, Astro.site ?? site.url).toString();
 <link rel="icon" href="/favicon.ico" />
 <link rel="sitemap" href="/sitemap.xml" />
 
-<!-- Outfit, with display swap so text never blocks render -->
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" />
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" />
+<!-- Outfit, served by the site itself and fetched first (KHP §7.7, §7.8) -->
+<link rel="preload" as="font" type="font/woff2" href="/fonts/outfit-5.3.0-latin.woff2" crossorigin />
 
 <!-- Open Graph and Twitter -->
 <meta property="og:type" content={type} />

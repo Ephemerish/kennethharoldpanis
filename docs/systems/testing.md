@@ -49,6 +49,8 @@ budget's numbers belong to [Content registries](content-registries.md)
 
 ## Before changing
 
+- The dev server bundles the islands' browser dependencies at start (`vite.optimizeDeps.include` in `astro.config.mjs`). A new island dependency goes in that list, or the first visit to its page in dev stalls while Vite re-bundles and reloads.
+
 - Build first: `pnpm build`, then `pnpm test:e2e` or `pnpm test:perf`. Read the printed numbers, not just pass or fail.
 - Locally, Google Chrome must be installed. Stop any old server on port 4400, or the tests reuse it and test an old build.
 - A new feature gets a test in `features.spec.ts` that uses it the way a visitor would: by role and name, with the keyboard where it matters.

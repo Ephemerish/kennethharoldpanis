@@ -172,7 +172,6 @@ export default function Search({ className, autoFocus = false }: { className?: s
               )}
               {results.map((item, i) => {
                 const meta = TYPE_META[item.type];
-                const Ic = meta.Icon;
                 return (
                   <a
                     key={`${item.type}-${item.url}`}
@@ -188,16 +187,12 @@ export default function Search({ className, autoFocus = false }: { className?: s
                       i === active ? "bg-brand-50" : "hover:bg-neutral-50"
                     )}
                   >
-                    <span className="flex items-center justify-center w-7 h-7 shrink-0 bg-neutral-100 text-neutral-500">
-                      {item.imagePath ? (
-                        <>
-                          <img src={item.imagePath} alt="" className={cn("w-4 h-4 object-contain", item.imagePathDark && "dark:hidden")} />
-                          {item.imagePathDark && <img src={item.imagePathDark} alt="" className="hidden w-4 h-4 object-contain dark:block" />}
-                        </>
-                      ) : (
-                        <Ic className="w-4 h-4" aria-hidden="true" />
-                      )}
-                    </span>
+                    {item.imagePath && (
+                      <span className="flex items-center justify-center w-7 h-7 shrink-0">
+                        <img src={item.imagePath} alt="" className={cn("w-4 h-4 object-contain", item.imagePathDark && "dark:hidden")} />
+                        {item.imagePathDark && <img src={item.imagePathDark} alt="" className="hidden w-4 h-4 object-contain dark:block" />}
+                      </span>
+                    )}
                     <span className="flex-1 min-w-0 text-sm text-neutral-900 truncate">
                       <Highlight text={item.title} tokens={tokens} />
                     </span>

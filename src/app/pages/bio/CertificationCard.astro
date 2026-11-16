@@ -4,7 +4,7 @@
  * to, and the public credential.
  */
 import { ArrowSquareOutIcon } from "@phosphor-icons/react";
-import { Box, ButtonLink, Card, Heading, Image, Row, Stack, Text, VisuallyHidden } from "@ui";
+import { Box, ButtonLink, Card, Heading, Logo, Row, Stack, Text, VisuallyHidden } from "@ui";
 import TechChips from "@app/features/entries/TechChips.astro";
 import TagLinks from "@app/features/taxonomy/TagLinks.astro";
 import type { Certification } from "@data/bio/certifications";
@@ -18,10 +18,7 @@ const { cert } = Astro.props;
 
 <Card id={cert.slug} padding="none" class="scroll-mt-24 overflow-hidden">
   <Row stackBelow="sm" align="start" gap="lg" class="p-6 sm:gap-6 sm:p-7">
-    {/* A badge keeps its own white plate, sized to the badge, in either theme */}
-    <Row justify="center" class="h-24 w-24 shrink-0 border border-neutral-200 bg-white p-2 sm:h-28 sm:w-28">
-      <Image src={`/images/${cert.badge}`} alt={`${cert.title} badge`} width="112" height="112" fit="contain" class="h-full w-full" />
-    </Row>
+    <Logo name={cert.issuer} src={cert.image} size="lg" />
 
     <Stack gap="lg" class="min-w-0 flex-1">
       <Box>
@@ -32,11 +29,11 @@ const { cert } = Astro.props;
         </Text>
       </Box>
 
-      <Text size="body" leading="relaxed">{cert.summary}</Text>
+      <Text size="body" leading="relaxed">{cert.description}</Text>
 
       <TechChips tech={cert.tech} size="sm" />
 
-      {cert.tags && cert.tags.length > 0 && <TagLinks tags={cert.tags} size="sm" />}
+      {cert.tags.length > 0 && <TagLinks tags={cert.tags} size="sm" />}
 
       <Row>
         <ButtonLink href={cert.credentialUrl} target="_blank" rel="noopener noreferrer" variant="outlineBrand" size="sm" class="gap-1.5">

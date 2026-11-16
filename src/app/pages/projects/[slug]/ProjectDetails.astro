@@ -1,20 +1,14 @@
 ---
 /**
- * ProjectDetails, a polished "overview" card shown above the story.
+ * ProjectDetails, the project's overview card above the story.
  *
- * White card with a quiet header strip. Tech now lives in the shared article
+ * A plain panel. Tech now lives in the shared article
  * header (TechChips); this card holds the project-only detail: materials,
  * a facts grid, and Key features / Challenges side by side.
  */
 import { Chip, Fact, Facts, Grid, List, ListItem, Panel, PanelSection } from "@ui";
 import type { CollectionEntry } from "astro:content";
 import { formatMonth } from "@app/calc/format";
-import {
-  SquaresFourIcon as Squares2X2Icon,
-  ListChecksIcon,
-  LightningIcon as BoltIcon,
-  WrenchIcon,
-} from "@phosphor-icons/react";
 
 interface Props {
   data: CollectionEntry<"projects">["data"];
@@ -49,9 +43,9 @@ const hasAnything = hasMaterials || facts.length > 0 || hasLists;
 ---
 
 {hasAnything && (
-  <Panel title="Overview" Icon={Squares2X2Icon}>
+  <Panel title="Overview">
     {hasMaterials && (
-      <PanelSection heading="Materials & tools" Icon={WrenchIcon} divided>
+      <PanelSection heading="Materials & tools" divided>
         <List direction="row" gap="sm">
           {materials.map((m) => <ListItem><Chip variant="outline" size="md" class="py-1.5 font-normal text-neutral-600">{m}</Chip></ListItem>)}
         </List>
@@ -69,14 +63,14 @@ const hasAnything = hasMaterials || facts.length > 0 || hasLists;
     {hasLists && (
       <Grid cols="halves-md" gap="none">
         {keyFeatures.length > 0 && (
-          <PanelSection heading="Key features" Icon={ListChecksIcon}>
+          <PanelSection heading="Key features">
             <List gap="none" class="space-y-2.5 text-sm text-neutral-700">
               {keyFeatures.map((f) => <ListItem marker="square">{f}</ListItem>)}
             </List>
           </PanelSection>
         )}
         {challenges.length > 0 && (
-          <PanelSection heading="Challenges" Icon={BoltIcon} iconTone="muted" side={keyFeatures.length > 0}>
+          <PanelSection heading="Challenges" side={keyFeatures.length > 0}>
             <List gap="none" class="space-y-2.5 text-sm text-neutral-700">
               {challenges.map((c) => <ListItem marker="square-muted">{c}</ListItem>)}
             </List>

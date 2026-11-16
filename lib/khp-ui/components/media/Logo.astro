@@ -1,0 +1,30 @@
+---
+/**
+ * Logo, an organisation's logo or a certification's badge on a white plate,
+ * the same in light and dark. With no image, or one that fails to load, the
+ * plate shows the name's initials instead (KHP §7.8): there is always a mark.
+ */
+import { cn } from "../../utils/cn";
+import Image from "./Image.astro";
+
+interface Props {
+  name: string;
+  src?: string;
+  size?: "sm" | "md" | "lg";
+  class?: string;
+}
+
+const { name, src, size = "md", class: className } = Astro.props;
+const SIZE = { sm: "h-10 w-10 p-1 text-xs", md: "h-12 w-12 p-1.5 text-sm", lg: "h-24 w-24 p-2 text-xl sm:h-28 sm:w-28" }[size];
+const initials = name
+  .split(/[\s,]+/)
+  .filter((word) => /^[A-Z]/.test(word))
+  .slice(0, 3)
+  .map((word) => word[0])
+  .join("");
+---
+
+<span class={cn("relative inline-flex shrink-0 items-center justify-center border border-neutral-200 bg-white font-semibold text-ink", SIZE, className)}>
+  <span aria-hidden="true">{initials}</span>
+  {src && <Image src={src} alt="" fit="contain" class="absolute inset-0 h-full w-full bg-white p-[inherit]" />}
+</span>

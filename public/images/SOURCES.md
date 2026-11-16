@@ -45,3 +45,7 @@ Sandingan National High School has no published logo; its role shows an icon.
 | `focus.svg` | focus.finops.org | Cropped to the mark, wordmark removed |
 
 `dynamodb.svg`, `playwright.svg` and `zustand.svg` were empty files; the first two were replaced and `zustand.svg` removed (Zustand uses `zustand.png`).
+
+## Font (`/fonts/`, beside `images/`)
+
+`outfit-5.3.0-latin.woff2` and `outfit-5.3.0-latin-ext.woff2`: Outfit, the variable font (weights 100 to 900), from `@fontsource-variable/outfit` 5.3.0, SIL Open Font License 1.1. Renamed with the version so `server.mjs` can cache them for a year; a new version gets a new name.

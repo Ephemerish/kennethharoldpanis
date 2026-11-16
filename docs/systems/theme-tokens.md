@@ -23,7 +23,6 @@ names or `var(--…)`. Component shapes belong to the lib components
   - `@theme inline`: maps each scale step to its class name (`bg-brand-600`, `text-neutral-700`).
   - Utilities: `z-*` layers.
   - Brand utilities: `bg-brand-gradient` (`brand-700` to `brand-800`, under white text), `bg-hero-gradient` (`neutral-0` to `brand-50`), `bg-card-gradient` (`neutral-0` to `neutral-50`), `text-brand-gradient` (`brand-600` to `brand-500`), `shadow-brand`, `shadow-elegant`, `shadow-floating`.
-  - `soft-glow`: a halo as a radial gradient of `brand-100`, used by `PageHeader`'s `glow`, the site's only glow (KHP §5.9). They replaced CSS blurs, which repaint on every scroll frame (KHP §7.7).
   - `.float-btn` and `.float-tip`: a fixed tool at the right edge under the top bar (`z-float`) and its name beside it (`z-tooltip`), shown on the button's hover and focus. `data-stack="1"` moves both to the second slot. Shared by `FloatingButton` and the collapse-all button (KHP §3.5).
   - `.drawer`: the right-hand `<dialog>` at full height, up to 34rem wide, with a `neutral-950` backdrop at 30%. Used by `Drawer`.
   - Base: border colour, body background and text, Outfit.
@@ -50,7 +49,7 @@ names or `var(--…)`. Component shapes belong to the lib components
 8. A card that is a link is a `Card` with `href`; nothing clickable sits inside it (KHP §4.4).
 9. Reduced motion stops every transition and animation, and leaves the marquee as a readable list showing each technology once (KHP §5.8).
 10. Durations come from the motion tokens, so the site moves at one pace.
-11. No CSS blur filter. A halo is `soft-glow`, which scrolls for free (KHP §7.7).
+11. No CSS blur filter and no glow (KHP §5.9, §7.7).
 12. Floating tools share `.float-btn` and `.float-tip`, so the release-notes button and collapse-all look and stack the same (KHP §3.5).
 
 ## Before changing

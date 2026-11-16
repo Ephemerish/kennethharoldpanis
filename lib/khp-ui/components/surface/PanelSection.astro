@@ -4,13 +4,10 @@
  * are divided by a rule (`divided`); `side` draws the left rule for the second
  * of two parts laid side by side.
  */
-import type { Icon } from "@phosphor-icons/react";
 import { cn } from "../../utils/cn";
 
 interface Props {
   heading?: string;
-  Icon?: Icon;
-  iconTone?: "brand" | "muted";
   /** Draw a rule under this part (all but the last). */
   divided?: boolean;
   /** A rule on the left from md, for the second of two side-by-side parts. */
@@ -18,7 +15,7 @@ interface Props {
   class?: string;
 }
 
-const { heading, Icon, iconTone = "brand", divided = false, side = false, class: className } = Astro.props;
+const { heading, divided = false, side = false, class: className } = Astro.props;
 ---
 
 <div
@@ -30,8 +27,7 @@ const { heading, Icon, iconTone = "brand", divided = false, side = false, class:
   )}
 >
   {heading && (
-    <h3 class="text-[11px] font-semibold uppercase tracking-wider text-neutral-500 mb-4 flex items-center gap-2">
-      {Icon && <Icon className={cn("w-4 h-4", iconTone === "brand" ? "text-brand-500" : "text-neutral-400")} aria-hidden="true" />}
+    <h3 class="text-[11px] font-semibold uppercase tracking-wider text-neutral-500 mb-4">
       {heading}
     </h3>
   )}

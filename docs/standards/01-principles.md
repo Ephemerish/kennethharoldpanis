@@ -45,6 +45,8 @@ Known repeats are recorded as gaps in the system files.
 
 Controls, popovers, toasts, icons and data fetching come from maintained libraries: Radix (Select), sonner (toasts), Phosphor (icons), nanostores and nanoquery (client data), class-variance-authority and tailwind-merge (class composition). Custom code that does a library's job says which library didn't fit and why, in a comment. Read a library's behaviour before relying on it: nanoquery's `mutate()` returns `undefined` on failure instead of throwing.
 
+A library this section names is not swapped out (for a native element, another library or custom code) without the owner's say first, even when the swap looks simpler. Fix the problem inside the chosen library. *Why:* on November 16, 2026, to make `/contact` faster, the Radix Select and sonner were replaced with a native select and a status line; the owner rejected it. The slowness was the Select's `client:only` and the dev server re-bundling, both fixed with the libraries kept (§4.6, §7.6).
+
 ## 1.5 No loose ends
 
 Whoever finds a dead link, an unused component, an option nobody passes, a page nothing links to or an unused dependency removes it in the same change and names it in the report. Two components for one thing become one. Removing something a reader sees needs the owner's say (§6.6).

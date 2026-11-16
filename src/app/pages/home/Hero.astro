@@ -1,8 +1,4 @@
 ---
-import {
-  EnvelopeIcon,
-  FileTextIcon as DocumentTextIcon,
-} from "@phosphor-icons/react";
 import { currentRole } from "@data/bio/experience";
 import { Box, ButtonLink, Chip, Frame, Heading, Image, List, ListItem, Row, Stack, Text } from "@ui";
 import { certifications } from "@data/bio/certifications";
@@ -45,7 +41,7 @@ const current = currentRole;
                 size="sm"
                 href={`/bio#${cert.slug}`}
                 title={cert.title}
-                logo={`/images/${cert.badge}`}
+                logo={cert.image}
                 class="gap-2 py-1.5 hover:bg-brand-100 hover:border-brand-300"
               >
                 {cert.shortTitle}
@@ -57,11 +53,9 @@ const current = currentRole;
 
       <Row stackBelow="sm" gap="md" class="mt-6 sm:mt-8 w-full sm:w-auto">
         <ButtonLink href="/contact" class="w-full sm:w-auto h-auto px-6 py-3 text-sm sm:text-base">
-          <EnvelopeIcon className="mr-2 h-4 w-4" aria-hidden="true" />
           Get In Touch
         </ButtonLink>
         <ButtonLink href="/projects" variant="outline" class="w-full sm:w-auto h-auto px-6 py-3 border-2 border-neutral-300 text-neutral-900 text-sm sm:text-base">
-          <DocumentTextIcon className="mr-2 h-4 w-4" aria-hidden="true" />
           View Projects
         </ButtonLink>
       </Row>

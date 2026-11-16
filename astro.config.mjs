@@ -62,6 +62,28 @@ export default defineConfig({
       ? 'node_modules/.vite-dev'
       : 'node_modules/.vite-build',
     plugins: [tailwindcss()],
+    // Bundle every island's browser dependencies when the dev server starts.
+    // Otherwise Vite finds them on the first visit to a page that uses them
+    // (sonner and Radix on /contact), re-bundles, and reloads the page: a
+    // multi-second stall in dev. The production build is unaffected.
+    optimizeDeps: {
+      include: [
+        "react",
+        "react-dom",
+        "react-dom/client",
+        "react/jsx-runtime",
+        "@radix-ui/react-select",
+        "sonner",
+        "class-variance-authority",
+        "clsx",
+        "tailwind-merge",
+        "@phosphor-icons/react",
+        "nanostores",
+        "@nanostores/react",
+        "@nanostores/query",
+        "@chenglou/pretext",
+      ],
+    },
   },
 
   integrations: [mdx(), react()],

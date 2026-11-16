@@ -10,7 +10,7 @@ Before writing markup, check this list. If a component is close but not right, e
 
 | File | Holds |
 | ---- | ----- |
-| `tokens/theme.css` | The brand, neutral, success, warning and error scales for light and their mirrored dark values (`:root.dark`); `white`, `black`, `ink`; Outfit; shadows; square corners; layers; the brand utilities (`bg-brand-gradient`, `bg-hero-gradient`, `bg-card-gradient`, `text-brand-gradient`, `shadow-elegant`, `shadow-floating`, `shadow-brand`); `soft-glow` (the page title's halo, a radial gradient, not a CSS blur); `.float-btn` and `.float-tip` (a floating tool and its name, in two slots by `data-stack`); `.drawer` (the right-hand drawer and its backdrop); motion (KHP §5.8): `--duration-fast` and `--ease-out`, the base transition on links, buttons, fields and `.motion-surface`, `marquee`, `marquee-track` and `marquee-reverse`, and the reduced-motion switch; resilience (KHP §7.8): `js-only`, `no-js-only`, `img[data-broken]` |
+| `tokens/theme.css` | The brand, neutral, success, warning and error scales for light and their mirrored dark values (`:root.dark`); `white`, `black`, `ink`; Outfit; shadows; square corners; layers; the brand utilities (`bg-brand-gradient`, `bg-hero-gradient`, `bg-card-gradient`, `text-brand-gradient`, `shadow-elegant`, `shadow-floating`, `shadow-brand`); `.float-btn` and `.float-tip` (a floating tool and its name, in two slots by `data-stack`); `.drawer` (the right-hand drawer and its backdrop); motion (KHP §5.8): `--duration-fast` and `--ease-out`, the base transition on links, buttons, fields and `.motion-surface`, `marquee`, `marquee-track` and `marquee-reverse`, and the reduced-motion switch; resilience (KHP §7.8): `js-only`, `no-js-only`, `img[data-broken]` |
 | `tokens/prose.css` | Only the collapsible section toggle styles. Article type lives in `components/type/Prose.astro` |
 
 ## Components
@@ -41,19 +41,18 @@ Props are typed. Most extend Astro's `HTMLAttributes<...>`, so plain attributes 
 | `Label` | The small uppercase line that names a group ("Built with"). `as`, `tone` (`subtle`, `brand`), `size` (`xs`, `2xs`) |
 | `Link` | Every navigation in an Astro template (KHP §4.3). `href`, `tone` (`inherit`, `brand`, `muted`, `quiet`, `strong`), `external` (new tab, `rel="noopener noreferrer"`), `underline`. A card that is a link is a `Card` with `href` |
 | `List`, `ListItem` | A `ul` or `ol` laid out as a column or a wrapping row. `List`: `ordered`, `direction` (`column`, `row`), `gap`, `space`. `ListItem`: `marker` (`none`, `square`, `square-muted`) |
-| `Divider` | The short gradient bar under a centred title. `width` (`sm`, `md`, `lg`), `thickness` (`thin`, `thick`) |
-| `IconText` | A Phosphor icon beside a few words (a date, a read time). `Icon`, `as`, `iconSize` (`sm`, `md`, `lg`), `datetime` |
 | `VisuallyHidden` | Words for screen readers only. No props |
 | `SkipLink` | "Skip to content", the first focusable thing on the page. `href` (default `#main`) |
 | `Facts`, `Fact` | Labelled values as a `dl`. `Facts`: `layout` (`grid`, `stack`), `gap`. `Fact`: `label`; the value is the slot |
 | `Prose` | The type of long-form markdown (KHP §5.5): headings, lists, quotes, code, links, figures. `id`. The article feature wraps it with tables and collapsible sections |
-| `PageHeader` | A page's centred `h1` from `prefix`, `accent` (in `text-brand-gradient`) and `suffix`, an optional `subtitle` (a fact from the data only, never a tagline, KHP §6.7), and a short gradient bar. `size` (`lg` or `md`); `glow` adds a `soft-glow` halo behind it |
-| `SectionHeader` | A section's centred title, composed the same way, with an optional `subtitle` (a fact from the data only, KHP §6.7) and the bar. `level` (2, the default, or 1 when it is the page's first title, so the page has one `h1`), `id` (on the title, for an anchor) |
+| `PageHeader` | A page's centred `h1` from `prefix`, `accent` (in `text-brand-gradient`) and `suffix`, an optional `subtitle` (a fact from the data only, KHP §6.7). `size` (`lg` or `md`). No bar, no glow |
+| `SectionHeader` | A section's centred title, composed the same way, with an optional `subtitle` (a fact from the data only, KHP §6.7). `level` (2, the default, or 1 when it is the page's first title, so the page has one `h1`), `id` (on the title, for an anchor) |
 
 ### Media (`components/media/`)
 
 | Component | Use for, and its props |
 | --------- | ---------------------- |
+| `Logo` | An organisation's logo or a certification's badge on a white plate, in both themes. `name` (its initials show when there is no image, or it fails), `src`, `size` (`sm`, `md`, `lg`) |
 | `Image` | Every picture. `src`, `alt` (required; `""` for decoration), `width`, `height`, `fit` (`cover`, `contain`, `none`), `priority` (loads eagerly with `fetchpriority="high"`; otherwise lazy), `darkSrc` (a second picture shown only in dark, for a logo drawn in black or white) |
 
 ### Surface (`components/surface/`)
@@ -64,8 +63,7 @@ Props are typed. Most extend Astro's `HTMLAttributes<...>`, so plain attributes 
 | `Chip` | Every small label: tags, linked tags, tech with logos, versions, change categories. `variant` (`brand`, `neutral`, `tag`, `outline`, `link`, `success`, `warning`, `error`), `size` (`xs`, `sm`, `md`, `tag`, `link-sm`, `link-md`, `logo-sm`, `logo-md`), `href` (a link, with a hover for `link` and `outline`), `dot` (the lime square), `logo` (a technology's logo), `logoDark` (its dark-theme variant) |
 | `AccordionItem` | A card whose summary row opens to show more: a native `<details>`, so it works by keyboard and without script. The `summary` slot is the row; the default slot is what it reveals. `open`, `id` (a link to `#id` opens it). No coloured side edge (KHP §5.9). The roles on `/bio` |
 | `StatusPill` | A state in words (Completed, In Progress). `variant` (`brand`: `brand-700`, white text; `neutral`, `success`, `warning`, `error`). One size |
-| `IconBadge` | A square holding one Phosphor icon. `Icon`, `variant` (`brand`, `dark`, `warning`, `success`, `subtle`), `size` (`sm` to `xl`), `weight` |
-| `Panel`, `PanelSection` | A bordered box with a header strip, in parts: the project's Overview card. `Panel`: `title`, `Icon`. `PanelSection`: `heading`, `Icon`, `iconTone` (`brand`, `muted`), `divided` (a rule under it), `side` (a rule on its left from `md`) |
+| `Panel`, `PanelSection` | A bordered box with a header strip, in parts: the project's Overview card. `Panel`: `title`. `PanelSection`: `heading`, `divided` (a rule under it), `side` (a rule on its left from `md`). No icons |
 
 ### Form (`components/form/`)
 
@@ -99,10 +97,11 @@ Props are typed. Most extend Astro's `HTMLAttributes<...>`, so plain attributes 
 
 ## Rules
 
+- An icon is a control, a signal or a logo, never decoration; `pnpm check:icons` lists where Phosphor may be used (KHP §4.8).
 - A control that needs script carries `js-only` (hidden while `<html>` has `no-js`); its plain fallback is `no-js-only` or inside `NoScript` (KHP §7.8).
 
 - Colours only from the theme's scales and `white`, `black`, `ink`; no rounded corners; layers by name. `pnpm check:tokens` enforces it (KHP §5.1, §5.6, §5.7).
-- Motion from the tokens and utilities in `theme.css`, on colour, background, border, shadow, opacity and transform only (KHP §5.8). No CSS blur filter; a halo is `soft-glow` (KHP §7.7).
+- Motion from the tokens and utilities in `theme.css`, on colour, background, border, shadow, opacity and transform only (KHP §5.8). No CSS blur filter, no glow (KHP §5.9, §7.7).
 - A component takes its data as props and starts with a comment saying what it is for.
 - A pattern a page needs that no component covers becomes a component here first, then the page uses it (KHP §4.9).
 - Adding a component: add its row here and its export in `index.ts` in the same change.

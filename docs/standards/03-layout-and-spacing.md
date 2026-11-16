@@ -17,8 +17,8 @@ Every band of a page is full width, with a `neutral-200` rule above it, and its 
 
 ## 3.2 Headers
 
-- `PageHeader`: one centred `h1` built from `prefix`, `accent` and `suffix`, the accent word in `text-brand-gradient`. An optional `subtitle` under it, then a short `bg-brand-gradient` bar (`w-32` at `size="lg"`, `w-24` at `md`). `glow` adds a soft brand halo behind it (`soft-glow`, a radial gradient, never a CSS blur; §7.7). `/projects` uses it. Sizes are Tailwind's (`text-4xl` up to `lg:text-7xl` at `lg`).
-- `SectionHeader`: the same for an `h2` inside a page (`text-3xl` up to `md:text-5xl`), with a subtitle and a `w-24` bar. On a page with no `PageHeader` its first one passes `level={1}`, so the page still has one `h1`: `/bio` opens with "My Experience".
+- `PageHeader`: one centred `h1` built from `prefix`, `accent` and `suffix`, the accent word in `text-brand-gradient`. An optional `subtitle` under it, only a fact from the data (§6.7). No bar and no glow (§5.9). Sizes are Tailwind's (`text-4xl` up to `lg:text-7xl` at `lg`).
+- `SectionHeader`: the same for an `h2` inside a page (`text-3xl` up to `md:text-5xl`), with the same optional subtitle and no bar. On a page with no `PageHeader` its first one passes `level={1}`, so the page still has one `h1`: `/bio` opens with "My Experience".
 - The home hero ("Hi, I'm Kenneth", the accent name in `brand-600`) and article titles (left-aligned, plain `h1` with status badges) are their own headers.
 
 ## 3.3 Spacing

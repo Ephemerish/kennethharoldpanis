@@ -8,8 +8,7 @@
  * never branches on the kind: a project brings its status, a post its read
  * time, and both show in the same places.
  */
-import { ArrowRightIcon, CalendarBlankIcon, ClockIcon } from "@phosphor-icons/react";
-import { Box, Card, Chip, Heading, IconText, List, ListItem, Row, Stack, StatusPill, Text } from "@ui";
+import { Box, Card, Chip, Heading, List, ListItem, Stack, StatusPill, Text } from "@ui";
 import { formatDate, isoDay } from "@app/calc/format";
 import { getTagLabel } from "@data/taxonomy/tags";
 import Cover from "./Cover.astro";
@@ -31,25 +30,20 @@ const { card, priority = false } = Astro.props;
     )}
   </Box>
 
-  <Stack gap="md" grow class="p-6 sm:p-8">
+  <Stack gap="sm" grow class="p-6 sm:p-8">
     <Heading level={2} size="card" class="line-clamp-2 group-hover:text-brand-700">{card.title}</Heading>
 
-    <Row wrap gap="md" class="text-sm text-neutral-600">
-      <IconText Icon={CalendarBlankIcon} as="time" datetime={isoDay(card.date)}>{formatDate(card.date)}</IconText>
-      {card.readTime && <IconText Icon={ClockIcon}>{card.readTime}</IconText>}
-    </Row>
+    <Text size="sm" tone="subtle">
+      <Text as="time" size="inherit" tone="inherit" datetime={isoDay(card.date)}>{formatDate(card.date)}</Text>{card.readTime && ` · ${card.readTime}`}
+    </Text>
 
-    {card.summary && <Text size="sm" tone="muted" clamp={3}>{card.summary}</Text>}
+    {card.summary && <Text size="sm" tone="muted" clamp={3} class="mt-1">{card.summary}</Text>}
 
     {card.tags.length > 0 && (
-      <List direction="row" gap="none" class="gap-1">
-        {card.tags.map((tag) => <ListItem><Chip variant="tag" size="tag" dot>{getTagLabel(tag)}</Chip></ListItem>)}
+      <List direction="row" gap="none" class="mt-auto gap-1 pt-3">
+        {card.tags.map((tag) => <ListItem><Chip variant="tag" size="tag">{getTagLabel(tag)}</Chip></ListItem>)}
       </List>
     )}
 
-    <Row gap="sm" class="mt-auto border-t border-neutral-200 pt-4 text-sm font-medium text-neutral-900 group-hover:text-brand-700" aria-hidden="true">
-      <Text as="span" tone="inherit">{card.action}</Text>
-      <ArrowRightIcon className="h-4 w-4" />
-    </Row>
   </Stack>
 </Card>

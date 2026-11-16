@@ -2,7 +2,6 @@
 /** The home page's projects: the first few, featured ones first, in the same cards as everywhere. */
 import { ButtonLink, PageSection, Row, SectionHeader } from "@ui";
 import EntryGrid from "@app/features/entries/EntryGrid.astro";
-import { ArrowRightIcon } from "@phosphor-icons/react";
 import { lists } from "@data/settings";
 import { getCollection } from "astro:content";
 import { asProjects, sortProjects } from "@app/features/entries/model";
@@ -16,7 +15,6 @@ const projects = asProjects(sortProjects(await getCollection("projects")).slice(
   <Row justify="center">
     <ButtonLink href="/projects" variant="gradient" size="lg" class="text-base sm:text-lg font-semibold">
       View All Projects
-      <ArrowRightIcon className="ml-3 w-5 h-5" aria-hidden="true" />
     </ButtonLink>
   </Row>
 </PageSection>

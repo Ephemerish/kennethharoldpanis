@@ -27,7 +27,8 @@ come from `src/data/site.ts` ([Frame and navigation](frame-and-navigation.md)).
 3. Answers are short and plain: "All fields are required", "Invalid email address", "Message is too long", "Email service not configured" (503), "Failed to send email" (502). Never a stack trace or a provider message (KHP §8.5).
 4. Every user field is HTML-escaped before it goes into the email body.
 5. The subject must be one of `SUBJECTS`. The form and the endpoint read the same list (KHP §1.3).
-6. The subject submits with the form through Radix's own `name` and `required` when script runs; the Radix picker is `client:only`, so no hidden required field is server-rendered, and without script a `NativeSelect` inside `NoScript` takes its place (KHP §4.6, §7.8).
+6. The subject is the Radix Select (KHP §1.4, §4.6), server-rendered with `client:load` so it shows with the page. It submits through Radix's own `name` and `required`, given only once hydrated, so the server markup holds no hidden required field; without script a `NativeSelect` inside `NoScript` takes its place (KHP §7.8). Never `client:only`: the field would appear late.
+15. The send call is `src/app/api/contact.ts`, its own module, so the contact page doesn't load the search stores to post a form.
 7. The honeypot stays hidden from people and assistive tech (a `hidden`, `aria-hidden` wrapper, and `tabindex="-1"` on the field).
 8. A missing `RESEND_API_KEY` answers 503 and logs on the server.
 9. The real email address is never in the server-rendered HTML.
