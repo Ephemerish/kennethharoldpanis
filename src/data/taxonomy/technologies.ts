@@ -278,6 +278,11 @@ export const technologies = [
 
   // School: Computer Systems Servicing (senior high) and Computer Engineering (college)
   { name: 'C', imagePath: '/images/tech-logos/c.svg', url: 'https://en.cppreference.com/w/c' },
+  { name: 'Assembly', imagePath: '/images/tech-logos/assembly.svg', url: 'https://en.wikipedia.org/wiki/Assembly_language' },
+  { name: 'C#', imagePath: '/images/tech-logos/csharp.svg', url: 'https://learn.microsoft.com/dotnet/csharp/' },
+  { name: 'Kotlin', imagePath: '/images/tech-logos/kotlin.svg', url: 'https://kotlinlang.org/' },
+  { name: 'Jetpack Compose', imagePath: '/images/tech-logos/jetpack-compose.png', url: 'https://developer.android.com/compose' },
+  { name: 'Dart', imagePath: '/images/tech-logos/dart.svg', url: 'https://dart.dev/' },
   { name: 'C++', imagePath: '/images/tech-logos/cpp.svg', url: 'https://isocpp.org/' },
   { name: 'Java', imagePath: '/images/tech-logos/java.svg', url: 'https://dev.java/' },
   { name: 'Python', imagePath: '/images/tech-logos/python.svg', url: 'https://www.python.org/' },

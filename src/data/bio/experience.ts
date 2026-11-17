@@ -48,10 +48,12 @@ export const timeline: TimelineEntry[] = [
     description: "Undergraduate degree in Computer Engineering. Thesis work built a marine communication network for monitoring small fishing boats.",
     tags: ["education", "thesis", "hardware"],
     // The BS Computer Engineering curriculum (programming, data structures,
-    // databases, networks, operating systems, embedded systems), the web
-    // development he did in class, and the thesis hardware.
+    // databases, networks, operating systems, embedded systems, assembly
+    // language), mobile apps in class (C#, Kotlin and Jetpack Compose,
+    // Flutter and Dart), the web development he did in class, and the thesis
+    // hardware.
     tech: [
-      "C", "C++", "Java", "Python", "JavaScript",
+      "C", "C++", "Assembly", "C#", "Java", "Kotlin", "Jetpack Compose", "Dart", "Python", "JavaScript",
       "HTML", "CSS", "React", "MySQL", "Git", "Linux", "Cisco Packet Tracer",
       "Arduino", "Raspberry Pi", "LoRa", "IoT", "Flutter", "Firebase",
     ],
@@ -63,7 +65,7 @@ export const timeline: TimelineEntry[] = [
     org: "Sandingan National High School, Loon, Bohol",
     startDate: "2018",
     endDate: "2020",
-    description: "Senior high school under the ICT track, Computer Systems Servicing (CSS) strand.",
+    description: "Senior high school under the ICT track, Computer Systems Servicing (CSS) strand. Assembled and disassembled PCs and their parts, and set up computer networks.",
     tags: ["education", "hardware"],
     // The Computer Systems Servicing NC II strand: install and configure
     // computers, set up networks and servers; plus HTML and CSS.
