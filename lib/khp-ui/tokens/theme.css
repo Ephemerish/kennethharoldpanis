@@ -396,12 +396,11 @@
 }
 .drawer::backdrop { background: color-mix(in srgb, var(--neutral-950) 30%, transparent); }
 
-/* The splash (Splash.astro): the mark's green over the whole window, the
-   mark's pieces flying in and out. Hidden unless its own script adds
-   data-show (KHP §7.8). Only `transform` and `opacity` move, so the compositor
-   runs it all and a busy page can't make it stutter (KHP §7.7). The timing
-   variables come from the component; `splash-cap` hides it after
-   --splash-max with no script at all, in case its script never gets there. */
+/* The splash (Splash.astro): the mark's green over the whole window and the
+   mark's pieces on it. Hidden unless its own script adds data-show (KHP §7.8).
+   Its whole timeline is set by the component as literal keyframes, so only
+   `transform` and `opacity` move and the compositor plays all of it
+   (KHP §7.7). `splash-fade` ends hidden, so it never blocks the page. */
 .splash { display: none; }
 .splash[data-show] {
   position: fixed;
@@ -411,10 +410,7 @@
   overflow: hidden;
   contain: strict;
   background: var(--mark-ground);
-  transition: opacity var(--splash-out) var(--ease-in-out);
-  animation: splash-cap 1ms linear var(--splash-max) forwards;
 }
-.splash[data-leaving] { opacity: 0; pointer-events: none; }
 .splash-mark {
   position: absolute;
   left: 50%;
@@ -423,39 +419,17 @@
   height: 50vmin;
   transform: translate(-50%, -50%);
 }
-.splash-piece {
-  position: absolute;
-  left: calc(var(--x) * 1%);
-  top: calc(var(--y) * 1%);
-  width: calc(var(--size) * 1%);
-  aspect-ratio: 1;
-  margin: calc(var(--size) * -0.5%) 0 0 calc(var(--size) * -0.5%);
-  will-change: transform;
-  animation: splash-fly-in var(--splash-fly) var(--ease-out) calc(var(--i) * var(--splash-stagger)) both;
-}
-.splash-full { animation: splash-pop var(--splash-pop) var(--ease-out) var(--splash-pop-delay) both; }
-.splash[data-leaving] .splash-piece {
-  animation: splash-fly-out var(--splash-out) var(--ease-in-out) calc(var(--i) * var(--splash-out-stagger)) both;
-}
-.splash[data-leaving] .splash-full { animation: splash-shrink calc(var(--splash-out) * 0.6) var(--ease-in-out) both; }
+.splash-piece { position: absolute; }
 .splash-piece svg { display: block; width: 100%; height: 100%; }
 .splash-lit { fill: var(--mark-lit); }
 .splash-unlit { fill: var(--mark-shadow); }
-@keyframes splash-fly-in {
-  from { transform: translate(calc(var(--dx) * 80vmax), calc(var(--dy) * 80vmax)) scale(0.7); }
-  to { transform: none; }
-}
-@keyframes splash-fly-out {
-  from { transform: none; }
-  to { transform: translate(calc(var(--dx) * 80vmax), calc(var(--dy) * 80vmax)) scale(0.7); }
-}
 @keyframes splash-pop {
   0% { transform: scale(0); }
   65% { transform: scale(1.08); }
-  100% { transform: none; }
+  100% { transform: scale(1); }
 }
-@keyframes splash-shrink { to { transform: scale(0); } }
-@keyframes splash-cap { to { opacity: 0; visibility: hidden; pointer-events: none; } }
+@keyframes splash-shrink { from { transform: scale(1); } to { transform: scale(0); } }
+@keyframes splash-fade { from { opacity: 1; } to { opacity: 0; visibility: hidden; } }
 
 @layer base {
   * { border-color: var(--neutral-200); }
@@ -475,7 +449,6 @@
 :root {
   --duration-fast: 150ms;
   --ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
-  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
 }
 
 @layer base {

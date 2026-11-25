@@ -9,7 +9,8 @@
  *                                     the master for the app family; not loaded by the site
  *   public/favicon.svg, favicon.ico, apple-touch-icon.png  the mark at rest
  *
- * The site's splash is CSS, not a player: each moon is moved by `transform` on
+ * The site's splash is CSS, not a player: one timeline of literal keyframes,
+ * moons moved only by `transform`, the window faded only by `opacity`, all on
  * the compositor, so it is smooth on any device and costs no download. Its
  * timing comes from TIMING below, which the Lottie uses too.
  * The colours here and the `--mark-*` tokens in lib/khp-ui/tokens/theme.css
@@ -97,7 +98,6 @@ const TIMING = {
   hold: 1220, // when the mark is together and the splash may start to leave
   outStagger: 17, // between moons flying out
   out: 670, // the flight out, and the splash's fade
-  max: 4500, // the splash is gone by then whatever happens
 };
 
 const STAGE = 1000; // the Lottie's square; the splash fits it to the window's short side

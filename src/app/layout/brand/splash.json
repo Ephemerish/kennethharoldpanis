@@ -6,8 +6,7 @@
     "pop": 400,
     "hold": 1220,
     "outStagger": 17,
-    "out": 670,
-    "max": 4500
+    "out": 670
   },
   "pieces": [
     {

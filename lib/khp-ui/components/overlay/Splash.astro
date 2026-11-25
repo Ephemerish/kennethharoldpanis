@@ -2,15 +2,17 @@
 /**
  * Splash, every time the site loads (KHP §5.8): the mark's green over the
  * whole window, the mark's pieces flying in from past its edges and settling,
- * then, once the page has loaded, flying back out while the green fades, so
- * the page opens through the motion.
+ * then flying back out while the green fades, so the page opens through the
+ * motion.
  *
- * Built to cost nothing (KHP §7.7): no player, no request, no bundle. The
- * pieces are small inline SVGs moved only by `transform` and the window faded
- * only by `opacity`, both on the compositor, so the motion stays smooth while
- * the page is still loading and on a slow phone. One inline script shows it,
- * waits for the load and starts the exit; a CSS-only cap hides it after
- * `timing.max` even if that script never gets there.
+ * Built to cost as little as possible (KHP §7.7): no player, no request, no
+ * bundle, no timer. The whole motion is one CSS timeline, scheduled when the
+ * splash first paints: pieces move only by `transform`, the window fades only
+ * by `opacity`, and every keyframe is a literal value, so the compositor plays
+ * it all from start to end and a busy page can't delay or stutter it. The
+ * page underneath is server-rendered and already there when it opens. The one
+ * inline script only decides whether to show it, and removes it once its fade
+ * has ended; if that never happens, the ended fade leaves it hidden.
  *
  * Shown only with script, and never under reduced motion or Data Saver
  * (KHP §7.8). A view-transition swap is not a load, so moving between pages
@@ -32,39 +34,56 @@ export interface SplashPiece {
   dy: number;
 }
 
+/** Milliseconds. */
 export interface SplashTiming {
+  /** Between one piece's flight in and the next. */
   stagger: number;
+  /** One flight in. */
   fly: number;
+  /** When the full moon starts to pop in, and how long it takes. */
   popDelay: number;
   pop: number;
+  /** When the mark starts to leave. */
   hold: number;
+  /** Between pieces flying out. */
   outStagger: number;
+  /** The flight out, and the window's fade. */
   out: number;
-  max: number;
 }
 
 interface Props {
   pieces: SplashPiece[];
-  /** Milliseconds. */
   timing: SplashTiming;
 }
 
-const { pieces, timing } = Astro.props;
-const vars = [
-  `--splash-stagger:${timing.stagger}ms`,
-  `--splash-fly:${timing.fly}ms`,
-  `--splash-pop-delay:${timing.popDelay}ms`,
-  `--splash-pop:${timing.pop}ms`,
-  `--splash-out-stagger:${timing.outStagger}ms`,
-  `--splash-out:${timing.out}ms`,
-  `--splash-max:${timing.max}ms`,
-].join(";");
-const hold = timing.hold;
-const leaveAfter = timing.out + (pieces.length - 1) * timing.outStagger;
+const { pieces, timing: t } = Astro.props;
+
+/** How far past its place a piece starts and ends: off any window's edge. */
+const FAR_VMAX = 80;
+const easeOut = "cubic-bezier(0.16, 1, 0.3, 1)";
+const easeInOut = "cubic-bezier(0.65, 0, 0.35, 1)";
+const away = (p: SplashPiece) =>
+  `translate3d(${Math.round(p.dx * FAR_VMAX * 10) / 10}vmax, ${Math.round(p.dy * FAR_VMAX * 10) / 10}vmax, 0)`;
+
+// One literal keyframe pair per moon, and one schedule per piece.
+const css = pieces
+  .map((p) => {
+    const sel = `.splash[data-show] [data-piece="${p.i}"]`;
+    if (p.kind === "full") {
+      return `${sel}{animation:splash-pop ${t.pop}ms ${easeOut} ${t.popDelay}ms both,splash-shrink ${Math.round(t.out * 0.6)}ms ${easeInOut} ${t.hold}ms forwards}`;
+    }
+    return (
+      `@keyframes splash-in-${p.i}{from{transform:${away(p)}}to{transform:translate3d(0,0,0)}}` +
+      `@keyframes splash-out-${p.i}{from{transform:translate3d(0,0,0)}to{transform:${away(p)}}}` +
+      `${sel}{animation:splash-in-${p.i} ${t.fly}ms ${easeOut} ${p.i * t.stagger}ms both,splash-out-${p.i} ${t.out}ms ${easeInOut} ${t.hold + p.i * t.outStagger}ms forwards}`
+    );
+  })
+  .join("") +
+  `.splash[data-show]{animation:splash-fade ${t.out}ms ${easeInOut} ${t.hold}ms forwards}`;
 ---
 
-<div class="splash" data-splash aria-hidden="true" style={vars}>
-  <script is:inline define:vars={{ hold, leaveAfter }}>
+<div class="splash" data-splash aria-hidden="true">
+  <script is:inline>
     // Runs as the page parses, before it paints. A view-transition swap runs it
     // again in the same window; the flag skips it there.
     (function (splash) {
@@ -74,23 +93,19 @@ const leaveAfter = timing.out + (pieces.length - 1) * timing.outStagger;
       if (media && media("(prefers-reduced-motion: reduce)").matches) return;
       if (navigator.connection && navigator.connection.saveData) return;
       splash.setAttribute("data-show", "");
-      var start = Date.now();
-      function leave() {
-        if (splash.hasAttribute("data-leaving")) return;
-        splash.setAttribute("data-leaving", "");
-        setTimeout(function () { splash.remove(); }, leaveAfter + 50);
-      }
-      // Leave once the page has loaded and the mark has come together.
-      function loaded() { setTimeout(leave, Math.max(0, hold - (Date.now() - start))); }
-      if (document.readyState === "complete") loaded();
-      else window.addEventListener("load", loaded, { once: true });
+      // Gone once its own fade has ended (the pieces' animations bubble here too).
+      splash.addEventListener("animationend", function (event) {
+        if (event.target === splash) splash.remove();
+      });
     })(document.currentScript.parentElement);
   </script>
+  <style is:inline set:html={css}></style>
   <div class="splash-mark">
     {pieces.map((piece) => (
       <div
-        class:list={["splash-piece", piece.kind === "full" && "splash-full"]}
-        style={`--x:${piece.x};--y:${piece.y};--size:${piece.size};--dx:${piece.dx};--dy:${piece.dy};--i:${piece.i}`}
+        class="splash-piece"
+        data-piece={piece.i}
+        style={`left:${piece.x}%;top:${piece.y}%;width:${piece.size}%;height:${piece.size}%;margin:${-piece.size / 2}% 0 0 ${-piece.size / 2}%`}
         set:html={piece.svg}
       />
     ))}
