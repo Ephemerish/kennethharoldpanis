@@ -1,0 +1,84 @@
+{
+  "timing": {
+    "stagger": 50,
+    "fly": 730,
+    "popDelay": 500,
+    "pop": 400,
+    "hold": 1220,
+    "outStagger": 17,
+    "out": 670,
+    "max": 4500
+  },
+  "pieces": [
+    {
+      "kind": "moon",
+      "i": 0,
+      "svg": "<svg viewBox=\"-74 -74 148 148\" aria-hidden=\"true\"><circle r=\"74\" class=\"splash-unlit\"/></svg>",
+      "x": 50,
+      "y": 16.09,
+      "size": 32.17,
+      "dx": 0,
+      "dy": -1
+    },
+    {
+      "kind": "moon",
+      "i": 1,
+      "svg": "<svg viewBox=\"-74 -74 148 148\" aria-hidden=\"true\"><circle r=\"74\" class=\"splash-unlit\"/><path d=\"M0 -74A74 74 0 0 1 0 74A37 74 0 0 0 0 -74Z\" class=\"splash-lit\"/></svg>",
+      "x": 79.37,
+      "y": 33.04,
+      "size": 32.17,
+      "dx": 0.866,
+      "dy": -0.5
+    },
+    {
+      "kind": "moon",
+      "i": 2,
+      "svg": "<svg viewBox=\"-74 -74 148 148\" aria-hidden=\"true\"><circle r=\"74\" class=\"splash-unlit\"/><path d=\"M0 -74A74 74 0 0 1 0 74A37 74 0 0 1 0 -74Z\" class=\"splash-lit\"/></svg>",
+      "x": 79.37,
+      "y": 66.96000000000001,
+      "size": 32.17,
+      "dx": 0.866,
+      "dy": 0.5
+    },
+    {
+      "kind": "moon",
+      "i": 3,
+      "svg": "<svg viewBox=\"-74 -74 148 148\" aria-hidden=\"true\"><circle r=\"74\" class=\"splash-unlit\"/><circle r=\"74\" class=\"splash-lit\"/></svg>",
+      "x": 50,
+      "y": 83.91,
+      "size": 32.17,
+      "dx": 0,
+      "dy": 1
+    },
+    {
+      "kind": "moon",
+      "i": 4,
+      "svg": "<svg viewBox=\"-74 -74 148 148\" aria-hidden=\"true\"><circle r=\"74\" class=\"splash-unlit\"/><path d=\"M0 -74A74 74 0 0 0 0 74A37 74 0 0 0 0 -74Z\" class=\"splash-lit\"/></svg>",
+      "x": 20.630000000000003,
+      "y": 66.96000000000001,
+      "size": 32.17,
+      "dx": -0.866,
+      "dy": 0.5
+    },
+    {
+      "kind": "moon",
+      "i": 5,
+      "svg": "<svg viewBox=\"-74 -74 148 148\" aria-hidden=\"true\"><circle r=\"74\" class=\"splash-unlit\"/><path d=\"M0 -74A74 74 0 0 0 0 74A37 74 0 0 1 0 -74Z\" class=\"splash-lit\"/></svg>",
+      "x": 20.630000000000003,
+      "y": 33.04,
+      "size": 32.17,
+      "dx": -0.866,
+      "dy": -0.5
+    },
+    {
+      "kind": "full",
+      "i": 6,
+      "svg": "<svg viewBox=\"-86 -86 172 172\" aria-hidden=\"true\"><circle r=\"86\" class=\"splash-lit\"/></svg>",
+      "x": 50,
+      "y": 50,
+      "size": 37.39,
+      "dx": 0,
+      "dy": 0
+    }
+  ]
+}

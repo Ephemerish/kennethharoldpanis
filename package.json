@@ -22,7 +22,8 @@
     "optimize-images": "node scripts/optimize-images.mjs",
     "check:assets": "node --experimental-strip-types --no-warnings scripts/check-assets.mjs",
     "check:copy": "node scripts/check-copy.mjs",
-    "check:icons": "node scripts/check-icons.mjs"
+    "check:icons": "node scripts/check-icons.mjs",
+    "generate:brand": "node scripts/generate-brand.mjs"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.4",

@@ -2,7 +2,7 @@
  * Every interactive feature works the way a visitor uses it (KHP §9.2):
  * navigation, search, the mobile menu, the theme, the apps menu, release
  * notes, collapsible sections, the image viewer, the marquee, the live cover,
- * bio anchors and the contact form.
+ * bio anchors, the contact form and the splash.
  */
 import { expect, test, type Page } from "@playwright/test";
 
@@ -131,6 +131,8 @@ test("the technologies marquee moves, and pauses under the pointer", async ({ pa
 test("the technologies marquee can be dragged, and a drag doesn't open a tile", async ({ page }, info) => {
   test.skip(isMobile(info.project.name), "Touch dragging is the same code; the mouse path is enough.");
   await page.goto("/");
+  // Raw mouse moves don't wait for what covers the page; a reader waits for the splash.
+  await expect(page.locator("[data-splash][data-show]")).toHaveCount(0, { timeout: 10_000 });
   const marquee = page.locator("[data-marquee]").first();
   const track = marquee.locator(".marquee-track");
   await marquee.scrollIntoViewIfNeeded();
@@ -238,4 +240,37 @@ test("a tech page says built with only when real work used it", async ({ page })
   const rows = page.locator("[data-marquee]");
   await expect(rows.getByRole("link", { name: /Spanner/ }).first()).toBeAttached();
   await expect(rows.getByRole("link", { name: /Amazon EC2/ })).toHaveCount(0);
+});
+
+test.describe("the splash", () => {
+  const splash = "[data-splash][data-show]";
+
+  test("greets every load, then opens the page; moving between pages doesn't replay it", async ({ page }) => {
+    await page.goto("/", { waitUntil: "commit" });
+    await expect(page.locator(splash)).toBeVisible();
+    await expect(page.locator("[data-splash]")).toHaveCount(0, { timeout: 8000 });
+    await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
+    // A link is a view-transition swap, not a load: no splash.
+    await page.getByRole("link", { name: "View Projects" }).click();
+    await expect(page).toHaveURL(/\/projects$/);
+    await expect(page.locator(splash)).toHaveCount(0);
+    // A reload is a load: it greets again.
+    await page.reload({ waitUntil: "commit" });
+    await expect(page.locator(splash)).toBeVisible();
+    await expect(page.locator("[data-splash]")).toHaveCount(0, { timeout: 8000 });
+  });
+
+  test("stays away under reduced motion", async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: "reduce" });
+    await page.goto("/", { waitUntil: "domcontentloaded" });
+    await expect(page.locator(splash)).toHaveCount(0);
+  });
+
+  test("stays away under Data Saver", async ({ page }) => {
+    await page.addInitScript(() => {
+      Object.defineProperty(navigator, "connection", { value: { saveData: true } });
+    });
+    await page.goto("/", { waitUntil: "domcontentloaded" });
+    await expect(page.locator(splash)).toHaveCount(0);
+  });
 });

@@ -9,7 +9,10 @@ import Head, { type Props as HeadProps } from "./Head.astro";
 import Navbar from "./Navbar";
 import Footer from "./Footer.astro";
 import Analytics from "@app/features/analytics/Analytics.astro";
-import { Box, Frame, SkipLink } from "@ui";
+import { Box, Frame, SkipLink, Splash } from "@ui";
+// The splash's pieces and timing, drawn by scripts/generate-brand.mjs.
+import splash from "./brand/splash.json";
+import type { SplashPiece } from "@ui/components/overlay/Splash.astro";
 
 type Props = HeadProps;
 
@@ -24,6 +27,7 @@ const props = Astro.props;
     <ClientRouter />
   </head>
   <body class="w-full min-h-screen flex flex-col bg-neutral-0 antialiased">
+    <Splash pieces={splash.pieces as SplashPiece[]} timing={splash.timing} />
     <SkipLink />
     <Navbar client:idle path={Astro.url.pathname} transition:persist />
     <Box as="main" id="main" class="flex-1 relative flex flex-col">

@@ -32,7 +32,10 @@ const imageUrl = new URL(image, Astro.site ?? site.url).toString();
 <meta name="description" content={description} />
 <link rel="canonical" href={canonical} />
 {noindex && <meta name="robots" content="noindex" />}
-<link rel="icon" href="/favicon.ico" />
+<!-- The mark, drawn by scripts/generate-brand.mjs -->
+<link rel="icon" href="/favicon.ico" sizes="48x48" />
+<link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 <link rel="sitemap" href="/sitemap.xml" />
 
 <!-- Outfit, served by the site itself and fetched first (KHP §7.7, §7.8) -->

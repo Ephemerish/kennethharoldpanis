@@ -67,6 +67,7 @@ export {
 export { default as Drawer } from "./components/overlay/Drawer.astro";
 export { default as Disclosure } from "./components/overlay/Disclosure.astro";
 export { default as FloatingButton } from "./components/overlay/FloatingButton.astro";
+export { default as Splash } from "./components/overlay/Splash.astro";
 export { Toaster } from "./components/overlay/Toaster";
 
 export { cn } from "./utils/cn";

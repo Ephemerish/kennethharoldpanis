@@ -17,7 +17,7 @@ tests that drive the server are [Testing](testing.md).
   - `<title>` and the share titles are the `title` prop as given.
   - Canonical and `og:url`: the path on `Astro.site` (`https://kennethharoldpanis.com`, from `astro.config.mjs`), falling back to `site.url`. The share image is made absolute the same way.
   - Open Graph: type, site name, title, description, image, URL. Twitter: `summary_large_image` with title, description, image.
-  - `/favicon.ico` and a sitemap link. No theme colour, manifest or app icons.
+  - The icons: `/favicon.ico` (16, 32 and 48 pixels), `/favicon.svg` and `/apple-touch-icon.png`, all the moon-phase mark drawn by `scripts/generate-brand.mjs`, and a sitemap link. No theme colour or manifest.
   - Outfit from Google Fonts with `display=swap`, then `ThemeScript`.
   - `noindex` adds `<meta name="robots" content="noindex">`.
 - Page titles: each page passes its full title: "Kenneth Harold Panis - Software Engineer" (home), "Projects - Kenneth Harold Panis", "Blog - Kenneth Harold Panis", "Bio - Kenneth Harold Panis", "Resume - Kenneth Harold Panis", "Contact - Kenneth Harold Panis", "Tagged “…” - Kenneth Harold Panis", "Built with … - Kenneth Harold Panis", "404 - Page Not Found". Articles get "<title> - Kenneth Harold Panis" from `ArticleLayout`.
@@ -25,7 +25,7 @@ tests that drive the server are [Testing](testing.md).
 - `src/app/pages/bio/resume/Resume.astro`: passes `noindex` while `resumeAvailable` is false.
 - `src/pages/sitemap.xml.ts`: prerendered, built from `loadTaxonomy` ([Content registries](content-registries.md)). `/`, `/bio`, `/projects`, `/blogs`, `/contact`; `/bio/resume` only when `resumeAvailable`; `/blogs/page/N` from 2; every project and post; a tag or tech page for each one any project, post, role or certification carries. Sorted, absolute on `site.url`.
 - `src/pages/robots.txt.ts`: prerendered. Allows all, disallows `/api/`, names the sitemap.
-- `public/favicon.ico`: the original favicon.
+- `public/favicon.ico`, `public/favicon.svg`, `public/apple-touch-icon.png`: the mark, written by `scripts/generate-brand.mjs` (`pnpm generate:brand`) and committed. Change the mark there, never by hand.
 - `astro.config.mjs`: `output: "server"` with the Node adapter in `middleware` mode, so Astro exports a request handler instead of starting its own server. Pages that set `prerender = true` are built to `dist/client`.
 - `scripts/compress-assets.mjs`: the last step of `pnpm build`. Writes a Brotli (quality 11) `.br` and a gzip (level 9) `.gz` copy beside every `.html`, `.js`, `.mjs`, `.css`, `.json`, `.svg`, `.xml`, `.txt` and `.webmanifest` file of 1 KB or more in `dist/client`, and prints the total saved.
 - `server.mjs`: the production server, run by `pnpm preview`, `pnpm start`, the Dockerfile (`CMD ["node", "server.mjs"]`) and the browser tests. Listens on `PORT` (default 3000) and `HOST` (default `0.0.0.0`).

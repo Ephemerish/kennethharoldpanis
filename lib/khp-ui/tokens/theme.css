@@ -87,6 +87,13 @@
   --art-strip-3: #102b19;
   --art-glow: rgb(190, 242, 100);
 
+  /* The mark's colours: the splash fills the window with its green and draws
+     the moons in its cream and darker green. Match `THEMES` in
+     scripts/generate-brand.mjs. */
+  --mark-ground: #3d6b47;
+  --mark-shadow: #2f5538;
+  --mark-lit: #e8e3d9;
+
   /* Layers, lowest to highest (KHP §5.7). */
   --z-raised: 10;
   --z-nav: 50;
@@ -97,6 +104,7 @@
   --z-popover: 110;
   --z-tooltip: 120;
   --z-toast: 130;
+  --z-splash: 140;
 }
 
 /* Scales, dark: each step mirrored, so dark text on light stays light on dark */
@@ -160,6 +168,9 @@
   --success-800: rgb(187, 247, 208);
   --success-900: rgb(220, 252, 231);
 
+  --mark-ground: #31593a;
+  --mark-shadow: #25462c;
+  --mark-lit: #e8e3d9;
   --brand-glow: rgb(163, 230, 53);
   --shadow-strength: 3;
 }
@@ -285,6 +296,7 @@
 @utility z-popover { z-index: var(--z-popover); }
 @utility z-tooltip { z-index: var(--z-tooltip); }
 @utility z-toast { z-index: var(--z-toast); }
+@utility z-splash { z-index: var(--z-splash); }
 
 /* Brand utilities: the site's look */
 @layer utilities {
@@ -384,6 +396,67 @@
 }
 .drawer::backdrop { background: color-mix(in srgb, var(--neutral-950) 30%, transparent); }
 
+/* The splash (Splash.astro): the mark's green over the whole window, the
+   mark's pieces flying in and out. Hidden unless its own script adds
+   data-show (KHP §7.8). Only `transform` and `opacity` move, so the compositor
+   runs it all and a busy page can't make it stutter (KHP §7.7). The timing
+   variables come from the component; `splash-cap` hides it after
+   --splash-max with no script at all, in case its script never gets there. */
+.splash { display: none; }
+.splash[data-show] {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-splash);
+  display: block;
+  overflow: hidden;
+  contain: strict;
+  background: var(--mark-ground);
+  transition: opacity var(--splash-out) var(--ease-in-out);
+  animation: splash-cap 1ms linear var(--splash-max) forwards;
+}
+.splash[data-leaving] { opacity: 0; pointer-events: none; }
+.splash-mark {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 50vmin;
+  height: 50vmin;
+  transform: translate(-50%, -50%);
+}
+.splash-piece {
+  position: absolute;
+  left: calc(var(--x) * 1%);
+  top: calc(var(--y) * 1%);
+  width: calc(var(--size) * 1%);
+  aspect-ratio: 1;
+  margin: calc(var(--size) * -0.5%) 0 0 calc(var(--size) * -0.5%);
+  will-change: transform;
+  animation: splash-fly-in var(--splash-fly) var(--ease-out) calc(var(--i) * var(--splash-stagger)) both;
+}
+.splash-full { animation: splash-pop var(--splash-pop) var(--ease-out) var(--splash-pop-delay) both; }
+.splash[data-leaving] .splash-piece {
+  animation: splash-fly-out var(--splash-out) var(--ease-in-out) calc(var(--i) * var(--splash-out-stagger)) both;
+}
+.splash[data-leaving] .splash-full { animation: splash-shrink calc(var(--splash-out) * 0.6) var(--ease-in-out) both; }
+.splash-piece svg { display: block; width: 100%; height: 100%; }
+.splash-lit { fill: var(--mark-lit); }
+.splash-unlit { fill: var(--mark-shadow); }
+@keyframes splash-fly-in {
+  from { transform: translate(calc(var(--dx) * 80vmax), calc(var(--dy) * 80vmax)) scale(0.7); }
+  to { transform: none; }
+}
+@keyframes splash-fly-out {
+  from { transform: none; }
+  to { transform: translate(calc(var(--dx) * 80vmax), calc(var(--dy) * 80vmax)) scale(0.7); }
+}
+@keyframes splash-pop {
+  0% { transform: scale(0); }
+  65% { transform: scale(1.08); }
+  100% { transform: none; }
+}
+@keyframes splash-shrink { to { transform: scale(0); } }
+@keyframes splash-cap { to { opacity: 0; visibility: hidden; pointer-events: none; } }
+
 @layer base {
   * { border-color: var(--neutral-200); }
 
@@ -396,11 +469,13 @@
 
 /* Motion (KHP §5.8): only motion with a job. Controls change colour and shadow
    at --duration-fast to answer the pointer; a tooltip fades; the image viewer's
-   zoom follows the hand; the marquee and the pretext cover are the owner's.
-   Nothing lifts, zooms or fades in for decoration; reduced motion stops all. */
+   zoom follows the hand; the marquee, the pretext cover and the splash are
+   the owner's. Nothing lifts, zooms or fades in for decoration; reduced motion
+   stops all. */
 :root {
   --duration-fast: 150ms;
   --ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
 }
 
 @layer base {

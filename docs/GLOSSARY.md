@@ -35,6 +35,8 @@ What we call things on this site, in code, in docs and on screen. One thing, one
 | label | The small uppercase line naming a group (`Label`) |
 | subtitle | A fact from the data under a page title (a count, a latest release). Never written words: no taglines (§6.7) |
 | marquee | The home page's two draggable rows of tech tiles (`Marquee`) |
+| mark | The site's logo: six moon phases in a ring around a full moon, in moss and cream. Drawn by `scripts/generate-brand.mjs`; never shown with words |
+| splash | The mark's animation on the mark's green, over the whole window, each time the site loads (`Splash`). Not a loading screen: the page underneath is already there |
 | article engine | How a post's body renders (`prose`, `pretext`); see docs/systems/article-engines.md |
 
 ## Field names

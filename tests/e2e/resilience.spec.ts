@@ -1,6 +1,7 @@
 /**
  * The site works in any condition (KHP §7.8): with script off, with every
  * image failing, with storage refused, and with the search index failing.
+ * The splash never shows without script.
  * Each condition costs a feature, never the page.
  */
 import { expect, test, type Page } from "@playwright/test";
@@ -25,8 +26,9 @@ test.describe("with script off", () => {
       for (const name of ["Bio", "Projects", "Blogs", "Contact"]) {
         await expect(page.getByRole("navigation").getByRole("link", { name, exact: true }).filter({ visible: true }).first()).toBeVisible();
       }
-      // Controls that need script are hidden, not dead.
+      // Controls that need script are hidden, not dead, and the splash never covers the page.
       await expect(page.getByRole("button", { name: "Toggle menu" })).toBeHidden();
+      await expect(page.locator("[data-splash]")).toBeHidden();
     });
   }
 

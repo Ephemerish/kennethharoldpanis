@@ -13,6 +13,7 @@ src/
     features/       A use case two or more pages need: its UI and logic together (entries, taxonomy, article, search, analytics).
     shared/         The brand icons (GitHub, LinkedIn, envelope) and the email link: the only raw HTML in Astro templates outside lib/khp-ui.
     layout/         The frame around every page: head, theme script and toggle, top bar, footer, the article layout.
+      brand/        The splash's pieces and timing (splash.json) and the same motion as Lottie for the app family (orbit.json, orbit-dark.json), written by scripts/generate-brand.mjs.
     calc/           Pure functions, no rendering (dates, reading time).
     api/            What the browser calls, and the server's clients (nanostores, Supabase).
   data/             Everything that is content, data or a tunable. Code reads it; it renders nothing.

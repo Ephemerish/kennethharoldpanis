@@ -52,7 +52,7 @@ Corners are square: the theme clears `--radius-*`, and `pnpm check:tokens` fails
 
 ## 5.7 Layers
 
-Never a raw `z-<number>`. In order: `z-raised`, `z-nav`, `z-dropdown`, `z-float`, `z-drawer`, `z-modal`, `z-popover`, `z-tooltip`, `z-toast`. In CSS, `var(--z-*)`.
+Never a raw `z-<number>`. In order: `z-raised`, `z-nav`, `z-dropdown`, `z-float`, `z-drawer`, `z-modal`, `z-popover`, `z-tooltip`, `z-toast`, `z-splash`. In CSS, `var(--z-*)`.
 
 ## 5.8 Motion, only with a job
 
@@ -63,7 +63,7 @@ Every animation and transition on the site has one of these jobs, or it doesn't 
 | Answer the pointer | A link, button, field or card changes colour, border or shadow on hover and focus | `--duration-fast` (150ms), set once in `theme.css` for `a`, `button`, `summary`, fields, `[role="button"]`, `[role="option"]` and `.motion-surface` |
 | Show what appeared | A tooltip fades in | `--duration-fast` opacity |
 | Follow the hand | The marquee follows a drag; the image viewer follows a zoom or pan | Moved directly by the pointer |
-| The owner's motion | The technology marquee drifts; the pretext post's cover draws live | `marquee` utilities; the pretext engine |
+| The owner's motion | The technology marquee drifts; the pretext post's cover draws live; the splash greets each load of the site | `marquee` utilities; the pretext engine; `Splash` |
 
 Not allowed, because it has no job: cards lifting on hover, images zooming on hover, page cross-fades on navigation, things fading or sliding in as they scroll into view, bouncing, pulsing, parallax, entrance animations, a transition on `all`, any duration other than the token. `pnpm check:tokens` fails on `animate-*`, `transition-all`, a raw `duration-*`, and a scale or translate on hover or focus ("decorative motion").
 
@@ -72,7 +72,10 @@ Rules for the motion that stays:
 - **Cheap properties only.** Colour, background, border, shadow, opacity and transform; never a property that moves layout. The marquee moves by `transform`.
 - **Paused when unseen.** The marquee pauses on hover, focus and drag, and an `IntersectionObserver` pauses it off screen. The pretext cover runs at 24 frames a second only while it is on screen and the tab is visible.
 - **Nothing eager.** A card's live cover paints a still first and hydrates when it scrolls into view (§7.6).
-- **Reduced motion stops it.** Under `prefers-reduced-motion` every transition and animation ends at once, the marquee becomes a still, wrapped list, and the pretext cover draws one still frame.
+- **Reduced motion stops it.** Under `prefers-reduced-motion` every transition and animation ends at once, the marquee becomes a still, wrapped list, the pretext cover draws one still frame, and the splash never shows.
+- **The splash, each load.** `Splash` (`lib/khp-ui/components/overlay/`) covers the window in the mark's green (`--mark-ground`) each time the site loads, a reload included. Moving between pages is a view-transition swap, not a load, so it never shows there. It needs script and never shows under reduced motion or Data Saver (KHP §7.8). The mark's seven pieces, small inline SVGs filled by `--mark-lit` and `--mark-shadow`, fly in from past the window's edges and settle into the ring (`--ease-out`), the full moon popping in last; once the page has loaded and the mark is together, they fly back out (`--ease-in-out`) while the green fades, so the page opens through the motion. Only `transform` and `opacity` move, on the compositor; no player, no request, no bundle (§7.7). A CSS-only cap (`splash-cap`) hides it after 4.5 seconds even if its script never gets there. Pieces and timing are written by `scripts/generate-brand.mjs` into `src/app/layout/brand/splash.json`, which also writes the same motion as Lottie (`orbit.json`) for the app family.
+
+*Why the splash:* on November 24, 2026 the owner chose the moon-phase mark ("Six", in moss) and asked for a splash screen animated with Lottie, like his other apps, easing in and out like the loader on sproutmarkup.com/p/patricia. Seeing the first version, he asked for it on every load ("it does it even when you refresh"), over the whole window in the mark's green with no tile behind the moons, bigger, and with a seamless transition into the page. Then he asked for it to be as cheap as possible on every device: the Lottie player was replaced by CSS on the compositor.
 
 *Why:* on November 16, 2026 the owner asked to cut animation and transitions to the ones needed. Removed: `motion-lift` (cards rising 2px on hover), `motion-zoom` (covers scaling on hover), the view-transition cross-fade between pages (`transition:animate="none"` on `<html>`), the `--duration-base` and `--duration-slow` tokens, and `opacity` and `transform` from the base transition. v2 had turned all motion off; v3 allowed it on a budget; this keeps only motion with a job.
 

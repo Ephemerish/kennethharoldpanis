@@ -17,7 +17,7 @@ names or `var(--…)`. Component shapes belong to the lib components
 - `lib/khp-ui/tokens/theme.css`: imported once, by `src/app/layout/MainLayout.astro`. Imports Tailwind and `prose.css`.
   - Light scales on `:root`: `--brand-50` to `--brand-900` (lime), `--neutral-0` to `--neutral-950`, `--error-*`, `--warning-*`, `--success-*`, all as `rgb()`. Also `--brand-glow` (the brand shadow tint) and `--shadow-strength` (1).
   - Art tokens: `--art-night`, `--art-forest`, `--art-strip-1..3`, `--art-glow`. The pretext still cover's picture, the same in both themes.
-  - Layers `--z-raised` to `--z-toast`.
+  - Layers `--z-raised` to `--z-toast`, then `--z-splash` over everything.
   - Dark scales on `:root.dark`: every step mirrored (light `brand-50` becomes the darkest lime, `neutral-0` becomes near-black), `--shadow-strength: 3`.
   - `@theme`: `--color-*: initial` clears Tailwind's palette, then defines `white`, `black` and `ink` (near-black that stays dark in both themes). Outfit and the mono stack. Shadow sizes scaled by `--shadow-strength`. `--radius-*: initial`, so corners are square. A few large spacing steps.
   - `@theme inline`: maps each scale step to its class name (`bg-brand-600`, `text-neutral-700`).
@@ -26,7 +26,9 @@ names or `var(--…)`. Component shapes belong to the lib components
   - `.float-btn` and `.float-tip`: a fixed tool at the right edge under the top bar (`z-float`) and its name beside it (`z-tooltip`), shown on the button's hover and focus. `data-stack="1"` moves both to the second slot. Shared by `FloatingButton` and the collapse-all button (KHP §3.5).
   - `.drawer`: the right-hand `<dialog>` at full height, up to 34rem wide, with a `neutral-950` backdrop at 30%. Used by `Drawer`.
   - Base: border colour, body background and text, Outfit.
-  - Motion tokens on `:root`: `--duration-fast` (150ms), `--duration-base` (250ms), `--duration-slow` (600ms), `--ease-out`.
+  - Motion tokens on `:root`: `--duration-fast` (150ms), `--ease-out`, `--ease-in-out` (the splash).
+  - The mark's colours, a light and a dark value each: `--mark-ground`, `--mark-shadow`, `--mark-lit`; they match `THEMES` in `scripts/generate-brand.mjs`.
+  - The splash (`Splash.astro`): `.splash`, hidden unless its own script adds `data-show`, fills the window with `--mark-ground` and fades on `data-leaving`; `.splash-mark` (half the window's short side) holds the `.splash-piece`s, moved only by `transform` in `splash-fly-in`, `splash-pop`, `splash-fly-out` and `splash-shrink`, timed by the `--splash-*` variables the component sets; `splash-cap` hides it after `--splash-max` without script.
   - Base transitions on `a`, `button`, `summary`, `input`, `textarea`, `[role="button"]`, `[role="option"]` and `.motion-surface`: colour, background, border, text decoration colour, shadow, opacity and transform, at `--duration-fast`.
   - Motion: `--duration-fast` and `--ease-out`; the base transition on controls and `.motion-surface`; `marquee`, `marquee-track` and `marquee-reverse` (KHP §5.8).
   - Reduced motion: under `prefers-reduced-motion: reduce` every animation and transition lasts 0.01ms and runs once, scrolling is not smooth, and the marquee becomes a still, wrapped, centred list with its `[data-marquee-copy]` hidden.
